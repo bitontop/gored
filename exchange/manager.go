@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bitontop/gored/coin"
-	"github.com/bitontop/gored/pair"
+	"../coin"
+	"../pair"
 
 	cmap "github.com/orcaman/concurrent-map"
 )
