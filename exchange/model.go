@@ -7,8 +7,8 @@ package exchange
 import (
 	"time"
 
-	"../coin"
-	"../pair"
+	"github.com/bitontop/gored/coin"
+	"github.com/bitontop/gored/pair"
 )
 
 type Update struct {

@@ -8,11 +8,11 @@ import (
 	"log"
 	"testing"
 
-	"../coin"
-	"../exchange"
-	"../exchange/bittrex"
-	"../pair"
-	"./conf"
+	"github.com/bitontop/gored/coin"
+	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/exchange/bittrex"
+	"github.com/bitontop/gored/pair"
+	"github.com/bitontop/gored/test/conf"
 )
 
 /********************Public API********************/

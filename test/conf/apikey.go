@@ -5,7 +5,7 @@ package conf
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"../../exchange"
+	"github.com/bitontop/gored/exchange"
 )
 
 func Exchange(name exchange.ExchangeName, config *exchange.Config) {

@@ -9,13 +9,13 @@ import (
 	"os"
 	"time"
 
-	"./coin"
-	"./exchange"
-	"./exchange/binance"
-	"./exchange/bittrex"
-	"./pair"
-	"./test/conf"
-	"./utils"
+	"github.com/bitontop/gored/coin"
+	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/bittrex"
+	"github.com/bitontop/gored/pair"
+	"github.com/bitontop/gored/test/conf"
+	"github.com/bitontop/gored/utils"
 )
 
 func main() {

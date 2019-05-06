@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strconv"
 
-	coin "../coin"
+	coin "github.com/bitontop/gored/coin"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
