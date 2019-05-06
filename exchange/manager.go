@@ -104,6 +104,10 @@ func (e *ExchangeManager) Add(exchange Exchange) {
 	exMap.Set(key, exchange)
 }
 
+func (e *ExchangeManager) Quantity() int {
+	return exMap.Count()
+}
+
 func (e *ExchangeManager) Get(name ExchangeName) Exchange {
 	if tmp, ok := exMap.Get(string(name)); ok {
 		return tmp.(Exchange)
