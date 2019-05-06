@@ -19,11 +19,11 @@ const (
 
 	BINANCE ExchangeName = "BINANCE"
 	BITTREX ExchangeName = "BITTREX"
-	COINEGG ExchangeName = "COINEGG"
+	COINEX ExchangeName = "COINEX"
 )
 
 func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BINANCE)
 	supportList = append(supportList, BITTREX)
-	supportList = append(supportList, COINEGG)
+	supportList = append(supportList, COINEX)
 }

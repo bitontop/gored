@@ -67,7 +67,7 @@ func InitCoinegg() exchange.Exchange {
 	pair.Init()
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.COINEGG, config)
+	conf.Exchange(exchange.COINEX, config)
 
 	ex := coinegg.CreateCoinegg(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())

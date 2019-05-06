@@ -1,4 +1,4 @@
-package coinegg
+package coinex
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -78,7 +78,7 @@ func getCoinFromCoinMarket() string {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Coinegg) GetCoinsData() {
+func (e *Coinex) GetCoinsData() {
 	coinsData := CoinsData{}
 
 	strUrl := "" //"https://www.binance.com/assetWithdraw/getAllAsset.html"
@@ -128,7 +128,7 @@ func (e *Coinegg) GetCoinsData() {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Coinegg) GetPairsData() {
+func (e *Coinex) GetPairsData() {
 	pairsData := &PairsData{}
 
 	strRequestUrl := "/api/v1/exchangeInfo"
@@ -196,7 +196,7 @@ Step 3: Get Exchange Pair Code ex. symbol := e.GetPairCode(p)
 Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
-func (e *Coinegg) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
+func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(p)
 
@@ -257,7 +257,7 @@ func (e *Coinegg) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Coinegg) UpdateAllBalances() {
+func (e *Coinex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
@@ -287,7 +287,7 @@ func (e *Coinegg) UpdateAllBalances() {
 }
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
-func (e *Coinegg) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+func (e *Coinex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return false
@@ -318,7 +318,7 @@ func (e *Coinegg) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	return true
 }
 
-func (e *Coinegg) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Coinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -353,7 +353,7 @@ func (e *Coinegg) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	return order, nil
 }
 
-func (e *Coinegg) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Coinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -389,7 +389,7 @@ func (e *Coinegg) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	return order, nil
 }
 
-func (e *Coinegg) OrderStatus(order *exchange.Order) error {
+func (e *Coinex) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -430,11 +430,11 @@ func (e *Coinegg) OrderStatus(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Coinegg) ListOrders() ([]*exchange.Order, error) {
+func (e *Coinex) ListOrders() ([]*exchange.Order, error) {
 	return nil, nil
 }
 
-func (e *Coinegg) CancelOrder(order *exchange.Order) error {
+func (e *Coinex) CancelOrder(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -459,7 +459,7 @@ func (e *Coinegg) CancelOrder(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Coinegg) CancelAllOrder() error {
+func (e *Coinex) CancelAllOrder() error {
 	return nil
 }
 
@@ -468,7 +468,7 @@ func (e *Coinegg) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Coinegg) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
+func (e *Coinex) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
 	mapParams["recvWindow"] = fmt.Sprintf("50000000")
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 
