@@ -1,0 +1,9 @@
+conf/*
+test/*.cache
+*.cache
+*.lock
+*.log
+.vscode/*
+.ishell_history
+test/logs/*
+.vscode/ftp-sync.json
