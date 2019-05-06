@@ -12,9 +12,9 @@ import (
 	"net/http"
 	"time"
 
-	"../../coin"
-	"../../exchange"
-	"../../pair"
+	"github.com/bitontop/gored/coin"
+	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/pair"
 )
 
 const (

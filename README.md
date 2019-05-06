@@ -6,9 +6,9 @@
 [![Coverage Status](http://codecov.io/github/bitontop/gored/coverage.svg?branch=master)](http://codecov.io/github/bitontop/gored?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bitontop/gored)](https://goreportcard.com/report/github.com/bitontop/gored)
 
-A cryptocurrency trading bot supporting multiple exchanges written in Golang.
+A Realtime-Exchange-Data SDK is supporting multiple exchanges written in Golang.
 
-**Please note that this bot is under development and is not ready for production!**
+**Please note that this SDK is under heavily development and is not ready for production!**
 
 ## Community
 

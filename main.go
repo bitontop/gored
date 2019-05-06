@@ -9,14 +9,13 @@ import (
 	"os"
 	"time"
 
-	"./coin"
-	"./exchange"
-	"./exchange/binance"
-	"./exchange/bittrex"
-	"./exchange/coinegg"
-	"./pair"
-	"./test/conf"
-	"./utils"
+	"github.com/bitontop/gored/coin"
+	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/bittrex"
+	"github.com/bitontop/gored/pair"
+	"github.com/bitontop/gored/test/conf"
+	"github.com/bitontop/gored/utils"
 )
 
 func main() {
@@ -68,7 +67,6 @@ func Init(source exchange.DataSource, sourceURI string) {
 
 	InitBinance(config)
 	InitBittrex(config)
-	InitCoinegg(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -83,15 +81,6 @@ func InitBinance(config *exchange.Config) {
 func InitBittrex(config *exchange.Config) {
 	conf.Exchange(exchange.BITTREX, config)
 	ex := bittrex.CreateBittrex(config)
-	log.Printf("Initial [ %12v ] ", ex.GetName())
-
-	exMan := exchange.CreateExchangeManager()
-	exMan.Add(ex)
-}
-
-func InitCoinegg(config *exchange.Config) {
-	conf.Exchange(exchange.COINEGG, config)
-	ex := coinegg.CreateCoinegg(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

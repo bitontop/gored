@@ -10,9 +10,9 @@ import (
 	"io/ioutil"
 	"log"
 
-	"../coin"
-	"../exchange"
-	"../pair"
+	"github.com/bitontop/gored/coin"
+	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/pair"
 	cmap "github.com/orcaman/concurrent-map"
 )
 
