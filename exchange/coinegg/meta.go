@@ -1,4 +1,4 @@
-package binance
+package coinegg
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying

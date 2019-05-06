@@ -1,4 +1,4 @@
-package binance
+package coinegg
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -10,6 +10,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
+	"os"
 	"strconv"
 	"time"
 
@@ -20,7 +22,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://api.binance.com"
+	API_URL = "https://api.coinegg.im"
 )
 
 /*API Base Knowledge
@@ -43,15 +45,43 @@ ex. Get /api/v1/depth
 Get - Method
 /api/v1/depth - Path*/
 
+func getCoinFromCoinMarket() string {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info", nil)
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+
+	q := url.Values{}
+	q.Add("start", "1")
+	q.Add("limit", "5000")
+	q.Add("convert", "USD")
+
+	req.Header.Set("Accepts", "application/json")
+	req.Header.Add("X-CMC_PRO_API_KEY", "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request to server")
+		os.Exit(1)
+	}
+	fmt.Println(resp.Status)
+	respBody, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(respBody))
+	return string(respBody)
+}
+
 /*************** Public API ***************/
 /*Get Coins Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Binance) GetCoinsData() {
+func (e *Coinegg) GetCoinsData() {
 	coinsData := CoinsData{}
 
-	strUrl := "https://www.binance.com/assetWithdraw/getAllAsset.html"
+	strUrl := "" //"https://www.binance.com/assetWithdraw/getAllAsset.html"
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
@@ -98,7 +128,7 @@ func (e *Binance) GetCoinsData() {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Binance) GetPairsData() {
+func (e *Coinegg) GetPairsData() {
 	pairsData := &PairsData{}
 
 	strRequestUrl := "/api/v1/exchangeInfo"
@@ -166,7 +196,7 @@ Step 3: Get Exchange Pair Code ex. symbol := e.GetPairCode(p)
 Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
-func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
+func (e *Coinegg) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(p)
 
@@ -227,7 +257,7 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Binance) UpdateAllBalances() {
+func (e *Coinegg) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
@@ -257,7 +287,7 @@ func (e *Binance) UpdateAllBalances() {
 }
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
-func (e *Binance) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+func (e *Coinegg) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return false
@@ -288,7 +318,7 @@ func (e *Binance) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	return true
 }
 
-func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Coinegg) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -323,7 +353,7 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	return order, nil
 }
 
-func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Coinegg) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -359,7 +389,7 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	return order, nil
 }
 
-func (e *Binance) OrderStatus(order *exchange.Order) error {
+func (e *Coinegg) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -400,11 +430,11 @@ func (e *Binance) OrderStatus(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Binance) ListOrders() ([]*exchange.Order, error) {
+func (e *Coinegg) ListOrders() ([]*exchange.Order, error) {
 	return nil, nil
 }
 
-func (e *Binance) CancelOrder(order *exchange.Order) error {
+func (e *Coinegg) CancelOrder(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -429,7 +459,7 @@ func (e *Binance) CancelOrder(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Binance) CancelAllOrder() error {
+func (e *Coinegg) CancelAllOrder() error {
 	return nil
 }
 
@@ -438,7 +468,7 @@ func (e *Binance) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
+func (e *Coinegg) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
 	mapParams["recvWindow"] = fmt.Sprintf("50000000")
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 
