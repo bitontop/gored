@@ -7,7 +7,7 @@ package bittrex
 import (
 	"encoding/json"
 
-	"../../exchange"
+	"github.com/bitontop/gored/exchange"
 )
 
 type JsonResponse struct {
