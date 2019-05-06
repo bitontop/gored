@@ -19,7 +19,7 @@ import (
 func Test_Binance(t *testing.T) {
 	e := InitBinance()
 
-	pair := e.GetPair("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
