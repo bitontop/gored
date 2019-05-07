@@ -28,7 +28,7 @@ func Test_Pairs(e exchange.Exchange) {
 
 func Test_Pair(e exchange.Exchange, pair *pair.Pair) {
 	log.Printf("%s Pair: %+v", e.GetName(), pair)
-	log.Printf("%s Pair Code: %s", e.GetName(), e.GetPairCode(pair))
+	log.Printf("%s Pair Code: %s", e.GetName(), e.GetSymbolByPair(pair))
 }
 
 func Test_Orderbook(e exchange.Exchange, p *pair.Pair) {

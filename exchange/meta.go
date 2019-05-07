@@ -81,4 +81,6 @@ const (
 func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BINANCE)
 	supportList = append(supportList, BITTREX)
+	supportList = append(supportList, COINEX)
+
 }
