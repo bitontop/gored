@@ -20,7 +20,6 @@ import (
 )
 
 type Bittrex struct {
-	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
 
@@ -42,7 +41,6 @@ var once sync.Once
 func CreateBittrex(config *exchange.Config) *Bittrex {
 	once.Do(func() {
 		instance = &Bittrex{
-			ID:      DEFAULT_ID,
 			Name:    "Bittrex",
 			Website: "https://www.bittrex.com/",
 
@@ -81,10 +79,6 @@ func (e *Bittrex) InitData() {
 }
 
 /**************** Exchange Information ****************/
-func (e *Bittrex) GetID() int {
-	return e.ID
-}
-
 func (e *Bittrex) GetName() exchange.ExchangeName {
 	return exchange.BITTREX
 }

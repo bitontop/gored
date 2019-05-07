@@ -20,7 +20,6 @@ import (
 )
 
 type Binance struct {
-	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
 
@@ -42,7 +41,6 @@ var once sync.Once
 func CreateBinance(config *exchange.Config) *Binance {
 	once.Do(func() {
 		instance = &Binance{
-			ID:      DEFAULT_ID,
 			Name:    "Binance",
 			Website: "https://www.binance.com/",
 
@@ -81,10 +79,6 @@ func (e *Binance) InitData() {
 }
 
 /**************** Exchange Information ****************/
-func (e *Binance) GetID() int {
-	return e.ID
-}
-
 func (e *Binance) GetName() exchange.ExchangeName {
 	return exchange.BINANCE
 }
