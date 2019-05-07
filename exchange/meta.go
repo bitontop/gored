@@ -57,12 +57,9 @@ const (
 	IBANKDIGITAL ExchangeName = "IBANKDIGITAL"
 	IDAX         ExchangeName = "IDAX"
 	IDEX         ExchangeName = "IDEX"
-	ITIGER       ExchangeName = "ITIGER"
 	KRAKEN       ExchangeName = "KRAKEN"
 	KUCOIN       ExchangeName = "KUCOIN"
-	KUCOIN2      ExchangeName = "KUCOIN2"
 	LBANK        ExchangeName = "LBANK"
-	LIQUI        ExchangeName = "LIQUI"
 	LIQUID       ExchangeName = "LIQUID"
 	LIVECOIN     ExchangeName = "LIVECOIN"
 	MXC          ExchangeName = "MXC"
@@ -82,6 +79,6 @@ const (
 )
 
 func (e *ExchangeManager) initExchangeNames() {
-	supportList = append(supportList, BINANCE)
-	supportList = append(supportList, BITTREX)
+	supportList.Set("1", BINANCE)
+	supportList.Set("2", BITTREX)
 }

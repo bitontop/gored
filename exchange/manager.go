@@ -5,7 +5,10 @@ package exchange
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"fmt"
 	"log"
+	"sort"
+	"strconv"
 	"sync"
 	"time"
 
@@ -19,7 +22,6 @@ type Exchange interface {
 	InitData()
 
 	/***** Exchange Information *****/
-	GetID() int
 	GetName() ExchangeName
 	GetTradingWebURL(pair *pair.Pair) string
 	GetBalance(coin *coin.Coin) float64
@@ -80,8 +82,7 @@ var instance *ExchangeManager
 var once sync.Once
 
 var exMap cmap.ConcurrentMap
-var exList = make([]Exchange, 0)
-var supportList = make([]ExchangeName, 0)
+var supportList cmap.ConcurrentMap
 
 func CreateExchangeManager() *ExchangeManager {
 	once.Do(func() {
@@ -90,6 +91,10 @@ func CreateExchangeManager() *ExchangeManager {
 
 		if exMap == nil {
 			exMap = cmap.New()
+		}
+
+		if supportList == nil {
+			supportList = cmap.New()
 		}
 	})
 	return instance
@@ -116,8 +121,17 @@ func (e *ExchangeManager) Get(name ExchangeName) Exchange {
 }
 
 func (e *ExchangeManager) GetID(name ExchangeName) int {
-	eInstance := e.Get(name)
-	return eInstance.GetID()
+	var id int
+	for _, key := range supportList.Keys() {
+		if tmp, ok := supportList.Get(key); ok {
+			if name == tmp.(ExchangeName) {
+				id, _ = strconv.Atoi(key)
+				break
+			}
+		}
+	}
+
+	return id
 }
 
 func (e *ExchangeManager) GetById(i int) Exchange {
@@ -139,7 +153,21 @@ func (e *ExchangeManager) GetStr(name string) Exchange {
 }
 
 func (e *ExchangeManager) GetSupportExchanges() []ExchangeName {
-	return supportList
+	list := []ExchangeName{}
+	idSort := []int{}
+	for _, key := range supportList.Keys() {
+		id, _ := strconv.Atoi(key)
+		idSort = append(idSort, id)
+	}
+	sort.Ints(idSort)
+	for _, id := range idSort {
+		key := fmt.Sprintf("%d", id)
+		if tmp, ok := supportList.Get(key); ok {
+			list = append(list, tmp.(ExchangeName))
+		}
+	}
+
+	return list
 }
 
 func (e *ExchangeManager) GetExchanges() []Exchange {
@@ -149,6 +177,19 @@ func (e *ExchangeManager) GetExchanges() []Exchange {
 	}
 
 	return exchanges
+}
+
+func (e *ExchangeManager) SubsetPairs(e1, e2 Exchange) []*pair.Pair {
+	var pairs []*pair.Pair
+	ep1 := e1.GetPairs()
+
+	for _, p := range ep1 {
+		if e2.HasPair(p) {
+			pairs = append(pairs, p)
+		}
+	}
+
+	return pairs
 }
 
 func (e *ExchangeManager) UpdateExData(conf *Update) {

@@ -5,7 +5,6 @@ package bittrex
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 const (
-	DEFAULT_ID           = 2
 	DEFAULT_TAKER_FEE    = 0.0025
 	DEFAULT_MAKERER_FEE  = 0.0025
 	DEFAULT_LOT_SIZE     = 0.00000001
