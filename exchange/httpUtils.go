@@ -6,6 +6,7 @@ package exchange
 
 import (
 	"crypto/hmac"
+	"crypto/md5"
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/base64"
@@ -81,6 +82,13 @@ func HttpPostRequest(strUrl string, mapParams map[string]string) string {
 }
 
 //Signature加密
+func ComputeMD5(strMessage string) string {
+	h := md5.New()
+	h.Write([]byte(strMessage))
+
+	return hex.EncodeToString(h.Sum(nil))
+}
+
 func ComputeHmac256(strMessage string, strSecret string) string {
 	key, _ := base64.StdEncoding.DecodeString(strSecret)
 	h := hmac.New(sha256.New, key)
