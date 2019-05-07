@@ -173,7 +173,10 @@ func (e *Bittrex) GetPairs() []*pair.Pair {
 	}
 	sort.Ints(keySort)
 	for _, key := range keySort {
-		pairList = append(pairList, pair.GetPairByID(key))
+		p := pair.GetPairByID(key)
+		if p != nil {
+			pairList = append(pairList, p)
+		}
 	}
 	return pairList
 }
