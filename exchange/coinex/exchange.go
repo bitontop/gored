@@ -44,7 +44,7 @@ func CreateCoinex(config *exchange.Config) *Coinex {
 		instance = &Coinex{
 			ID:      DEFAULT_ID,
 			Name:    "Coinex",
-			Website: "https://www.binance.com/",
+			Website: "https://www.coinex.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -90,7 +90,7 @@ func (e *Coinex) GetName() exchange.ExchangeName {
 }
 
 func (e *Coinex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.binance.com/cn/trade/pro/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.coinex.com/exchange?currency=%s&dest=%s&tab=limit", e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target))
 }
 
 func (e *Coinex) GetBalance(coin *coin.Coin) float64 {
@@ -214,10 +214,10 @@ func (e *Coinex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
-	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 

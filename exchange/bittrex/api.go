@@ -57,7 +57,7 @@ func (e *Bittrex) GetCoinsData() {
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if !jsonResponse.Success {
-		log.Printf("%s Get Coins Failed: %v", jsonResponse.Message)
+		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
 		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
@@ -112,7 +112,7 @@ func (e *Bittrex) GetPairsData() {
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
 		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if !jsonResponse.Success {
-		log.Printf("%s Get Pairs Failed: %v", jsonResponse.Message)
+		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
 		log.Printf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
@@ -173,15 +173,12 @@ func (e *Bittrex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-		log.Printf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-		return nil, nil
+		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if !jsonResponse.Success {
-		log.Printf("%s Get Orderbook Failed: %v", jsonResponse.Message)
-		return nil, nil
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderBook); err != nil {
-		log.Printf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
-		return nil, nil
+		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
