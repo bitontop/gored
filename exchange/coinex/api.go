@@ -383,7 +383,7 @@ func (e *Coinex) OrderStatus(order *exchange.Order) error {
 
 	jsonOrderStatus := e.ApiKeyRequest("GET", mapParams, strUrl)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
-		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 0 {
 		return fmt.Errorf("%s OrderStatus Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
