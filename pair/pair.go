@@ -30,14 +30,18 @@ func Init() {
 }
 
 func GeneratePairID() int {
-	keySort := []int{}
-	for _, key := range pairMap.Keys() {
-		if id, err := strconv.Atoi(key); err == nil {
-			keySort = append(keySort, id)
+	if pairMap.Count() > 0 {
+		keySort := []int{}
+		for _, key := range pairMap.Keys() {
+			if id, err := strconv.Atoi(key); err == nil {
+				keySort = append(keySort, id)
+			}
 		}
+		sort.Ints(keySort)
+		return keySort[len(keySort)-1] + 1
+	} else {
+		return 1
 	}
-	sort.Ints(keySort)
-	return keySort[len(keySort)-1] + 1
 }
 
 func SetPair(id int, base, target *coin.Coin) *Pair {
