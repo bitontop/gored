@@ -12,7 +12,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -435,7 +434,7 @@ func (e *Coinex) ApiKeyRequest(strMethod string, mapParams map[string]string, st
 		return err.Error()
 	}
 	hasher := md5.New()
-	signature := fmt.Sprintf("%s&secret_key=%s", MapSortByKey(mapParams), e.API_SECRET)
+	signature := fmt.Sprintf("%s&secret_key=%s", exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 	hasher.Write([]byte(signature))
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("authorization", strings.ToUpper(hex.EncodeToString(hasher.Sum(nil))))
@@ -475,7 +474,7 @@ func (e *Coinex) ApiKeyPost(strUrl string, mapParams map[string]string) string {
 		return err.Error()
 	}
 	hasher := md5.New()
-	signature := fmt.Sprintf("%s&secret_key=%s", MapSortByKey(mapParams), e.API_SECRET)
+	signature := fmt.Sprintf("%s&secret_key=%s", exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 	hasher.Write([]byte(signature))
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("authorization", strings.ToUpper(hex.EncodeToString(hasher.Sum(nil))))
@@ -495,26 +494,4 @@ func (e *Coinex) ApiKeyPost(strUrl string, mapParams map[string]string) string {
 	}
 
 	return string(body)
-}
-
-// 对Map按着ASCII码进行排序
-// mapValue: 需要进行排序的map
-// return: 排序后的map
-func MapSortByKey(mapValue map[string]string) string {
-	var keys []string
-	for key := range mapValue {
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-
-	var strParams string
-	for _, key := range keys {
-		strParams += (key + "=" + mapValue[key] + "&")
-	}
-
-	if 0 < len(strParams) {
-		strParams = string([]rune(strParams)[:len(strParams)-1])
-	}
-
-	return strParams
 }
