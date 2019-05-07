@@ -94,6 +94,10 @@ func CreateExchangeManager() *ExchangeManager {
 		if exMap == nil {
 			exMap = cmap.New()
 		}
+
+		if exIDMap == nil {
+			exIDMap = cmap.New()
+		}
 	})
 	return instance
 }
