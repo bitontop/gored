@@ -5,12 +5,16 @@ package coinex
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -230,11 +234,8 @@ func (e *Coinex) UpdateAllBalances() {
 	accountBalance := CoinexAccountBalance{}
 	strRequest := "/v1/balance/info"
 
-	timestamp := time.Now().UnixNano() / 1e6
-
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
-	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
@@ -272,17 +273,14 @@ func (e *Coinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	strRequest := "/v1/order/limit"
 	strUrl := API_URL + strRequest
 
-	timestamp := time.Now().UnixNano() / 1e6
-
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
 	mapParams["market"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "sell"
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
 	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
-	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
-	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strUrl)
+	jsonPlaceReturn := e.ApiKeyPost(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Code != 0 {
@@ -310,17 +308,14 @@ func (e *Coinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	strRequest := "/v1/order/limit"
 	strUrl := API_URL + strRequest
 
-	timestamp := time.Now().UnixNano() / 1e6
-
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
 	mapParams["market"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "buy"
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
 	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
-	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
-	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strUrl)
+	jsonPlaceReturn := e.ApiKeyPost(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Code != 0 {
@@ -350,12 +345,10 @@ func (e *Coinex) OrderStatus(order *exchange.Order) error {
 	strUrl := API_URL + strRequest
 
 	mapParams := make(map[string]string)
-	timestamp := time.Now().UnixNano() / 1e6
 
 	mapParams["access_id"] = e.API_KEY
 	mapParams["id"] = order.OrderID
 	mapParams["market"] = e.GetSymbolByPair(order.Pair)
-	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
 	jsonOrderStatus := e.ApiKeyRequest("GET", mapParams, strUrl)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
@@ -396,12 +389,10 @@ func (e *Coinex) CancelOrder(order *exchange.Order) error {
 	strRequest := "/v1/order/pending"
 	strUrl := API_URL + strRequest
 
-	timestamp := time.Now().UnixNano() / 1e6
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
 	mapParams["id"] = order.OrderID
 	mapParams["market"] = e.GetSymbolByPair(order.Pair)
-	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
 	jsonCancelOrder := e.ApiKeyRequest("DELETE", mapParams, strUrl)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
@@ -425,33 +416,105 @@ func (e *Coinex) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Coinex) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
-	mapParams["recvWindow"] = fmt.Sprintf("50000000")
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
+func (e *Coinex) ApiKeyRequest(strMethod string, mapParams map[string]string, strUrl string) string {
+	timestamp := time.Now().UnixNano() / 1e6
+	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
-	payload := exchange.Map2UrlQuery(mapParams)
-	mapParams["signature"] = exchange.ComputeHmac256(payload, e.API_SECRET)
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	var strRequestUrl string
+	if nil == mapParams {
+		strRequestUrl = strUrl
+	} else {
+		strParams := exchange.Map2UrlQuery(mapParams)
+		strRequestUrl = strUrl + "?" + strParams
+	}
 
+	// 构建Request, 并且按官方要求添加Http Header
 	httpClient := &http.Client{}
-
-	request, err := http.NewRequest(http.MethodGet, strUrl, nil)
+	request, err := http.NewRequest(strMethod, strRequestUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+	hasher := md5.New()
+	signature := fmt.Sprintf("%s&secret_key=%s", MapSortByKey(mapParams), e.API_SECRET)
+	hasher.Write([]byte(signature))
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("authorization", strings.ToUpper(hex.EncodeToString(hasher.Sum(nil))))
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
 
+	// 发出请求
 	response, err := httpClient.Do(request)
 	if nil != err {
 		return err.Error()
 	}
 	defer response.Body.Close()
 
+	// 解析响应内容
 	body, err := ioutil.ReadAll(response.Body)
 	if nil != err {
 		return err.Error()
 	}
 
 	return string(body)
+
+}
+
+func (e *Coinex) ApiKeyPost(strUrl string, mapParams map[string]string) string {
+	timestamp := time.Now().UnixNano() / 1e6
+	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
+
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	// 构建Request, 并且按官方要求添加Http Header
+	httpClient := &http.Client{}
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
+	if nil != err {
+		return err.Error()
+	}
+	hasher := md5.New()
+	signature := fmt.Sprintf("%s&secret_key=%s", MapSortByKey(mapParams), e.API_SECRET)
+	hasher.Write([]byte(signature))
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("authorization", strings.ToUpper(hex.EncodeToString(hasher.Sum(nil))))
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+
+	// 发出请求
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	// 解析响应内容
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+// 对Map按着ASCII码进行排序
+// mapValue: 需要进行排序的map
+// return: 排序后的map
+func MapSortByKey(mapValue map[string]string) string {
+	var keys []string
+	for key := range mapValue {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	var strParams string
+	for _, key := range keys {
+		strParams += (key + "=" + mapValue[key] + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
 }
