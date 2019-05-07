@@ -70,22 +70,14 @@ func (e *Coinex) GetCoinsData() {
 		case exchange.EXCHANGE_API:
 			c = coin.GetCoin(data.TradingName)
 			if c == nil {
-				log.Printf("====Trading Name:%v", data.TradingName) //==========
 				c = &coin.Coin{}
 				c.Code = data.TradingName
-				//c.Name = data.AssetName
-				//c.Website = data.URL
-				//c.Explorer = data.BlockURL
 				coin.AddCoin(c)
 			}
 			c2 = coin.GetCoin(data.PricingName)
 			if c2 == nil {
-				log.Printf("====Pricing Name:%v", data.PricingName) //==========
 				c2 = &coin.Coin{}
 				c2.Code = data.PricingName
-				//c.Name = data.AssetName
-				//c.Website = data.URL
-				//c.Explorer = data.BlockURL
 				coin.AddCoin(c2)
 			}
 		case exchange.JSON_FILE:
@@ -97,11 +89,7 @@ func (e *Coinex) GetCoinsData() {
 				CoinID:   c.ID,
 				Coin:     c,
 				ExSymbol: data.TradingName,
-				//TxFee:        data.TransactionFee,
-				//Withdraw:     data.EnableWithdraw,
-				//Deposit:      data.EnableCharge,
-				//Confirmation: confirmation,
-				Listed: true,
+				Listed:   true,
 			}
 
 			e.SetCoinConstraint(coinConstraint)
