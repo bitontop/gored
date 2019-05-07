@@ -42,13 +42,17 @@ func GetExchangeDataFromJSON(datapath string, exName exchange.ExchangeName) *Exc
 	for _, cc := range jsonData.CoinConstraint {
 		key := fmt.Sprintf("%d", cc.CoinID)
 		cc.Coin = coin.GetCoinByID(cc.CoinID)
-		exchangeData.CoinConstraint.Set(key, cc)
+		if cc.Coin != nil {
+			exchangeData.CoinConstraint.Set(key, cc)
+		}
 	}
 
 	for _, pc := range jsonData.PairConstraint {
 		key := fmt.Sprintf("%d", pc.PairID)
 		pc.Pair = pair.GetPairByID(pc.PairID)
-		exchangeData.PairConstraint.Set(key, pc)
+		if pc.Pair != nil {
+			exchangeData.PairConstraint.Set(key, pc)
+		}
 	}
 
 	return exchangeData
