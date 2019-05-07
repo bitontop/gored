@@ -135,11 +135,11 @@ func (e *ExchangeManager) GetID(name ExchangeName) int {
 }
 
 func (e *ExchangeManager) GetById(i int) Exchange {
-	for _, ex := range e.GetExchanges() {
-		if ex.GetID() == i {
-			return ex
-		}
+	key := fmt.Sprintf("%d", i)
+	if tmp, ok := supportList.Get(key); ok {
+		return e.Get(tmp.(ExchangeName))
 	}
+
 	return nil
 }
 
