@@ -19,7 +19,7 @@ import (
 func Test_Bittrex(t *testing.T) {
 	e := InitBittrex()
 
-	pair := e.GetPair("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
