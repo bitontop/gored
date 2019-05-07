@@ -4,11 +4,9 @@ import (
 	"log"
 	"testing"
 
-	// ==================need change=====================
-	//"github.com/bitontop/gored/exchange/coinex"
-	"../exchange/coinex"
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 )
