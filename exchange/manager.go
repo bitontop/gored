@@ -22,6 +22,7 @@ type Exchange interface {
 	InitData()
 
 	/***** Exchange Information *****/
+	GetID() int
 	GetName() ExchangeName
 	GetTradingWebURL(pair *pair.Pair) string
 	GetBalance(coin *coin.Coin) float64
@@ -82,7 +83,8 @@ var instance *ExchangeManager
 var once sync.Once
 
 var exMap cmap.ConcurrentMap
-var supportList cmap.ConcurrentMap
+var exIDMap cmap.ConcurrentMap
+var supportList = make([]ExchangeName, 0)
 
 func CreateExchangeManager() *ExchangeManager {
 	once.Do(func() {
@@ -91,10 +93,6 @@ func CreateExchangeManager() *ExchangeManager {
 
 		if exMap == nil {
 			exMap = cmap.New()
-		}
-
-		if supportList == nil {
-			supportList = cmap.New()
 		}
 	})
 	return instance
@@ -107,6 +105,13 @@ func (e *ExchangeManager) init() {
 func (e *ExchangeManager) Add(exchange Exchange) {
 	key := string(exchange.GetName())
 	exMap.Set(key, exchange)
+
+	id := fmt.Sprintf("%d", exchange.GetID())
+	if exIDMap.Has(id) {
+		log.Fatal("%s ID: %d is exist. Please check.", exchange.GetName(), exchange.GetID())
+	} else {
+		exIDMap.Set(id, exchange)
+	}
 }
 
 func (e *ExchangeManager) Quantity() int {
@@ -121,23 +126,14 @@ func (e *ExchangeManager) Get(name ExchangeName) Exchange {
 }
 
 func (e *ExchangeManager) GetID(name ExchangeName) int {
-	var id int
-	for _, key := range supportList.Keys() {
-		if tmp, ok := supportList.Get(key); ok {
-			if name == tmp.(ExchangeName) {
-				id, _ = strconv.Atoi(key)
-				break
-			}
-		}
-	}
-
-	return id
+	eInstance := e.Get(name)
+	return eInstance.GetID()
 }
 
 func (e *ExchangeManager) GetById(i int) Exchange {
 	key := fmt.Sprintf("%d", i)
-	if tmp, ok := supportList.Get(key); ok {
-		return e.Get(tmp.(ExchangeName))
+	if tmp, ok := exIDMap.Get(key); ok {
+		return tmp.(Exchange)
 	}
 
 	return nil
@@ -153,27 +149,19 @@ func (e *ExchangeManager) GetStr(name string) Exchange {
 }
 
 func (e *ExchangeManager) GetSupportExchanges() []ExchangeName {
-	list := []ExchangeName{}
+	return supportList
+}
+
+func (e *ExchangeManager) GetExchanges() []Exchange {
+	exchanges := []Exchange{}
 	idSort := []int{}
-	for _, key := range supportList.Keys() {
+	for _, key := range exIDMap.Keys() {
 		id, _ := strconv.Atoi(key)
 		idSort = append(idSort, id)
 	}
 	sort.Ints(idSort)
 	for _, id := range idSort {
-		key := fmt.Sprintf("%d", id)
-		if tmp, ok := supportList.Get(key); ok {
-			list = append(list, tmp.(ExchangeName))
-		}
-	}
-
-	return list
-}
-
-func (e *ExchangeManager) GetExchanges() []Exchange {
-	exchanges := []Exchange{}
-	for _, key := range exMap.Keys() {
-		exchanges = append(exchanges, e.GetStr(key))
+		exchanges = append(exchanges, e.GetById(id))
 	}
 
 	return exchanges

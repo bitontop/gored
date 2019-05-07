@@ -5,6 +5,7 @@ package binance
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 const (
+	DEFAULT_ID           = 1
 	DEFAULT_TAKER_FEE    = 0.001
 	DEFAULT_MAKERER_FEE  = 0.001
 	DEFAULT_LOT_SIZE     = 0.00000001
