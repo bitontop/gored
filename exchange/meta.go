@@ -79,6 +79,6 @@ const (
 )
 
 func (e *ExchangeManager) initExchangeNames() {
-	supportList.Set("1", BINANCE)
-	supportList.Set("2", BITTREX)
+	supportList = append(supportList, BINANCE)
+	supportList = append(supportList, BITTREX)
 }
