@@ -37,6 +37,14 @@ func Test_Orderbook(e exchange.Exchange, p *pair.Pair) {
 }
 
 /********************Private API********************/
+func Test_Balance(e exchange.Exchange, p *pair.Pair) {
+	e.UpdateAllBalances()
+
+	base := e.GetBalance(p.Base)
+	target := e.GetBalance(p.Target)
+	log.Printf("Pair: %12s  Base %s: %f | Target %s: %f", p.Name, p.Base.Code, base, p.Target.Code, target)
+}
+
 func Test_Trading(e exchange.Exchange, p *pair.Pair, rate, quantity float64) {
 	order, err := e.LimitBuy(p, quantity, rate)
 	if err == nil {

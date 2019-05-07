@@ -25,10 +25,12 @@ func Test_Binance(t *testing.T) {
 	Test_Pairs(e)
 	Test_Pair(e, pair)
 	Test_Orderbook(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
-	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
+
+	Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
 func InitBinance() exchange.Exchange {
