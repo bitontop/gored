@@ -12,7 +12,7 @@ A Realtime-Exchange-Data SDK is supporting multiple exchanges written in Golang.
 
 ## Community
 
-Join our slack to discuss all things related to GoRed! [GoRed Telegram](https://t.me/aibone)
+Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https://t.me/bitontop)
 
 ## Exchange Support Table
 
