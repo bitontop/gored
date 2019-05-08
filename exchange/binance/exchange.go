@@ -122,7 +122,10 @@ func (e *Binance) GetCoins() []*coin.Coin {
 	}
 	sort.Ints(keySort)
 	for _, key := range keySort {
-		coinList = append(coinList, coin.GetCoinByID(key))
+		c := coin.GetCoinByID(key)
+		if c != nil {
+			coinList = append(coinList, c)
+		}
 	}
 	return coinList
 }

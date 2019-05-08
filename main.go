@@ -13,13 +13,7 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bittrex"
-
-	// ==================need change=====================
-	//"github.com/bitontop/gored/exchange/coinex"
-	//"github.com/bitontop/gored/exchange/stex"
-	"../gored/exchange/coinex"
-	"../gored/exchange/stex"
-
+	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 	"github.com/bitontop/gored/utils"

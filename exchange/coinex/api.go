@@ -258,7 +258,7 @@ func (e *Coinex) UpdateAllBalances() {
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", mapParams, strRequest)
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -274,7 +274,10 @@ func (e *Coinex) UpdateAllBalances() {
 	for key, balance := range accountBalance {
 		c := e.GetCoinBySymbol(key)
 		if c != nil {
-			balanceMap.Set(c.Code, balance.Available)
+			freeamount, err := strconv.ParseFloat(balance.Available, 64)
+			if err == nil {
+				balanceMap.Set(c.Code, freeamount)
+			}
 		}
 	}
 }
@@ -293,7 +296,6 @@ func (e *Coinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	placeOrder := PlaceOrder{}
 
 	strRequest := "/v1/order/limit"
-	strUrl := API_URL + strRequest
 
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
@@ -302,7 +304,7 @@ func (e *Coinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["amount"] = fmt.Sprintf("%f", quantity)
 	mapParams["price"] = fmt.Sprintf("%f", rate)
 
-	jsonPlaceReturn := e.ApiKeyPost(strUrl, mapParams)
+	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
@@ -333,7 +335,6 @@ func (e *Coinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := PlaceOrder{}
 
 	strRequest := "/v1/order/limit"
-	strUrl := API_URL + strRequest
 
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
@@ -342,7 +343,7 @@ func (e *Coinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["amount"] = fmt.Sprintf("%f", quantity)
 	mapParams["price"] = fmt.Sprintf("%f", rate)
 
-	jsonPlaceReturn := e.ApiKeyPost(strUrl, mapParams)
+	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
@@ -373,7 +374,6 @@ func (e *Coinex) OrderStatus(order *exchange.Order) error {
 	orderStatus := PlaceOrder{}
 
 	strRequest := "/v1/order/status"
-	strUrl := API_URL + strRequest
 
 	mapParams := make(map[string]string)
 
@@ -381,9 +381,9 @@ func (e *Coinex) OrderStatus(order *exchange.Order) error {
 	mapParams["id"] = order.OrderID
 	mapParams["market"] = e.GetSymbolByPair(order.Pair)
 
-	jsonOrderStatus := e.ApiKeyRequest("GET", mapParams, strUrl)
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
-		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 0 {
 		return fmt.Errorf("%s OrderStatus Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
@@ -420,14 +420,13 @@ func (e *Coinex) CancelOrder(order *exchange.Order) error {
 	cancelOrder := PlaceOrder{}
 
 	strRequest := "/v1/order/pending"
-	strUrl := API_URL + strRequest
 
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
 	mapParams["id"] = order.OrderID
 	mapParams["market"] = e.GetSymbolByPair(order.Pair)
 
-	jsonCancelOrder := e.ApiKeyRequest("DELETE", mapParams, strUrl)
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != 0 {
@@ -452,16 +451,16 @@ func (e *Coinex) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Coinex) ApiKeyRequest(strMethod string, mapParams map[string]string, strUrl string) string {
+func (e *Coinex) ApiKeyRequest(strMethod string, strRequestPath string, mapParams map[string]string) string {
 	timestamp := time.Now().UnixNano() / 1e6
 	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
 	var strRequestUrl string
 	if nil == mapParams {
-		strRequestUrl = strUrl
+		strRequestUrl = API_URL + strRequestPath
 	} else {
 		strParams := exchange.Map2UrlQuery(mapParams)
-		strRequestUrl = strUrl + "?" + strParams
+		strRequestUrl = API_URL + strRequestPath + "?" + strParams
 	}
 
 	signature := fmt.Sprintf("%s&secret_key=%s", exchange.Map2UrlQuery(mapParams), e.API_SECRET)
@@ -493,9 +492,11 @@ func (e *Coinex) ApiKeyRequest(strMethod string, mapParams map[string]string, st
 
 }
 
-func (e *Coinex) ApiKeyPost(strUrl string, mapParams map[string]string) string {
+func (e *Coinex) ApiKeyPost(strRequestPath string, mapParams map[string]string) string {
 	timestamp := time.Now().UnixNano() / 1e6
 	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
+
+	strUrl := API_URL + strRequestPath
 
 	jsonParams := ""
 	if nil != mapParams {

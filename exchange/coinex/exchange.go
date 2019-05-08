@@ -122,7 +122,10 @@ func (e *Coinex) GetCoins() []*coin.Coin {
 	}
 	sort.Ints(keySort)
 	for _, key := range keySort {
-		coinList = append(coinList, coin.GetCoinByID(key))
+		c := coin.GetCoinByID(key)
+		if c != nil {
+			coinList = append(coinList, c)
+		}
 	}
 	return coinList
 }
@@ -175,7 +178,10 @@ func (e *Coinex) GetPairs() []*pair.Pair {
 	}
 	sort.Ints(keySort)
 	for _, key := range keySort {
-		pairList = append(pairList, pair.GetPairByID(key))
+		p := pair.GetPairByID(key)
+		if p != nil {
+			pairList = append(pairList, p)
+		}
 	}
 	return pairList
 }
