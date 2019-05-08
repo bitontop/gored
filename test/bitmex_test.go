@@ -17,9 +17,10 @@ import (
 
 /********************Public API********************/
 func Test_Bitmex(t *testing.T) {
+	log.SetFlags(log.LstdFlags | log.Llongfile)
 	e := InitBitmex()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("M19|XBT")
 
 	Test_Coins(e)
 	Test_Pairs(e)

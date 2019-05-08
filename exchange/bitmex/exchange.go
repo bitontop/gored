@@ -86,7 +86,7 @@ func (e *Bitmex) GetID() int {
 }
 
 func (e *Bitmex) GetName() exchange.ExchangeName {
-	return exchange.BINANCE
+	return exchange.BITMEX
 }
 
 func (e *Bitmex) GetTradingWebURL(pair *pair.Pair) string {
