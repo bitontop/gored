@@ -138,7 +138,7 @@ func (e *Bitmex) GetPairsData() {
 		case exchange.EXCHANGE_API:
 			base := coin.GetCoin(data.QuoteCurrency)
 			target := coin.GetCoin(data.RootSymbol)
-			if base != nil && target != nil {
+			if base != nil && target != nil && base != target {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
