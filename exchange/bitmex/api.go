@@ -52,7 +52,8 @@ Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitmex) GetCoinsData() {
 	coinsData := PairsData{}
 
-	strUrl := "/instrument/active"
+	strRequestUrl := "/instrument/active"
+	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
