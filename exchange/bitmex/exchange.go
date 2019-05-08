@@ -90,7 +90,7 @@ func (e *Bitmex) GetName() exchange.ExchangeName {
 }
 
 func (e *Bitmex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bitmex.com/cn/trade/pro/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.bitmex.com/app/trade/%s", e.GetSymbolByPair(pair))
 }
 
 func (e *Bitmex) GetBalance(coin *coin.Coin) float64 {
