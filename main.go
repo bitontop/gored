@@ -16,7 +16,9 @@ import (
 
 	// ==================need change=====================
 	//"github.com/bitontop/gored/exchange/coinex"
+	//"github.com/bitontop/gored/exchange/stex"
 	"../gored/exchange/coinex"
+	"../gored/exchange/stex"
 
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
@@ -73,6 +75,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBinance(config)
 	InitBittrex(config)
 	InitCoinex(config)
+	InitStex(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -96,6 +99,15 @@ func InitBittrex(config *exchange.Config) {
 func InitCoinex(config *exchange.Config) {
 	conf.Exchange(exchange.COINEX, config)
 	ex := coinex.CreateCoinex(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitStex(config *exchange.Config) {
+	conf.Exchange(exchange.STEX, config)
+	ex := stex.CreateStex(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
