@@ -8,6 +8,9 @@ import (
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/stex"
+
+	//"github.com/bitontop/gored/exchange/kucoin"
+	"../exchange/kucoin"
 )
 
 var instance *InitManager
@@ -45,6 +48,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.STEX:
 		ex := stex.CreateStex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.KUCOIN:
+		ex := kucoin.CreateKucoin(config)
 		e.exMan.Add(ex)
 		return ex
 
