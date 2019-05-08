@@ -105,6 +105,14 @@ func ComputeHmac512(strMessage string, strSecret string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
+func ComputeHmac512NoDecode(strMessage string, strSecret string) string {
+	key := []byte(strSecret)
+	h := hmac.New(sha512.New, key)
+	h.Write([]byte(strMessage))
+
+	return hex.EncodeToString(h.Sum(nil))
+}
+
 // 将map格式的请求参数转换为字符串格式的
 // mapParams: map格式的参数键值对
 // return: 查询字符串

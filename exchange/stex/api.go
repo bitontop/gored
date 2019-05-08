@@ -11,7 +11,6 @@ import (
 	"log"
 	"math"
 	"net/http"
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -129,8 +128,8 @@ func (e *Stex) GetPairsData() {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.CurrencyCode)
-			target := coin.GetCoin(data.MarketCode)
+			base := coin.GetCoin(data.MarketCode)
+			target := coin.GetCoin(data.CurrencyCode)
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
@@ -141,7 +140,7 @@ func (e *Stex) GetPairsData() {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    strconv.Itoa(data.ID),
+				ExSymbol:    fmt.Sprintf("%d", data.ID),
 				MakerFee:    DEFAULT_MAKERER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.CurrencyPrecision * -1),
@@ -164,7 +163,7 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonResponse := JsonResponseV3{}
 	orderBook := OrderBook{}
 
-	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", pair.Name)
+	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetSymbolByPair(pair))
 	strUrl := API3_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
@@ -234,13 +233,12 @@ func (e *Stex) UpdateAllBalances() {
 
 	mapParams := make(map[string]string)
 	mapParams["method"] = "GetInfo"
-	jsonBalanceReturn := e.ApiPostRequest(mapParams)
-
+	jsonBalanceReturn := e.ApiKeyPost(mapParams)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if jsonResponse.Success != 1 {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
+		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Error)
 		return
 	}
 
@@ -287,7 +285,7 @@ func (e *Stex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 	mapParams["amount"] = fmt.Sprintf("%v", quantity)
 
 	jsonResponse := &JsonResponse{}
-	jsonSubmitWithdraw := e.ApiPostRequest(mapParams)
+	jsonSubmitWithdraw := e.ApiKeyPost(mapParams)
 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
@@ -319,7 +317,7 @@ func (e *Stex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams["type"] = "SELL"
 	mapParams["pair"] = e.GetSymbolByPair(pair)
 
-	jsonPlaceReturn := e.ApiPostRequest(mapParams)
+	jsonPlaceReturn := e.ApiKeyPost(mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Success != 1 {
@@ -358,7 +356,7 @@ func (e *Stex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	mapParams["type"] = "BUY"
 	mapParams["pair"] = e.GetSymbolByPair(pair)
 
-	jsonPlaceReturn := e.ApiPostRequest(mapParams)
+	jsonPlaceReturn := e.ApiKeyPost(mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Success != 1 {
@@ -403,7 +401,7 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 		mapParams["end_id"] = order.OrderID
 		mapParams["owner"] = "ALL"
 
-		jsonOrderStatus := e.ApiPostRequest(mapParams)
+		jsonOrderStatus := e.ApiKeyPost(mapParams)
 		if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 			return fmt.Errorf("%s orderDetail Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 		} else if jsonResponse.Success != 1 {
@@ -457,7 +455,7 @@ func (e *Stex) CancelOrder(order *exchange.Order) error {
 	mapParams := make(map[string]string)
 	mapParams["order_id"] = order.OrderID
 	mapParams["method"] = "CancelOrder"
-	jsonCancelOrder := e.ApiPostRequest(mapParams)
+	jsonCancelOrder := e.ApiKeyPost(mapParams)
 
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
@@ -483,24 +481,19 @@ func (e *Stex) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Stex) ApiPostRequest(payload map[string]string) string {
+func (e *Stex) ApiKeyPost(mapParams map[string]string) string {
 	httpClient := &http.Client{}
 
-	formValues := url.Values{}
-	for key, value := range payload {
-		formValues.Add(key, value)
-	}
-	nonce := fmt.Sprintf("%d", time.Now().Unix())
-	formValues.Add("nonce", nonce)
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
 
-	formData := formValues.Encode()
+	payload := exchange.Map2UrlQuery(mapParams)
 
-	request, err := http.NewRequest("POST", API_URL, strings.NewReader(formData))
+	request, err := http.NewRequest("POST", API_URL, strings.NewReader(payload))
 	if err != nil {
 		return err.Error()
 	}
 
-	sig := exchange.ComputeHmac512(formData, e.API_SECRET)
+	sig := exchange.ComputeHmac512NoDecode(payload, e.API_SECRET)
 	request.Header.Add("Key", e.API_KEY)
 	request.Header.Add("Sign", sig)
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")

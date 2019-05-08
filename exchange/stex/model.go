@@ -11,9 +11,9 @@ import (
 type JsonResponse struct {
 	Success int             `json:"success"`
 	Data    json.RawMessage `json:"data"`
+	Error   string          `json:"error"`
 	Notice  string          `json:"notice"`
 	Message string          `json:"message"`
-	Err     interface{}     `json:"errors"`
 }
 
 type JsonResponseV3 struct {
