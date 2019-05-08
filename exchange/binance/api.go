@@ -183,8 +183,7 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
-		log.Printf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
-		return nil, err
+		return nil, fmt.Errorf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
@@ -195,14 +194,12 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		buydata := exchange.Order{}
 		buydata.Quantity, err = strconv.ParseFloat(bid[1].(string), 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		buydata.Rate, err = strconv.ParseFloat(bid[0].(string), 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 		maker.Bids = append(maker.Bids, buydata)
 	}
@@ -211,14 +208,12 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		selldata := exchange.Order{}
 		selldata.Quantity, err = strconv.ParseFloat(ask[1].(string), 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat  Quantity error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat  Rate error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 		maker.Asks = append(maker.Asks, selldata)
 	}

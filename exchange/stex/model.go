@@ -85,7 +85,7 @@ type OrderBook struct {
 	} `json:"bid"`
 }
 
-type UserInfo struct {
+type AccountBalances struct {
 	Email        string            `json:"email"`
 	Username     string            `json:"username"`
 	Hash         string            `json:"hash"`

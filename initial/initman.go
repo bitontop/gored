@@ -5,6 +5,7 @@ import (
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/stex"
@@ -45,6 +46,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.STEX:
 		ex := stex.CreateStex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BITMEX:
+		ex := bitmex.CreateBitmex(config)
 		e.exMan.Add(ex)
 		return ex
 
@@ -305,11 +311,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 		// case exchange.RIGHTBTC:
 		// 	ex := rightbtc.CreateRightbtc(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
-		// case exchange.BITMEX:
-		// 	ex := bitmex.CreateBitmex(config)
 		// 	e.exMan.Add(ex)
 		// 	return ex
 
