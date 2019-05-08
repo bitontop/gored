@@ -52,7 +52,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Stex) GetCoinsData() {
-	jsonResponse := &JsonResponse{}
+	jsonResponse := &JsonResponseV3{}
 	coinsData := CoinsData{}
 
 	strRequestUrl := "/public/currencies"
@@ -60,8 +60,8 @@ func (e *Stex) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v", err)
-	} else if jsonResponse.Success != 1 {
+		log.Printf("%s Get Coins Json Unmarshal Err: %v-%v", err, jsonCurrencyReturn)
+	} else if !jsonResponse.Success {
 		log.Printf("%s Get Coins Failed: %v", jsonResponse.Message)
 	}
 
@@ -91,7 +91,7 @@ func (e *Stex) GetCoinsData() {
 				Coin:         c,
 				ExSymbol:     data.Code,
 				TxFee:        txFee,
-				Withdraw:     data.Active, //This may be true(from crd)
+				Withdraw:     data.Active,
 				Deposit:      data.Active,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       true,
@@ -163,9 +163,8 @@ Step 6: Convert the response to Standard Maker struct*/
 func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonResponse := JsonResponseV3{}
 	orderBook := OrderBook{}
-	symbol := e.GetSymbolByPair(pair)
 
-	strRequestUrl := fmt.Sprintf("/public/orderbook/%s", symbol)
+	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", pair.ID)
 	strUrl := API3_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
@@ -177,7 +176,7 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		log.Printf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 		return nil, nil
 	} else if !jsonResponse.Success {
-		log.Printf("%s Get Orderbook Failed: %v", jsonResponse.Message)
+		log.Printf("Get Orderbook Failed: %v", jsonResponse.Message)
 		return nil, nil
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {

@@ -10,8 +10,7 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-
-	"../exchange/stex"
+	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 )
@@ -20,12 +19,13 @@ import (
 func Test_Stex(t *testing.T) {
 	e := InitStex()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|BRAT")
 
 	Test_Coins(e)
 	Test_Pairs(e)
 	Test_Pair(e, pair)
 	Test_Orderbook(e, pair)
+	//Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	Test_ConstraintFetch(e, pair)

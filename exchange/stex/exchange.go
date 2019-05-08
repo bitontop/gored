@@ -44,7 +44,7 @@ func CreateStex(config *exchange.Config) *Stex {
 		instance = &Stex{
 			ID:      DEFAULT_ID,
 			Name:    "Stex",
-			Website: "https://www.bittrex.com/",
+			Website: "https://www.stex.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -98,7 +98,7 @@ func (e *Stex) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Stex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://bittrex.com/Market/Index?MarketName=%s", e.GetSymbolByPair(pair))
+	return fmt.Sprintf("https://app.stex.com/en/basic-trade/pair/%s/%s", e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target))
 }
 
 /*************** Coins on the Exchanges ***************/
@@ -218,7 +218,7 @@ func (e *Stex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.TxFee = true
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
-	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 
