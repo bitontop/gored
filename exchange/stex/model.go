@@ -146,3 +146,8 @@ type OrderDetail struct {
 	Timestamp      int                       `json:"timestamp"`
 	Rates          map[string]*BuySellAmount `json:"rates"`
 }
+
+type BuySellAmount struct {
+	BuyAmount  interface{} `json:"buy_amount"`
+	SellAmount interface{} `json:"sell_amount"`
+}
