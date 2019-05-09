@@ -146,7 +146,7 @@ func (e *Kucoin) GetPairsData() {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     lotSize,
 				PriceFilter: priceFilter,
-				Listed:      true,
+				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -497,7 +497,7 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 
 	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
 	request.Header.Add("KC-API-KEY", e.API_KEY)
-	request.Header.Add("KC-API-SIGN", exchange.CreateSign(nonce, e.API_SECRET, strMethod, strRequestPath, mapParams))
+	request.Header.Add("KC-API-SIGN", createSign(nonce, e.API_SECRET, strMethod, strRequestPath, mapParams))
 	request.Header.Add("KC-API-TIMESTAMP", fmt.Sprintf("%v", nonce))
 	request.Header.Add("KC-API-PASSPHRASE", e.Passphrase)
 	response, err := httpClient.Do(request)
