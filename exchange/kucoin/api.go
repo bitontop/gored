@@ -11,9 +11,6 @@ import (
 	"log"
 	"math"
 	"net/http"
-	"net/url"
-	"path"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -452,55 +449,38 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
+	strRequestUrl = API_URL + strRequestPath
 
 	httpClient := &http.Client{}
-	request := &http.Request{}
 	var err error
+	request := &http.Request{}
+	jsonParams := ""
 
-	Url, err := url.Parse(API_URL)
-	if err != nil {
-		return err.Error()
-	}
-	Url.Path = path.Join(Url.Path, strRequestPath)
-
-	if strMethod == "GET" {
-		q := Url.Query()
-		for key, value := range mapParams {
-			q.Set(key, value)
+	if strMethod == "GET" || strMethod == "DELETE" {
+		if nil != mapParams {
+			payload := exchange.Map2UrlQuery(mapParams)
+			strRequestUrl = API_URL + strRequestPath + "?" + payload
 		}
-		Url.RawQuery = q.Encode()
-		request, err = http.NewRequest(strMethod, Url.String(), nil)
-	} else if strMethod == "DELETE" {
-		q := Url.Query()
-		for key, value := range mapParams {
-			q.Set(key, value)
-		}
-		Url.RawQuery = q.Encode()
-		request, err = http.NewRequest(strMethod, Url.String(), nil)
+		request, err = http.NewRequest(strMethod, strRequestUrl, nil)
 	} else {
-
-		body := ""
-		if len(mapParams) != 0 {
-			jsonBody, err := json.Marshal(mapParams)
-			if err != nil {
-				log.Printf("marshal mapParams to json body err :%v", err)
-			}
-			body = string(jsonBody)
+		if nil != mapParams {
+			bytesParams, _ := json.Marshal(mapParams)
+			jsonParams = string(bytesParams)
 		}
-		request, err = http.NewRequest(strMethod, Url.String(), strings.NewReader(body))
+		request, err = http.NewRequest(strMethod, Url.String(), strings.NewReader(jsonParams))
 	}
 
 	if nil != err {
 		return err.Error()
 	}
-
+	signature := fmt.Sprintf("%v", nonce) + strMethod + strRequestUrl + jsonParams
 	request.Header.Add("Content-Type", "application/json")
-
-	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
 	request.Header.Add("KC-API-KEY", e.API_KEY)
-	request.Header.Add("KC-API-SIGN", e.CreateSign(nonce, strMethod, strRequestPath, mapParams))
+	request.Header.Add("KC-API-SIGN", exchange.ComputeHmac256NoDecode(signature, e.API_SECRET))
 	request.Header.Add("KC-API-TIMESTAMP", fmt.Sprintf("%v", nonce))
 	request.Header.Add("KC-API-PASSPHRASE", e.Passphrase)
+
 	response, err := httpClient.Do(request)
 	if nil != err {
 		return err.Error()
@@ -513,36 +493,4 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 	}
 
 	return string(body)
-
-}
-
-func (e *Kucoin) CreateSign(nonce int64, strMethod string, path string, mapParams map[string]string) string {
-	body := ""
-	if len(mapParams) != 0 {
-		jsonBody, err := json.Marshal(mapParams)
-		if err != nil {
-			log.Printf("marshal mapParams to json body err :%v", err)
-		}
-		body = string(jsonBody)
-	}
-	mapString := ""
-	if len(mapParams) != 0 {
-		keys := make([]string, 0, len(mapParams))
-		for key := range mapParams {
-			keys = append(keys, key)
-		}
-		sort.Strings(keys)
-		for _, key := range keys {
-			mapString += (key + "=" + mapParams[key] + "&")
-		}
-		mapString = "?" + mapString[:len(mapString)-1]
-	}
-	strForSign := ""
-	if strMethod == "GET" || strMethod == "DELETE" {
-		strForSign = fmt.Sprintf("%v", nonce) + strMethod + path + mapString // + body
-	} else if strMethod == "POST" {
-		strForSign = fmt.Sprintf("%v", nonce) + strMethod + path + body
-	}
-	signature := exchange.ComputeHmac256NoDecode(strForSign, e.API_SECRET)
-	return signature
 }
