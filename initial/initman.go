@@ -8,9 +8,9 @@ import (
 	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/coinex"
-	"github.com/bitontop/gored/exchange/stex"
-
+	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/stex"
 )
 
 var instance *InitManager
