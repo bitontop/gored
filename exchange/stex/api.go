@@ -172,17 +172,15 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-		log.Printf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-		return nil, nil
+		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if !jsonResponse.Success {
-		log.Printf("Get Orderbook Failed: %v", jsonResponse.Message)
-		return nil, nil
+		return nil, fmt.Errorf("Get Orderbook Failed: %v", jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
-		log.Printf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return nil, nil
+		return nil, fmt.Errorf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 	var err error
 	for _, bid := range orderBook.Bid {
 		var buydata exchange.Order
@@ -190,11 +188,11 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		//Modify according to type and structure
 		buydata.Rate, err = strconv.ParseFloat(bid.Price, 64)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 		buydata.Quantity, err = strconv.ParseFloat(bid.Amount, 64)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		maker.Bids = append(maker.Bids, buydata)
@@ -206,17 +204,15 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		//Modify according to type and structure
 		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)
 	}
-
-	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	return maker, nil
 }
@@ -229,10 +225,11 @@ func (e *Stex) UpdateAllBalances() {
 	}
 
 	jsonResponse := &JsonResponse{}
-	accountBalance := UserInfo{}
+	accountBalance := AccountBalances{}
 
 	mapParams := make(map[string]string)
 	mapParams["method"] = "GetInfo"
+
 	jsonBalanceReturn := e.ApiKeyPost(mapParams)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
@@ -245,12 +242,12 @@ func (e *Stex) UpdateAllBalances() {
 	if strings.Contains(jsonBalanceReturn, "\"funds\":[]") {
 		EmptyAccount := EmptyAccount{}
 		if err := json.Unmarshal(jsonResponse.Data, &EmptyAccount); err != nil {
-			log.Printf("Get Balance Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-			log.Printf("Stex Get Balance: This account has no balance")
-			_ = accountBalance
+			log.Printf("%s Get Balance Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+			return
+		} else {
+			log.Printf("%s Get Balance: This account has no balance", e.GetName())
 			return
 		}
-		return
 	}
 
 	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
@@ -455,8 +452,8 @@ func (e *Stex) CancelOrder(order *exchange.Order) error {
 	mapParams := make(map[string]string)
 	mapParams["order_id"] = order.OrderID
 	mapParams["method"] = "CancelOrder"
-	jsonCancelOrder := e.ApiKeyPost(mapParams)
 
+	jsonCancelOrder := e.ApiKeyPost(mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Success != 1 {
@@ -485,7 +482,6 @@ func (e *Stex) ApiKeyPost(mapParams map[string]string) string {
 	httpClient := &http.Client{}
 
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-
 	payload := exchange.Map2UrlQuery(mapParams)
 
 	request, err := http.NewRequest("POST", API_URL, strings.NewReader(payload))

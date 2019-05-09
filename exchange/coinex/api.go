@@ -213,14 +213,12 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		buydata := exchange.Order{}
 		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 		maker.Bids = append(maker.Bids, buydata)
 	}
@@ -229,14 +227,12 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		selldata := exchange.Order{}
 		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat  Quantity error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
 		if err != nil {
-			log.Printf("%s OrderBook strconv.ParseFloat  Rate error:%v", e.GetName(), err)
-			return nil, err
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 		maker.Asks = append(maker.Asks, selldata)
 	}
