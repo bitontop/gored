@@ -24,8 +24,9 @@ type Bitmax struct {
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
 
-	API_KEY    string
-	API_SECRET string
+	API_KEY       string
+	API_SECRET    string
+	Account_Group string
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -56,6 +57,7 @@ func CreateBitmax(config *exchange.Config) *Bitmax {
 		coinConstraintMap = cmap.New()
 		pairConstraintMap = cmap.New()
 
+		instance.AccountGroup()
 		instance.InitData()
 	})
 	return instance
@@ -215,12 +217,12 @@ func (e *Bitmax) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bitmax) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
-	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = false
-	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Fee = true
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
+	constrainFetchMethod.TxFee = true
+	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }

@@ -5,13 +5,12 @@ import (
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/coinex"
-	"github.com/bitontop/gored/exchange/stex"
-
-	"../exchange/bitmax"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/stex"
 )
 
 var instance *InitManager
@@ -61,11 +60,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		ex := kucoin.CreateKucoin(config)
 		e.exMan.Add(ex)
 		return ex
-
-	// case exchange.BITMAX:
-	// 	ex := bitmax.CreateBitmax(config)
-	// 	e.exMan.Add(ex)
-	// 	return ex
 
 	case exchange.HUOBIOTC:
 		ex := huobiotc.CreateHuobiotc(config)
