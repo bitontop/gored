@@ -234,7 +234,7 @@ func (e *Kucoin) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if jsonResponse.Code != "200000" {
-		log.Printf("%s UpdateAllBalances Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		log.Printf("%s UpdateAllBalances Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 		return
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
@@ -274,7 +274,7 @@ func (e *Kucoin) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonCreateWithdraw)
 		return false
 	} else if jsonResponse.Code != "200000" {
-		log.Printf("%s Withdraw Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		log.Printf("%s Withdraw Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 		return false
 	}
 
@@ -308,7 +308,7 @@ func (e *Kucoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "200000" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitSell Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -348,7 +348,7 @@ func (e *Kucoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "200000" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -380,7 +380,7 @@ func (e *Kucoin) OrderStatus(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != "200000" {
-		return fmt.Errorf("%s OrderStatus Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return fmt.Errorf("%s OrderStatus Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -427,7 +427,7 @@ func (e *Kucoin) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != "200000" {
-		return fmt.Errorf("%s CancelOrder Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return fmt.Errorf("%s CancelOrder Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -455,18 +455,21 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 	httpClient := &http.Client{}
 	var err error
 	request := &http.Request{}
+	signature := fmt.Sprintf("%v", nonce) + strMethod + strRequestPath
 	jsonParams := ""
 
 	if strMethod == "GET" || strMethod == "DELETE" {
 		if nil != mapParams {
 			payload := exchange.Map2UrlQuery(mapParams)
 			strRequestUrl = API_URL + strRequestPath + "?" + payload
+			signature = signature + "?" + payload
 		}
 		request, err = http.NewRequest(strMethod, strRequestUrl, nil)
 	} else {
 		if nil != mapParams {
 			bytesParams, _ := json.Marshal(mapParams)
 			jsonParams = string(bytesParams)
+			signature = signature + jsonParams
 		}
 		request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
 	}
@@ -474,7 +477,6 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 	if nil != err {
 		return err.Error()
 	}
-	signature := fmt.Sprintf("%v", nonce) + strMethod + strRequestUrl + jsonParams
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("KC-API-KEY", e.API_KEY)
 	request.Header.Add("KC-API-SIGN", exchange.ComputeHmac256NoDecode(signature, e.API_SECRET))
