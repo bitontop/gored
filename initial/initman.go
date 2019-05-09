@@ -10,6 +10,7 @@ import (
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/stex"
 
+	"../exchange/bitmax"
 	"github.com/bitontop/gored/exchange/kucoin"
 )
 
@@ -58,6 +59,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITMEX:
 		ex := bitmex.CreateBitmex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BITMAX:
+		ex := bitmax.CreateBitmax(config)
 		e.exMan.Add(ex)
 		return ex
 

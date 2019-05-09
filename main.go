@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"../gored/exchange/bitmax"
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/binance"
@@ -73,6 +74,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitCoinex(config)
 	InitStex(config)
 	InitKucoin(config)
+	InitBitmax(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -114,6 +116,15 @@ func InitStex(config *exchange.Config) {
 func InitKucoin(config *exchange.Config) {
 	conf.Exchange(exchange.KUCOIN, config)
 	ex := kucoin.CreateKucoin(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBitmax(config *exchange.Config) {
+	conf.Exchange(exchange.BITMAX, config)
+	ex := bitmax.CreateBitmax(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
