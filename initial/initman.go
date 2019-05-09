@@ -9,6 +9,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/coinex"
+	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/stex"
 )
@@ -62,7 +63,7 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		return ex
 
 	case exchange.HUOBIOTC:
-		ex := huobiotc.CreateHuobiotc(config)
+		ex := huobiotc.CreateHuobiOTC(config)
 		e.exMan.Add(ex)
 		return ex
 
