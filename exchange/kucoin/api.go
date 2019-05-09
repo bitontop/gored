@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -497,7 +498,7 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 
 	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
 	request.Header.Add("KC-API-KEY", e.API_KEY)
-	request.Header.Add("KC-API-SIGN", createSign(nonce, e.API_SECRET, strMethod, strRequestPath, mapParams))
+	request.Header.Add("KC-API-SIGN", e.CreateSign(nonce, strMethod, strRequestPath, mapParams))
 	request.Header.Add("KC-API-TIMESTAMP", fmt.Sprintf("%v", nonce))
 	request.Header.Add("KC-API-PASSPHRASE", e.Passphrase)
 	response, err := httpClient.Do(request)
@@ -513,4 +514,35 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 
 	return string(body)
 
+}
+
+func (e *Kucoin) CreateSign(nonce int64, strMethod string, path string, mapParams map[string]string) string {
+	body := ""
+	if len(mapParams) != 0 {
+		jsonBody, err := json.Marshal(mapParams)
+		if err != nil {
+			log.Printf("marshal mapParams to json body err :%v", err)
+		}
+		body = string(jsonBody)
+	}
+	mapString := ""
+	if len(mapParams) != 0 {
+		keys := make([]string, 0, len(mapParams))
+		for key := range mapParams {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			mapString += (key + "=" + mapParams[key] + "&")
+		}
+		mapString = "?" + mapString[:len(mapString)-1]
+	}
+	strForSign := ""
+	if strMethod == "GET" || strMethod == "DELETE" {
+		strForSign = fmt.Sprintf("%v", nonce) + strMethod + path + mapString // + body
+	} else if strMethod == "POST" {
+		strForSign = fmt.Sprintf("%v", nonce) + strMethod + path + body
+	}
+	signature := exchange.ComputeHmac256NoDecode(strForSign, e.API_SECRET)
+	return signature
 }
