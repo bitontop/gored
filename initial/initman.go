@@ -51,13 +51,23 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		e.exMan.Add(ex)
 		return ex
 
+	case exchange.BITMEX:
+		ex := bitmex.CreateBitmex(config)
+		e.exMan.Add(ex)
+		return ex
+
 	case exchange.KUCOIN:
 		ex := kucoin.CreateKucoin(config)
 		e.exMan.Add(ex)
 		return ex
 
-	case exchange.BITMEX:
-		ex := bitmex.CreateBitmex(config)
+	// case exchange.BITMAX:
+	// 	ex := bitmax.CreateBitmax(config)
+	// 	e.exMan.Add(ex)
+	// 	return ex
+
+	case exchange.HUOBIOTC:
+		ex := huobiotc.CreateHuobiotc(config)
 		e.exMan.Add(ex)
 		return ex
 
@@ -128,11 +138,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 		// case exchange.BCEX:
 		// 	ex := bcex.CreateBcex(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
-		// case exchange.STEX:
-		// 	ex := stex.CreateStex(config)
 		// 	e.exMan.Add(ex)
 		// 	return ex
 
@@ -228,16 +233,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 		// case exchange.HOTBIT:
 		// 	ex := hotbit.CreateHotbit(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
-		// case exchange.BITMAX:
-		// 	ex := bitmax.CreateBitmax(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
-		// case exchange.HUOBIOTC:
-		// 	ex := huobiotc.CreateHuobiotc(config)
 		// 	e.exMan.Add(ex)
 		// 	return ex
 
