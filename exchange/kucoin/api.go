@@ -450,7 +450,7 @@ Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
 	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
-	strRequestUrl = API_URL + strRequestPath
+	strRequestUrl := API_URL + strRequestPath
 
 	httpClient := &http.Client{}
 	var err error
@@ -468,7 +468,7 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 			bytesParams, _ := json.Marshal(mapParams)
 			jsonParams = string(bytesParams)
 		}
-		request, err = http.NewRequest(strMethod, Url.String(), strings.NewReader(jsonParams))
+		request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
 	}
 
 	if nil != err {
