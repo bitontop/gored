@@ -19,7 +19,7 @@ import (
 func Test_HuobiOTC(t *testing.T) {
 	e := InitHuobiOTC()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("CNY|BTC")
 
 	Test_Coins(e)
 	Test_Pairs(e)
