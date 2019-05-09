@@ -54,6 +54,7 @@ func (e *Bitmax) GetCoinsData() {
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	log.Printf("====jsonresponse: %+v", jsonCurrencyReturn) //=====
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if !jsonResponse.Success {

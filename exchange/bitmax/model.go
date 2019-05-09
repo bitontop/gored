@@ -16,6 +16,16 @@ type JsonResponse struct {
 	Result  json.RawMessage `json:"result"`
 }
 
+type BitmaxCoins []struct {
+	AssetCode        string `json:"assetCode"`
+	AssetName        string `json:"assetName"`
+	PrecisionScale   int    `json:"precisionScale"`
+	NativeScale      int    `json:"nativeScale"`
+	WithdrawalFee    int    `json:"withdrawalFee"`
+	MinWithdrawalAmt int    `json:"minWithdrawalAmt"`
+	Status           string `json:"status"`
+}
+
 type AccountBalances []struct {
 	Currency      string  `json:"Currency"`
 	Balance       float64 `json:"Balance"`
