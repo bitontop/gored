@@ -67,7 +67,7 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 	// 	return ex
 
 	case exchange.HUOBIOTC:
-		ex := huobiotc.CreateHuobiotc(config)
+		ex := huobiotc.CreateHuobiOTC(config)
 		e.exMan.Add(ex)
 		return ex
 
