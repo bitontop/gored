@@ -1,4 +1,4 @@
-package bitmex
+package huobiotc
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -9,6 +9,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 
 	cmap "github.com/orcaman/concurrent-map"
@@ -19,7 +20,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-type Bitmex struct {
+type HuobiOTC struct {
 	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
@@ -35,16 +36,16 @@ var pairConstraintMap cmap.ConcurrentMap
 var coinConstraintMap cmap.ConcurrentMap
 var balanceMap cmap.ConcurrentMap
 
-var instance *Bitmex
+var instance *HuobiOTC
 var once sync.Once
 
 /***************************************************/
-func CreateBitmex(config *exchange.Config) *Bitmex {
+func CreateHuobiOTC(config *exchange.Config) *HuobiOTC {
 	once.Do(func() {
-		instance = &Bitmex{
+		instance = &HuobiOTC{
 			ID:      DEFAULT_ID,
-			Name:    "Bitmex",
-			Website: "https://www.bitmex.com/",
+			Name:    "HuobiOTC",
+			Website: "https://www.huobiotc.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -61,7 +62,7 @@ func CreateBitmex(config *exchange.Config) *Bitmex {
 	return instance
 }
 
-func (e *Bitmex) InitData() {
+func (e *HuobiOTC) InitData() {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		e.GetCoinsData()
@@ -76,24 +77,24 @@ func (e *Bitmex) InitData() {
 		break
 	case exchange.PSQL:
 	default:
-		log.Printf("Bitmex Initial Coin: There is not selected data source.")
+		log.Printf("HuobiOTC Initial Coin: There is not selected data source.")
 	}
 }
 
 /**************** Exchange Information ****************/
-func (e *Bitmex) GetID() int {
+func (e *HuobiOTC) GetID() int {
 	return e.ID
 }
 
-func (e *Bitmex) GetName() exchange.ExchangeName {
-	return exchange.BITMEX
+func (e *HuobiOTC) GetName() exchange.ExchangeName {
+	return exchange.HUOBIOTC
 }
 
-func (e *Bitmex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bitmex.com/app/trade/%s", e.GetSymbolByPair(pair))
+func (e *HuobiOTC) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://otc.hbg.com/en-us/trade/%s-%s", "buy", strings.ToLower(pair.Target.Code))
 }
 
-func (e *Bitmex) GetBalance(coin *coin.Coin) float64 {
+func (e *HuobiOTC) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
@@ -102,18 +103,18 @@ func (e *Bitmex) GetBalance(coin *coin.Coin) float64 {
 }
 
 /*************** Coins on the Exchanges ***************/
-func (e *Bitmex) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
+func (e *HuobiOTC) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
 	if tmp, ok := coinConstraintMap.Get(fmt.Sprintf("%d", coin.ID)); ok {
 		return tmp.(*exchange.CoinConstraint)
 	}
 	return nil
 }
 
-func (e *Bitmex) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
+func (e *HuobiOTC) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
 	coinConstraintMap.Set(fmt.Sprintf("%d", coinConstraint.CoinID), coinConstraint)
 }
 
-func (e *Bitmex) GetCoins() []*coin.Coin {
+func (e *HuobiOTC) GetCoins() []*coin.Coin {
 	coinList := []*coin.Coin{}
 	keySort := []int{}
 	for _, key := range coinConstraintMap.Keys() {
@@ -130,7 +131,7 @@ func (e *Bitmex) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *Bitmex) GetCoinBySymbol(symbol string) *coin.Coin {
+func (e *HuobiOTC) GetCoinBySymbol(symbol string) *coin.Coin {
 	for _, id := range coinConstraintMap.Keys() {
 		if tmp, ok := coinConstraintMap.Get(id); ok {
 			cc := tmp.(*exchange.CoinConstraint)
@@ -144,7 +145,7 @@ func (e *Bitmex) GetCoinBySymbol(symbol string) *coin.Coin {
 	return nil
 }
 
-func (e *Bitmex) GetSymbolByCoin(coin *coin.Coin) string {
+func (e *HuobiOTC) GetSymbolByCoin(coin *coin.Coin) string {
 	key := fmt.Sprintf("%d", coin.ID)
 	if tmp, ok := coinConstraintMap.Get(key); ok {
 		cc := tmp.(*exchange.CoinConstraint)
@@ -153,23 +154,23 @@ func (e *Bitmex) GetSymbolByCoin(coin *coin.Coin) string {
 	return ""
 }
 
-func (e *Bitmex) DeleteCoin(coin *coin.Coin) {
+func (e *HuobiOTC) DeleteCoin(coin *coin.Coin) {
 	coinConstraintMap.Remove(fmt.Sprintf("%d", coin.ID))
 }
 
 /*************** Pairs on the Exchanges ***************/
-func (e *Bitmex) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+func (e *HuobiOTC) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
 	return nil
 }
 
-func (e *Bitmex) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
+func (e *HuobiOTC) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
 	pairConstraintMap.Set(fmt.Sprintf("%d", pairConstraint.PairID), pairConstraint)
 }
 
-func (e *Bitmex) GetPairs() []*pair.Pair {
+func (e *HuobiOTC) GetPairs() []*pair.Pair {
 	pairList := []*pair.Pair{}
 	keySort := []int{}
 	for _, key := range pairConstraintMap.Keys() {
@@ -186,7 +187,7 @@ func (e *Bitmex) GetPairs() []*pair.Pair {
 	return pairList
 }
 
-func (e *Bitmex) GetPairBySymbol(symbol string) *pair.Pair {
+func (e *HuobiOTC) GetPairBySymbol(symbol string) *pair.Pair {
 	for _, id := range pairConstraintMap.Keys() {
 		if tmp, ok := pairConstraintMap.Get(id); ok {
 			pc := tmp.(*exchange.PairConstraint)
@@ -198,7 +199,7 @@ func (e *Bitmex) GetPairBySymbol(symbol string) *pair.Pair {
 	return nil
 }
 
-func (e *Bitmex) GetSymbolByPair(pair *pair.Pair) string {
+func (e *HuobiOTC) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
@@ -206,16 +207,16 @@ func (e *Bitmex) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
-func (e *Bitmex) HasPair(pair *pair.Pair) bool {
+func (e *HuobiOTC) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }
 
-func (e *Bitmex) DeletePair(pair *pair.Pair) {
+func (e *HuobiOTC) DeletePair(pair *pair.Pair) {
 	pairConstraintMap.Remove(fmt.Sprintf("%d", pair.ID))
 }
 
 /**************** Exchange Constraint ****************/
-func (e *Bitmex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
+func (e *HuobiOTC) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
@@ -227,44 +228,44 @@ func (e *Bitmex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	return constrainFetchMethod
 }
 
-func (e *Bitmex) UpdateConstraint() {
+func (e *HuobiOTC) UpdateConstraint() {
 	e.GetCoinsData()
 	e.GetPairsData()
 }
 
 /**************** Coin Constraint ****************/
-func (e *Bitmex) GetTxFee(coin *coin.Coin) float64 {
+func (e *HuobiOTC) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
 	return coinConstraint.TxFee
 }
 
-func (e *Bitmex) CanWithdraw(coin *coin.Coin) bool {
+func (e *HuobiOTC) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	return coinConstraint.Withdraw
 }
 
-func (e *Bitmex) CanDeposit(coin *coin.Coin) bool {
+func (e *HuobiOTC) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	return coinConstraint.Deposit
 }
 
-func (e *Bitmex) GetConfirmation(coin *coin.Coin) int {
+func (e *HuobiOTC) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
 	return coinConstraint.Confirmation
 }
 
 /**************** Pair Constraint ****************/
-func (e *Bitmex) GetFee(pair *pair.Pair) float64 {
+func (e *HuobiOTC) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	return pairConstraint.TakerFee
 }
 
-func (e *Bitmex) GetLotSize(pair *pair.Pair) float64 {
+func (e *HuobiOTC) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	return pairConstraint.LotSize
 }
 
-func (e *Bitmex) GetPriceFilter(pair *pair.Pair) float64 {
+func (e *HuobiOTC) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	return pairConstraint.PriceFilter
 }

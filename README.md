@@ -118,3 +118,5 @@ Binaries will be published once the codebase reaches a stable condition.
 |--|--|--|
 | iobond | https://github.com/iobond | 526 |
 | chunlee1991 | https://github.com/chunlee1991 | 302 |
+| 9cat | https://github.com/9cat | 116 |
+| temple | https://github.com/botemple | 129 |
