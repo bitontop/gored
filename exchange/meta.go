@@ -83,5 +83,6 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BITTREX)
 	supportList = append(supportList, COINEX)
 	supportList = append(supportList, STEX)
+	supportList = append(supportList, KUCOIN)
 	supportList = append(supportList, BITMEX)
 }

@@ -1,0 +1,516 @@
+package kucoin
+
+// Copyright (c) 2015-2019 Bitontop Technologies Inc.
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"math"
+	"net/http"
+	"net/url"
+	"path"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/bitontop/gored/coin"
+	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/pair"
+)
+
+/*The Base Endpoint URL*/
+const (
+	API_URL = "https://openapi-v2.kucoin.com"
+)
+
+/*API Base Knowledge
+Path: API function. Usually after the base endpoint URL
+Method:
+	Get - Call a URL, API return a response
+	Post - Call a URL & send a request, API return a response
+Public API:
+	It doesn't need authorization/signature , can be called by browser to get response.
+	using exchange.HttpGetRequest/exchange.HttpPostRequest
+Private API:
+	Authorization/Signature is requried. The signature request should look at Exchange API Document.
+	using ApiKeyGet/ApiKeyPost
+Response:
+	Response is a json structure.
+	Copy the json to https://transform.now.sh/json-to-go/ convert to go Struct.
+	Add the go Struct to model.go
+
+ex. Get /api/v1/depth
+Get - Method
+/api/v1/depth - Path*/
+
+/*************** Public API ***************/
+/*Get Coins Information (If API provide)
+Step 1: Change Instance Name    (e *<exchange Instance Name>)
+Step 2: Add Model of API Response
+Step 3: Modify API Path(strRequestUrl)*/
+func (e *Kucoin) GetCoinsData() {
+	jsonResponse := &JsonResponse{}
+	coinsData := CoinsData{}
+
+	strRequestUrl := "/api/v1/currencies"
+	strUrl := API_URL + strRequestUrl
+
+	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
+		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+	} else if jsonResponse.Code != "200000" {
+		log.Printf("%s Get Coins Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
+		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	for _, data := range coinsData {
+		c := &coin.Coin{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			c = coin.GetCoin(data.Currency)
+			if c == nil {
+				c = &coin.Coin{}
+				c.Code = data.Currency
+				c.Name = data.FullName
+				coin.AddCoin(c)
+			}
+		case exchange.JSON_FILE:
+			c = e.GetCoinBySymbol(data.Currency)
+		}
+
+		if c != nil {
+			txFee, _ := strconv.ParseFloat(data.WithdrawalMinFee, 64)
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       c.ID,
+				Coin:         c,
+				ExSymbol:     data.Currency,
+				TxFee:        txFee,
+				Withdraw:     data.IsWithdrawEnabled,
+				Deposit:      data.IsDepositEnabled,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+	}
+}
+
+/* GetPairsData - Get Pairs Information (If API provide)
+Step 1: Change Instance Name    (e *<exchange Instance Name>)
+Step 2: Add Model of API Response
+Step 3: Modify API Path(strRequestUrl)*/
+func (e *Kucoin) GetPairsData() {
+	jsonResponse := &JsonResponse{}
+	pairsData := PairsData{}
+
+	strRequestUrl := "/api/v1/symbols"
+	strUrl := API_URL + strRequestUrl
+
+	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
+		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+	} else if jsonResponse.Code != "200000" {
+		log.Printf("%s Get Pairs Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
+		log.Printf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	for _, data := range pairsData {
+		p := &pair.Pair{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			base := coin.GetCoin(data.QuoteCurrency)
+			target := coin.GetCoin(data.BaseCurrency)
+			if base != nil && target != nil {
+				p = pair.GetPair(base, target)
+			}
+		case exchange.JSON_FILE:
+			p = e.GetPairBySymbol(data.Symbol)
+		}
+
+		if p != nil {
+			lotSize, _ := strconv.ParseFloat(data.BaseIncrement, 64)
+			priceFilter, _ := strconv.ParseFloat(data.PriceIncrement, 64)
+			pairConstraint := &exchange.PairConstraint{
+				PairID:      p.ID,
+				Pair:        p,
+				ExSymbol:    data.Symbol,
+				MakerFee:    DEFAULT_MAKERER_FEE,
+				TakerFee:    DEFAULT_TAKER_FEE,
+				LotSize:     lotSize,
+				PriceFilter: priceFilter,
+				Listed:      true,
+			}
+			e.SetPairConstraint(pairConstraint)
+		}
+	}
+}
+
+/*Get Pair Market Depth
+Step 1: Change Instance Name    (e *<exchange Instance Name>)
+Step 2: Add Model of API Response
+Step 3: Get Exchange Pair Code ex. symbol := e.GetPairCode(p)
+Step 4: Modify API Path(strRequestUrl)
+Step 5: Add Params - Depend on API request
+Step 6: Convert the response to Standard Maker struct*/
+func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
+	jsonResponse := &JsonResponse{}
+	orderBook := OrderBook{}
+	symbol := e.GetSymbolByPair(p)
+
+	strRequestUrl := "/api/v1/market/orderbook/level2"
+	strUrl := API_URL + strRequestUrl
+
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = symbol
+
+	maker := &exchange.Maker{}
+	maker.WorkerIP = exchange.GetExternalIP()
+	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
+
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
+	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
+	} else if jsonResponse.Code != "200000" {
+		return nil, fmt.Errorf("%s Get Pairs Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
+		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+
+	var err error
+	for _, bid := range orderBook.Bids {
+		buydata := exchange.Order{}
+
+		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
+		if err != nil {
+			log.Printf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+			return nil, err
+		}
+		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
+		if err != nil {
+			log.Printf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, err
+		}
+		maker.Bids = append(maker.Bids, buydata)
+	}
+
+	for i := len(orderBook.Asks) - 1; i >= 0; i-- {
+		selldata := exchange.Order{}
+		selldata.Rate, err = strconv.ParseFloat(orderBook.Asks[i][0], 64)
+		if err != nil {
+			log.Printf("%s OrderBook strconv.ParseFloat  Rate error:%v", e.GetName(), err)
+		}
+		selldata.Quantity, err = strconv.ParseFloat(orderBook.Asks[i][1], 64)
+		if err != nil {
+			log.Printf("%s OrderBook strconv.ParseFloat  Quantity error:%v", e.GetName(), err)
+		}
+		maker.Asks = append(maker.Asks, selldata)
+	}
+
+	return maker, err
+}
+
+/*************** Private API ***************/
+func (e *Kucoin) UpdateAllBalances() {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountBalance := AccountBalance{}
+	strRequest := "/api/v1/accounts"
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+		return
+	} else if jsonResponse.Code != "200000" {
+		log.Printf("%s UpdateAllBalances Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return
+	}
+
+	for _, balance := range accountBalance {
+		c := e.GetCoinBySymbol(balance.Currency)
+		if c != nil {
+			freeamount, err := strconv.ParseFloat(balance.Available, 64)
+			if err == nil {
+				balanceMap.Set(c.Code, freeamount)
+			}
+		}
+	}
+}
+
+/* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
+func (e *Kucoin) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		log.Printf("Kucoin API Key or Secret Key or passphrase are nil.")
+		return false
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+	strRequestUrl := "/api/v1/withdrawals"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = fmt.Sprintf("%v", strings.ToUpper(coin.Code))
+	mapParams["address"] = addr
+	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+
+	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
+	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonCreateWithdraw)
+		return false
+	} else if jsonResponse.Code != "200000" {
+		log.Printf("%s Withdraw Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return false
+	}
+
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return false
+	}
+
+	log.Printf("the withdraw state response %v and the withdraw id: %v", jsonCreateWithdraw, withdraw.WithdrawalID)
+	return true
+}
+
+func (e *Kucoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	placeOrder := OrderDetail{}
+	strRequest := "/api/v1/orders"
+
+	mapParams := make(map[string]string)
+	mapParams["clientOid"] = fmt.Sprintf("%v", time.Now().UnixNano()) //Unique order id selected by you to identify your order
+	mapParams["side"] = "sell"
+	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["type"] = "limit"
+	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["size"] = fmt.Sprintf("%f", quantity)
+
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if jsonResponse.Code != "200000" {
+		return nil, fmt.Errorf("%s LimitSell Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	order := &exchange.Order{
+		Pair:         pair,
+		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
+		Rate:         rate,
+		Quantity:     quantity,
+		Side:         "Sell",
+		Status:       exchange.New,
+		JsonResponse: jsonPlaceReturn,
+	}
+
+	return order, nil
+}
+
+func (e *Kucoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	placeOrder := OrderDetail{}
+	strRequest := "/api/v1/orders"
+
+	mapParams := make(map[string]string)
+	mapParams["clientOid"] = fmt.Sprintf("%v", time.Now().UnixNano()) //Unique order id selected by you to identify your order
+	mapParams["side"] = "buy"
+	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["type"] = "limit"
+	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["size"] = fmt.Sprintf("%f", quantity)
+
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if jsonResponse.Code != "200000" {
+		return nil, fmt.Errorf("%s LimitBuy Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	order := &exchange.Order{
+		Pair:         pair,
+		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
+		Rate:         rate,
+		Quantity:     quantity,
+		Side:         "Buy",
+		Status:       exchange.New,
+		JsonResponse: jsonPlaceReturn,
+	}
+
+	return order, nil
+}
+
+func (e *Kucoin) OrderStatus(order *exchange.Order) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	orderStatus := OrderStatus{}
+	strRequest := fmt.Sprintf("/api/v1/orders/%s", order.OrderID)
+
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, nil)
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+	} else if jsonResponse.Code != "200000" {
+		return fmt.Errorf("%s OrderStatus Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	switch orderStatus.OpType {
+	case "DEAL":
+		dealSize, _ := strconv.ParseFloat(orderStatus.DealSize, 64)
+		if dealSize == order.Quantity {
+			order.Status = exchange.Filled
+		} else if dealSize > 0 && dealSize < order.Quantity {
+			order.Status = exchange.Partial
+		} else if math.Abs(dealSize-0.0) < 0.00000000001 {
+			order.Status = exchange.New
+		} else {
+			order.Status = exchange.Other
+		}
+	case "CANCEL":
+		order.Status = exchange.Canceled
+	default:
+		order.Status = exchange.Other
+	}
+
+	order.DealRate, _ = strconv.ParseFloat(orderStatus.DealFunds, 64)
+	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.DealSize, 64)
+
+	return nil
+}
+
+func (e *Kucoin) ListOrders() ([]*exchange.Order, error) {
+	return nil, nil
+}
+
+func (e *Kucoin) CancelOrder(order *exchange.Order) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	cancelOrder := CancelOrder{}
+	strRequest := fmt.Sprintf("/api/v1/orders/%s", order.OrderID)
+
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, nil)
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
+		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
+	} else if jsonResponse.Code != "200000" {
+		return fmt.Errorf("%s CancelOrder Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
+		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	order.Status = exchange.Canceling
+	order.CancelStatus = jsonCancelOrder
+
+	return nil
+}
+
+func (e *Kucoin) CancelAllOrder() error {
+	return nil
+}
+
+/*************** Signature Http Request ***************/
+/*Method: API Request and Signature is required
+Step 1: Change Instance Name    (e *<exchange Instance Name>)
+Step 2: Create mapParams Depend on API Signature request
+Step 3: Add HttpGetRequest below strUrl if API has different requests*/
+func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+
+	httpClient := &http.Client{}
+	request := &http.Request{}
+	var err error
+
+	Url, err := url.Parse(API_URL)
+	if err != nil {
+		return err.Error()
+	}
+	Url.Path = path.Join(Url.Path, strRequestPath)
+
+	if strMethod == "GET" {
+		q := Url.Query()
+		for key, value := range mapParams {
+			q.Set(key, value)
+		}
+		Url.RawQuery = q.Encode()
+		request, err = http.NewRequest(strMethod, Url.String(), nil)
+	} else if strMethod == "DELETE" {
+		q := Url.Query()
+		for key, value := range mapParams {
+			q.Set(key, value)
+		}
+		Url.RawQuery = q.Encode()
+		request, err = http.NewRequest(strMethod, Url.String(), nil)
+	} else {
+
+		body := ""
+		if len(mapParams) != 0 {
+			jsonBody, err := json.Marshal(mapParams)
+			if err != nil {
+				log.Printf("marshal mapParams to json body err :%v", err)
+			}
+			body = string(jsonBody)
+		}
+		request, err = http.NewRequest(strMethod, Url.String(), strings.NewReader(body))
+	}
+
+	if nil != err {
+		return err.Error()
+	}
+
+	request.Header.Add("Content-Type", "application/json")
+
+	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
+	request.Header.Add("KC-API-KEY", e.API_KEY)
+	request.Header.Add("KC-API-SIGN", exchange.CreateSign(nonce, e.API_SECRET, strMethod, strRequestPath, mapParams))
+	request.Header.Add("KC-API-TIMESTAMP", fmt.Sprintf("%v", nonce))
+	request.Header.Add("KC-API-PASSPHRASE", e.Passphrase)
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+
+}
