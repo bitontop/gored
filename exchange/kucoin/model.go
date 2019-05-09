@@ -7,47 +7,95 @@ import "encoding/json"
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 type JsonResponse struct {
-	Code    int             `json:"code"`
-	Message string          `json:"message"`
+	Success bool            `json:"success"`
+	Code    string          `json:"code"`
+	Msg     string          `json:"msg"`
+	Retry   bool            `json:"retry"`
 	Data    json.RawMessage `json:"data"`
 }
 
-type AccountBalances struct {
-	Available string `json:"available"`
-	Frozen    string `json:"frozen"`
+type CoinsData []struct {
+	WithdrawalMinFee  string `json:"withdrawalMinFee"`
+	Precision         int    `json:"precision"`
+	Name              string `json:"name"`
+	FullName          string `json:"fullName"`
+	Currency          string `json:"currency"`
+	WithdrawalMinSize string `json:"withdrawalMinSize"`
+	IsWithdrawEnabled bool   `json:"isWithdrawEnabled"`
+	IsDepositEnabled  bool   `json:"isDepositEnabled"`
 }
 
-type PlaceOrder struct {
-	Amount       string `json:"amount"`
-	AvgPrice     string `json:"avg_price"`
-	CreateTime   int    `json:"create_time"`
-	DealAmount   string `json:"deal_amount"`
-	DealFee      string `json:"deal_fee"`
-	DealMoney    string `json:"deal_money"`
-	ID           int    `json:"id"`
-	Left         string `json:"left"`
-	MakerFeeRate string `json:"maker_fee_rate"`
-	Market       string `json:"market"`
-	OrderType    string `json:"order_type"`
-	Price        string `json:"price"`
-	Status       string `json:"status"`
-	TakerFeeRate string `json:"taker_fee_rate"`
-	Type         string `json:"type"`
+type PairsData []struct {
+	Symbol         string `json:"symbol"`
+	QuoteMaxSize   string `json:"quoteMaxSize"`
+	EnableTrading  bool   `json:"enableTrading"`
+	PriceIncrement string `json:"priceIncrement"`
+	BaseMaxSize    string `json:"baseMaxSize"`
+	BaseCurrency   string `json:"baseCurrency"`
+	QuoteCurrency  string `json:"quoteCurrency"`
+	Market         string `json:"market"`
+	QuoteIncrement string `json:"quoteIncrement"`
+	BaseMinSize    string `json:"baseMinSize"`
+	QuoteMinSize   string `json:"quoteMinSize"`
+	Name           string `json:"name"`
+	BaseIncrement  string `json:"baseIncrement"`
 }
 
 type OrderBook struct {
-	Asks [][]string `json:"asks"`
-	Bids [][]string `json:"bids"`
-	Last string     `json:"last"`
+	Sequence string     `json:"sequence"`
+	Asks     [][]string `json:"asks"`
+	Bids     [][]string `json:"bids"`
 }
 
-type PairsData struct {
-	Symbol         string `json:"name"`
-	MinAmount      string `json:"min_amount"`
-	MakerFeeRate   string `json:"maker_fee_rate"`
-	TakerFeeRate   string `json:"taker_fee_rate"`
-	PricingName    string `json:"pricing_name"`
-	PricingDecimal int    `json:"pricing_decimal"`
-	TradingName    string `json:"trading_name"`
-	TradingDecimal int    `json:"trading_decimal"`
+type AccountBalance []struct {
+	Balance   string `json:"balance"`
+	Available string `json:"available"`
+	Holds     string `json:"holds"`
+	Currency  string `json:"currency"`
+	ID        string `json:"id"`
+	Type      string `json:"type"`
+}
+
+type Withdraw struct {
+	WithdrawalID string `json:"withdrawalId"`
+}
+
+type OrderDetail struct {
+	OrderID string `json:"orderId"`
+}
+
+type OrderStatus struct {
+	ID            string `json:"id"`
+	Symbol        string `json:"symbol"`
+	OpType        string `json:"opType"`
+	Type          string `json:"type"`
+	Side          string `json:"side"`
+	Price         string `json:"price"`
+	Size          string `json:"size"`
+	Funds         string `json:"funds"`
+	DealFunds     string `json:"dealFunds"`
+	DealSize      string `json:"dealSize"`
+	Fee           string `json:"fee"`
+	FeeCurrency   string `json:"feeCurrency"`
+	Stp           string `json:"stp"`
+	Stop          string `json:"stop"`
+	StopTriggered bool   `json:"stopTriggered"`
+	StopPrice     string `json:"stopPrice"`
+	TimeInForce   string `json:"timeInForce"`
+	PostOnly      bool   `json:"postOnly"`
+	Hidden        bool   `json:"hidden"`
+	Iceberg       bool   `json:"iceberg"`
+	VisibleSize   string `json:"visibleSize"`
+	CancelAfter   int    `json:"cancelAfter"`
+	Channel       string `json:"channel"`
+	ClientOid     string `json:"clientOid"`
+	Remark        string `json:"remark"`
+	Tags          string `json:"tags"`
+	IsActive      bool   `json:"isActive"`
+	CancelExist   bool   `json:"cancelExist"`
+	CreatedAt     int64  `json:"createdAt"`
+}
+
+type CancelOrder struct {
+	CancelledOrderIds []string `json:"cancelledOrderIds"`
 }

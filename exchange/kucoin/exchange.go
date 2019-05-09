@@ -26,6 +26,7 @@ type Kucoin struct {
 
 	API_KEY    string
 	API_SECRET string
+	Passphrase string
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -44,12 +45,14 @@ func CreateKucoin(config *exchange.Config) *Kucoin {
 		instance = &Kucoin{
 			ID:      DEFAULT_ID,
 			Name:    "Kucoin",
-			Website: "https://www.coinex.com/",
+			Website: "https://www.kucoin.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
-			Source:     config.Source,
-			SourceURI:  config.SourceURI,
+			Passphrase: config.Passphrase,
+
+			Source:    config.Source,
+			SourceURI: config.SourceURI,
 		}
 
 		balanceMap = cmap.New()
@@ -90,7 +93,7 @@ func (e *Kucoin) GetName() exchange.ExchangeName {
 }
 
 func (e *Kucoin) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.coinex.com/exchange?currency=%s&dest=%s&tab=limit", e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target))
+	return fmt.Sprintf("https://www.kucoin.com/trade/%s-%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 func (e *Kucoin) GetBalance(coin *coin.Coin) float64 {
@@ -218,12 +221,12 @@ func (e *Kucoin) DeletePair(pair *pair.Pair) {
 func (e *Kucoin) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.Fee = true
-	constrainFetchMethod.LotSize = true
-	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = false
-	constrainFetchMethod.Deposit = false
-	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.LotSize = false
+	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.TxFee = true
+	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.Deposit = true
+	constrainFetchMethod.Confirmation = true
 	return constrainFetchMethod
 }
 

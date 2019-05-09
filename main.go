@@ -9,12 +9,12 @@ import (
 	"os"
 	"time"
 
-	"../gored/exchange/kucoin"
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/coinex"
+	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"

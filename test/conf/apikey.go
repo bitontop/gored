@@ -32,6 +32,7 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 	case exchange.KUCOIN:
 		config.API_KEY = ""
 		config.API_SECRET = ""
+		config.Passphrase = ""
 		break
 
 		// case exchange.HUOBI:

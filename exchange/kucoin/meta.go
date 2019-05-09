@@ -5,13 +5,11 @@ package kucoin
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 const (
-	DEFAULT_ID           = 3
+	DEFAULT_ID           = 6
 	DEFAULT_TAKER_FEE    = 0.001
 	DEFAULT_MAKERER_FEE  = 0.001
 	DEFAULT_LOT_SIZE     = 0.00000001
 	DEFAULT_PRICE_FILTER = 0.00000001 //PRICE FILTER
-	DEFAULT_TXFEE        = 0.005
-	DEFAULT_WITHDRAW     = true
-	DEFAULT_DEPOSIT      = true
-	DEFAULT_CONFIRMATION = 2
+	DEFAULT_CONFIRMATION = 1001
+	DEFAULT_LISTED       = true
 )
