@@ -6748,8 +6748,8 @@
             "Coin": null,
             "ExSymbol": "B2G",
             "TxFee": 0.003,
-            "Withdraw": false,
-            "Deposit": false,
+            "Withdraw": true,
+            "Deposit": true,
             "Confirmation": 2,
             "Listed": true,
             "Issue": ""

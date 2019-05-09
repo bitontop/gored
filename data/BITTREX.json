@@ -467,8 +467,8 @@
             "Coin": null,
             "ExSymbol": "ADA",
             "TxFee": 1,
-            "Withdraw": false,
-            "Deposit": false,
+            "Withdraw": true,
+            "Deposit": true,
             "Confirmation": 20,
             "Listed": true,
             "Issue": ""
@@ -3262,6 +3262,17 @@
             "PairID": 28,
             "Pair": null,
             "ExSymbol": "ETH-STRAT",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 35,
+            "Pair": null,
+            "ExSymbol": "BTC-FUN",
             "MakerFee": 0.0025,
             "TakerFee": 0.0025,
             "LotSize": 1e-8,
