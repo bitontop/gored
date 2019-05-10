@@ -192,8 +192,12 @@ func (e *ExchangeManager) UpdateExData(conf *Update) {
 		for {
 			for _, exName := range conf.ExNames {
 				eInstance := e.Get(exName)
-				eInstance.InitData()
-				log.Printf("%s Data Updated. Coin: %d   Pair: %d", exName, len(eInstance.GetCoins()), len(eInstance.GetPairs()))
+				if eInstance != nil {
+					eInstance.InitData()
+					log.Printf("%s Data Updated. Coin: %d   Pair: %d", exName, len(eInstance.GetCoins()), len(eInstance.GetPairs()))
+				} else {
+					log.Printf("Updating %s Data is failed.", exName)
+				}
 			}
 			time.Sleep(conf.Time)
 		}
