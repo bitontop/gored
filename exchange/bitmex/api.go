@@ -199,7 +199,7 @@ func (e *Bitmex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 			buydata := exchange.Order{}
 
 			buydata.Rate = bid.Price
-			buydata.Quantity = bid.Size
+			buydata.Quantity = bid.Size / bid.Price
 
 			maker.Bids = append(maker.Bids, buydata)
 		}
@@ -209,7 +209,7 @@ func (e *Bitmex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 			selldata := exchange.Order{}
 
 			selldata.Rate = orderBook[i].Price
-			selldata.Quantity = orderBook[i].Size
+			selldata.Quantity = orderBook[i].Size / orderBook[i].Price
 
 			maker.Asks = append(maker.Asks, selldata)
 		}
