@@ -86,7 +86,7 @@ func (e *Bitstamp) GetCoinsData() {
 			}
 		case exchange.JSON_FILE:
 			base = e.GetCoinBySymbol(baseSymbol)
-			base = e.GetCoinBySymbol(targetSymbol)
+			target = e.GetCoinBySymbol(targetSymbol)
 		}
 
 		trading := true
