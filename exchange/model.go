@@ -32,6 +32,7 @@ type Config struct {
 type PairConstraint struct {
 	PairID      int
 	Pair        *pair.Pair //the code on excahnge with the same chain, eg: BCH, BCC on different exchange, but they are the same chain
+	ExID        string
 	ExSymbol    string
 	MakerFee    float64
 	TakerFee    float64
@@ -44,7 +45,6 @@ type PairConstraint struct {
 type CoinConstraint struct {
 	CoinID       int
 	Coin         *coin.Coin
-	ExID         string
 	ExSymbol     string
 	TxFee        float64 // the withdraw fee for this exchange
 	Withdraw     bool
