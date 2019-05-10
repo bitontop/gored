@@ -229,7 +229,10 @@ func (e *Kucoin) UpdateAllBalances() {
 	accountBalance := AccountBalance{}
 	strRequest := "/api/v1/accounts"
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	mapParams := make(map[string]string)
+	mapParams["type"] = "trade"
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
