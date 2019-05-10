@@ -44,6 +44,7 @@ type PairConstraint struct {
 type CoinConstraint struct {
 	CoinID       int
 	Coin         *coin.Coin
+	ExID         string
 	ExSymbol     string
 	TxFee        float64 // the withdraw fee for this exchange
 	Withdraw     bool

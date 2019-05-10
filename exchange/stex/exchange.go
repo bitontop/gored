@@ -201,6 +201,14 @@ func (e *Stex) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
+func (e *Stex) GetIDByPair(pair *pair.Pair) string {
+	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint != nil {
+		return pairConstraint.ExID
+	}
+	return ""
+}
+
 func (e *Stex) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }

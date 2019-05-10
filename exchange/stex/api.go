@@ -140,7 +140,8 @@ func (e *Stex) GetPairsData() {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    fmt.Sprintf("%d", data.ID),
+				ExID:        fmt.Sprintf("%d", data.ID),
+				ExSymbol:    data.Symbol,
 				MakerFee:    DEFAULT_MAKERER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.CurrencyPrecision * -1),
@@ -163,7 +164,7 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonResponse := JsonResponseV3{}
 	orderBook := OrderBook{}
 
-	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetSymbolByPair(pair))
+	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetIDByPair(pair))
 	strUrl := API3_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
