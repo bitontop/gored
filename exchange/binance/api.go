@@ -434,14 +434,10 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
-	mapParams2Sign := make(map[string]string)
-	mapParams2Sign["recvWindow"] = "50000000"
-	mapParams2Sign["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
+	payload := fmt.Sprintf("%s&recvWindow=%d&timestamp=%d", exchange.Map2UrlQuery(mapParams), 5000, time.Now().UTC().UnixNano()/int64(time.Millisecond))
+	payload = fmt.Sprintf("%s&signature=%s", payload, exchange.ComputeHmac256(payload, e.API_SECRET))
 
-	payload := exchange.Map2UrlQuery(mapParams) + exchange.Map2UrlQuery(mapParams2Sign)
-	mapParams["signature"] = exchange.ComputeHmac256(payload, e.API_SECRET)
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
-
+	strUrl := API_URL + strRequestPath + "?" + payload
 	httpClient := &http.Client{}
 
 	request, err := http.NewRequest(http.MethodGet, strUrl, nil)
