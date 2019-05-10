@@ -295,7 +295,7 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "LIMIT"
-	mapParams["timeInForce"] = "GTC"
+	// mapParams["timeInForce"] = "GTC"
 	mapParams["price"] = fmt.Sprintf("%f", rate)
 	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
 
@@ -330,7 +330,7 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "LIMIT"
-	mapParams["timeInForce"] = "GTC"
+	// mapParams["timeInForce"] = "GTC"
 	mapParams["price"] = fmt.Sprintf("%f", rate)
 	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
 
@@ -434,7 +434,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
-	payload := fmt.Sprintf("%s&recvWindow=%d&timestamp=%d", exchange.Map2UrlQuery(mapParams), 5000, time.Now().UTC().UnixNano()/int64(time.Millisecond))
+	payload := fmt.Sprintf("%s&timestamp=%d", exchange.Map2UrlQuery(mapParams), time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	payload = fmt.Sprintf("%s&signature=%s", payload, exchange.ComputeHmac256(payload, e.API_SECRET))
 
 	strUrl := API_URL + strRequestPath + "?" + payload
