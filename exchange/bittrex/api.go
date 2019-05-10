@@ -202,7 +202,7 @@ func (e *Bittrex) UpdateAllBalances() {
 	accountBalance := AccountBalances{}
 	strRequest := "/v1.1/account/getbalances"
 
-	jsonBalanceReturn := e.ApiKeyGET(strRequest, nil)
+	jsonBalanceReturn := e.ApiKeyGET(strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -411,7 +411,7 @@ func (e *Bittrex) ApiKeyGET(strRequestPath string, mapParams map[string]string) 
 
 	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
 
-	signature := exchange.ComputeHmac512(strUrl, e.API_SECRET)
+	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
 	httpClient := &http.Client{}
 
 	request, err := http.NewRequest("GET", strUrl, nil)
