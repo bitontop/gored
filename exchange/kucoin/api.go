@@ -316,7 +316,7 @@ func (e *Kucoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
+		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
