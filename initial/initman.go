@@ -11,6 +11,7 @@ import (
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
 
 	"github.com/bitontop/gored/exchange/bitstamp"
@@ -76,6 +77,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITSTAMP:
 		ex := bitstamp.CreateBitstamp(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.OTCBTC:
+		ex := otcbtc.CreateOtcbtc(config)
 		e.exMan.Add(ex)
 		return ex
 

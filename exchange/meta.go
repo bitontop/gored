@@ -88,4 +88,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BITMAX)
 	supportList = append(supportList, HUOBIOTC)
 	supportList = append(supportList, BITSTAMP)
+	supportList = append(supportList, OTCBTC)
 }
