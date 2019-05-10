@@ -105,12 +105,19 @@ func ComputeHmac512(strMessage string, strSecret string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func ComputeHmac256NoDecode(strMessage string, strSecret string) string {
+func ComputeHmac256Base64(strMessage string, strSecret string) string {
 	key := []byte(strSecret)
 	h := hmac.New(sha256.New, key)
 	h.Write([]byte(strMessage))
 
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+}
+
+func ComputeHmac256NoDecode(strMessage string, strSecret string) string {
+	key := []byte(strSecret)
+	h := hmac.New(sha256.New, key)
+	h.Write([]byte(strMessage))
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func ComputeHmac512NoDecode(strMessage string, strSecret string) string {

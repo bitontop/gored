@@ -5,9 +5,6 @@ package otcbtc
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -284,7 +281,6 @@ func (e *Otcbtc) UpdateAllBalances() {
 }
 
 func (e *Otcbtc) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-
 	return false
 }
 
@@ -446,7 +442,7 @@ func (e *Otcbtc) ApiKeyGET(mapParams map[string]string, strRequestPath string) s
 
 	mapParams["access_key"] = e.API_KEY
 	mapParams["nonce"] = timestamp
-	mapParams["signature"] = ComputeHmac256(payload, e.API_SECRET)
+	mapParams["signature"] = exchange.ComputeHmac256NoDecode(payload, e.API_SECRET)
 
 	return exchange.HttpGetRequest(strUrl, mapParams)
 }
@@ -467,7 +463,6 @@ func (e *Otcbtc) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 
 	response, err := httpClient.Do(request)
 	if err != nil {
-		log.Printf("err=%v", err)
 		return err.Error()
 	}
 	defer response.Body.Close()
@@ -478,11 +473,4 @@ func (e *Otcbtc) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 	}
 
 	return string(body)
-}
-
-func ComputeHmac256(strMessage string, strSecret string) string {
-	key := []byte(strSecret)
-	h := hmac.New(sha256.New, key)
-	h.Write([]byte(strMessage))
-	return hex.EncodeToString(h.Sum(nil))
 }
