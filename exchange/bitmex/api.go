@@ -388,7 +388,7 @@ func (e *Bitmex) ApiKeyGet(mapParams map[string]string, strRequestPath string) s
 	mapParams2Sign := make(map[string]string)
 	mapParams2Sign["api-expires"] = strconv.FormatInt(timestamp, 10)
 	mapParams2Sign["api-key"] = e.API_KEY
-	mapParams2Sign["api-signature"] = exchange.ComputeHmac256NoDecode(strPayload, e.API_SECRET)
+	mapParams2Sign["api-signature"] = exchange.ComputeHmac256Base64(strPayload, e.API_SECRET)
 
 	strUrl := API_URL + strRequestUrl
 
@@ -447,7 +447,7 @@ func (e *Bitmex) ApiKeyPost(mapParams map[string]string, strRequestPath string) 
 	request.Header.Add("api-expires", strconv.FormatInt(timestamp, 10))
 	request.Header.Add("api-key", e.API_KEY)
 	strPayload := fmt.Sprintf("%s%s%d%s", strMethod, strRequestPath, timestamp, jsonParams)
-	request.Header.Add("api-signature", exchange.ComputeHmac256NoDecode(strPayload, e.API_SECRET))
+	request.Header.Add("api-signature", exchange.ComputeHmac256Base64(strPayload, e.API_SECRET))
 
 	// 发出请求
 	response, err := httpClient.Do(request)

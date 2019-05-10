@@ -482,7 +482,7 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 	}
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("KC-API-KEY", e.API_KEY)
-	request.Header.Add("KC-API-SIGN", exchange.ComputeHmac256NoDecode(signature, e.API_SECRET))
+	request.Header.Add("KC-API-SIGN", exchange.ComputeHmac256Base64(signature, e.API_SECRET))
 	request.Header.Add("KC-API-TIMESTAMP", fmt.Sprintf("%v", nonce))
 	request.Header.Add("KC-API-PASSPHRASE", e.Passphrase)
 
