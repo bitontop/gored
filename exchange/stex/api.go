@@ -408,31 +408,31 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 
 		if err := json.Unmarshal(jsonResponse.Data, &orderDetail); err != nil && i == 4 {
 			return fmt.Errorf("%s OrderStatus order does not exist: %v %s", e.GetName(), err, jsonResponse.Data)
-		}
+		} else if err == nil {
+			order.Side = orderDetail[order.OrderID].Type
+			var orderAmount, dealAmount float64
+			if order.Side == "sell" {
+				orderAmount, _ = strconv.ParseFloat(fmt.Sprintf("%v", orderDetail[order.OrderID].SellAmount), 64)
+				dealAmount = orderAmount / order.Rate
+			} else {
+				orderAmount, _ = strconv.ParseFloat(fmt.Sprintf("%v", orderDetail[order.OrderID].BuyAmount), 64)
+				dealAmount = orderAmount / order.Rate
+			}
 
-		order.Side = orderDetail[order.OrderID].Type
-		var orderAmount, dealAmount float64
-		if order.Side == "sell" {
-			orderAmount, _ = strconv.ParseFloat(fmt.Sprintf("%v", orderDetail[order.OrderID].SellAmount), 64)
-			dealAmount = orderAmount / order.Rate
-		} else {
-			orderAmount, _ = strconv.ParseFloat(fmt.Sprintf("%v", orderDetail[order.OrderID].BuyAmount), 64)
-			dealAmount = orderAmount / order.Rate
-		}
+			if dealAmount == 0 {
+				order.Status = exchange.New
+			} else if dealAmount > 0 && dealAmount < order.Quantity {
+				order.Status = exchange.Partial
+			}
 
-		if dealAmount == 0 {
-			order.Status = exchange.New
-		} else if dealAmount > 0 && dealAmount < order.Quantity {
-			order.Status = exchange.Partial
-		}
+			if i == 4 {
+				order.Status = exchange.Canceled
+			} else if i == 3 {
+				order.Status = exchange.Filled
+			}
 
-		if i == 4 {
-			order.Status = exchange.Canceled
-		} else if i == 3 {
-			order.Status = exchange.Filled
+			order.StatusMessage = jsonOrderStatus
 		}
-
-		order.StatusMessage = jsonOrderStatus
 	}
 
 	return nil
