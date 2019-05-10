@@ -14,7 +14,7 @@ type JsonResponse struct {
 	Data    json.RawMessage `json:"data"`
 }
 
-type BitmaxCoins []struct {
+type CoinsData []struct {
 	AssetCode        string  `json:"assetCode"`
 	AssetName        string  `json:"assetName"`
 	PrecisionScale   int     `json:"precisionScale"`
@@ -24,7 +24,7 @@ type BitmaxCoins []struct {
 	Status           string  `json:"status"`
 }
 
-type BitmaxPairs []struct {
+type PairsData []struct {
 	Symbol        string `json:"symbol"`
 	BaseAsset     string `json:"baseAsset"`
 	QuoteAsset    string `json:"quoteAsset"`
@@ -39,18 +39,18 @@ type BitmaxPairs []struct {
 	MiningStatus  string `json:"miningStatus"`
 }
 
-type BitmaxOrderBook struct {
+type OrderBook struct {
 	M    string     `json:"m"`
 	S    string     `json:"s"`
 	Asks [][]string `json:"asks"`
 	Bids [][]string `json:"bids"`
 }
 
-type BitmaxAccountGroup struct {
+type AccountGroup struct {
 	AccountGroup int `json:"accountGroup"`
 }
 
-type BitmaxBalance []struct {
+type AccountBalances []struct {
 	AssetCode       string `json:"assetCode"`
 	AssetName       string `json:"assetName"`
 	TotalAmount     string `json:"totalAmount"`
@@ -63,23 +63,13 @@ type Withdrawal struct {
 	Status string `json:"status"`
 }
 
-type BitmaxWithdraw struct {
-	RequestID string `json:"requestId"`
-	Time      int64  `json:"time"`
-	AssetCode string `json:"assetCode"`
-	Amount    string `json:"amount"`
-	Address   struct {
-		Address string `json:"address"`
-	} `json:"address"`
-}
-
-type BitmaxOrder struct {
+type PlaceOrder struct {
 	Coid    string `json:"coid"`
 	Action  string `json:"action"`
 	Success bool   `json:"success"`
 }
 
-type BitmaxOrderStatus struct {
+type OrderStatus struct {
 	Time       int64  `json:"time"`
 	Coid       string `json:"coid"`
 	Symbol     string `json:"symbol"`
@@ -95,93 +85,8 @@ type BitmaxOrderStatus struct {
 	Status     string `json:"status"`
 }
 
-type BitmaxCancel struct {
+type CancelOrder struct {
 	Coid    string `json:"coid"`
 	Action  string `json:"action"`
 	Success bool   `json:"success"`
 }
-
-/* type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            string
-} */
-
-/* type Uuid struct {
-	Id string `json:"uuid"`
-} */
-
-/* type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
-} */
-
-/* type OrderBook struct {
-	Buy  []exchange.Order `json:"buy"`
-	Sell []exchange.Order `json:"sell"`
-} */
-
-/* type PairsData []struct {
-	MarketCurrency     string      `json:"MarketCurrency"`
-	BaseCurrency       string      `json:"BaseCurrency"`
-	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
-	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
-	MinTradeSize       float64     `json:"MinTradeSize"`
-	MarketName         string      `json:"MarketName"`
-	IsActive           bool        `json:"IsActive"`
-	Created            string      `json:"Created"`
-	Notice             interface{} `json:"Notice"`
-	IsSponsored        interface{} `json:"IsSponsored"`
-	LogoURL            string      `json:"LogoUrl"`
-} */
-
-/* type CoinsData []struct {
-	Currency        string      `json:"Currency"`
-	CurrencyLong    string      `json:"CurrencyLong"`
-	MinConfirmation int         `json:"MinConfirmation"`
-	TxFee           float64     `json:"TxFee"`
-	IsActive        bool        `json:"IsActive"`
-	IsRestricted    bool        `json:"IsRestricted"`
-	CoinType        string      `json:"CoinType"`
-	BaseAddress     string      `json:"BaseAddress"`
-	Notice          interface{} `json:"Notice"`
-} */
-
-/* type PairsData []struct {
-	MarketCurrency     string      `json:"MarketCurrency"`
-	BaseCurrency       string      `json:"BaseCurrency"`
-	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
-	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
-	MinTradeSize       float64     `json:"MinTradeSize"`
-	MarketName         string      `json:"MarketName"`
-	IsActive           bool        `json:"IsActive"`
-	Created            string      `json:"Created"`
-	Notice             interface{} `json:"Notice"`
-	IsSponsored        interface{} `json:"IsSponsored"`
-	LogoURL            string      `json:"LogoUrl"`
-} */

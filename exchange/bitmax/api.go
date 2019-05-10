@@ -55,7 +55,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitmax) GetCoinsData() {
-	coinsData := BitmaxCoins{}
+	coinsData := CoinsData{}
 
 	strRequestUrl := "/api/v1/assets"
 	strUrl := API_URL + strRequestUrl
@@ -105,7 +105,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitmax) GetPairsData() {
-	pairsData := BitmaxPairs{}
+	pairsData := PairsData{}
 
 	strRequestUrl := "/api/v1/products"
 	strUrl := API_URL + strRequestUrl
@@ -151,7 +151,7 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
-	orderBook := BitmaxOrderBook{}
+	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
 	strRequestUrl := "/api/v1/depth"
@@ -207,7 +207,7 @@ func (e *Bitmax) AccountGroup() {
 		log.Printf("Bitmax API Key or Secret Key are nil.")
 	}
 	strUrl := "/api/v1/user/info"
-	account := BitmaxAccountGroup{}
+	account := AccountGroup{}
 
 	jsonAccountGroup := e.ApiKeyGet(nil, strUrl, "user/info")
 	err := json.Unmarshal([]byte(jsonAccountGroup), &account)
@@ -224,7 +224,7 @@ func (e *Bitmax) UpdateAllBalances() {
 		return
 	}
 
-	accountBalance := BitmaxBalance{}
+	accountBalance := AccountBalances{}
 	jsonResponse := JsonResponse{}
 	strRequest := fmt.Sprintf("/%v/api/v1/balance", e.Account_Group)
 
@@ -290,7 +290,7 @@ func (e *Bitmax) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	}
 
 	jsonResponse := &JsonResponse{}
-	bitmaxOrder := BitmaxOrder{}
+	bitmaxOrder := PlaceOrder{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order", e.Account_Group)
 
 	mapParams := make(map[string]string)
@@ -332,7 +332,7 @@ func (e *Bitmax) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	}
 
 	jsonResponse := &JsonResponse{}
-	bitmaxOrder := BitmaxOrder{}
+	bitmaxOrder := PlaceOrder{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order", e.Account_Group)
 
 	mapParams := make(map[string]string)
@@ -374,7 +374,7 @@ func (e *Bitmax) OrderStatus(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	orderStatus := BitmaxOrderStatus{}
+	orderStatus := OrderStatus{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order/%v", e.Account_Group, order.OrderID)
 
 	jsonOrderStatus := e.ApiKeyRequest(nil, "GET", strRequestUrl, "order")
@@ -413,7 +413,7 @@ func (e *Bitmax) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := BitmaxCancel{}
+	cancelOrder := CancelOrder{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order", e.Account_Group)
 
 	mapParams := make(map[string]string)
