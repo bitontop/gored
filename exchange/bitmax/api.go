@@ -306,7 +306,7 @@ func (e *Bitmax) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Code)
+		return nil, fmt.Errorf("%s LimitSell Failed: Code %v ::: Msg=> %+v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &bitmaxOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
