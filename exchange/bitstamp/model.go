@@ -4,18 +4,77 @@ package bitstamp
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-import (
-	"encoding/json"
-
-	"github.com/bitontop/gored/exchange"
-)
-
-type JsonResponse struct {
+/* type JsonResponse struct {
 	Success bool            `json:"success"`
 	Message string          `json:"message"`
 	Result  json.RawMessage `json:"result"`
+} */
+
+type CoinsData []struct {
+	ID                  string `json:"id"`
+	FullName            string `json:"fullName"`
+	Crypto              bool   `json:"crypto"`
+	DepositStatus       bool   `json:"depositStatus"`
+	DepositConfirmation int    `json:"depositConfirmation"`
+	WithdrawStatus      bool   `json:"withdrawStatus"`
+	WithdrawFee         string `json:"withdrawFee"`
 }
 
+type PairsDataaaa []struct {
+	ID            string `json:"id"`
+	BaseCurrency  string `json:"baseCurrency"`
+	QuoteCurrency string `json:"quoteCurrency"`
+	LotSize       string `json:"lotSize"`
+	TickSize      string `json:"tickSize"`
+}
+
+type PairsData []struct {
+	BaseDecimals    int    `json:"base_decimals"`
+	MinimumOrder    string `json:"minimum_order"`
+	Name            string `json:"name"`
+	CounterDecimals int    `json:"counter_decimals"`
+	Trading         string `json:"trading"`
+	URLSymbol       string `json:"url_symbol"`
+	Description     string `json:"description"`
+}
+
+type OrderBook struct {
+	Timestamp string     `json:"timestamp"`
+	Bids      [][]string `json:"bids"`
+	Asks      [][]string `json:"asks"`
+}
+
+/* type OrderBook struct {
+	Buy  []exchange.Order `json:"buy"`
+	Sell []exchange.Order `json:"sell"`
+} */
+
+/* type CoinsData []struct {
+	Currency        string      `json:"Currency"`
+	CurrencyLong    string      `json:"CurrencyLong"`
+	MinConfirmation int         `json:"MinConfirmation"`
+	TxFee           float64     `json:"TxFee"`
+	IsActive        bool        `json:"IsActive"`
+	IsRestricted    bool        `json:"IsRestricted"`
+	CoinType        string      `json:"CoinType"`
+	BaseAddress     string      `json:"BaseAddress"`
+	Notice          interface{} `json:"Notice"`
+} */
+
+/* type PairsData []struct {
+	MarketCurrency     string      `json:"MarketCurrency"`
+	BaseCurrency       string      `json:"BaseCurrency"`
+	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
+	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
+	MinTradeSize       float64     `json:"MinTradeSize"`
+	MarketName         string      `json:"MarketName"`
+	IsActive           bool        `json:"IsActive"`
+	Created            string      `json:"Created"`
+	Notice             interface{} `json:"Notice"`
+	IsSponsored        interface{} `json:"IsSponsored"`
+	LogoURL            string      `json:"LogoUrl"`
+} */
+/*
 type AccountBalances []struct {
 	Currency      string  `json:"Currency"`
 	Balance       float64 `json:"Balance"`
@@ -54,35 +113,4 @@ type PlaceOrder struct {
 	IsConditional              bool
 	Condition                  string
 	ConditionTarget            string
-}
-
-type PairsData []struct {
-	MarketCurrency     string      `json:"MarketCurrency"`
-	BaseCurrency       string      `json:"BaseCurrency"`
-	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
-	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
-	MinTradeSize       float64     `json:"MinTradeSize"`
-	MarketName         string      `json:"MarketName"`
-	IsActive           bool        `json:"IsActive"`
-	Created            string      `json:"Created"`
-	Notice             interface{} `json:"Notice"`
-	IsSponsored        interface{} `json:"IsSponsored"`
-	LogoURL            string      `json:"LogoUrl"`
-}
-
-type CoinsData []struct {
-	Currency        string      `json:"Currency"`
-	CurrencyLong    string      `json:"CurrencyLong"`
-	MinConfirmation int         `json:"MinConfirmation"`
-	TxFee           float64     `json:"TxFee"`
-	IsActive        bool        `json:"IsActive"`
-	IsRestricted    bool        `json:"IsRestricted"`
-	CoinType        string      `json:"CoinType"`
-	BaseAddress     string      `json:"BaseAddress"`
-	Notice          interface{} `json:"Notice"`
-}
-
-type OrderBook struct {
-	Buy  []exchange.Order `json:"buy"`
-	Sell []exchange.Order `json:"sell"`
-}
+} */

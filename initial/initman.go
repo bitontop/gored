@@ -13,8 +13,7 @@ import (
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/stex"
 
-	//"github.com/bitontop/gored/exchange/bitstamp"
-	"../exchange/bitstamp"
+	"github.com/bitontop/gored/exchange/bitstamp"
 )
 
 var instance *InitManager

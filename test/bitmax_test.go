@@ -20,7 +20,7 @@ import (
 func Test_Bitmax(t *testing.T) {
 	e := InitBitmax()
 
-	pair := pair.GetPairByKey("ETH|BTC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)

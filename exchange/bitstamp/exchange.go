@@ -44,7 +44,7 @@ func CreateBitstamp(config *exchange.Config) *Bitstamp {
 		instance = &Bitstamp{
 			ID:      DEFAULT_ID,
 			Name:    "Bitstamp",
-			Website: "https://www.bittrex.com/",
+			Website: "https://www.bitstamp.net/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -98,7 +98,7 @@ func (e *Bitstamp) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Bitstamp) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://bittrex.com/Market/Index?MarketName=%s", e.GetSymbolByPair(pair))
+	return fmt.Sprintf("https://www.bitstamp.net/market/tradeview/beta/")
 }
 
 /*************** Coins on the Exchanges ***************/
@@ -215,13 +215,13 @@ func (e *Bitstamp) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bitstamp) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.Fee = true
+	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
+	constrainFetchMethod.TxFee = false
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
-	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 

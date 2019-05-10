@@ -21,8 +21,7 @@ import (
 	"github.com/bitontop/gored/test/conf"
 	"github.com/bitontop/gored/utils"
 
-	//"github.com/bitontop/gored/exchange/bitstamp"
-	"../gored/exchange/bitstamp"
+	"github.com/bitontop/gored/exchange/bitstamp"
 )
 
 func main() {
