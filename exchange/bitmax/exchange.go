@@ -45,7 +45,7 @@ func CreateBitmax(config *exchange.Config) *Bitmax {
 		instance = &Bitmax{
 			ID:      DEFAULT_ID,
 			Name:    "Bitmax",
-			Website: "https://www.bitmax.com/",
+			Website: "https://bitmax.io/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,

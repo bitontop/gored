@@ -119,8 +119,8 @@ func (e *Bitmax) GetPairsData() {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.BaseAsset)
-			target := coin.GetCoin(data.QuoteAsset)
+			base := coin.GetCoin(data.QuoteAsset)
+			target := coin.GetCoin(data.BaseAsset)
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
@@ -204,15 +204,17 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 func (e *Bitmax) AccountGroup() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("Bitmax API Key or Secret Key are nil.")
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return
 	}
+
 	strUrl := "/api/v1/user/info"
 	account := AccountGroup{}
 
 	jsonAccountGroup := e.ApiKeyGet(nil, strUrl, "user/info")
 	err := json.Unmarshal([]byte(jsonAccountGroup), &account)
 	if err != nil {
-		log.Printf("Bitmax get Account Group jsonUnmarshal error :%v", err)
+		log.Printf("%s get Account Group jsonUnmarshal error :%v", e.GetName(), err)
 	}
 
 	e.Account_Group = fmt.Sprintf("%v", account.AccountGroup) //set the AccountGroup
@@ -229,7 +231,6 @@ func (e *Bitmax) UpdateAllBalances() {
 	strRequest := fmt.Sprintf("/%v/api/v1/balance", e.Account_Group)
 
 	jsonBalanceReturn := e.ApiKeyGet(nil, strRequest, "balance")
-
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -243,7 +244,7 @@ func (e *Bitmax) UpdateAllBalances() {
 	}
 
 	for _, freeBalance := range accountBalance {
-		freeAmount, err := strconv.ParseFloat(fmt.Sprintf("%v", freeBalance.AvailableAmount), 64)
+		freeAmount, err := strconv.ParseFloat(freeBalance.AvailableAmount, 64)
 		if err != nil {
 			log.Printf("%v", err)
 			return
