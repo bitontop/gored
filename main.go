@@ -20,6 +20,9 @@ import (
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 	"github.com/bitontop/gored/utils"
+
+	//"github.com/bitontop/gored/exchange/bitstamp"
+	"../gored/exchange/bitstamp"
 )
 
 func main() {
@@ -75,6 +78,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitStex(config)
 	InitKucoin(config)
 	InitBitmax(config)
+	InitBitstamp(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -125,6 +129,15 @@ func InitKucoin(config *exchange.Config) {
 func InitBitmax(config *exchange.Config) {
 	conf.Exchange(exchange.BITMAX, config)
 	ex := bitmax.CreateBitmax(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBitstamp(config *exchange.Config) {
+	conf.Exchange(exchange.BITSTAMP, config)
+	ex := bitstamp.CreateBitstamp(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
