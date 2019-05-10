@@ -1281,9 +1281,9 @@
             "Coin": null,
             "ExSymbol": "CANN",
             "TxFee": 0.2,
-            "Withdraw": false,
-            "Deposit": false,
-            "Confirmation": 300,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 1000,
             "Listed": true,
             "Issue": ""
         },
