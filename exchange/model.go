@@ -32,6 +32,7 @@ type Config struct {
 type PairConstraint struct {
 	PairID      int
 	Pair        *pair.Pair //the code on excahnge with the same chain, eg: BCH, BCC on different exchange, but they are the same chain
+	ExID        string
 	ExSymbol    string
 	MakerFee    float64
 	TakerFee    float64

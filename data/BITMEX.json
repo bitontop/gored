@@ -104,6 +104,7 @@
         {
             "PairID": 1,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETHM19",
             "MakerFee": -0.0005,
             "TakerFee": 0.0025,
@@ -115,6 +116,7 @@
         {
             "PairID": 2,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LTCM19",
             "MakerFee": -0.0005,
             "TakerFee": 0.0025,
@@ -126,6 +128,7 @@
         {
             "PairID": 50,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "EOSM19",
             "MakerFee": -0.0005,
             "TakerFee": 0.0025,
@@ -137,6 +140,7 @@
         {
             "PairID": 75,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "TRXM19",
             "MakerFee": -0.0005,
             "TakerFee": 0.0025,
@@ -148,6 +152,7 @@
         {
             "PairID": 82,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XRPM19",
             "MakerFee": -0.0005,
             "TakerFee": 0.0025,
@@ -159,6 +164,7 @@
         {
             "PairID": 155,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ADAM19",
             "MakerFee": -0.0005,
             "TakerFee": 0.0025,
@@ -170,6 +176,7 @@
         {
             "PairID": 575,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BCHM19",
             "MakerFee": -0.0005,
             "TakerFee": 0.0025,
@@ -181,6 +188,7 @@
         {
             "PairID": 604,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XBTU19",
             "MakerFee": -0.00025,
             "TakerFee": 0.00075,
@@ -192,6 +200,7 @@
         {
             "PairID": 610,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETHUSD",
             "MakerFee": -0.00025,
             "TakerFee": 0.00075,

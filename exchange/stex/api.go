@@ -140,7 +140,8 @@ func (e *Stex) GetPairsData() {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    fmt.Sprintf("%d", data.ID),
+				ExID:        fmt.Sprintf("%d", data.ID),
+				ExSymbol:    data.Symbol,
 				MakerFee:    DEFAULT_MAKERER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.CurrencyPrecision * -1),
@@ -163,7 +164,7 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonResponse := JsonResponseV3{}
 	orderBook := OrderBook{}
 
-	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetSymbolByPair(pair))
+	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetIDByPair(pair))
 	strUrl := API3_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
@@ -235,7 +236,7 @@ func (e *Stex) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if jsonResponse.Success != 1 {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Error)
+		log.Printf("%s UpdateAllBalances Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 		return
 	}
 
@@ -288,7 +289,7 @@ func (e *Stex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
 	} else if jsonResponse.Success != 1 {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Message)
+		log.Printf("%s Withdraw Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 		return false
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
@@ -318,7 +319,7 @@ func (e *Stex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Success != 1 {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -357,7 +358,7 @@ func (e *Stex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Success != 1 {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -400,13 +401,13 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 
 		jsonOrderStatus := e.ApiKeyPost(mapParams)
 		if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
-			return fmt.Errorf("%s orderDetail Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+			return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 		} else if jsonResponse.Success != 1 {
-			return fmt.Errorf("%s orderDetail Failed: %v", e.GetName(), jsonResponse.Message)
+			return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 		}
 
 		if err := json.Unmarshal(jsonResponse.Data, &orderDetail); err != nil && i == 4 {
-			return fmt.Errorf("%s Stex orderDetail order does not exist: %v %s", e.GetName(), err, jsonResponse.Data)
+			return fmt.Errorf("%s OrderStatus order does not exist: %v %s", e.GetName(), err, jsonResponse.Data)
 		}
 
 		order.Side = orderDetail[order.OrderID].Type
@@ -457,7 +458,7 @@ func (e *Stex) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Success != 1 {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s CancelOrder Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)

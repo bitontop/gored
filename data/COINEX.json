@@ -133,6 +133,17 @@
             "Issue": ""
         },
         {
+            "CoinID": 36,
+            "Coin": null,
+            "ExSymbol": "IOTA",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
             "CoinID": 38,
             "Coin": null,
             "ExSymbol": "ETC",
@@ -487,7 +498,7 @@
         {
             "CoinID": 370,
             "Coin": null,
-            "ExSymbol": "SEELE",
+            "ExSymbol": "OLT",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -498,7 +509,7 @@
         {
             "CoinID": 371,
             "Coin": null,
-            "ExSymbol": "WHC",
+            "ExSymbol": "CET",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -509,7 +520,7 @@
         {
             "CoinID": 372,
             "Coin": null,
-            "ExSymbol": "THPC",
+            "ExSymbol": "CNN",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -520,7 +531,7 @@
         {
             "CoinID": 373,
             "Coin": null,
-            "ExSymbol": "CARD",
+            "ExSymbol": "MT",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -531,7 +542,7 @@
         {
             "CoinID": 374,
             "Coin": null,
-            "ExSymbol": "CET",
+            "ExSymbol": "THPC",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -553,7 +564,7 @@
         {
             "CoinID": 376,
             "Coin": null,
-            "ExSymbol": "MT",
+            "ExSymbol": "CARD",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -564,7 +575,7 @@
         {
             "CoinID": 377,
             "Coin": null,
-            "ExSymbol": "KAN",
+            "ExSymbol": "ULT",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -575,7 +586,7 @@
         {
             "CoinID": 378,
             "Coin": null,
-            "ExSymbol": "ULT",
+            "ExSymbol": "CODY",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -586,7 +597,7 @@
         {
             "CoinID": 379,
             "Coin": null,
-            "ExSymbol": "TCT",
+            "ExSymbol": "NNB",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -597,7 +608,7 @@
         {
             "CoinID": 380,
             "Coin": null,
-            "ExSymbol": "LAMB",
+            "ExSymbol": "TCT",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -608,7 +619,7 @@
         {
             "CoinID": 381,
             "Coin": null,
-            "ExSymbol": "CODY",
+            "ExSymbol": "LAMB",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -619,7 +630,7 @@
         {
             "CoinID": 382,
             "Coin": null,
-            "ExSymbol": "EGT",
+            "ExSymbol": "WWB",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -630,7 +641,7 @@
         {
             "CoinID": 383,
             "Coin": null,
-            "ExSymbol": "NNB",
+            "ExSymbol": "SEELE",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -641,7 +652,7 @@
         {
             "CoinID": 384,
             "Coin": null,
-            "ExSymbol": "LFC",
+            "ExSymbol": "WHC",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -652,7 +663,7 @@
         {
             "CoinID": 385,
             "Coin": null,
-            "ExSymbol": "WWB",
+            "ExSymbol": "EGT",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -663,7 +674,7 @@
         {
             "CoinID": 386,
             "Coin": null,
-            "ExSymbol": "CNN",
+            "ExSymbol": "LFC",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -674,7 +685,7 @@
         {
             "CoinID": 387,
             "Coin": null,
-            "ExSymbol": "OLT",
+            "ExSymbol": "KAN",
             "TxFee": 0.005,
             "Withdraw": true,
             "Deposit": true,
@@ -687,6 +698,7 @@
         {
             "PairID": 1,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETHBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -698,6 +710,7 @@
         {
             "PairID": 2,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LTCBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -709,6 +722,7 @@
         {
             "PairID": 4,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "NEOBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -720,6 +734,7 @@
         {
             "PairID": 6,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "EOSETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -731,6 +746,7 @@
         {
             "PairID": 11,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BTCUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -742,6 +758,7 @@
         {
             "PairID": 12,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETHUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -753,6 +770,7 @@
         {
             "PairID": 21,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "QTUMBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -764,6 +782,7 @@
         {
             "PairID": 23,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "OMGBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -775,6 +794,7 @@
         {
             "PairID": 24,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "OMGETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -786,6 +806,7 @@
         {
             "PairID": 25,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ZRXBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -797,7 +818,20 @@
         {
             "PairID": 26,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ZRXETH",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 40,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "IOTABTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -808,6 +842,7 @@
         {
             "PairID": 42,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LINKBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -819,6 +854,7 @@
         {
             "PairID": 43,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LINKETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -830,6 +866,7 @@
         {
             "PairID": 50,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "EOSBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -841,6 +878,7 @@
         {
             "PairID": 53,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETCBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -852,6 +890,7 @@
         {
             "PairID": 59,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ZECBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -863,6 +902,7 @@
         {
             "PairID": 64,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "DASHBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -874,6 +914,7 @@
         {
             "PairID": 75,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "TRXBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -885,6 +926,7 @@
         {
             "PairID": 76,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "TRXETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -896,6 +938,7 @@
         {
             "PairID": 82,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XRPBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -907,6 +950,7 @@
         {
             "PairID": 102,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XMRBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -918,6 +962,7 @@
         {
             "PairID": 111,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BATBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -929,6 +974,7 @@
         {
             "PairID": 112,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BATETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -940,6 +986,7 @@
         {
             "PairID": 125,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "NEOUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -951,6 +998,7 @@
         {
             "PairID": 135,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XZCBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -962,6 +1010,7 @@
         {
             "PairID": 155,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ADABTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -973,6 +1022,7 @@
         {
             "PairID": 159,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "CMTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -984,6 +1034,7 @@
         {
             "PairID": 162,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XLMBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -995,6 +1046,7 @@
         {
             "PairID": 174,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LTCUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1006,6 +1058,7 @@
         {
             "PairID": 227,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "NANOBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1017,6 +1070,7 @@
         {
             "PairID": 245,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ZILBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1028,6 +1082,7 @@
         {
             "PairID": 246,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ZILETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1039,6 +1094,7 @@
         {
             "PairID": 248,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ONTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1050,6 +1106,7 @@
         {
             "PairID": 272,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ADAUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1061,6 +1118,7 @@
         {
             "PairID": 274,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "GNTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1072,6 +1130,7 @@
         {
             "PairID": 275,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "GNTETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1083,6 +1142,7 @@
         {
             "PairID": 277,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LOOMBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1094,6 +1154,7 @@
         {
             "PairID": 278,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LOOMETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1105,6 +1166,7 @@
         {
             "PairID": 280,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XRPUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1116,6 +1178,7 @@
         {
             "PairID": 284,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BTCTUSD",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1127,6 +1190,7 @@
         {
             "PairID": 285,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETHTUSD",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1138,6 +1202,7 @@
         {
             "PairID": 292,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "EOSUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1149,6 +1214,7 @@
         {
             "PairID": 301,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "TUSDUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1158,8 +1224,21 @@
             "Issue": ""
         },
         {
+            "PairID": 302,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "IOTAUSDT",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.000001,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
             "PairID": 303,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XLMUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1171,6 +1250,7 @@
         {
             "PairID": 317,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ONTUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1182,6 +1262,7 @@
         {
             "PairID": 319,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "TRXUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1193,6 +1274,7 @@
         {
             "PairID": 320,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETCUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1204,6 +1286,7 @@
         {
             "PairID": 323,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "SCBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1215,6 +1298,7 @@
         {
             "PairID": 342,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "HOTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1226,6 +1310,7 @@
         {
             "PairID": 343,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "HOTETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1237,6 +1322,7 @@
         {
             "PairID": 344,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "VETBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1248,6 +1334,7 @@
         {
             "PairID": 345,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "VETETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1259,6 +1346,7 @@
         {
             "PairID": 355,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "HCBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1270,6 +1358,7 @@
         {
             "PairID": 359,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "PAXUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1281,6 +1370,7 @@
         {
             "PairID": 362,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "DCRBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1292,6 +1382,7 @@
         {
             "PairID": 369,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BTCPAX",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1303,6 +1394,7 @@
         {
             "PairID": 370,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETHPAX",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1314,6 +1406,7 @@
         {
             "PairID": 381,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BTCUSDC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1325,6 +1418,7 @@
         {
             "PairID": 382,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ETHUSDC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1336,6 +1430,7 @@
         {
             "PairID": 383,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XRPUSDC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1347,6 +1442,7 @@
         {
             "PairID": 386,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "USDCUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1358,6 +1454,7 @@
         {
             "PairID": 408,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "LTCUSDC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1369,6 +1466,7 @@
         {
             "PairID": 411,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BTTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1380,6 +1478,7 @@
         {
             "PairID": 424,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ONGBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1391,6 +1490,7 @@
         {
             "PairID": 434,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BATUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1402,6 +1502,7 @@
         {
             "PairID": 436,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "XMRUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1413,6 +1514,7 @@
         {
             "PairID": 438,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "ZECUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1424,6 +1526,7 @@
         {
             "PairID": 452,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "DASHUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1435,6 +1538,7 @@
         {
             "PairID": 453,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "NANOUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1446,6 +1550,7 @@
         {
             "PairID": 474,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "DOGEBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1457,6 +1562,7 @@
         {
             "PairID": 557,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "WINGSBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1468,6 +1574,7 @@
         {
             "PairID": 574,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BCHUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1479,6 +1586,7 @@
         {
             "PairID": 575,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BCHBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1490,6 +1598,7 @@
         {
             "PairID": 618,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "HYDROBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1501,6 +1610,7 @@
         {
             "PairID": 640,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BSVBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1512,6 +1622,7 @@
         {
             "PairID": 642,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BSVUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1523,6 +1634,7 @@
         {
             "PairID": 659,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BTMBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1534,6 +1646,7 @@
         {
             "PairID": 662,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "BTUBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1545,6 +1658,7 @@
         {
             "PairID": 668,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "CTXCBTC",
             "MakerFee": 0,
             "TakerFee": 0.001,
@@ -1556,18 +1670,20 @@
         {
             "PairID": 700,
             "Pair": null,
-            "ExSymbol": "NEOBCH",
+            "ExID": "",
+            "ExSymbol": "CETUSDC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 0.000001,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 701,
             "Pair": null,
-            "ExSymbol": "HOTBCH",
+            "ExID": "",
+            "ExSymbol": "CODYBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1578,7 +1694,8 @@
         {
             "PairID": 702,
             "Pair": null,
-            "ExSymbol": "TCTBTC",
+            "ExID": "",
+            "ExSymbol": "CODYETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1589,7 +1706,8 @@
         {
             "PairID": 703,
             "Pair": null,
-            "ExSymbol": "XRPBCH",
+            "ExID": "",
+            "ExSymbol": "ETCBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1600,6 +1718,7 @@
         {
             "PairID": 704,
             "Pair": null,
+            "ExID": "",
             "ExSymbol": "MTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
@@ -1611,7 +1730,8 @@
         {
             "PairID": 705,
             "Pair": null,
-            "ExSymbol": "CODYETH",
+            "ExID": "",
+            "ExSymbol": "TCTETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1622,7 +1742,20 @@
         {
             "PairID": 706,
             "Pair": null,
-            "ExSymbol": "OLTBTC",
+            "ExID": "",
+            "ExSymbol": "GUSDUSDT",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.0001,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 707,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "LFCBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1631,9 +1764,10 @@
             "Issue": ""
         },
         {
-            "PairID": 707,
+            "PairID": 708,
             "Pair": null,
-            "ExSymbol": "DOGEBCH",
+            "ExID": "",
+            "ExSymbol": "GNTBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1642,20 +1776,10 @@
             "Issue": ""
         },
         {
-            "PairID": 708,
-            "Pair": null,
-            "ExSymbol": "KANBTC",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
             "PairID": 709,
             "Pair": null,
-            "ExSymbol": "ONTBCH",
+            "ExID": "",
+            "ExSymbol": "CETBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1666,7 +1790,8 @@
         {
             "PairID": 710,
             "Pair": null,
-            "ExSymbol": "OMGBCH",
+            "ExID": "",
+            "ExSymbol": "QTUMBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1677,7 +1802,8 @@
         {
             "PairID": 711,
             "Pair": null,
-            "ExSymbol": "ADABCH",
+            "ExID": "",
+            "ExSymbol": "DCRBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1688,18 +1814,20 @@
         {
             "PairID": 712,
             "Pair": null,
-            "ExSymbol": "SEELEBTC",
+            "ExID": "",
+            "ExSymbol": "MTBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 713,
             "Pair": null,
-            "ExSymbol": "ETHBCH",
+            "ExID": "",
+            "ExSymbol": "ONTBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1710,18 +1838,20 @@
         {
             "PairID": 714,
             "Pair": null,
-            "ExSymbol": "XMRBCH",
+            "ExID": "",
+            "ExSymbol": "LAMBUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 0.000001,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 715,
             "Pair": null,
-            "ExSymbol": "ETCBCH",
+            "ExID": "",
+            "ExSymbol": "ONGBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1732,7 +1862,8 @@
         {
             "PairID": 716,
             "Pair": null,
-            "ExSymbol": "CARDETH",
+            "ExID": "",
+            "ExSymbol": "NEOBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1743,18 +1874,8 @@
         {
             "PairID": 717,
             "Pair": null,
-            "ExSymbol": "BCHGUSD",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 0.01,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 718,
-            "Pair": null,
-            "ExSymbol": "EOSBCH",
+            "ExID": "",
+            "ExSymbol": "HOTBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1763,9 +1884,22 @@
             "Issue": ""
         },
         {
+            "PairID": 718,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ULTBTC",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-10,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
             "PairID": 719,
             "Pair": null,
-            "ExSymbol": "WWBBTC",
+            "ExID": "",
+            "ExSymbol": "BATBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1776,7 +1910,8 @@
         {
             "PairID": 720,
             "Pair": null,
-            "ExSymbol": "SEELEETH",
+            "ExID": "",
+            "ExSymbol": "EOSBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1787,7 +1922,8 @@
         {
             "PairID": 721,
             "Pair": null,
-            "ExSymbol": "CETBTC",
+            "ExID": "",
+            "ExSymbol": "LAMBETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1798,7 +1934,8 @@
         {
             "PairID": 722,
             "Pair": null,
-            "ExSymbol": "MTBCH",
+            "ExID": "",
+            "ExSymbol": "DOGEBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1809,7 +1946,8 @@
         {
             "PairID": 723,
             "Pair": null,
-            "ExSymbol": "LAMBBTC",
+            "ExID": "",
+            "ExSymbol": "XRPBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1820,18 +1958,20 @@
         {
             "PairID": 724,
             "Pair": null,
-            "ExSymbol": "BTCGUSD",
+            "ExID": "",
+            "ExSymbol": "LINKBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 0.01,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 725,
             "Pair": null,
-            "ExSymbol": "CARDBCH",
+            "ExID": "",
+            "ExSymbol": "ADABCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1842,29 +1982,8 @@
         {
             "PairID": 726,
             "Pair": null,
-            "ExSymbol": "CODYBTC",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 727,
-            "Pair": null,
-            "ExSymbol": "BATBCH",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 728,
-            "Pair": null,
-            "ExSymbol": "BCHTUSD",
+            "ExID": "",
+            "ExSymbol": "BCHUSDC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1873,9 +1992,34 @@
             "Issue": ""
         },
         {
+            "PairID": 727,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "OLTBTC",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-10,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 728,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "VETBCH",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
             "PairID": 729,
             "Pair": null,
-            "ExSymbol": "HYDROETH",
+            "ExID": "",
+            "ExSymbol": "THPCBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1886,29 +2030,32 @@
         {
             "PairID": 730,
             "Pair": null,
-            "ExSymbol": "CNNBTC",
+            "ExID": "",
+            "ExSymbol": "XMRBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 731,
             "Pair": null,
-            "ExSymbol": "LFCBTC",
+            "ExID": "",
+            "ExSymbol": "TCTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 732,
             "Pair": null,
-            "ExSymbol": "WHCBCH",
+            "ExID": "",
+            "ExSymbol": "LTCBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1919,7 +2066,8 @@
         {
             "PairID": 733,
             "Pair": null,
-            "ExSymbol": "BTMETH",
+            "ExID": "",
+            "ExSymbol": "HCBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1930,7 +2078,8 @@
         {
             "PairID": 734,
             "Pair": null,
-            "ExSymbol": "THPCBCH",
+            "ExID": "",
+            "ExSymbol": "LAMBBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1941,7 +2090,20 @@
         {
             "PairID": 735,
             "Pair": null,
-            "ExSymbol": "TCTETH",
+            "ExID": "",
+            "ExSymbol": "CNNBTC",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-10,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 736,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "CARDBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1950,20 +2112,10 @@
             "Issue": ""
         },
         {
-            "PairID": 736,
-            "Pair": null,
-            "ExSymbol": "CETUSDT",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 0.000001,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
             "PairID": 737,
             "Pair": null,
-            "ExSymbol": "QTUMBCH",
+            "ExID": "",
+            "ExSymbol": "NNBCET",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1974,7 +2126,20 @@
         {
             "PairID": 738,
             "Pair": null,
-            "ExSymbol": "NNBCET",
+            "ExID": "",
+            "ExSymbol": "NNBBTC",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-10,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 739,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ETHBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -1983,20 +2148,10 @@
             "Issue": ""
         },
         {
-            "PairID": 739,
-            "Pair": null,
-            "ExSymbol": "LAMBUSDT",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 0.000001,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
             "PairID": 740,
             "Pair": null,
-            "ExSymbol": "BTTBCH",
+            "ExID": "",
+            "ExSymbol": "MTETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2007,7 +2162,8 @@
         {
             "PairID": 741,
             "Pair": null,
-            "ExSymbol": "ZECBCH",
+            "ExID": "",
+            "ExSymbol": "XZCBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2018,7 +2174,8 @@
         {
             "PairID": 742,
             "Pair": null,
-            "ExSymbol": "ZILBCH",
+            "ExID": "",
+            "ExSymbol": "THPCETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2029,18 +2186,8 @@
         {
             "PairID": 743,
             "Pair": null,
-            "ExSymbol": "EGTBTC",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 744,
-            "Pair": null,
-            "ExSymbol": "CETETH",
+            "ExID": "",
+            "ExSymbol": "WHCBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2049,9 +2196,22 @@
             "Issue": ""
         },
         {
+            "PairID": 744,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ETHGUSD",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
             "PairID": 745,
             "Pair": null,
-            "ExSymbol": "CARDBTC",
+            "ExID": "",
+            "ExSymbol": "ZRXBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2062,18 +2222,20 @@
         {
             "PairID": 746,
             "Pair": null,
-            "ExSymbol": "NNBBTC",
+            "ExID": "",
+            "ExSymbol": "DASHBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 747,
             "Pair": null,
-            "ExSymbol": "MTETH",
+            "ExID": "",
+            "ExSymbol": "CETETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2084,7 +2246,8 @@
         {
             "PairID": 748,
             "Pair": null,
-            "ExSymbol": "VETBCH",
+            "ExID": "",
+            "ExSymbol": "ULTETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2095,7 +2258,8 @@
         {
             "PairID": 749,
             "Pair": null,
-            "ExSymbol": "NNBBCH",
+            "ExID": "",
+            "ExSymbol": "ZILBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2106,7 +2270,8 @@
         {
             "PairID": 750,
             "Pair": null,
-            "ExSymbol": "DASHBCH",
+            "ExID": "",
+            "ExSymbol": "IOTABCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2117,7 +2282,8 @@
         {
             "PairID": 751,
             "Pair": null,
-            "ExSymbol": "ONGBCH",
+            "ExID": "",
+            "ExSymbol": "BTTBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2128,7 +2294,20 @@
         {
             "PairID": 752,
             "Pair": null,
-            "ExSymbol": "BCHPAX",
+            "ExID": "",
+            "ExSymbol": "TRXBCH",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 753,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "BCHTUSD",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2137,31 +2316,22 @@
             "Issue": ""
         },
         {
-            "PairID": 753,
-            "Pair": null,
-            "ExSymbol": "ULTBTC",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 1e-8,
-            "PriceFilter": 1e-10,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
             "PairID": 754,
             "Pair": null,
-            "ExSymbol": "CETUSDC",
+            "ExID": "",
+            "ExSymbol": "CETBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 0.000001,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 755,
             "Pair": null,
-            "ExSymbol": "THPCBTC",
+            "ExID": "",
+            "ExSymbol": "SEELEETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2172,7 +2342,8 @@
         {
             "PairID": 756,
             "Pair": null,
-            "ExSymbol": "BTMBCH",
+            "ExID": "",
+            "ExSymbol": "BSVBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2183,7 +2354,8 @@
         {
             "PairID": 757,
             "Pair": null,
-            "ExSymbol": "ULTETH",
+            "ExID": "",
+            "ExSymbol": "CARDBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2194,40 +2366,44 @@
         {
             "PairID": 758,
             "Pair": null,
-            "ExSymbol": "ZRXBCH",
+            "ExID": "",
+            "ExSymbol": "EGTBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 1e-10,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 759,
             "Pair": null,
-            "ExSymbol": "BSVBCH",
+            "ExID": "",
+            "ExSymbol": "BCHPAX",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 0.01,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 760,
             "Pair": null,
-            "ExSymbol": "LAMBETH",
+            "ExID": "",
+            "ExSymbol": "CETUSDT",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 0.000001,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 761,
             "Pair": null,
-            "ExSymbol": "CODYBCH",
+            "ExID": "",
+            "ExSymbol": "CARDETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2238,18 +2414,20 @@
         {
             "PairID": 762,
             "Pair": null,
-            "ExSymbol": "ETHGUSD",
+            "ExID": "",
+            "ExSymbol": "XLMBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 0.01,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 763,
             "Pair": null,
-            "ExSymbol": "NANOBCH",
+            "ExID": "",
+            "ExSymbol": "BTMETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2260,7 +2438,8 @@
         {
             "PairID": 764,
             "Pair": null,
-            "ExSymbol": "LTCBCH",
+            "ExID": "",
+            "ExSymbol": "BTMBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2271,29 +2450,32 @@
         {
             "PairID": 765,
             "Pair": null,
-            "ExSymbol": "XLMBCH",
+            "ExID": "",
+            "ExSymbol": "BCHGUSD",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 0.01,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 766,
             "Pair": null,
-            "ExSymbol": "HCBCH",
+            "ExID": "",
+            "ExSymbol": "CODYBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 1e-10,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 767,
             "Pair": null,
-            "ExSymbol": "TRXBCH",
+            "ExID": "",
+            "ExSymbol": "THPCBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2304,18 +2486,20 @@
         {
             "PairID": 768,
             "Pair": null,
-            "ExSymbol": "GUSDUSDT",
+            "ExID": "",
+            "ExSymbol": "BTCGUSD",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 0.0001,
+            "PriceFilter": 0.01,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 769,
             "Pair": null,
-            "ExSymbol": "CETBCH",
+            "ExID": "",
+            "ExSymbol": "HYDROETH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2326,7 +2510,8 @@
         {
             "PairID": 770,
             "Pair": null,
-            "ExSymbol": "LINKBCH",
+            "ExID": "",
+            "ExSymbol": "NANOBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2337,7 +2522,8 @@
         {
             "PairID": 771,
             "Pair": null,
-            "ExSymbol": "GNTBCH",
+            "ExID": "",
+            "ExSymbol": "NNBBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2348,18 +2534,20 @@
         {
             "PairID": 772,
             "Pair": null,
-            "ExSymbol": "DCRBCH",
+            "ExID": "",
+            "ExSymbol": "KANBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 1e-8,
+            "PriceFilter": 1e-10,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 773,
             "Pair": null,
-            "ExSymbol": "SCBCH",
+            "ExID": "",
+            "ExSymbol": "SEELEBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2370,7 +2558,8 @@
         {
             "PairID": 774,
             "Pair": null,
-            "ExSymbol": "BTUBCH",
+            "ExID": "",
+            "ExSymbol": "ZECBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2381,7 +2570,8 @@
         {
             "PairID": 775,
             "Pair": null,
-            "ExSymbol": "THPCETH",
+            "ExID": "",
+            "ExSymbol": "SCBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2392,18 +2582,20 @@
         {
             "PairID": 776,
             "Pair": null,
-            "ExSymbol": "BCHUSDC",
+            "ExID": "",
+            "ExSymbol": "SEELEBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
-            "PriceFilter": 0.01,
+            "PriceFilter": 1e-10,
             "Listed": true,
             "Issue": ""
         },
         {
             "PairID": 777,
             "Pair": null,
-            "ExSymbol": "SEELEBCH",
+            "ExID": "",
+            "ExSymbol": "BTUBCH",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,
@@ -2414,7 +2606,20 @@
         {
             "PairID": 778,
             "Pair": null,
-            "ExSymbol": "XZCBCH",
+            "ExID": "",
+            "ExSymbol": "OMGBCH",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 779,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "WWBBTC",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 1e-8,

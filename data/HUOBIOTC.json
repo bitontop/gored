@@ -23,7 +23,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1152,
+            "CoinID": 1153,
             "Coin": null,
             "ExSymbol": "1",
             "TxFee": 0.005,
@@ -36,9 +36,10 @@
     ],
     "PairConstraint": [
         {
-            "PairID": 1885,
+            "PairID": 1886,
             "Pair": null,
-            "ExSymbol": "CNY_USDT",
+            "ExID": "",
+            "ExSymbol": "CNY_BTC",
             "MakerFee": 0.001,
             "TakerFee": 0,
             "LotSize": 0.000001,
@@ -47,9 +48,10 @@
             "Issue": ""
         },
         {
-            "PairID": 1886,
+            "PairID": 1887,
             "Pair": null,
-            "ExSymbol": "CNY_BTC",
+            "ExID": "",
+            "ExSymbol": "CNY_USDT",
             "MakerFee": 0.001,
             "TakerFee": 0,
             "LotSize": 0.000001,
