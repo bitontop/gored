@@ -57,7 +57,9 @@ func CreateBitmax(config *exchange.Config) *Bitmax {
 		coinConstraintMap = cmap.New()
 		pairConstraintMap = cmap.New()
 
-		instance.AccountGroup()
+		if instance.API_KEY != "" && instance.API_SECRET != "" {
+			instance.AccountGroup()
+		}
 		instance.InitData()
 	})
 	return instance
