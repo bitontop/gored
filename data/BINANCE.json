@@ -7590,7 +7590,19 @@
             "Issue": ""
         },
         {
-            "PairID": 726,
+            "PairID": 707,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "BCHABCPAX",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 0.00001,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 709,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BCHABCUSDC",
@@ -7602,22 +7614,10 @@
             "Issue": ""
         },
         {
-            "PairID": 753,
+            "PairID": 728,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BCHABCTUSD",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 0.00001,
-            "PriceFilter": 0.01,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 759,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "BCHABCPAX",
             "MakerFee": 0.001,
             "TakerFee": 0.001,
             "LotSize": 0.00001,
