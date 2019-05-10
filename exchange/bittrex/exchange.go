@@ -52,6 +52,9 @@ func CreateBittrex(config *exchange.Config) *Bittrex {
 			SourceURI:  config.SourceURI,
 		}
 
+		log.Printf("%s API_KEY: %s  API_SECRET: %s", instance.GetName(), config.API_KEY, config.API_SECRET)
+		log.Printf("%s API_KEY: %s  API_SECRET: %s", instance.GetName(), instance.API_KEY, instance.API_SECRET)
+
 		balanceMap = cmap.New()
 		coinConstraintMap = cmap.New()
 		pairConstraintMap = cmap.New()
