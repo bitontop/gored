@@ -1358,8 +1358,8 @@
             "Coin": null,
             "ExSymbol": "BLOCK",
             "TxFee": 0.02,
-            "Withdraw": false,
-            "Deposit": false,
+            "Withdraw": true,
+            "Deposit": true,
             "Confirmation": 6,
             "Listed": true,
             "Issue": ""

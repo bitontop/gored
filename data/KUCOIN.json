@@ -1167,7 +1167,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 370,
+            "CoinID": 382,
             "Coin": null,
             "ExSymbol": "EGT",
             "TxFee": 1483.6,
@@ -1178,7 +1178,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 378,
+            "CoinID": 387,
             "Coin": null,
             "ExSymbol": "OLT",
             "TxFee": 204.9,
@@ -4414,7 +4414,7 @@
             "Issue": ""
         },
         {
-            "PairID": 750,
+            "PairID": 706,
             "Pair": null,
             "ExSymbol": "OLT-BTC",
             "MakerFee": 0.001,
@@ -4425,7 +4425,7 @@
             "Issue": ""
         },
         {
-            "PairID": 751,
+            "PairID": 733,
             "Pair": null,
             "ExSymbol": "BTM-ETH",
             "MakerFee": 0.001,
@@ -4436,7 +4436,7 @@
             "Issue": ""
         },
         {
-            "PairID": 756,
+            "PairID": 743,
             "Pair": null,
             "ExSymbol": "EGT-BTC",
             "MakerFee": 0.001,

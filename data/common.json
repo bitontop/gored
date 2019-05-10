@@ -4039,7 +4039,7 @@
         },
         {
             "ID": 370,
-            "code": "EGT",
+            "code": "SEELE",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4050,7 +4050,7 @@
         },
         {
             "ID": 371,
-            "code": "THPC",
+            "code": "WHC",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4061,7 +4061,7 @@
         },
         {
             "ID": 372,
-            "code": "TCT",
+            "code": "THPC",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4072,7 +4072,7 @@
         },
         {
             "ID": 373,
-            "code": "KAN",
+            "code": "CARD",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4105,17 +4105,6 @@
         },
         {
             "ID": 376,
-            "code": "ULT",
-            "name": "",
-            "website": "",
-            "explorer": "",
-            "CurrencyType": "",
-            "Health": "",
-            "Blockheigh": 0,
-            "Blocktime": 0
-        },
-        {
-            "ID": 377,
             "code": "MT",
             "name": "",
             "website": "",
@@ -4126,8 +4115,19 @@
             "Blocktime": 0
         },
         {
+            "ID": 377,
+            "code": "KAN",
+            "name": "",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
             "ID": 378,
-            "code": "OLT",
+            "code": "ULT",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4138,7 +4138,7 @@
         },
         {
             "ID": 379,
-            "code": "NNB",
+            "code": "TCT",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4149,7 +4149,7 @@
         },
         {
             "ID": 380,
-            "code": "WWB",
+            "code": "LAMB",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4171,7 +4171,7 @@
         },
         {
             "ID": 382,
-            "code": "LAMB",
+            "code": "EGT",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4182,7 +4182,7 @@
         },
         {
             "ID": 383,
-            "code": "SEELE",
+            "code": "NNB",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4204,7 +4204,7 @@
         },
         {
             "ID": 385,
-            "code": "CARD",
+            "code": "WWB",
             "name": "",
             "website": "",
             "explorer": "",
@@ -4226,7 +4226,7 @@
         },
         {
             "ID": 387,
-            "code": "WHC",
+            "code": "OLT",
             "name": "",
             "website": "",
             "explorer": "",
@@ -12434,6 +12434,204 @@
             "ID": 1134,
             "code": "MHC",
             "name": "MetaHash",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1135,
+            "code": "LTO",
+            "name": "LTO",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1136,
+            "code": "CHX",
+            "name": "Own",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1137,
+            "code": "BOLT",
+            "name": "BOLT Token",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1138,
+            "code": "RNT",
+            "name": "OneRoot Network",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1139,
+            "code": "LAMBLCK",
+            "name": "Lambda Token Lock",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1140,
+            "code": "QCX",
+            "name": "QuickX",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1141,
+            "code": "DOS",
+            "name": "DOS Network",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1142,
+            "code": "BTMX",
+            "name": "BitMax.io Native Token",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1143,
+            "code": "HT",
+            "name": "Huobi Token",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1144,
+            "code": "COVA",
+            "name": "Covalent Token",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1145,
+            "code": "BXA",
+            "name": "BXA",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1146,
+            "code": "ETZ",
+            "name": "Ether Zero",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1147,
+            "code": "XTZ",
+            "name": "Tezos",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1148,
+            "code": "CVNT",
+            "name": "Content Value Network",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1149,
+            "code": "DUO",
+            "name": "DUO",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1150,
+            "code": "VALOR",
+            "name": "Valor Token",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1151,
+            "code": "DUOLCK",
+            "name": "DUO Lock",
+            "website": "",
+            "explorer": "",
+            "CurrencyType": "",
+            "Health": "",
+            "Blockheigh": 0,
+            "Blocktime": 0
+        },
+        {
+            "ID": 1152,
+            "code": "CNY",
+            "name": "",
             "website": "",
             "explorer": "",
             "CurrencyType": "",
@@ -30489,7 +30687,7 @@
         },
         {
             "ID": 700,
-            "Name": "BCH|NANO",
+            "Name": "BCH|NEO",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -30502,12 +30700,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 109,
-                "code": "NANO",
-                "name": "NANO",
-                "website": "https://nanocrawler.cc/explorer/block/",
+                "ID": 3,
+                "code": "NEO",
+                "name": "NEO",
+                "website": "https://neotracker.io/tx/",
                 "explorer": "",
-                "CurrencyType": "",
+                "CurrencyType": "ANTSHARES",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -30515,33 +30713,7 @@
         },
         {
             "ID": 701,
-            "Name": "ETH|HYDRO",
-            "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "",
-                "CurrencyType": "ETH",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 319,
-                "code": "HYDRO",
-                "name": "Hydro",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "ETH_CONTRACT",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 702,
-            "Name": "BCH|XMR",
+            "Name": "BCH|HOT",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -30554,37 +30726,11 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 58,
-                "code": "XMR",
-                "name": "Monero",
-                "website": "https://minergate.com/blockchain/xmr/transaction/",
-                "explorer": "",
-                "CurrencyType": "CRYPTO_NOTE_PAYMENTID",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 703,
-            "Name": "BCH|LINK",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 31,
-                "code": "LINK",
-                "name": "ChainLink",
+                "ID": 147,
+                "code": "HOT",
+                "name": "Holo",
                 "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/blocks/",
+                "explorer": "https://etherscan.io/block/",
                 "CurrencyType": "",
                 "Health": "",
                 "Blockheigh": 0,
@@ -30592,60 +30738,8 @@
             }
         },
         {
-            "ID": 704,
-            "Name": "TUSD|BCH",
-            "Base": {
-                "ID": 126,
-                "code": "TUSD",
-                "name": "TrueUSD",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/block/",
-                "CurrencyType": "ETH_CONTRACT",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 705,
-            "Name": "BCH|ETC",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 38,
-                "code": "ETC",
-                "name": "Ethereum Classic",
-                "website": "https://gastracker.io/tx/",
-                "explorer": "http://gastracker.io/block/",
-                "CurrencyType": "ETH",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 706,
-            "Name": "BTC|LFC",
+            "ID": 702,
+            "Name": "BTC|TCT",
             "Base": {
                 "ID": 2,
                 "code": "BTC",
@@ -30658,8 +30752,112 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 384,
-                "code": "LFC",
+                "ID": 379,
+                "code": "TCT",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 703,
+            "Name": "BCH|XRP",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 50,
+                "code": "XRP",
+                "name": "Ripple",
+                "website": "https://bithomp.com/explorer/",
+                "explorer": "",
+                "CurrencyType": "RIPPLE",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 704,
+            "Name": "BTC|MT",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 376,
+                "code": "MT",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 705,
+            "Name": "ETH|CODY",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 381,
+                "code": "CODY",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 706,
+            "Name": "BTC|OLT",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 387,
+                "code": "OLT",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -30671,7 +30869,7 @@
         },
         {
             "ID": 707,
-            "Name": "BCH|XZC",
+            "Name": "BCH|DOGE",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -30684,10 +30882,10 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 71,
-                "code": "XZC",
-                "name": "Zcoin",
-                "website": "https://chainz.cryptoid.info/xzc/tx.dws?",
+                "ID": 178,
+                "code": "DOGE",
+                "name": "Dogecoin",
+                "website": "",
                 "explorer": "",
                 "CurrencyType": "BITCOIN",
                 "Health": "",
@@ -30697,19 +30895,8 @@
         },
         {
             "ID": 708,
-            "Name": "GUSD|BTC",
+            "Name": "BTC|KAN",
             "Base": {
-                "ID": 375,
-                "code": "GUSD",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
                 "ID": 2,
                 "code": "BTC",
                 "name": "Bitcoin",
@@ -30719,29 +30906,40 @@
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
+            },
+            "Target": {
+                "ID": 377,
+                "code": "KAN",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
             }
         },
         {
             "ID": 709,
-            "Name": "ETH|CARD",
+            "Name": "BCH|ONT",
             "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
                 "explorer": "",
-                "CurrencyType": "ETH",
+                "CurrencyType": "BITCOIN",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 385,
-                "code": "CARD",
-                "name": "",
-                "website": "",
+                "ID": 116,
+                "code": "ONT",
+                "name": "Ontology",
+                "website": "https://explorer.ont.io/transaction/",
                 "explorer": "",
-                "CurrencyType": "",
+                "CurrencyType": "ONTOLOGY",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -30749,25 +30947,25 @@
         },
         {
             "ID": 710,
-            "Name": "ETH|LAMB",
+            "Name": "BCH|OMG",
             "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
                 "explorer": "",
-                "CurrencyType": "ETH",
+                "CurrencyType": "BITCOIN",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 382,
-                "code": "LAMB",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
+                "ID": 19,
+                "code": "OMG",
+                "name": "OmiseGO",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/blocks/",
+                "CurrencyType": "ETH_CONTRACT",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -30775,7 +30973,7 @@
         },
         {
             "ID": 711,
-            "Name": "BCH|WHC",
+            "Name": "BCH|ADA",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -30788,12 +30986,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 387,
-                "code": "WHC",
-                "name": "",
-                "website": "",
+                "ID": 79,
+                "code": "ADA",
+                "name": "Cardano",
+                "website": "https://cardanoexplorer.com/tx/",
                 "explorer": "",
-                "CurrencyType": "",
+                "CurrencyType": "ADA",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -30801,12 +30999,12 @@
         },
         {
             "ID": 712,
-            "Name": "BCH|THPC",
+            "Name": "BTC|SEELE",
             "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
                 "explorer": "",
                 "CurrencyType": "BITCOIN",
                 "Health": "",
@@ -30814,8 +31012,8 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 371,
-                "code": "THPC",
+                "ID": 370,
+                "code": "SEELE",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -30853,7 +31051,7 @@
         },
         {
             "ID": 714,
-            "Name": "BCH|SEELE",
+            "Name": "BCH|XMR",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -30866,12 +31064,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 383,
-                "code": "SEELE",
-                "name": "",
-                "website": "",
+                "ID": 58,
+                "code": "XMR",
+                "name": "Monero",
+                "website": "https://minergate.com/blockchain/xmr/transaction/",
                 "explorer": "",
-                "CurrencyType": "",
+                "CurrencyType": "CRYPTO_NOTE_PAYMENTID",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -30879,7 +31077,7 @@
         },
         {
             "ID": 715,
-            "Name": "BCH|ONT",
+            "Name": "BCH|ETC",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -30892,12 +31090,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 116,
-                "code": "ONT",
-                "name": "Ontology",
-                "website": "https://explorer.ont.io/transaction/",
-                "explorer": "",
-                "CurrencyType": "ONTOLOGY",
+                "ID": 38,
+                "code": "ETC",
+                "name": "Ethereum Classic",
+                "website": "https://gastracker.io/tx/",
+                "explorer": "http://gastracker.io/block/",
+                "CurrencyType": "ETH",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -30905,21 +31103,21 @@
         },
         {
             "ID": 716,
-            "Name": "BTC|CNN",
+            "Name": "ETH|CARD",
             "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
                 "explorer": "",
-                "CurrencyType": "BITCOIN",
+                "CurrencyType": "ETH",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 386,
-                "code": "CNN",
+                "ID": 373,
+                "code": "CARD",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -30931,32 +31129,6 @@
         },
         {
             "ID": 717,
-            "Name": "BTC|KAN",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 373,
-                "code": "KAN",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 718,
             "Name": "GUSD|BCH",
             "Base": {
                 "ID": 375,
@@ -30982,553 +31154,7 @@
             }
         },
         {
-            "ID": 719,
-            "Name": "BTC|TCT",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 372,
-                "code": "TCT",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 720,
-            "Name": "BCH|ZEC",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 62,
-                "code": "ZEC",
-                "name": "Zcash",
-                "website": "https://zcashnetwork.info/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOINEX",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 721,
-            "Name": "BCH|LTC",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 5,
-                "code": "LTC",
-                "name": "Litecoin",
-                "website": "http://explorer.litecoin.net/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN16",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 722,
-            "Name": "BCH|MT",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 377,
-                "code": "MT",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 723,
-            "Name": "BCH|NNB",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 379,
-                "code": "NNB",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 724,
-            "Name": "BCH|HC",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 154,
-                "code": "HC",
-                "name": "HyperCash",
-                "website": "https://hc-explorer.h.cash/explorer/tx/",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 725,
-            "Name": "BTC|WWB",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 380,
-                "code": "WWB",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 726,
-            "Name": "BCH|ADA",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 79,
-                "code": "ADA",
-                "name": "Cardano",
-                "website": "https://cardanoexplorer.com/tx/",
-                "explorer": "",
-                "CurrencyType": "ADA",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 727,
-            "Name": "BTC|SEELE",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 383,
-                "code": "SEELE",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 728,
-            "Name": "BCH|CODY",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 381,
-                "code": "CODY",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 729,
-            "Name": "BCH|BTU",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 341,
-                "code": "BTU",
-                "name": "BTU Protocol",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "ETH_CONTRACT",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 730,
-            "Name": "BCH|CET",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 374,
-                "code": "CET",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 731,
-            "Name": "BTC|THPC",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 371,
-                "code": "THPC",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 732,
-            "Name": "BCH|CARD",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 385,
-                "code": "CARD",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 733,
-            "Name": "BTC|CET",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 374,
-                "code": "CET",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 734,
-            "Name": "BCH|GNT",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 97,
-                "code": "GNT",
-                "name": "Golem",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/blocks/",
-                "CurrencyType": "ETH_CONTRACT",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 735,
-            "Name": "ETH|SEELE",
-            "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "",
-                "CurrencyType": "ETH",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 383,
-                "code": "SEELE",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 736,
-            "Name": "USDC|BCH",
-            "Base": {
-                "ID": 159,
-                "code": "USDC",
-                "name": "USD Coin",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/block/",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 737,
-            "Name": "BCH|BAT",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 61,
-                "code": "BAT",
-                "name": "Basic Attention Token",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/blocks/",
-                "CurrencyType": "ETH_CONTRACT",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 738,
-            "Name": "BTC|MT",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 377,
-                "code": "MT",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 739,
-            "Name": "BCH|DCR",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 158,
-                "code": "DCR",
-                "name": "Decred",
-                "website": "https://explorer.dcrdata.org/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 740,
+            "ID": 718,
             "Name": "BCH|EOS",
             "Base": {
                 "ID": 296,
@@ -31554,13 +31180,13 @@
             }
         },
         {
-            "ID": 741,
-            "Name": "BCH|ZIL",
+            "ID": 719,
+            "Name": "BTC|WWB",
             "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
                 "explorer": "",
                 "CurrencyType": "BITCOIN",
                 "Health": "",
@@ -31568,60 +31194,8 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 117,
-                "code": "ZIL",
-                "name": "Zilliqa",
-                "website": "https://viewblock.io/zilliqa/tx/0x",
-                "explorer": "https://viewblock.io/zilliqa/block/",
-                "CurrencyType": "ETH_CONTRACT",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 742,
-            "Name": "BCH|BTT",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 165,
-                "code": "BTT",
-                "name": "BitTorrent",
-                "website": "https://tronscan.org/#/transaction/",
-                "explorer": "",
-                "CurrencyType": "TRON",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 743,
-            "Name": "ETH|TCT",
-            "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "",
-                "CurrencyType": "ETH",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 372,
-                "code": "TCT",
+                "ID": 385,
+                "code": "WWB",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -31632,34 +31206,8 @@
             }
         },
         {
-            "ID": 744,
-            "Name": "BCH|SC",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 134,
-                "code": "SC",
-                "name": "Siacoin",
-                "website": "https://siastats.info/navigator?search=",
-                "explorer": "",
-                "CurrencyType": "SIA",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 745,
-            "Name": "ETH|CET",
+            "ID": 720,
+            "Name": "ETH|SEELE",
             "Base": {
                 "ID": 4,
                 "code": "ETH",
@@ -31667,6 +31215,32 @@
                 "website": "https://etherscan.io/tx/",
                 "explorer": "",
                 "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 370,
+                "code": "SEELE",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 721,
+            "Name": "BTC|CET",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -31684,22 +31258,22 @@
             }
         },
         {
-            "ID": 746,
-            "Name": "ETH|THPC",
+            "ID": 722,
+            "Name": "BCH|MT",
             "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
                 "explorer": "",
-                "CurrencyType": "ETH",
+                "CurrencyType": "BITCOIN",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 371,
-                "code": "THPC",
+                "ID": 376,
+                "code": "MT",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -31710,8 +31284,8 @@
             }
         },
         {
-            "ID": 747,
-            "Name": "BTC|ULT",
+            "ID": 723,
+            "Name": "BTC|LAMB",
             "Base": {
                 "ID": 2,
                 "code": "BTC",
@@ -31724,8 +31298,8 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 376,
-                "code": "ULT",
+                "ID": 380,
+                "code": "LAMB",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -31736,7 +31310,59 @@
             }
         },
         {
-            "ID": 748,
+            "ID": 724,
+            "Name": "GUSD|BTC",
+            "Base": {
+                "ID": 375,
+                "code": "GUSD",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 725,
+            "Name": "BCH|CARD",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 373,
+                "code": "CARD",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 726,
             "Name": "BTC|CODY",
             "Base": {
                 "ID": 2,
@@ -31762,8 +31388,8 @@
             }
         },
         {
-            "ID": 749,
-            "Name": "BCH|DASH",
+            "ID": 727,
+            "Name": "BCH|BAT",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -31776,10 +31402,36 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 43,
-                "code": "DASH",
-                "name": "Dash",
-                "website": "https://chainz.cryptoid.info/dash/tx.dws?",
+                "ID": 61,
+                "code": "BAT",
+                "name": "Basic Attention Token",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/blocks/",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 728,
+            "Name": "TUSD|BCH",
+            "Base": {
+                "ID": 126,
+                "code": "TUSD",
+                "name": "TrueUSD",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/block/",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
                 "explorer": "",
                 "CurrencyType": "BITCOIN",
                 "Health": "",
@@ -31788,8 +31440,34 @@
             }
         },
         {
-            "ID": 750,
-            "Name": "BTC|OLT",
+            "ID": 729,
+            "Name": "ETH|HYDRO",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 319,
+                "code": "HYDRO",
+                "name": "Hydro",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 730,
+            "Name": "BTC|CNN",
             "Base": {
                 "ID": 2,
                 "code": "BTC",
@@ -31802,8 +31480,8 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 378,
-                "code": "OLT",
+                "ID": 386,
+                "code": "CNN",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -31814,7 +31492,59 @@
             }
         },
         {
-            "ID": 751,
+            "ID": 731,
+            "Name": "BTC|LFC",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 384,
+                "code": "LFC",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 732,
+            "Name": "BCH|WHC",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 371,
+                "code": "WHC",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 733,
             "Name": "ETH|BTM",
             "Base": {
                 "ID": 4,
@@ -31840,7 +31570,85 @@
             }
         },
         {
-            "ID": 752,
+            "ID": 734,
+            "Name": "BCH|THPC",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 372,
+                "code": "THPC",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 735,
+            "Name": "ETH|TCT",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 379,
+                "code": "TCT",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 736,
+            "Name": "USDT|CET",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 374,
+                "code": "CET",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 737,
             "Name": "BCH|QTUM",
             "Base": {
                 "ID": 296,
@@ -31866,137 +31674,7 @@
             }
         },
         {
-            "ID": 753,
-            "Name": "ETH|CODY",
-            "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "",
-                "CurrencyType": "ETH",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 381,
-                "code": "CODY",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 754,
-            "Name": "USDT|LAMB",
-            "Base": {
-                "ID": 12,
-                "code": "USDT",
-                "name": "TetherUS",
-                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
-                "explorer": "https://omniexplorer.info/transactions.aspx",
-                "CurrencyType": "OMNI",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 382,
-                "code": "LAMB",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 755,
-            "Name": "BCH|XRP",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 50,
-                "code": "XRP",
-                "name": "Ripple",
-                "website": "https://bithomp.com/explorer/",
-                "explorer": "",
-                "CurrencyType": "RIPPLE",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 756,
-            "Name": "BTC|EGT",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 370,
-                "code": "EGT",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 757,
-            "Name": "BCH|XLM",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 82,
-                "code": "XLM",
-                "name": "Stellar Lumens",
-                "website": "https://steexp.com/tx/",
-                "explorer": "",
-                "CurrencyType": "STELLAR",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 758,
+            "ID": 738,
             "Name": "CET|NNB",
             "Base": {
                 "ID": 374,
@@ -32010,7 +31688,7 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 379,
+                "ID": 383,
                 "code": "NNB",
                 "name": "",
                 "website": "",
@@ -32022,8 +31700,34 @@
             }
         },
         {
-            "ID": 759,
-            "Name": "BCH|HOT",
+            "ID": 739,
+            "Name": "USDT|LAMB",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 380,
+                "code": "LAMB",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 740,
+            "Name": "BCH|BTT",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -32036,11 +31740,89 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 147,
-                "code": "HOT",
-                "name": "Holo",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/block/",
+                "ID": 165,
+                "code": "BTT",
+                "name": "BitTorrent",
+                "website": "https://tronscan.org/#/transaction/",
+                "explorer": "",
+                "CurrencyType": "TRON",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 741,
+            "Name": "BCH|ZEC",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 62,
+                "code": "ZEC",
+                "name": "Zcash",
+                "website": "https://zcashnetwork.info/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOINEX",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 742,
+            "Name": "BCH|ZIL",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 117,
+                "code": "ZIL",
+                "name": "Zilliqa",
+                "website": "https://viewblock.io/zilliqa/tx/0x",
+                "explorer": "https://viewblock.io/zilliqa/block/",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 743,
+            "Name": "BTC|EGT",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 382,
+                "code": "EGT",
+                "name": "",
+                "website": "",
+                "explorer": "",
                 "CurrencyType": "",
                 "Health": "",
                 "Blockheigh": 0,
@@ -32048,8 +31830,86 @@
             }
         },
         {
-            "ID": 760,
-            "Name": "ETH|ULT",
+            "ID": 744,
+            "Name": "ETH|CET",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 374,
+                "code": "CET",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 745,
+            "Name": "BTC|CARD",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 373,
+                "code": "CARD",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 746,
+            "Name": "BTC|NNB",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 383,
+                "code": "NNB",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 747,
+            "Name": "ETH|MT",
             "Base": {
                 "ID": 4,
                 "code": "ETH",
@@ -32063,6 +31923,162 @@
             },
             "Target": {
                 "ID": 376,
+                "code": "MT",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 748,
+            "Name": "BCH|VET",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 148,
+                "code": "VET",
+                "name": "VeChain",
+                "website": "https://explore.veforge.com/transactions/",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 749,
+            "Name": "BCH|NNB",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 383,
+                "code": "NNB",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 750,
+            "Name": "BCH|DASH",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 43,
+                "code": "DASH",
+                "name": "Dash",
+                "website": "https://chainz.cryptoid.info/dash/tx.dws?",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 751,
+            "Name": "BCH|ONG",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 152,
+                "code": "ONG",
+                "name": "Ontology Gas",
+                "website": "https://explorer.ont.io/transaction/",
+                "explorer": "",
+                "CurrencyType": "ONTOLOGY",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 752,
+            "Name": "PAX|BCH",
+            "Base": {
+                "ID": 156,
+                "code": "PAX",
+                "name": "Paxos Standard",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 753,
+            "Name": "BTC|ULT",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 378,
                 "code": "ULT",
                 "name": "",
                 "website": "",
@@ -32074,15 +32090,15 @@
             }
         },
         {
-            "ID": 761,
-            "Name": "USDT|CET",
+            "ID": 754,
+            "Name": "USDC|CET",
             "Base": {
-                "ID": 12,
-                "code": "USDT",
-                "name": "TetherUS",
-                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
-                "explorer": "https://omniexplorer.info/transactions.aspx",
-                "CurrencyType": "OMNI",
+                "ID": 159,
+                "code": "USDC",
+                "name": "USD Coin",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/block/",
+                "CurrencyType": "",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -32090,6 +32106,188 @@
             "Target": {
                 "ID": 374,
                 "code": "CET",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 755,
+            "Name": "BTC|THPC",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 372,
+                "code": "THPC",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 756,
+            "Name": "BCH|BTM",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 11,
+                "code": "BTM",
+                "name": "Bytom",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/blocks/",
+                "CurrencyType": "BYTOM",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 757,
+            "Name": "ETH|ULT",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 378,
+                "code": "ULT",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 758,
+            "Name": "BCH|ZRX",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 18,
+                "code": "ZRX",
+                "name": "0x",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/blocks/",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 759,
+            "Name": "BCH|BSV",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 332,
+                "code": "BSV",
+                "name": "Bitcoin SV",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 760,
+            "Name": "ETH|LAMB",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 380,
+                "code": "LAMB",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 761,
+            "Name": "BCH|CODY",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 381,
+                "code": "CODY",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -32127,7 +32325,7 @@
         },
         {
             "ID": 763,
-            "Name": "BCH|NEO",
+            "Name": "BCH|NANO",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -32140,12 +32338,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 3,
-                "code": "NEO",
-                "name": "NEO",
-                "website": "https://neotracker.io/tx/",
+                "ID": 109,
+                "code": "NANO",
+                "name": "NANO",
+                "website": "https://nanocrawler.cc/explorer/block/",
                 "explorer": "",
-                "CurrencyType": "ANTSHARES",
+                "CurrencyType": "",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -32153,7 +32351,7 @@
         },
         {
             "ID": 764,
-            "Name": "BCH|ONG",
+            "Name": "BCH|LTC",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -32166,12 +32364,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 152,
-                "code": "ONG",
-                "name": "Ontology Gas",
-                "website": "https://explorer.ont.io/transaction/",
+                "ID": 5,
+                "code": "LTC",
+                "name": "Litecoin",
+                "website": "http://explorer.litecoin.net/tx/",
                 "explorer": "",
-                "CurrencyType": "ONTOLOGY",
+                "CurrencyType": "BITCOIN16",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -32179,7 +32377,7 @@
         },
         {
             "ID": 765,
-            "Name": "BCH|VET",
+            "Name": "BCH|XLM",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -32192,12 +32390,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 148,
-                "code": "VET",
-                "name": "VeChain",
-                "website": "https://explore.veforge.com/transactions/",
+                "ID": 82,
+                "code": "XLM",
+                "name": "Stellar Lumens",
+                "website": "https://steexp.com/tx/",
                 "explorer": "",
-                "CurrencyType": "",
+                "CurrencyType": "STELLAR",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -32205,7 +32403,7 @@
         },
         {
             "ID": 766,
-            "Name": "BCH|ZRX",
+            "Name": "BCH|HC",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -32218,12 +32416,12 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 18,
-                "code": "ZRX",
-                "name": "0x",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/blocks/",
-                "CurrencyType": "ETH_CONTRACT",
+                "ID": 154,
+                "code": "HC",
+                "name": "HyperCash",
+                "website": "https://hc-explorer.h.cash/explorer/tx/",
+                "explorer": "",
+                "CurrencyType": "",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -32231,162 +32429,6 @@
         },
         {
             "ID": 767,
-            "Name": "USDT|GUSD",
-            "Base": {
-                "ID": 12,
-                "code": "USDT",
-                "name": "TetherUS",
-                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
-                "explorer": "https://omniexplorer.info/transactions.aspx",
-                "CurrencyType": "OMNI",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 375,
-                "code": "GUSD",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 768,
-            "Name": "ETH|MT",
-            "Base": {
-                "ID": 4,
-                "code": "ETH",
-                "name": "Ethereum",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "",
-                "CurrencyType": "ETH",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 377,
-                "code": "MT",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 769,
-            "Name": "BCH|BTM",
-            "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 11,
-                "code": "BTM",
-                "name": "Bytom",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/blocks/",
-                "CurrencyType": "BYTOM",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 770,
-            "Name": "PAX|BCH",
-            "Base": {
-                "ID": 156,
-                "code": "PAX",
-                "name": "Paxos Standard",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "",
-                "CurrencyType": "ETH_CONTRACT",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 771,
-            "Name": "BTC|NNB",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 379,
-                "code": "NNB",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 772,
-            "Name": "BTC|LAMB",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 382,
-                "code": "LAMB",
-                "name": "",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 773,
             "Name": "BCH|TRX",
             "Base": {
                 "ID": 296,
@@ -32412,48 +32454,22 @@
             }
         },
         {
-            "ID": 774,
-            "Name": "BCH|DOGE",
+            "ID": 768,
+            "Name": "USDT|GUSD",
             "Base": {
-                "ID": 296,
-                "code": "BCH",
-                "name": "Bitcoin Cash (ABC)",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 178,
-                "code": "DOGE",
-                "name": "Dogecoin",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 775,
-            "Name": "BTC|CARD",
-            "Base": {
-                "ID": 2,
-                "code": "BTC",
-                "name": "Bitcoin",
-                "website": "https://www.blockchain.com/btc/tx/",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 385,
-                "code": "CARD",
+                "ID": 375,
+                "code": "GUSD",
                 "name": "",
                 "website": "",
                 "explorer": "",
@@ -32464,8 +32480,8 @@
             }
         },
         {
-            "ID": 776,
-            "Name": "BCH|BSV",
+            "ID": 769,
+            "Name": "BCH|CET",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -32473,32 +32489,6 @@
                 "website": "",
                 "explorer": "",
                 "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            },
-            "Target": {
-                "ID": 332,
-                "code": "BSV",
-                "name": "Bitcoin SV",
-                "website": "",
-                "explorer": "",
-                "CurrencyType": "BITCOIN",
-                "Health": "",
-                "Blockheigh": 0,
-                "Blocktime": 0
-            }
-        },
-        {
-            "ID": 777,
-            "Name": "USDC|CET",
-            "Base": {
-                "ID": 159,
-                "code": "USDC",
-                "name": "USD Coin",
-                "website": "https://etherscan.io/tx/",
-                "explorer": "https://etherscan.io/block/",
-                "CurrencyType": "",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -32516,8 +32506,8 @@
             }
         },
         {
-            "ID": 778,
-            "Name": "BCH|OMG",
+            "ID": 770,
+            "Name": "BCH|LINK",
             "Base": {
                 "ID": 296,
                 "code": "BCH",
@@ -32530,12 +32520,220 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 19,
-                "code": "OMG",
-                "name": "OmiseGO",
+                "ID": 31,
+                "code": "LINK",
+                "name": "ChainLink",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/blocks/",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 771,
+            "Name": "BCH|GNT",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 97,
+                "code": "GNT",
+                "name": "Golem",
                 "website": "https://etherscan.io/tx/",
                 "explorer": "https://etherscan.io/blocks/",
                 "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 772,
+            "Name": "BCH|DCR",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 158,
+                "code": "DCR",
+                "name": "Decred",
+                "website": "https://explorer.dcrdata.org/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 773,
+            "Name": "BCH|SC",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 134,
+                "code": "SC",
+                "name": "Siacoin",
+                "website": "https://siastats.info/navigator?search=",
+                "explorer": "",
+                "CurrencyType": "SIA",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 774,
+            "Name": "BCH|BTU",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 341,
+                "code": "BTU",
+                "name": "BTU Protocol",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 775,
+            "Name": "ETH|THPC",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 372,
+                "code": "THPC",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 776,
+            "Name": "USDC|BCH",
+            "Base": {
+                "ID": 159,
+                "code": "USDC",
+                "name": "USD Coin",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/block/",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 777,
+            "Name": "BCH|SEELE",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 370,
+                "code": "SEELE",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 778,
+            "Name": "BCH|XZC",
+            "Base": {
+                "ID": 296,
+                "code": "BCH",
+                "name": "Bitcoin Cash (ABC)",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 71,
+                "code": "XZC",
+                "name": "Zcoin",
+                "website": "https://chainz.cryptoid.info/xzc/tx.dws?",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
@@ -46790,6 +46988,32 @@
             }
         },
         {
+            "ID": 1328,
+            "Name": "ETH|EXBT",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 825,
+                "code": "EXBT",
+                "name": "ExhibitToken",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
             "ID": 1329,
             "Name": "ETH|FA",
             "Base": {
@@ -57750,7 +57974,7 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 370,
+                "ID": 382,
                 "code": "EGT",
                 "name": "",
                 "website": "",
@@ -57854,7 +58078,7 @@
                 "Blocktime": 0
             },
             "Target": {
-                "ID": 378,
+                "ID": 387,
                 "code": "OLT",
                 "name": "",
                 "website": "",
@@ -59862,6 +60086,1150 @@
                 "website": "",
                 "explorer": "",
                 "CurrencyType": "MIMBLEWIMBLE",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1843,
+            "Name": "ETH|LBA",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 336,
+                "code": "LBA",
+                "name": "Cred",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1844,
+            "Name": "BTC|BTMX",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1142,
+                "code": "BTMX",
+                "name": "BitMax.io Native Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1845,
+            "Name": "USDT|BTMX",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1142,
+                "code": "BTMX",
+                "name": "BitMax.io Native Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1846,
+            "Name": "ETH|BTMX",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1142,
+                "code": "BTMX",
+                "name": "BitMax.io Native Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1847,
+            "Name": "BTC|USDC",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 159,
+                "code": "USDC",
+                "name": "USD Coin",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "https://etherscan.io/block/",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1848,
+            "Name": "ETH|ONG",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 152,
+                "code": "ONG",
+                "name": "Ontology Gas",
+                "website": "https://explorer.ont.io/transaction/",
+                "explorer": "",
+                "CurrencyType": "ONTOLOGY",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1849,
+            "Name": "BTC|COVA",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1144,
+                "code": "COVA",
+                "name": "Covalent Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1850,
+            "Name": "ETH|COVA",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1144,
+                "code": "COVA",
+                "name": "Covalent Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1851,
+            "Name": "USDT|COVA",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1144,
+                "code": "COVA",
+                "name": "Covalent Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1852,
+            "Name": "BTC|CVNT",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1148,
+                "code": "CVNT",
+                "name": "Content Value Network",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1853,
+            "Name": "ETH|CVNT",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1148,
+                "code": "CVNT",
+                "name": "Content Value Network",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1854,
+            "Name": "BTC|LTO",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1135,
+                "code": "LTO",
+                "name": "LTO",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1855,
+            "Name": "USDT|LTO",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1135,
+                "code": "LTO",
+                "name": "LTO",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1856,
+            "Name": "BTC|QCX",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1140,
+                "code": "QCX",
+                "name": "QuickX",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1857,
+            "Name": "USDT|QCX",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1140,
+                "code": "QCX",
+                "name": "QuickX",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1858,
+            "Name": "USDT|BXA",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1145,
+                "code": "BXA",
+                "name": "BXA",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1859,
+            "Name": "BTC|XTZ",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1147,
+                "code": "XTZ",
+                "name": "Tezos",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1860,
+            "Name": "ETH|XTZ",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1147,
+                "code": "XTZ",
+                "name": "Tezos",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1861,
+            "Name": "USDT|RNT",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1138,
+                "code": "RNT",
+                "name": "OneRoot Network",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1862,
+            "Name": "USDT|ANKR",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 351,
+                "code": "ANKR",
+                "name": "Ankr",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1863,
+            "Name": "USDT|AERGO",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 354,
+                "code": "AERGO",
+                "name": "Aergo",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1864,
+            "Name": "USDT|FTM",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1066,
+                "code": "FTM",
+                "name": "Fantom",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1865,
+            "Name": "USDT|DOS",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1141,
+                "code": "DOS",
+                "name": "DOS Network",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1866,
+            "Name": "BTC|DOS",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1141,
+                "code": "DOS",
+                "name": "DOS Network",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1867,
+            "Name": "ETH|HT",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1143,
+                "code": "HT",
+                "name": "Huobi Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1868,
+            "Name": "USDT|HT",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1143,
+                "code": "HT",
+                "name": "Huobi Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1869,
+            "Name": "BTC|HT",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1143,
+                "code": "HT",
+                "name": "Huobi Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1870,
+            "Name": "USDT|BOLT",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1137,
+                "code": "BOLT",
+                "name": "BOLT Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1871,
+            "Name": "BTC|BOLT",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1137,
+                "code": "BOLT",
+                "name": "BOLT Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1872,
+            "Name": "PAX|BTMX",
+            "Base": {
+                "ID": 156,
+                "code": "PAX",
+                "name": "Paxos Standard",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1142,
+                "code": "BTMX",
+                "name": "BitMax.io Native Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1873,
+            "Name": "USDT|CHX",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1136,
+                "code": "CHX",
+                "name": "Own",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1874,
+            "Name": "BTC|CHX",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1136,
+                "code": "CHX",
+                "name": "Own",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1875,
+            "Name": "ETH|CHX",
+            "Base": {
+                "ID": 4,
+                "code": "ETH",
+                "name": "Ethereum",
+                "website": "https://etherscan.io/tx/",
+                "explorer": "",
+                "CurrencyType": "ETH",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1136,
+                "code": "CHX",
+                "name": "Own",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1876,
+            "Name": "USDT|LBA",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 336,
+                "code": "LBA",
+                "name": "Cred",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1877,
+            "Name": "USDT|ETZ",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1146,
+                "code": "ETZ",
+                "name": "Ether Zero",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1878,
+            "Name": "BTC|ETZ",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1146,
+                "code": "ETZ",
+                "name": "Ether Zero",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1879,
+            "Name": "USDT|DUO",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1149,
+                "code": "DUO",
+                "name": "DUO",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1880,
+            "Name": "BTC|DUO",
+            "Base": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1149,
+                "code": "DUO",
+                "name": "DUO",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1881,
+            "Name": "USDT|VALOR",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 1150,
+                "code": "VALOR",
+                "name": "Valor Token",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1882,
+            "Name": "USDT|MIX",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 934,
+                "code": "MIX",
+                "name": "MIX",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1883,
+            "Name": "USDT|BHD",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 565,
+                "code": "BHD",
+                "name": "Bithold",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1884,
+            "Name": "USDT|FSN",
+            "Base": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 349,
+                "code": "FSN",
+                "name": "Fusion",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "ETH_CONTRACT",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1885,
+            "Name": "CNY|USDT",
+            "Base": {
+                "ID": 1152,
+                "code": "CNY",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 12,
+                "code": "USDT",
+                "name": "TetherUS",
+                "website": "https://omniexplorer.info/lookuptx.aspx?txid=",
+                "explorer": "https://omniexplorer.info/transactions.aspx",
+                "CurrencyType": "OMNI",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            }
+        },
+        {
+            "ID": 1886,
+            "Name": "CNY|BTC",
+            "Base": {
+                "ID": 1152,
+                "code": "CNY",
+                "name": "",
+                "website": "",
+                "explorer": "",
+                "CurrencyType": "",
+                "Health": "",
+                "Blockheigh": 0,
+                "Blocktime": 0
+            },
+            "Target": {
+                "ID": 2,
+                "code": "BTC",
+                "name": "Bitcoin",
+                "website": "https://www.blockchain.com/btc/tx/",
+                "explorer": "",
+                "CurrencyType": "BITCOIN",
                 "Health": "",
                 "Blockheigh": 0,
                 "Blocktime": 0
