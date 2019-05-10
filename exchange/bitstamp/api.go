@@ -152,7 +152,7 @@ func (e *Bitstamp) GetPairsData() {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data.Name)
+			p = e.GetPairBySymbol(data.URLSymbol)
 		}
 		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
