@@ -434,35 +434,34 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Otcbtc) ApiKeyGET(mapParams map[string]string, strRequestPath string) string {
-
-	timestamp := strconv.FormatInt((time.Now().UTC().UnixNano() / int64(time.Millisecond)), 10)
+	strMethod := "GET"
 	strUrl := API_URL + strRequestPath
 
-	payload := "GET|" + strRequestPath + "|" + exchange.Map2UrlQuery(mapParams)
+	payload := fmt.Sprintf("%s|%s|%s", strMethod, strRequestPath, exchange.Map2UrlQuery(mapParams))
 
 	mapParams["access_key"] = e.API_KEY
-	mapParams["nonce"] = timestamp
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(payload, e.API_SECRET)
 
 	return exchange.HttpGetRequest(strUrl, mapParams)
 }
 
 func (e *Otcbtc) ApiKeyPost(strRequestPath string, mapParams map[string]string) string {
-	httpClient := &http.Client{}
-	timestamp := strconv.FormatInt((time.Now().UTC().UnixNano() / int64(time.Millisecond)), 10)
+	strMethod := "POST"
 	strUrl := API_URL + strRequestPath
 
-	payload := "POST|" + strRequestPath + "|" + exchange.Map2UrlQuery(mapParams)
+	payload := fmt.Sprintf("%s|%s|%s", strMethod, strRequestPath, exchange.Map2UrlQuery(mapParams))
 
 	mapParams["access_key"] = e.API_KEY
-	mapParams["nonce"] = timestamp
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(payload, e.API_SECRET)
+
+	httpClient := &http.Client{}
 
 	request, err := http.NewRequest("POST", strUrl, strings.NewReader(exchange.Map2UrlQuery(mapParams)))
 	if err != nil {
 		return err.Error()
 	}
-
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	request.Header.Add("Accept", "application/json")
 
