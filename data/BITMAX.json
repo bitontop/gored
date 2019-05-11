@@ -342,7 +342,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 374,
+            "CoinID": 381,
             "Coin": null,
             "ExSymbol": "LAMB",
             "TxFee": 50,
@@ -1401,55 +1401,7 @@
             "Issue": ""
         },
         {
-            "PairID": 726,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "SEELE/ETH",
-            "MakerFee": 0.0004,
-            "TakerFee": 0.0004,
-            "LotSize": 1,
-            "PriceFilter": 1e-9,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 750,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "LAMB/USDT",
-            "MakerFee": 0.0004,
-            "TakerFee": 0.0004,
-            "LotSize": 0.001,
-            "PriceFilter": 0.000001,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 754,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "LAMB/ETH",
-            "MakerFee": 0.0004,
-            "TakerFee": 0.0004,
-            "LotSize": 0.1,
-            "PriceFilter": 1e-8,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 761,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "SEELE/BTC",
-            "MakerFee": 0.0004,
-            "TakerFee": 0.0004,
-            "LotSize": 1,
-            "PriceFilter": 1e-9,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 776,
+            "PairID": 707,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LAMB/BTC",
@@ -1461,7 +1413,55 @@
             "Issue": ""
         },
         {
-            "PairID": 777,
+            "PairID": 734,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "LAMB/USDT",
+            "MakerFee": 0.0004,
+            "TakerFee": 0.0004,
+            "LotSize": 0.001,
+            "PriceFilter": 0.000001,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 738,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "SEELE/BTC",
+            "MakerFee": 0.0004,
+            "TakerFee": 0.0004,
+            "LotSize": 1,
+            "PriceFilter": 1e-9,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 743,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "LAMB/ETH",
+            "MakerFee": 0.0004,
+            "TakerFee": 0.0004,
+            "LotSize": 0.1,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 766,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "SEELE/ETH",
+            "MakerFee": 0.0004,
+            "TakerFee": 0.0004,
+            "LotSize": 1,
+            "PriceFilter": 1e-9,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 775,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OLT/BTC",

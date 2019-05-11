@@ -1169,8 +1169,8 @@
         {
             "CoinID": 382,
             "Coin": null,
-            "ExSymbol": "EGT",
-            "TxFee": 1483.6,
+            "ExSymbol": "OLT",
+            "TxFee": 204.9,
             "Withdraw": true,
             "Deposit": true,
             "Confirmation": 1001,
@@ -1178,10 +1178,10 @@
             "Issue": ""
         },
         {
-            "CoinID": 387,
+            "CoinID": 385,
             "Coin": null,
-            "ExSymbol": "OLT",
-            "TxFee": 204.9,
+            "ExSymbol": "EGT",
+            "TxFee": 1483.6,
             "Withdraw": true,
             "Deposit": true,
             "Confirmation": 1001,
@@ -4567,7 +4567,7 @@
             "Issue": ""
         },
         {
-            "PairID": 725,
+            "PairID": 721,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EGT-BTC",
@@ -4579,7 +4579,7 @@
             "Issue": ""
         },
         {
-            "PairID": 747,
+            "PairID": 751,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTM-ETH",
@@ -4591,7 +4591,7 @@
             "Issue": ""
         },
         {
-            "PairID": 777,
+            "PairID": 775,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OLT-BTC",
