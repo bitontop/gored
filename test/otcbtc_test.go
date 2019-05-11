@@ -6,10 +6,8 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/pair"
-
 	"github.com/bitontop/gored/test/conf"
 )
 
