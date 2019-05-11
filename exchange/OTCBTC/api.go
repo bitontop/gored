@@ -452,15 +452,13 @@ func (e *Otcbtc) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 	timestamp := strconv.FormatInt((time.Now().UTC().UnixNano() / int64(time.Millisecond)), 10)
 	strUrl := API_URL + strRequestPath
 
-	post := exchange.Map2UrlQuery(mapParams)
-
-	payload := "GET|" + strRequestPath + "|" + exchange.Map2UrlQuery(mapParams)
+	payload := "POST|" + strRequestPath + "|" + exchange.Map2UrlQuery(mapParams)
 
 	mapParams["access_key"] = e.API_KEY
 	mapParams["nonce"] = timestamp
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(payload, e.API_SECRET)
 
-	request, err := http.NewRequest("POST", strUrl, strings.NewReader(post))
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(exchange.Map2UrlQuery(mapParams)))
 	if err != nil {
 		return err.Error()
 	}
