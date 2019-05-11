@@ -13,15 +13,15 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitmax"
+	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 	"github.com/bitontop/gored/utils"
-
-	"github.com/bitontop/gored/exchange/bitstamp"
 )
 
 func main() {
@@ -78,6 +78,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitKucoin(config)
 	InitBitmax(config)
 	InitBitstamp(config)
+	InitOtcbtc(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -137,6 +138,15 @@ func InitBitmax(config *exchange.Config) {
 func InitBitstamp(config *exchange.Config) {
 	conf.Exchange(exchange.BITSTAMP, config)
 	ex := bitstamp.CreateBitstamp(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitOtcbtc(config *exchange.Config) {
+	conf.Exchange(exchange.OTCBTC, config)
+	ex := otcbtc.CreateOtcbtc(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
