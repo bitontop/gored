@@ -11,8 +11,6 @@ import (
 	"log"
 	"math"
 	"net/http"
-	"net/url"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -473,7 +471,7 @@ func (e *Huobi) ApiKeyRequest(strMethod string, mapParams map[string]string, str
 	mapParams["Signature"] = CreateSign(mapParams, strMethod, hostName, strRequestPath, e.API_SECRET)
 
 	var strRequestUrl string
-	strParams := MapSortByKey(mapParams)
+	strParams := exchange.Map2UrlQuery(mapParams)
 	strRequestUrl = strUrl + "?" + strParams
 
 	if strMethod == "POST" {
@@ -505,22 +503,8 @@ func (e *Huobi) ApiKeyRequest(strMethod string, mapParams map[string]string, str
 }
 
 func CreateSign(mapParams map[string]string, strMethod, strHostUrl, strRequestPath, strSecretKey string) string {
-	sortedParams := MapSortByKey(mapParams) //将数据根据ASCII进行排序
+	sortedParams := exchange.Map2UrlQuery(mapParams) //将数据根据ASCII进行排序
 	strPayload := strMethod + "\n" + strHostUrl + "\n" + strRequestPath + "\n" + sortedParams
 
 	return exchange.ComputeHmac256Base64(strPayload, strSecretKey)
-}
-
-func MapSortByKey(mapValue map[string]string) string {
-	keys := make([]string, 0, len(mapValue))
-	for key := range mapValue {
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-	mapParams := ""
-	for _, key := range keys {
-		mapParams += (key + "=" + url.QueryEscape(mapValue[key]) + "&")
-	}
-	mapParams = mapParams[:len(mapParams)-1]
-	return mapParams
 }

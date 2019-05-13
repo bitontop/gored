@@ -6,7 +6,6 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"

@@ -45,7 +45,7 @@ func CreateHuobi(config *exchange.Config) *Huobi {
 		instance = &Huobi{
 			ID:      DEFAULT_ID,
 			Name:    "Huobi",
-			Website: "https://www.huobi.com/",
+			Website: "https://www.hbg.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -102,7 +102,7 @@ func (e *Huobi) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Huobi) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.hbg.com/zh-cn/exchange/?s=%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.hbg.com/en-us/exchange/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 /*************** Coins on the Exchanges ***************/

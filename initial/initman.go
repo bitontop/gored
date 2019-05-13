@@ -91,11 +91,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		e.exMan.Add(ex)
 		return ex
 
-		// case exchange.HUOBI:
-		// 	ex := huobi.CreateHuobi(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
 		// case exchange.TRADESATOSHI:
 		// 	ex := tradesatoshi.CreateTradeSatoshi(config)
 		// 	e.exMan.Add(ex)
@@ -136,11 +131,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		// 	e.exMan.Add(ex)
 		// 	return ex
 
-		// case exchange.KUCOIN:
-		// 	ex := kucoin.CreateKucoin(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
 		// case exchange.LBANK:
 		// 	ex := lbank.CreateLbank(config)
 		// 	e.exMan.Add(ex)
@@ -176,11 +166,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		// 	e.exMan.Add(ex)
 		// 	return ex
 
-		// case exchange.BITSTAMP:
-		// 	ex := bitstamp.CreateBitstamp(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
 		// case exchange.DIGIFINEX:
 		// 	ex := digifinex.CreateDigifinex(config)
 		// 	e.exMan.Add(ex)
@@ -193,11 +178,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 		// case exchange.TOPBTC:
 		// 	ex := topbtc.CreateTopbtc(config)
-		// 	e.exMan.Add(ex)
-		// 	return ex
-
-		// case exchange.OTCBTC:
-		// 	ex := otcbtc.CreateOtcbtc(config)
 		// 	e.exMan.Add(ex)
 		// 	return ex
 
