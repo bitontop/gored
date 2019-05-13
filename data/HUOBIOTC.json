@@ -36,7 +36,7 @@
     ],
     "PairConstraint": [
         {
-            "PairID": 1886,
+            "PairID": 1876,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CNY_BTC",
@@ -48,7 +48,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1887,
+            "PairID": 1877,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CNY_USDT",

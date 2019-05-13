@@ -67,7 +67,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 792,
+            "CoinID": 789,
             "Coin": null,
             "ExSymbol": "EUR",
             "TxFee": 0.005,
@@ -188,7 +188,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1441,
+            "PairID": 1435,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "btceur",
@@ -200,7 +200,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1444,
+            "PairID": 1437,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "etheur",
@@ -212,7 +212,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1445,
+            "PairID": 1438,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ltceur",
@@ -224,7 +224,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1888,
+            "PairID": 1878,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "xrpeur",
@@ -236,7 +236,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1889,
+            "PairID": 1879,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "bcheur",
@@ -248,7 +248,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1890,
+            "PairID": 1880,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "eurusd",

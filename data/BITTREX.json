@@ -1261,7 +1261,7 @@
             "TxFee": 0.2,
             "Withdraw": true,
             "Deposit": true,
-            "Confirmation": 100,
+            "Confirmation": 300,
             "Listed": true,
             "Issue": ""
         },

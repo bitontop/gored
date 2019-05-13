@@ -342,7 +342,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 381,
+            "CoinID": 370,
             "Coin": null,
             "ExSymbol": "LAMB",
             "TxFee": 50,
@@ -353,7 +353,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 565,
+            "CoinID": 562,
             "Coin": null,
             "ExSymbol": "BHD",
             "TxFee": 0.1,
@@ -364,7 +364,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 934,
+            "CoinID": 931,
             "Coin": null,
             "ExSymbol": "MIX",
             "TxFee": 50,
@@ -375,7 +375,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1066,
+            "CoinID": 1065,
             "Coin": null,
             "ExSymbol": "FTM",
             "TxFee": 100,
@@ -386,7 +386,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1079,
+            "CoinID": 1078,
             "Coin": null,
             "ExSymbol": "KCS",
             "TxFee": 0.5,
@@ -397,7 +397,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1135,
+            "CoinID": 1134,
             "Coin": null,
             "ExSymbol": "LTO",
             "TxFee": 10,
@@ -408,10 +408,21 @@
             "Issue": ""
         },
         {
-            "CoinID": 1136,
+            "CoinID": 1135,
             "Coin": null,
             "ExSymbol": "CHX",
             "TxFee": 2,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 1136,
+            "Coin": null,
+            "ExSymbol": "ABBC",
+            "TxFee": 0.01,
             "Withdraw": true,
             "Deposit": true,
             "Confirmation": 2,
@@ -1401,19 +1412,7 @@
             "Issue": ""
         },
         {
-            "PairID": 707,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "LAMB/BTC",
-            "MakerFee": 0.0004,
-            "TakerFee": 0.0004,
-            "LotSize": 0.1,
-            "PriceFilter": 1e-8,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 734,
+            "PairID": 705,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LAMB/USDT",
@@ -1425,19 +1424,19 @@
             "Issue": ""
         },
         {
-            "PairID": 738,
+            "PairID": 729,
             "Pair": null,
             "ExID": "",
-            "ExSymbol": "SEELE/BTC",
+            "ExSymbol": "LAMB/BTC",
             "MakerFee": 0.0004,
             "TakerFee": 0.0004,
-            "LotSize": 1,
-            "PriceFilter": 1e-9,
+            "LotSize": 0.1,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },
         {
-            "PairID": 743,
+            "PairID": 737,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LAMB/ETH",
@@ -1449,7 +1448,19 @@
             "Issue": ""
         },
         {
-            "PairID": 766,
+            "PairID": 739,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "SEELE/BTC",
+            "MakerFee": 0.0004,
+            "TakerFee": 0.0004,
+            "LotSize": 1,
+            "PriceFilter": 1e-9,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 761,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SEELE/ETH",
@@ -1461,7 +1472,7 @@
             "Issue": ""
         },
         {
-            "PairID": 775,
+            "PairID": 770,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OLT/BTC",
@@ -1473,7 +1484,7 @@
             "Issue": ""
         },
         {
-            "PairID": 829,
+            "PairID": 822,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BHD/BTC",
@@ -1485,7 +1496,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1763,
+            "PairID": 1753,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OLT/ETH",
@@ -1497,7 +1508,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1778,
+            "PairID": 1768,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KCS/USDT",
@@ -1509,7 +1520,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1780,
+            "PairID": 1770,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KCS/BTC",
@@ -1521,7 +1532,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1796,
+            "PairID": 1786,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FET/ETH",
@@ -1533,7 +1544,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1814,
+            "PairID": 1804,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AERGO/ETH",
@@ -1545,7 +1556,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1831,
+            "PairID": 1821,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FTM/BTC",
@@ -1557,7 +1568,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1844,
+            "PairID": 1834,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LBA/ETH",
@@ -1569,7 +1580,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1845,
+            "PairID": 1835,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTMX/BTC",
@@ -1581,7 +1592,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1846,
+            "PairID": 1836,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTMX/USDT",
@@ -1593,7 +1604,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1847,
+            "PairID": 1837,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTMX/ETH",
@@ -1605,7 +1616,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1848,
+            "PairID": 1838,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "USDC/BTC",
@@ -1617,7 +1628,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1849,
+            "PairID": 1839,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ONG/ETH",
@@ -1629,7 +1640,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1850,
+            "PairID": 1840,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COVA/BTC",
@@ -1641,7 +1652,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1851,
+            "PairID": 1841,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COVA/ETH",
@@ -1653,7 +1664,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1852,
+            "PairID": 1842,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COVA/USDT",
@@ -1665,7 +1676,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1853,
+            "PairID": 1843,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CVNT/BTC",
@@ -1677,7 +1688,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1854,
+            "PairID": 1844,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CVNT/ETH",
@@ -1689,7 +1700,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1855,
+            "PairID": 1845,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LTO/BTC",
@@ -1701,7 +1712,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1856,
+            "PairID": 1846,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LTO/USDT",
@@ -1713,7 +1724,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1857,
+            "PairID": 1847,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "QCX/BTC",
@@ -1725,7 +1736,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1858,
+            "PairID": 1848,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "QCX/USDT",
@@ -1737,7 +1748,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1859,
+            "PairID": 1849,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BXA/USDT",
@@ -1749,7 +1760,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1860,
+            "PairID": 1850,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "XTZ/BTC",
@@ -1761,7 +1772,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1861,
+            "PairID": 1851,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "XTZ/ETH",
@@ -1773,7 +1784,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1862,
+            "PairID": 1852,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "RNT/USDT",
@@ -1785,7 +1796,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1863,
+            "PairID": 1853,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ANKR/USDT",
@@ -1797,7 +1808,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1864,
+            "PairID": 1854,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AERGO/USDT",
@@ -1809,7 +1820,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1865,
+            "PairID": 1855,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FTM/USDT",
@@ -1821,7 +1832,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1866,
+            "PairID": 1856,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DOS/USDT",
@@ -1833,7 +1844,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1867,
+            "PairID": 1857,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DOS/BTC",
@@ -1845,7 +1856,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1868,
+            "PairID": 1858,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HT/ETH",
@@ -1857,7 +1868,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1869,
+            "PairID": 1859,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HT/USDT",
@@ -1869,7 +1880,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1870,
+            "PairID": 1860,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HT/BTC",
@@ -1881,7 +1892,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1871,
+            "PairID": 1861,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BOLT/USDT",
@@ -1893,7 +1904,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1872,
+            "PairID": 1862,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BOLT/BTC",
@@ -1905,7 +1916,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1873,
+            "PairID": 1863,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTMX/PAX",
@@ -1917,7 +1928,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1874,
+            "PairID": 1864,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CHX/USDT",
@@ -1929,7 +1940,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1875,
+            "PairID": 1865,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CHX/BTC",
@@ -1941,7 +1952,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1876,
+            "PairID": 1866,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CHX/ETH",
@@ -1953,7 +1964,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1877,
+            "PairID": 1867,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LBA/USDT",
@@ -1965,7 +1976,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1878,
+            "PairID": 1868,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ETZ/USDT",
@@ -1977,7 +1988,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1879,
+            "PairID": 1869,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ETZ/BTC",
@@ -1989,7 +2000,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1880,
+            "PairID": 1870,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DUO/USDT",
@@ -2001,7 +2012,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1881,
+            "PairID": 1871,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DUO/BTC",
@@ -2013,7 +2024,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1882,
+            "PairID": 1872,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "VALOR/USDT",
@@ -2025,7 +2036,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1883,
+            "PairID": 1873,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MIX/USDT",
@@ -2037,7 +2048,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1884,
+            "PairID": 1874,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BHD/USDT",
@@ -2049,7 +2060,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1885,
+            "PairID": 1875,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FSN/USDT",

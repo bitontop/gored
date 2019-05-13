@@ -1167,18 +1167,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 382,
-            "Coin": null,
-            "ExSymbol": "OLT",
-            "TxFee": 204.9,
-            "Withdraw": true,
-            "Deposit": true,
-            "Confirmation": 1001,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "CoinID": 385,
+            "CoinID": 373,
             "Coin": null,
             "ExSymbol": "EGT",
             "TxFee": 1483.6,
@@ -1189,7 +1178,18 @@
             "Issue": ""
         },
         {
-            "CoinID": 422,
+            "CoinID": 383,
+            "Coin": null,
+            "ExSymbol": "OLT",
+            "TxFee": 204.9,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 1001,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 419,
             "Coin": null,
             "ExSymbol": "ONION",
             "TxFee": 0.1,
@@ -1200,7 +1200,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 489,
+            "CoinID": 486,
             "Coin": null,
             "ExSymbol": "EBTC",
             "TxFee": 38.2,
@@ -1211,7 +1211,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 556,
+            "CoinID": 553,
             "Coin": null,
             "ExSymbol": "HAT",
             "TxFee": 0.5,
@@ -1222,7 +1222,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 581,
+            "CoinID": 578,
             "Coin": null,
             "ExSymbol": "ITC",
             "TxFee": 6,
@@ -1233,7 +1233,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 583,
+            "CoinID": 580,
             "Coin": null,
             "ExSymbol": "BTCP",
             "TxFee": 0.01,
@@ -1244,7 +1244,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 625,
+            "CoinID": 622,
             "Coin": null,
             "ExSymbol": "TT",
             "TxFee": 7.35,
@@ -1255,7 +1255,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 684,
+            "CoinID": 681,
             "Coin": null,
             "ExSymbol": "MTC",
             "TxFee": 112.3,
@@ -1266,7 +1266,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1002,
+            "CoinID": 1001,
             "Coin": null,
             "ExSymbol": "CSP",
             "TxFee": 144,
@@ -1277,7 +1277,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1003,
+            "CoinID": 1002,
             "Coin": null,
             "ExSymbol": "LOKI",
             "TxFee": 3,
@@ -1288,7 +1288,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1004,
+            "CoinID": 1003,
             "Coin": null,
             "ExSymbol": "NRG",
             "TxFee": 0.5,
@@ -1299,7 +1299,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1005,
+            "CoinID": 1004,
             "Coin": null,
             "ExSymbol": "RBTC",
             "TxFee": 0.0005,
@@ -1310,7 +1310,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1006,
+            "CoinID": 1005,
             "Coin": null,
             "ExSymbol": "RIF",
             "TxFee": 8,
@@ -1321,7 +1321,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1007,
+            "CoinID": 1006,
             "Coin": null,
             "ExSymbol": "DX",
             "TxFee": 3000,
@@ -1332,7 +1332,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1008,
+            "CoinID": 1007,
             "Coin": null,
             "ExSymbol": "MTV",
             "TxFee": 125,
@@ -1343,7 +1343,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1009,
+            "CoinID": 1008,
             "Coin": null,
             "ExSymbol": "TRTL",
             "TxFee": 2000,
@@ -1354,7 +1354,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1010,
+            "CoinID": 1009,
             "Coin": null,
             "ExSymbol": "ODE",
             "TxFee": 3.6,
@@ -1365,7 +1365,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1011,
+            "CoinID": 1010,
             "Coin": null,
             "ExSymbol": "OPT",
             "TxFee": 60,
@@ -1376,7 +1376,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1012,
+            "CoinID": 1011,
             "Coin": null,
             "ExSymbol": "RFOX",
             "TxFee": 0.01,
@@ -1387,7 +1387,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1013,
+            "CoinID": 1012,
             "Coin": null,
             "ExSymbol": "TRY",
             "TxFee": 100,
@@ -1398,10 +1398,10 @@
             "Issue": ""
         },
         {
-            "CoinID": 1014,
+            "CoinID": 1013,
             "Coin": null,
             "ExSymbol": "NIX",
-            "TxFee": 12,
+            "TxFee": 0,
             "Withdraw": false,
             "Deposit": false,
             "Confirmation": 1001,
@@ -1409,7 +1409,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1015,
+            "CoinID": 1014,
             "Coin": null,
             "ExSymbol": "VSYS",
             "TxFee": 10,
@@ -1420,7 +1420,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1016,
+            "CoinID": 1015,
             "Coin": null,
             "ExSymbol": "ABT",
             "TxFee": 5.62,
@@ -1431,7 +1431,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1017,
+            "CoinID": 1016,
             "Coin": null,
             "ExSymbol": "ACAT",
             "TxFee": 10,
@@ -1442,7 +1442,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1018,
+            "CoinID": 1017,
             "Coin": null,
             "ExSymbol": "ACT",
             "TxFee": 1,
@@ -1453,7 +1453,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1019,
+            "CoinID": 1018,
             "Coin": null,
             "ExSymbol": "ADB",
             "TxFee": 467.29,
@@ -1464,7 +1464,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1020,
+            "CoinID": 1019,
             "Coin": null,
             "ExSymbol": "AIX",
             "TxFee": 142,
@@ -1475,7 +1475,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1021,
+            "CoinID": 1020,
             "Coin": null,
             "ExSymbol": "AOA",
             "TxFee": 63.6,
@@ -1486,7 +1486,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1022,
+            "CoinID": 1021,
             "Coin": null,
             "ExSymbol": "APH",
             "TxFee": 3,
@@ -1497,7 +1497,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1023,
+            "CoinID": 1022,
             "Coin": null,
             "ExSymbol": "ARY",
             "TxFee": 59.52,
@@ -1508,7 +1508,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1024,
+            "CoinID": 1023,
             "Coin": null,
             "ExSymbol": "AVA",
             "TxFee": 5,
@@ -1519,7 +1519,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1025,
+            "CoinID": 1024,
             "Coin": null,
             "ExSymbol": "AXPR",
             "TxFee": 117,
@@ -1530,7 +1530,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1026,
+            "CoinID": 1025,
             "Coin": null,
             "ExSymbol": "BAX",
             "TxFee": 2825,
@@ -1541,7 +1541,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1027,
+            "CoinID": 1026,
             "Coin": null,
             "ExSymbol": "BHC",
             "TxFee": 1,
@@ -1552,7 +1552,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1028,
+            "CoinID": 1027,
             "Coin": null,
             "ExSymbol": "BNTY",
             "TxFee": 223.8,
@@ -1563,7 +1563,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1029,
+            "CoinID": 1028,
             "Coin": null,
             "ExSymbol": "BOS",
             "TxFee": 1,
@@ -1574,7 +1574,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1030,
+            "CoinID": 1029,
             "Coin": null,
             "ExSymbol": "BPT",
             "TxFee": 11.22,
@@ -1585,7 +1585,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1031,
+            "CoinID": 1030,
             "Coin": null,
             "ExSymbol": "BU",
             "TxFee": 0.5,
@@ -1596,7 +1596,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1032,
+            "CoinID": 1031,
             "Coin": null,
             "ExSymbol": "CAG",
             "TxFee": 8.5,
@@ -1607,7 +1607,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1033,
+            "CoinID": 1032,
             "Coin": null,
             "ExSymbol": "CAN",
             "TxFee": 43.6,
@@ -1618,7 +1618,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1034,
+            "CoinID": 1033,
             "Coin": null,
             "ExSymbol": "CAPP",
             "TxFee": 232.5,
@@ -1629,7 +1629,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1035,
+            "CoinID": 1034,
             "Coin": null,
             "ExSymbol": "CAT",
             "TxFee": 500,
@@ -1640,7 +1640,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1036,
+            "CoinID": 1035,
             "Coin": null,
             "ExSymbol": "CFD",
             "TxFee": 0.5,
@@ -1651,7 +1651,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1037,
+            "CoinID": 1036,
             "Coin": null,
             "ExSymbol": "CHP",
             "TxFee": 90,
@@ -1662,7 +1662,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1038,
+            "CoinID": 1037,
             "Coin": null,
             "ExSymbol": "CHSB",
             "TxFee": 87.26,
@@ -1673,7 +1673,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1039,
+            "CoinID": 1038,
             "Coin": null,
             "ExSymbol": "COFI",
             "TxFee": 224.2,
@@ -1684,7 +1684,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1040,
+            "CoinID": 1039,
             "Coin": null,
             "ExSymbol": "COSM",
             "TxFee": 29.9,
@@ -1695,7 +1695,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1041,
+            "CoinID": 1040,
             "Coin": null,
             "ExSymbol": "COV",
             "TxFee": 7.1,
@@ -1706,7 +1706,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1042,
+            "CoinID": 1041,
             "Coin": null,
             "ExSymbol": "CPC",
             "TxFee": 47.21,
@@ -1717,7 +1717,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1043,
+            "CoinID": 1042,
             "Coin": null,
             "ExSymbol": "CRPT",
             "TxFee": 5,
@@ -1728,7 +1728,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1044,
+            "CoinID": 1043,
             "Coin": null,
             "ExSymbol": "CS",
             "TxFee": 7,
@@ -1739,7 +1739,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1045,
+            "CoinID": 1044,
             "Coin": null,
             "ExSymbol": "CV",
             "TxFee": 1785.71,
@@ -1750,7 +1750,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1046,
+            "CoinID": 1045,
             "Coin": null,
             "ExSymbol": "CXO",
             "TxFee": 52.4,
@@ -1761,7 +1761,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1047,
+            "CoinID": 1046,
             "Coin": null,
             "ExSymbol": "DACC",
             "TxFee": 4166.6,
@@ -1772,7 +1772,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1048,
+            "CoinID": 1047,
             "Coin": null,
             "ExSymbol": "DADI",
             "TxFee": 13.55,
@@ -1783,7 +1783,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1049,
+            "CoinID": 1048,
             "Coin": null,
             "ExSymbol": "DAG",
             "TxFee": 549.4,
@@ -1794,7 +1794,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1050,
+            "CoinID": 1049,
             "Coin": null,
             "ExSymbol": "DAI",
             "TxFee": 0.5,
@@ -1805,7 +1805,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1051,
+            "CoinID": 1050,
             "Coin": null,
             "ExSymbol": "DAT",
             "TxFee": 619.5,
@@ -1816,7 +1816,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1052,
+            "CoinID": 1051,
             "Coin": null,
             "ExSymbol": "DATX",
             "TxFee": 331.13,
@@ -1827,7 +1827,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1053,
+            "CoinID": 1052,
             "Coin": null,
             "ExSymbol": "DBC",
             "TxFee": 1,
@@ -1838,7 +1838,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1054,
+            "CoinID": 1053,
             "Coin": null,
             "ExSymbol": "DCC",
             "TxFee": 632.9,
@@ -1849,7 +1849,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1055,
+            "CoinID": 1054,
             "Coin": null,
             "ExSymbol": "DEB",
             "TxFee": 177.9,
@@ -1860,7 +1860,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1056,
+            "CoinID": 1055,
             "Coin": null,
             "ExSymbol": "DNA",
             "TxFee": 35,
@@ -1871,7 +1871,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1057,
+            "CoinID": 1056,
             "Coin": null,
             "ExSymbol": "EDN",
             "TxFee": 184.5,
@@ -1882,7 +1882,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1058,
+            "CoinID": 1057,
             "Coin": null,
             "ExSymbol": "ELA",
             "TxFee": 0.1,
@@ -1893,7 +1893,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1059,
+            "CoinID": 1058,
             "Coin": null,
             "ExSymbol": "ELEC",
             "TxFee": 186,
@@ -1904,7 +1904,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1060,
+            "CoinID": 1059,
             "Coin": null,
             "ExSymbol": "ELIX",
             "TxFee": 241.5,
@@ -1915,7 +1915,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1061,
+            "CoinID": 1060,
             "Coin": null,
             "ExSymbol": "EPRX",
             "TxFee": 1000,
@@ -1926,7 +1926,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1062,
+            "CoinID": 1061,
             "Coin": null,
             "ExSymbol": "ETN",
             "TxFee": 50,
@@ -1937,7 +1937,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1063,
+            "CoinID": 1062,
             "Coin": null,
             "ExSymbol": "EXY",
             "TxFee": 27.1,
@@ -1948,7 +1948,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1064,
+            "CoinID": 1063,
             "Coin": null,
             "ExSymbol": "FLIXX",
             "TxFee": 46,
@@ -1959,7 +1959,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1065,
+            "CoinID": 1064,
             "Coin": null,
             "ExSymbol": "FOTA",
             "TxFee": 63.8,
@@ -1970,7 +1970,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1066,
+            "CoinID": 1065,
             "Coin": null,
             "ExSymbol": "FTM",
             "TxFee": 133.6,
@@ -1981,7 +1981,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1067,
+            "CoinID": 1066,
             "Coin": null,
             "ExSymbol": "GALA",
             "TxFee": 5,
@@ -1992,7 +1992,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1068,
+            "CoinID": 1067,
             "Coin": null,
             "ExSymbol": "GAT",
             "TxFee": 357.14,
@@ -2003,7 +2003,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1069,
+            "CoinID": 1068,
             "Coin": null,
             "ExSymbol": "GGC",
             "TxFee": 0.01,
@@ -2014,7 +2014,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1070,
+            "CoinID": 1069,
             "Coin": null,
             "ExSymbol": "GLA",
             "TxFee": 4,
@@ -2025,7 +2025,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1071,
+            "CoinID": 1070,
             "Coin": null,
             "ExSymbol": "GMB",
             "TxFee": 4478.2,
@@ -2036,7 +2036,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1072,
+            "CoinID": 1071,
             "Coin": null,
             "ExSymbol": "GOD",
             "TxFee": 0.005,
@@ -2047,7 +2047,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1073,
+            "CoinID": 1072,
             "Coin": null,
             "ExSymbol": "HKN",
             "TxFee": 4.3,
@@ -2058,7 +2058,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1074,
+            "CoinID": 1073,
             "Coin": null,
             "ExSymbol": "HPB",
             "TxFee": 3.5,
@@ -2069,7 +2069,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1075,
+            "CoinID": 1074,
             "Coin": null,
             "ExSymbol": "ING",
             "TxFee": 102.8,
@@ -2080,7 +2080,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1076,
+            "CoinID": 1075,
             "Coin": null,
             "ExSymbol": "IOG",
             "TxFee": 10,
@@ -2091,7 +2091,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1077,
+            "CoinID": 1076,
             "Coin": null,
             "ExSymbol": "J8T",
             "TxFee": 1351.3,
@@ -2102,7 +2102,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1078,
+            "CoinID": 1077,
             "Coin": null,
             "ExSymbol": "KAT",
             "TxFee": 173.4,
@@ -2113,10 +2113,10 @@
             "Issue": ""
         },
         {
-            "CoinID": 1079,
+            "CoinID": 1078,
             "Coin": null,
             "ExSymbol": "KCS",
-            "TxFee": 1.3,
+            "TxFee": 0.001,
             "Withdraw": true,
             "Deposit": true,
             "Confirmation": 1001,
@@ -2124,7 +2124,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1080,
+            "CoinID": 1079,
             "Coin": null,
             "ExSymbol": "KICK",
             "TxFee": 219.2,
@@ -2135,7 +2135,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1081,
+            "CoinID": 1080,
             "Coin": null,
             "ExSymbol": "LA",
             "TxFee": 11,
@@ -2146,7 +2146,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1082,
+            "CoinID": 1081,
             "Coin": null,
             "ExSymbol": "LALA",
             "TxFee": 704.2,
@@ -2157,7 +2157,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1083,
+            "CoinID": 1082,
             "Coin": null,
             "ExSymbol": "LOC",
             "TxFee": 0.7,
@@ -2168,7 +2168,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1084,
+            "CoinID": 1083,
             "Coin": null,
             "ExSymbol": "LOCI",
             "TxFee": 240.3,
@@ -2179,7 +2179,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1085,
+            "CoinID": 1084,
             "Coin": null,
             "ExSymbol": "LYM",
             "TxFee": 123.1,
@@ -2190,7 +2190,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1086,
+            "CoinID": 1085,
             "Coin": null,
             "ExSymbol": "MAN",
             "TxFee": 2,
@@ -2201,7 +2201,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1087,
+            "CoinID": 1086,
             "Coin": null,
             "ExSymbol": "MCT",
             "TxFee": 0.1,
@@ -2212,7 +2212,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1088,
+            "CoinID": 1087,
             "Coin": null,
             "ExSymbol": "MEE",
             "TxFee": 30,
@@ -2223,7 +2223,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1089,
+            "CoinID": 1088,
             "Coin": null,
             "ExSymbol": "MEET",
             "TxFee": 10,
@@ -2234,7 +2234,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1090,
+            "CoinID": 1089,
             "Coin": null,
             "ExSymbol": "MKR",
             "TxFee": 0.001,
@@ -2245,7 +2245,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1091,
+            "CoinID": 1090,
             "Coin": null,
             "ExSymbol": "MTN",
             "TxFee": 147,
@@ -2256,7 +2256,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1092,
+            "CoinID": 1091,
             "Coin": null,
             "ExSymbol": "MVP",
             "TxFee": 2976.1,
@@ -2267,7 +2267,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1093,
+            "CoinID": 1092,
             "Coin": null,
             "ExSymbol": "MWAT",
             "TxFee": 44.52,
@@ -2278,7 +2278,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1094,
+            "CoinID": 1093,
             "Coin": null,
             "ExSymbol": "OMX",
             "TxFee": 862,
@@ -2289,7 +2289,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1095,
+            "CoinID": 1094,
             "Coin": null,
             "ExSymbol": "ONOT",
             "TxFee": 2688.1,
@@ -2300,7 +2300,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1096,
+            "CoinID": 1095,
             "Coin": null,
             "ExSymbol": "OPEN",
             "TxFee": 90.91,
@@ -2311,7 +2311,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1097,
+            "CoinID": 1096,
             "Coin": null,
             "ExSymbol": "OPQ",
             "TxFee": 34.7,
@@ -2322,7 +2322,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1098,
+            "CoinID": 1097,
             "Coin": null,
             "ExSymbol": "PARETO",
             "TxFee": 263.16,
@@ -2333,7 +2333,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1099,
+            "CoinID": 1098,
             "Coin": null,
             "ExSymbol": "PBL",
             "TxFee": 5,
@@ -2344,7 +2344,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1100,
+            "CoinID": 1099,
             "Coin": null,
             "ExSymbol": "PLAY",
             "TxFee": 210,
@@ -2355,7 +2355,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1101,
+            "CoinID": 1100,
             "Coin": null,
             "ExSymbol": "POLL",
             "TxFee": 7.5,
@@ -2366,7 +2366,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1102,
+            "CoinID": 1101,
             "Coin": null,
             "ExSymbol": "PRL",
             "TxFee": 1,
@@ -2377,7 +2377,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1103,
+            "CoinID": 1102,
             "Coin": null,
             "ExSymbol": "PURA",
             "TxFee": 0.5,
@@ -2388,7 +2388,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1104,
+            "CoinID": 1103,
             "Coin": null,
             "ExSymbol": "R",
             "TxFee": 6,
@@ -2399,7 +2399,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1105,
+            "CoinID": 1104,
             "Coin": null,
             "ExSymbol": "RHOC",
             "TxFee": 34.7,
@@ -2410,7 +2410,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1106,
+            "CoinID": 1105,
             "Coin": null,
             "ExSymbol": "SHL",
             "TxFee": 1,
@@ -2421,7 +2421,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1107,
+            "CoinID": 1106,
             "Coin": null,
             "ExSymbol": "SNC",
             "TxFee": 41.9,
@@ -2432,7 +2432,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1108,
+            "CoinID": 1107,
             "Coin": null,
             "ExSymbol": "SNOV",
             "TxFee": 467.2,
@@ -2443,7 +2443,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1109,
+            "CoinID": 1108,
             "Coin": null,
             "ExSymbol": "SNX",
             "TxFee": 14.2,
@@ -2454,7 +2454,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1110,
+            "CoinID": 1109,
             "Coin": null,
             "ExSymbol": "SOUL",
             "TxFee": 4,
@@ -2465,7 +2465,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1111,
+            "CoinID": 1110,
             "Coin": null,
             "ExSymbol": "SPF",
             "TxFee": 282.4,
@@ -2476,7 +2476,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1112,
+            "CoinID": 1111,
             "Coin": null,
             "ExSymbol": "SPHTX",
             "TxFee": 38,
@@ -2487,7 +2487,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1113,
+            "CoinID": 1112,
             "Coin": null,
             "ExSymbol": "STK",
             "TxFee": 111,
@@ -2498,7 +2498,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1114,
+            "CoinID": 1113,
             "Coin": null,
             "ExSymbol": "STQ",
             "TxFee": 2272.7,
@@ -2509,7 +2509,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1115,
+            "CoinID": 1114,
             "Coin": null,
             "ExSymbol": "STX",
             "TxFee": 5,
@@ -2520,7 +2520,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1116,
+            "CoinID": 1115,
             "Coin": null,
             "ExSymbol": "SUSD",
             "TxFee": 0.6,
@@ -2531,7 +2531,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1117,
+            "CoinID": 1116,
             "Coin": null,
             "ExSymbol": "TEL",
             "TxFee": 1567.3,
@@ -2542,7 +2542,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1118,
+            "CoinID": 1117,
             "Coin": null,
             "ExSymbol": "TFD",
             "TxFee": 100,
@@ -2553,7 +2553,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1119,
+            "CoinID": 1118,
             "Coin": null,
             "ExSymbol": "TFL",
             "TxFee": 2.9,
@@ -2564,7 +2564,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1120,
+            "CoinID": 1119,
             "Coin": null,
             "ExSymbol": "TIME",
             "TxFee": 0.29,
@@ -2575,7 +2575,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1121,
+            "CoinID": 1120,
             "Coin": null,
             "ExSymbol": "TIO",
             "TxFee": 5,
@@ -2586,7 +2586,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1122,
+            "CoinID": 1121,
             "Coin": null,
             "ExSymbol": "TKY",
             "TxFee": 10,
@@ -2597,7 +2597,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1123,
+            "CoinID": 1122,
             "Coin": null,
             "ExSymbol": "TMT",
             "TxFee": 162.8,
@@ -2608,7 +2608,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1124,
+            "CoinID": 1123,
             "Coin": null,
             "ExSymbol": "TNC",
             "TxFee": 1,
@@ -2619,7 +2619,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1125,
+            "CoinID": 1124,
             "Coin": null,
             "ExSymbol": "TOMO",
             "TxFee": 1.4,
@@ -2630,7 +2630,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1126,
+            "CoinID": 1125,
             "Coin": null,
             "ExSymbol": "USE",
             "TxFee": 609.7,
@@ -2641,7 +2641,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1127,
+            "CoinID": 1126,
             "Coin": null,
             "ExSymbol": "UT",
             "TxFee": 0.1,
@@ -2652,7 +2652,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1128,
+            "CoinID": 1127,
             "Coin": null,
             "ExSymbol": "UTK",
             "TxFee": 25.1,
@@ -2663,7 +2663,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1129,
+            "CoinID": 1128,
             "Coin": null,
             "ExSymbol": "VNX",
             "TxFee": 11200.7,
@@ -2674,7 +2674,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1130,
+            "CoinID": 1129,
             "Coin": null,
             "ExSymbol": "XAS",
             "TxFee": 4,
@@ -2685,7 +2685,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1131,
+            "CoinID": 1130,
             "Coin": null,
             "ExSymbol": "XLR",
             "TxFee": 1,
@@ -2696,7 +2696,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1132,
+            "CoinID": 1131,
             "Coin": null,
             "ExSymbol": "ZINC",
             "TxFee": 30,
@@ -2707,7 +2707,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1133,
+            "CoinID": 1132,
             "Coin": null,
             "ExSymbol": "ZPT",
             "TxFee": 1,
@@ -2718,7 +2718,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1134,
+            "CoinID": 1133,
             "Coin": null,
             "ExSymbol": "MHC",
             "TxFee": 10,
@@ -4567,19 +4567,7 @@
             "Issue": ""
         },
         {
-            "PairID": 721,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "EGT-BTC",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 0.0001,
-            "PriceFilter": 1e-10,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 751,
+            "PairID": 726,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTM-ETH",
@@ -4591,7 +4579,19 @@
             "Issue": ""
         },
         {
-            "PairID": 775,
+            "PairID": 740,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "EGT-BTC",
+            "MakerFee": 0.001,
+            "TakerFee": 0.001,
+            "LotSize": 0.0001,
+            "PriceFilter": 1e-10,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 770,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OLT-BTC",
@@ -4603,7 +4603,7 @@
             "Issue": ""
         },
         {
-            "PairID": 919,
+            "PairID": 912,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EBTC-BTC",
@@ -4615,7 +4615,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1052,
+            "PairID": 1045,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTC-BTC",
@@ -4627,7 +4627,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1087,
+            "PairID": 1080,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ONION-BTC",
@@ -4639,7 +4639,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1320,
+            "PairID": 1313,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EBTC-ETH",
@@ -4651,7 +4651,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1589,
+            "PairID": 1582,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HST-ETH",
@@ -4663,7 +4663,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1590,
+            "PairID": 1583,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "USE-BTC",
@@ -4675,7 +4675,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1591,
+            "PairID": 1584,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LA-BTC",
@@ -4687,7 +4687,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1592,
+            "PairID": 1585,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ONION-ETH",
@@ -4699,7 +4699,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1593,
+            "PairID": 1586,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LA-ETH",
@@ -4711,7 +4711,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1594,
+            "PairID": 1587,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DACC-BTC",
@@ -4723,7 +4723,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1595,
+            "PairID": 1588,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FLIXX-BTC",
@@ -4735,7 +4735,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1596,
+            "PairID": 1589,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FLIXX-ETH",
@@ -4747,7 +4747,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1597,
+            "PairID": 1590,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TFL-BTC",
@@ -4759,7 +4759,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1598,
+            "PairID": 1591,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TFL-ETH",
@@ -4771,7 +4771,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1599,
+            "PairID": 1592,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "POLL-ETH",
@@ -4783,7 +4783,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1600,
+            "PairID": 1593,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "POLL-BTC",
@@ -4795,7 +4795,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1601,
+            "PairID": 1594,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CHSB-BTC",
@@ -4807,7 +4807,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1602,
+            "PairID": 1595,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CHSB-ETH",
@@ -4819,7 +4819,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1603,
+            "PairID": 1596,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "XLR-ETH",
@@ -4831,7 +4831,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1604,
+            "PairID": 1597,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "RHOC-ETH",
@@ -4843,7 +4843,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1605,
+            "PairID": 1598,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "RHOC-BTC",
@@ -4855,7 +4855,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1606,
+            "PairID": 1599,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "XLR-BTC",
@@ -4867,7 +4867,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1607,
+            "PairID": 1600,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ETN-BTC",
@@ -4879,7 +4879,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1608,
+            "PairID": 1601,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SNOV-ETH",
@@ -4891,7 +4891,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1609,
+            "PairID": 1602,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SNOV-BTC",
@@ -4903,7 +4903,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1610,
+            "PairID": 1603,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DAT-BTC",
@@ -4915,7 +4915,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1611,
+            "PairID": 1604,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DAT-ETH",
@@ -4927,7 +4927,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1612,
+            "PairID": 1605,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AIX-ETH",
@@ -4939,7 +4939,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1613,
+            "PairID": 1606,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AIX-BTC",
@@ -4951,7 +4951,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1614,
+            "PairID": 1607,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BNTY-BTC",
@@ -4963,7 +4963,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1615,
+            "PairID": 1608,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BNTY-ETH",
@@ -4975,7 +4975,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1616,
+            "PairID": 1609,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SNX-ETH",
@@ -4987,7 +4987,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1617,
+            "PairID": 1610,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OPEN-ETH",
@@ -4999,7 +4999,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1618,
+            "PairID": 1611,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CAG-ETH",
@@ -5011,7 +5011,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1619,
+            "PairID": 1612,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SPF-ETH",
@@ -5023,7 +5023,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1620,
+            "PairID": 1613,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TIME-ETH",
@@ -5035,7 +5035,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1621,
+            "PairID": 1614,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SPF-BTC",
@@ -5047,7 +5047,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1622,
+            "PairID": 1615,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SNX-USDT",
@@ -5059,7 +5059,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1623,
+            "PairID": 1616,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CAG-BTC",
@@ -5071,7 +5071,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1624,
+            "PairID": 1617,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OPEN-BTC",
@@ -5083,7 +5083,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1625,
+            "PairID": 1618,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SNX-BTC",
@@ -5095,7 +5095,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1626,
+            "PairID": 1619,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TIME-BTC",
@@ -5107,7 +5107,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1627,
+            "PairID": 1620,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CHP-ETH",
@@ -5119,7 +5119,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1628,
+            "PairID": 1621,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FOTA-ETH",
@@ -5131,7 +5131,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1629,
+            "PairID": 1622,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "UTK-BTC",
@@ -5143,7 +5143,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1630,
+            "PairID": 1623,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "UTK-ETH",
@@ -5155,7 +5155,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1631,
+            "PairID": 1624,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FOTA-BTC",
@@ -5167,7 +5167,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1632,
+            "PairID": 1625,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CHP-BTC",
@@ -5179,7 +5179,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1633,
+            "PairID": 1626,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GO-USDT",
@@ -5191,7 +5191,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1634,
+            "PairID": 1627,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AXPR-ETH",
@@ -5203,7 +5203,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1635,
+            "PairID": 1628,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CAN-BTC",
@@ -5215,7 +5215,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1636,
+            "PairID": 1629,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AXPR-BTC",
@@ -5227,7 +5227,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1637,
+            "PairID": 1630,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ACT-ETH",
@@ -5239,7 +5239,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1638,
+            "PairID": 1631,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EOS-NEO",
@@ -5251,7 +5251,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1639,
+            "PairID": 1632,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ACT-BTC",
@@ -5263,7 +5263,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1640,
+            "PairID": 1633,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EOS-KCS",
@@ -5275,7 +5275,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1641,
+            "PairID": 1634,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CAN-ETH",
@@ -5287,7 +5287,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1642,
+            "PairID": 1635,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "PLAY-BTC",
@@ -5299,7 +5299,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1643,
+            "PairID": 1636,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "PLAY-ETH",
@@ -5311,7 +5311,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1644,
+            "PairID": 1637,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "J8T-BTC",
@@ -5323,7 +5323,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1645,
+            "PairID": 1638,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "J8T-ETH",
@@ -5335,7 +5335,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1646,
+            "PairID": 1639,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MWAT-BTC",
@@ -5347,7 +5347,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1647,
+            "PairID": 1640,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EXY-ETH",
@@ -5359,7 +5359,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1648,
+            "PairID": 1641,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MWAT-ETH",
@@ -5371,7 +5371,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1649,
+            "PairID": 1642,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EXY-BTC",
@@ -5383,7 +5383,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1650,
+            "PairID": 1643,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ITC-USDT",
@@ -5395,7 +5395,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1651,
+            "PairID": 1644,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ITC-BTC",
@@ -5407,7 +5407,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1652,
+            "PairID": 1645,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ITC-ETH",
@@ -5419,7 +5419,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1653,
+            "PairID": 1646,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "R-ETH",
@@ -5431,7 +5431,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1654,
+            "PairID": 1647,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DRGN-ETH",
@@ -5443,7 +5443,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1655,
+            "PairID": 1648,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CV-BTC",
@@ -5455,7 +5455,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1656,
+            "PairID": 1649,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "R-BTC",
@@ -5467,7 +5467,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1657,
+            "PairID": 1650,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ACAT-BTC",
@@ -5479,7 +5479,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1658,
+            "PairID": 1651,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DRGN-NEO",
@@ -5491,7 +5491,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1659,
+            "PairID": 1652,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CV-ETH",
@@ -5503,7 +5503,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1660,
+            "PairID": 1653,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ACAT-ETH",
@@ -5515,7 +5515,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1661,
+            "PairID": 1654,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DBC-NEO",
@@ -5527,7 +5527,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1662,
+            "PairID": 1655,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DBC-ETH",
@@ -5539,7 +5539,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1663,
+            "PairID": 1656,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ARY-BTC",
@@ -5551,7 +5551,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1664,
+            "PairID": 1657,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DBC-BTC",
@@ -5563,7 +5563,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1665,
+            "PairID": 1658,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ARY-ETH",
@@ -5575,7 +5575,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1666,
+            "PairID": 1659,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BOS-BTC",
@@ -5587,7 +5587,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1667,
+            "PairID": 1660,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ADB-ETH",
@@ -5599,7 +5599,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1668,
+            "PairID": 1661,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ADB-BTC",
@@ -5611,7 +5611,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1669,
+            "PairID": 1662,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HKN-BTC",
@@ -5623,7 +5623,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1670,
+            "PairID": 1663,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HPB-BTC",
@@ -5635,7 +5635,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1671,
+            "PairID": 1664,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HPB-ETH",
@@ -5647,7 +5647,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1672,
+            "PairID": 1665,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "HKN-ETH",
@@ -5659,7 +5659,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1673,
+            "PairID": 1666,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BOS-ETH",
@@ -5671,7 +5671,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1674,
+            "PairID": 1667,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TEL-BTC",
@@ -5683,7 +5683,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1675,
+            "PairID": 1668,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ING-ETH",
@@ -5695,7 +5695,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1676,
+            "PairID": 1669,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CXO-BTC",
@@ -5707,7 +5707,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1677,
+            "PairID": 1670,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SNC-BTC",
@@ -5719,7 +5719,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1678,
+            "PairID": 1671,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTN-BTC",
@@ -5731,7 +5731,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1679,
+            "PairID": 1672,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SNC-ETH",
@@ -5743,7 +5743,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1680,
+            "PairID": 1673,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COFI-BTC",
@@ -5755,7 +5755,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1681,
+            "PairID": 1674,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CS-KCS",
@@ -5767,7 +5767,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1682,
+            "PairID": 1675,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ING-BTC",
@@ -5779,7 +5779,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1683,
+            "PairID": 1676,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TEL-ETH",
@@ -5791,7 +5791,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1684,
+            "PairID": 1677,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COFI-ETH",
@@ -5803,7 +5803,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1685,
+            "PairID": 1678,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CXO-ETH",
@@ -5815,7 +5815,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1686,
+            "PairID": 1679,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTN-ETH",
@@ -5827,7 +5827,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1687,
+            "PairID": 1680,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GGC-USDT",
@@ -5839,7 +5839,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1688,
+            "PairID": 1681,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CAPP-ETH",
@@ -5851,7 +5851,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1689,
+            "PairID": 1682,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BPT-BTC",
@@ -5863,7 +5863,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1690,
+            "PairID": 1683,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TKY-NEO",
@@ -5875,7 +5875,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1691,
+            "PairID": 1684,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GGC-BTC",
@@ -5887,7 +5887,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1692,
+            "PairID": 1685,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TKY-BTC",
@@ -5899,7 +5899,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1693,
+            "PairID": 1686,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CAPP-BTC",
@@ -5911,7 +5911,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1694,
+            "PairID": 1687,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BPT-ETH",
@@ -5923,7 +5923,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1695,
+            "PairID": 1688,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TKY-ETH",
@@ -5935,7 +5935,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1696,
+            "PairID": 1689,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COV-ETH",
@@ -5947,7 +5947,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1697,
+            "PairID": 1690,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MAN-ETH",
@@ -5959,7 +5959,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1698,
+            "PairID": 1691,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DADI-ETH",
@@ -5971,7 +5971,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1699,
+            "PairID": 1692,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ZPT-ETH",
@@ -5983,7 +5983,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1700,
+            "PairID": 1693,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LTC-KCS",
@@ -5995,7 +5995,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1701,
+            "PairID": 1694,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DADI-BTC",
@@ -6007,7 +6007,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1702,
+            "PairID": 1695,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ZPT-BTC",
@@ -6019,7 +6019,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1703,
+            "PairID": 1696,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MAN-BTC",
@@ -6031,7 +6031,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1704,
+            "PairID": 1697,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COV-BTC",
@@ -6043,7 +6043,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1705,
+            "PairID": 1698,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OMX-BTC",
@@ -6055,7 +6055,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1706,
+            "PairID": 1699,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TOMO-ETH",
@@ -6067,7 +6067,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1707,
+            "PairID": 1700,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DEB-ETH",
@@ -6079,7 +6079,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1708,
+            "PairID": 1701,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TOMO-BTC",
@@ -6091,7 +6091,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1709,
+            "PairID": 1702,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BAX-ETH",
@@ -6103,7 +6103,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1710,
+            "PairID": 1703,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LYM-ETH",
@@ -6115,7 +6115,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1711,
+            "PairID": 1704,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TRAC-ETH",
@@ -6127,7 +6127,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1712,
+            "PairID": 1705,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OMX-ETH",
@@ -6139,7 +6139,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1713,
+            "PairID": 1706,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ELEC-ETH",
@@ -6151,7 +6151,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1714,
+            "PairID": 1707,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ELEC-BTC",
@@ -6163,7 +6163,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1715,
+            "PairID": 1708,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SOUL-BTC",
@@ -6175,7 +6175,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1716,
+            "PairID": 1709,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DEB-BTC",
@@ -6187,7 +6187,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1717,
+            "PairID": 1710,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "APH-BTC",
@@ -6199,7 +6199,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1718,
+            "PairID": 1711,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DATX-BTC",
@@ -6211,7 +6211,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1719,
+            "PairID": 1712,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DATX-ETH",
@@ -6223,7 +6223,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1720,
+            "PairID": 1713,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LYM-USDT",
@@ -6235,7 +6235,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1721,
+            "PairID": 1714,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GO-ETH",
@@ -6247,7 +6247,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1722,
+            "PairID": 1715,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SPHTX-ETH",
@@ -6259,7 +6259,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1723,
+            "PairID": 1716,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TKY-USDT",
@@ -6271,7 +6271,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1724,
+            "PairID": 1717,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BAX-BTC",
@@ -6283,7 +6283,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1725,
+            "PairID": 1718,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SOUL-ETH",
@@ -6295,7 +6295,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1726,
+            "PairID": 1719,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LYM-BTC",
@@ -6307,7 +6307,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1727,
+            "PairID": 1720,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SPHTX-BTC",
@@ -6319,7 +6319,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1728,
+            "PairID": 1721,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "APH-ETH",
@@ -6331,7 +6331,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1729,
+            "PairID": 1722,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AOA-ETH",
@@ -6343,7 +6343,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1730,
+            "PairID": 1723,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CS-BTC",
@@ -6355,7 +6355,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1731,
+            "PairID": 1724,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KICK-BTC",
@@ -6367,7 +6367,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1732,
+            "PairID": 1725,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ETN-ETH",
@@ -6379,7 +6379,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1733,
+            "PairID": 1726,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DACC-ETH",
@@ -6391,7 +6391,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1734,
+            "PairID": 1727,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CS-ETH",
@@ -6403,7 +6403,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1735,
+            "PairID": 1728,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AOA-BTC",
@@ -6415,7 +6415,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1736,
+            "PairID": 1729,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KICK-ETH",
@@ -6427,7 +6427,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1737,
+            "PairID": 1730,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LOC-ETH",
@@ -6439,7 +6439,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1738,
+            "PairID": 1731,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DAG-ETH",
@@ -6451,7 +6451,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1739,
+            "PairID": 1732,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SUSD-USDT",
@@ -6463,7 +6463,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1740,
+            "PairID": 1733,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LOC-BTC",
@@ -6475,7 +6475,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1741,
+            "PairID": 1734,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ELA-BTC",
@@ -6487,43 +6487,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1742,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "DCC-ETH",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 0.0001,
-            "PriceFilter": 1e-7,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 1743,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "DCC-BTC",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 0.0001,
-            "PriceFilter": 1e-10,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 1744,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "DCC-USDT",
-            "MakerFee": 0.001,
-            "TakerFee": 0.001,
-            "LotSize": 0.0001,
-            "PriceFilter": 0.000001,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 1745,
+            "PairID": 1735,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CBC-ETH",
@@ -6535,7 +6499,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1746,
+            "PairID": 1736,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SUSD-ETH",
@@ -6547,7 +6511,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1747,
+            "PairID": 1737,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DAG-BTC",
@@ -6559,7 +6523,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1748,
+            "PairID": 1738,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EDR-ETH",
@@ -6571,7 +6535,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1749,
+            "PairID": 1739,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CPC-ETH",
@@ -6583,7 +6547,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1750,
+            "PairID": 1740,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SUSD-BTC",
@@ -6595,7 +6559,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1751,
+            "PairID": 1741,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LALA-BTC",
@@ -6607,7 +6571,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1752,
+            "PairID": 1742,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MVP-BTC",
@@ -6619,7 +6583,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1753,
+            "PairID": 1743,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CPC-BTC",
@@ -6631,7 +6595,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1754,
+            "PairID": 1744,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MVP-ETH",
@@ -6643,7 +6607,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1755,
+            "PairID": 1745,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "UT-BTC",
@@ -6655,7 +6619,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1756,
+            "PairID": 1746,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ELA-ETH",
@@ -6667,7 +6631,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1757,
+            "PairID": 1747,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LALA-ETH",
@@ -6679,7 +6643,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1758,
+            "PairID": 1748,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "UT-ETH",
@@ -6691,7 +6655,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1759,
+            "PairID": 1749,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EGT-ETH",
@@ -6703,7 +6667,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1760,
+            "PairID": 1750,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "META-ETH",
@@ -6715,7 +6679,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1761,
+            "PairID": 1751,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CRPT-ETH",
@@ -6727,7 +6691,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1762,
+            "PairID": 1752,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TFD-BTC",
@@ -6739,7 +6703,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1763,
+            "PairID": 1753,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OLT-ETH",
@@ -6751,7 +6715,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1764,
+            "PairID": 1754,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TFD-ETH",
@@ -6763,7 +6727,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1765,
+            "PairID": 1755,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTC-ETH",
@@ -6775,7 +6739,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1766,
+            "PairID": 1756,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CRPT-BTC",
@@ -6787,7 +6751,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1767,
+            "PairID": 1757,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EDN-ETH",
@@ -6799,7 +6763,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1768,
+            "PairID": 1758,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "EDN-BTC",
@@ -6811,7 +6775,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1769,
+            "PairID": 1759,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "USE-ETH",
@@ -6823,7 +6787,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1772,
+            "PairID": 1762,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DCR-ETH",
@@ -6835,7 +6799,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1773,
+            "PairID": 1763,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BCHABC-ETH",
@@ -6847,7 +6811,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1774,
+            "PairID": 1764,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COSM-BTC",
@@ -6859,7 +6823,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1775,
+            "PairID": 1765,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TMT-BTC",
@@ -6871,7 +6835,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1776,
+            "PairID": 1766,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "COSM-ETH",
@@ -6883,7 +6847,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1777,
+            "PairID": 1767,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TMT-ETH",
@@ -6895,7 +6859,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1778,
+            "PairID": 1768,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KCS-USDT",
@@ -6907,7 +6871,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1779,
+            "PairID": 1769,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KCS-ETH",
@@ -6919,7 +6883,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1780,
+            "PairID": 1770,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KCS-BTC",
@@ -6931,7 +6895,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1781,
+            "PairID": 1771,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BU-BTC",
@@ -6943,7 +6907,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1782,
+            "PairID": 1772,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BU-ETH",
@@ -6955,7 +6919,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1783,
+            "PairID": 1773,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "USDT-PAX",
@@ -6967,7 +6931,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1784,
+            "PairID": 1774,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "USDT-TUSD",
@@ -6979,7 +6943,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1785,
+            "PairID": 1775,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "NEO-KCS",
@@ -6991,7 +6955,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1786,
+            "PairID": 1776,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "USDT-USDC",
@@ -7003,7 +6967,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1787,
+            "PairID": 1777,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GAS-NEO",
@@ -7015,7 +6979,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1788,
+            "PairID": 1778,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MHC-ETH",
@@ -7027,7 +6991,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1789,
+            "PairID": 1779,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MHC-BTC",
@@ -7039,7 +7003,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1790,
+            "PairID": 1780,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CSP-BTC",
@@ -7051,7 +7015,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1791,
+            "PairID": 1781,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "CSP-ETH",
@@ -7063,7 +7027,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1792,
+            "PairID": 1782,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LOKI-BTC",
@@ -7075,7 +7039,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1793,
+            "PairID": 1783,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LOKI-ETH",
@@ -7087,7 +7051,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1794,
+            "PairID": 1784,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "NRG-BTC",
@@ -7099,7 +7063,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1795,
+            "PairID": 1785,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AVA-USDT",
@@ -7111,7 +7075,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1796,
+            "PairID": 1786,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FET-ETH",
@@ -7123,7 +7087,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1797,
+            "PairID": 1787,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DX-BTC",
@@ -7135,7 +7099,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1798,
+            "PairID": 1788,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "DX-ETH",
@@ -7147,7 +7111,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1799,
+            "PairID": 1789,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MHC-USDT",
@@ -7159,7 +7123,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1800,
+            "PairID": 1790,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "RBTC-BTC",
@@ -7171,7 +7135,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1801,
+            "PairID": 1791,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "RIF-BTC",
@@ -7183,7 +7147,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1802,
+            "PairID": 1792,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TRTL-BTC",
@@ -7195,7 +7159,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1803,
+            "PairID": 1793,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TRTL-ETH",
@@ -7207,7 +7171,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1804,
+            "PairID": 1794,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTV-BTC",
@@ -7219,7 +7183,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1805,
+            "PairID": 1795,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTV-ETH",
@@ -7231,7 +7195,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1806,
+            "PairID": 1796,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTV-KCS",
@@ -7243,7 +7207,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1807,
+            "PairID": 1797,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ODE-ETH",
@@ -7255,7 +7219,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1808,
+            "PairID": 1798,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ODE-USDT",
@@ -7267,7 +7231,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1809,
+            "PairID": 1799,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MTV-USDT",
@@ -7279,7 +7243,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1810,
+            "PairID": 1800,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SPND-ETH",
@@ -7291,7 +7255,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1811,
+            "PairID": 1801,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AVA-NEO",
@@ -7303,7 +7267,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1812,
+            "PairID": 1802,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "TEL-USDT",
@@ -7315,7 +7279,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1813,
+            "PairID": 1803,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ONOT-ETH",
@@ -7327,7 +7291,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1814,
+            "PairID": 1804,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AERGO-ETH",
@@ -7339,7 +7303,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1815,
+            "PairID": 1805,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "XYO-ETH",
@@ -7351,7 +7315,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1816,
+            "PairID": 1806,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "VNX-ETH",
@@ -7363,7 +7327,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1817,
+            "PairID": 1807,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "ETH-DAI",
@@ -7375,7 +7339,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1818,
+            "PairID": 1808,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GMB-ETH",
@@ -7387,7 +7351,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1819,
+            "PairID": 1809,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GMB-BTC",
@@ -7399,7 +7363,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1820,
+            "PairID": 1810,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KAT-USDT",
@@ -7411,7 +7375,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1821,
+            "PairID": 1811,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MKR-BTC",
@@ -7423,7 +7387,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1822,
+            "PairID": 1812,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "KAT-BTC",
@@ -7435,7 +7399,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1823,
+            "PairID": 1813,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "STQ-ETH",
@@ -7447,7 +7411,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1824,
+            "PairID": 1814,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OPQ-ETH",
@@ -7459,7 +7423,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1825,
+            "PairID": 1815,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "XRP-NEO",
@@ -7471,7 +7435,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1826,
+            "PairID": 1816,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "PARETO-USDC",
@@ -7483,7 +7447,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1827,
+            "PairID": 1817,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "XRP-KCS",
@@ -7495,7 +7459,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1828,
+            "PairID": 1818,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "VNX-BTC",
@@ -7507,7 +7471,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1829,
+            "PairID": 1819,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AVA-BTC",
@@ -7519,7 +7483,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1830,
+            "PairID": 1820,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OPQ-BTC",
@@ -7531,7 +7495,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1831,
+            "PairID": 1821,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FTM-BTC",
@@ -7543,7 +7507,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1832,
+            "PairID": 1822,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "STQ-BTC",
@@ -7555,7 +7519,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1833,
+            "PairID": 1823,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "USDT-DAI",
@@ -7567,7 +7531,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1834,
+            "PairID": 1824,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTC-DAI",
@@ -7579,7 +7543,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1835,
+            "PairID": 1825,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "AVA-ETH",
@@ -7591,7 +7555,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1836,
+            "PairID": 1826,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MKR-ETH",
@@ -7603,7 +7567,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1837,
+            "PairID": 1827,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "FTM-ETH",
@@ -7615,7 +7579,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1838,
+            "PairID": 1828,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GO-KCS",
@@ -7627,7 +7591,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1839,
+            "PairID": 1829,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "PAL-ETH",
@@ -7639,7 +7603,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1840,
+            "PairID": 1830,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "VSYS-BTC",
@@ -7651,7 +7615,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1841,
+            "PairID": 1831,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "MKR-DAI",
@@ -7663,7 +7627,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1842,
+            "PairID": 1832,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "BTT-ETH",
@@ -7675,7 +7639,7 @@
             "Issue": ""
         },
         {
-            "PairID": 1843,
+            "PairID": 1833,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "GRIN-ETH",
