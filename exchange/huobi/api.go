@@ -11,6 +11,8 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -87,7 +89,7 @@ func (e *Huobi) GetCoinsData() {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     data.DisplayName,
+				ExSymbol:     data.Name,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     data.WithdrawEnabled,
 				Deposit:      data.DepositEnabled,
@@ -264,7 +266,7 @@ func (e *Huobi) UpdateAllBalances() {
 					balanceMap.Set(c.Code, freeamount)
 				}
 			} else {
-				log.Printf("Huobi %s Get Balance Err: %s\n", v.Currency, err)
+				log.Printf("%s %s Get Balance Err: %s\n", e.GetName(), v.Currency, err)
 			}
 		}
 	}
@@ -283,7 +285,7 @@ func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if e.Account_ID == "" {
 		e.Account_ID = e.GetAccounts()
 		if e.Account_ID == "" {
-			return nil, fmt.Errorf("Huobi Get AccountID Err")
+			return nil, fmt.Errorf("%s Get AccountID Err", e.GetName())
 		}
 	}
 
@@ -293,8 +295,8 @@ func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
+	mapParams["amount"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = fmt.Sprintf("%f", rate)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "sell-limit"
 
@@ -329,7 +331,7 @@ func (e *Huobi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	if e.Account_ID == "" {
 		e.Account_ID = e.GetAccounts()
 		if e.Account_ID == "" {
-			return nil, fmt.Errorf("Huobi Get AccountID Err")
+			return nil, fmt.Errorf("%s Get AccountID Err", e.GetName())
 		}
 	}
 
@@ -339,8 +341,8 @@ func (e *Huobi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
+	mapParams["amount"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = fmt.Sprintf("%f", rate)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "buy-limit"
 
@@ -375,7 +377,7 @@ func (e *Huobi) OrderStatus(order *exchange.Order) error {
 	if e.Account_ID == "" {
 		e.Account_ID = e.GetAccounts()
 		if e.Account_ID == "" {
-			return fmt.Errorf("Huobi Get AccountID Err")
+			return fmt.Errorf("%s Get AccountID Err", e.GetName())
 		}
 	}
 
@@ -424,7 +426,7 @@ func (e *Huobi) CancelOrder(order *exchange.Order) error {
 	if e.Account_ID == "" {
 		e.Account_ID = e.GetAccounts()
 		if e.Account_ID == "" {
-			return fmt.Errorf("Huobi Get AccountID Err")
+			return fmt.Errorf("%s Get AccountID Err", e.GetName())
 		}
 	}
 
@@ -471,7 +473,7 @@ func (e *Huobi) ApiKeyRequest(strMethod string, mapParams map[string]string, str
 	mapParams["Signature"] = CreateSign(mapParams, strMethod, hostName, strRequestPath, e.API_SECRET)
 
 	var strRequestUrl string
-	strParams := exchange.Map2UrlQuery(mapParams)
+	strParams := MapSortByKey(mapParams)
 	strRequestUrl = strUrl + "?" + strParams
 
 	if strMethod == "POST" {
@@ -503,8 +505,22 @@ func (e *Huobi) ApiKeyRequest(strMethod string, mapParams map[string]string, str
 }
 
 func CreateSign(mapParams map[string]string, strMethod, strHostUrl, strRequestPath, strSecretKey string) string {
-	sortedParams := exchange.Map2UrlQuery(mapParams) //将数据根据ASCII进行排序
+	sortedParams := MapSortByKey(mapParams) //将数据根据ASCII进行排序
 	strPayload := strMethod + "\n" + strHostUrl + "\n" + strRequestPath + "\n" + sortedParams
 
 	return exchange.ComputeHmac256Base64(strPayload, strSecretKey)
+}
+
+func MapSortByKey(mapValue map[string]string) string {
+	keys := make([]string, 0, len(mapValue))
+	for key := range mapValue {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	mapParams := ""
+	for _, key := range keys {
+		mapParams += (key + "=" + url.QueryEscape(mapValue[key]) + "&")
+	}
+	mapParams = mapParams[:len(mapParams)-1]
+	return mapParams
 }
