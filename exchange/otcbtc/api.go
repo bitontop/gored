@@ -67,8 +67,8 @@ func (e *Otcbtc) GetCoinsData() {
 	for _, data := range pairsData {
 		base := &coin.Coin{}
 		target := &coin.Coin{}
-		baseSymbol := strings.Split(data.Name, "/")[1]
-		targetSymbol := strings.Split(data.Name, "/")[0]
+		baseSymbol := strings.Split(data.TickerID, "_")[1]
+		targetSymbol := strings.Split(data.TickerID, "_")[0]
 
 		switch e.Source {
 		case exchange.EXCHANGE_API:
@@ -141,8 +141,8 @@ func (e *Otcbtc) GetPairsData() {
 
 	for _, data := range pairsData {
 		p := &pair.Pair{}
-		baseSymbol := strings.Split(data.Name, "/")[1]
-		targetSymbol := strings.Split(data.Name, "/")[0]
+		baseSymbol := strings.Split(data.TickerID, "_")[1]
+		targetSymbol := strings.Split(data.TickerID, "_")[0]
 
 		switch e.Source {
 		case exchange.EXCHANGE_API:
@@ -270,11 +270,6 @@ func (e *Otcbtc) UpdateAllBalances() {
 		}
 		c := e.GetCoinBySymbol(account.Currency)
 		if c != nil {
-			balanceMap.Set(c.Code, freeAmount)
-		} else {
-			c = &coin.Coin{}
-			c.Code = strings.ToUpper(account.Currency)
-			coin.AddCoin(c)
 			balanceMap.Set(c.Code, freeAmount)
 		}
 	}
