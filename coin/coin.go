@@ -55,6 +55,7 @@ func GetCoinID(code string) int {
 }
 
 func GetCoin(code string) *Coin {
+	code = strings.ToUpper(code)
 	for _, id := range coinMap.Keys() {
 		if tmp, ok := coinMap.Get(id); ok {
 			c := tmp.(*Coin)
