@@ -76,7 +76,7 @@ func (e *Huobi) GetCoinsData() {
 				c.Code = data.DisplayName
 				c.CurrencyType = data.CurrencyType
 				coin.AddCoin(c)
-			} else {
+			} else if c.CurrencyType == "" {
 				c.CurrencyType = data.CurrencyType
 			}
 		case exchange.JSON_FILE:

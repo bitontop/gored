@@ -74,7 +74,7 @@ func (e *Bittrex) GetCoinsData() {
 				c.Name = data.CurrencyLong
 				c.CurrencyType = data.CoinType
 				coin.AddCoin(c)
-			} else {
+			} else if c.CurrencyType == "" {
 				c.CurrencyType = data.CoinType
 			}
 		case exchange.JSON_FILE:
