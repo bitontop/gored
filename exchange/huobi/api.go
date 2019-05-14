@@ -290,13 +290,13 @@ func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
-	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "sell-limit"
 
@@ -312,7 +312,7 @@ func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -336,13 +336,13 @@ func (e *Huobi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
-	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "buy-limit"
 
@@ -358,7 +358,7 @@ func (e *Huobi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -431,7 +431,7 @@ func (e *Huobi) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
+	cancelOrder := ""
 	strRequest := fmt.Sprintf("/v1/order/orders/%s/submitcancel", order.OrderID)
 
 	jsonCancelOrder := e.ApiKeyRequest("POST", make(map[string]string), strRequest)

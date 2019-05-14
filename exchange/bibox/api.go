@@ -282,9 +282,14 @@ func (e *Bibox) UpdateAllBalances() {
 	}
 
 	for _, v := range accountBalance[0].AssetsList {
-		c := e.GetCoinBySymbol(v.CoinSymbol)
-		if c != nil {
-			balanceMap.Set(c.Code, v.Balance)
+		freeamount, err := strconv.ParseFloat(v.Balance, 64)
+		if err == nil {
+			c := e.GetCoinBySymbol(v.CoinSymbol)
+			if c != nil {
+				balanceMap.Set(c.Code, freeamount)
+			}
+		} else {
+			log.Printf("%s %s Get Balance Err: %s\n", e.GetName(), v.CoinSymbol, err)
 		}
 	}
 }

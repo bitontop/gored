@@ -87,10 +87,6 @@ type AccountBalances struct {
 	} `json:"list"`
 }
 
-type PlaceOrder struct {
-	Data string `json:"data"`
-}
-
 type OrderStatus struct {
 	ID              int    `json:"id"`
 	Symbol          string `json:"symbol"`

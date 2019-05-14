@@ -20,7 +20,7 @@ import (
 func Test_Huobi(t *testing.T) {
 	e := InitHuobi()
 
-	pair := pair.GetPairByKey("BTC|EOS")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
