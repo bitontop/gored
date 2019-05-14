@@ -262,6 +262,7 @@ func (e *Bitmax) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 		return false
 	}
 
+	// API 1.2 be deprecated
 	/* withdraw := Withdrawal{}
 	strRequest := fmt.Sprintf("/%v/api/v1/withdraw", e.Account_Group)
 
