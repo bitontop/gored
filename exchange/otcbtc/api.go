@@ -250,27 +250,30 @@ func (e *Otcbtc) UpdateAllBalances() {
 	strRequest := "/api/v2/users/me"
 
 	jsonBalanceReturn := e.ApiKeyGET(make(map[string]string), strRequest)
-	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
-		if err := json.Unmarshal([]byte(jsonBalanceReturn), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
-		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
-		}
-	}
-
-	if accountBalance.OtbFeeEnabled != true {
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &errResponse); err != nil {
+		log.Printf("%s Get Balance Error Response Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+		return
+	} else if errResponse.Error.Code != 0 {
+		log.Printf("%s Get Balance Failed: %v %v", e.GetName(), errResponse.Error.Code, errResponse.Error.Message)
+		return
+	} else if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
+		log.Printf("%s Get Balance Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	}
 
-	for _, account := range accountBalance.Accounts {
-		freeAmount, err := strconv.ParseFloat(account.Balance, 64)
-		if err != nil {
-			log.Printf("Parse freeAmount error: %v", err)
-			return
-		}
-		c := e.GetCoinBySymbol(account.Currency)
-		if c != nil {
-			balanceMap.Set(c.Code, freeAmount)
+	if !accountBalance.OtbFeeEnabled {
+		return
+	}
+
+	for _, data := range accountBalance.Accounts {
+		freeamount, err := strconv.ParseFloat(data.Balance, 64)
+		if err == nil {
+			c := e.GetCoinBySymbol(data.Currency)
+			if c != nil {
+				balanceMap.Set(c.Code, freeamount)
+			}
+		} else {
+			log.Printf("%s %s Get Balance Err: %s\n", e.GetName(), data.Currency, err)
 		}
 	}
 }
@@ -295,12 +298,12 @@ func (e *Otcbtc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["price"] = fmt.Sprintf("%v", rate)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
-		if err := json.Unmarshal([]byte(jsonPlaceReturn), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
-		}
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &errResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Error Response Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if errResponse.Error.Code != 0 {
+		return nil, fmt.Errorf("%s LimitSell Failed: %v %v", e.GetName(), errResponse.Error.Code, errResponse.Error.Message)
+	} else if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -332,12 +335,12 @@ func (e *Otcbtc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["price"] = fmt.Sprintf("%v", rate)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
-		if err := json.Unmarshal([]byte(jsonPlaceReturn), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
-		}
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &errResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Error Response Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if errResponse.Error.Code != 0 {
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v %v", e.GetName(), errResponse.Error.Code, errResponse.Error.Message)
+	} else if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -366,12 +369,12 @@ func (e *Otcbtc) OrderStatus(order *exchange.Order) error {
 	mapParams["id"] = order.OrderID
 
 	jsonOrderStatus := e.ApiKeyGET(mapParams, strRequest)
-	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
-		if err := json.Unmarshal([]byte(jsonOrderStatus), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
-		}
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &errResponse); err != nil {
+		return fmt.Errorf("%s OrderStatus Error Response Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+	} else if errResponse.Error.Code != 0 {
+		return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), errResponse.Error.Code, errResponse.Error.Message)
+	} else if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	}
 
 	order.StatusMessage = jsonOrderStatus
@@ -405,12 +408,12 @@ func (e *Otcbtc) CancelOrder(order *exchange.Order) error {
 	mapParams["id"] = order.OrderID
 
 	jsonCancelOrder := e.ApiKeyPost(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
-		if err := json.Unmarshal([]byte(jsonCancelOrder), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
-		}
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &errResponse); err != nil {
+		return fmt.Errorf("%s OrderStatus Error Response Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
+	} else if errResponse.Error.Code != 0 {
+		return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), errResponse.Error.Code, errResponse.Error.Message)
+	} else if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
@@ -432,10 +435,10 @@ func (e *Otcbtc) ApiKeyGET(mapParams map[string]string, strRequestPath string) s
 	strMethod := "GET"
 	strUrl := API_URL + strRequestPath
 
-	payload := fmt.Sprintf("%s|%s|%s", strMethod, strRequestPath, exchange.Map2UrlQuery(mapParams))
-
 	mapParams["access_key"] = e.API_KEY
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
+	payload := fmt.Sprintf("%s|%s|%s", strMethod, strRequestPath, exchange.Map2UrlQuery(mapParams))
+
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(payload, e.API_SECRET)
 
 	return exchange.HttpGetRequest(strUrl, mapParams)
@@ -445,10 +448,10 @@ func (e *Otcbtc) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 	strMethod := "POST"
 	strUrl := API_URL + strRequestPath
 
-	payload := fmt.Sprintf("%s|%s|%s", strMethod, strRequestPath, exchange.Map2UrlQuery(mapParams))
-
 	mapParams["access_key"] = e.API_KEY
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
+	payload := fmt.Sprintf("%s|%s|%s", strMethod, strRequestPath, exchange.Map2UrlQuery(mapParams))
+
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(payload, e.API_SECRET)
 
 	httpClient := &http.Client{}
