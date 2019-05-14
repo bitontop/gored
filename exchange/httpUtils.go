@@ -89,6 +89,14 @@ func ComputeMD5(strMessage string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
+func ComputeHmacMd5(strMessage string, strSecret string) string {
+	key := []byte(strSecret)
+	h := hmac.New(md5.New, key)
+	h.Write([]byte(strMessage))
+
+	return hex.EncodeToString(h.Sum([]byte("")))
+}
+
 func ComputeHmac256(strMessage string, strSecret string) string {
 	key, _ := base64.StdEncoding.DecodeString(strSecret)
 	h := hmac.New(sha256.New, key)
