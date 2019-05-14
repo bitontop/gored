@@ -19,6 +19,7 @@ import (
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/pair"
@@ -83,6 +84,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitOtcbtc(config)
 	InitHuobi(config)
 	InitBibox(config)
+	InitOkex(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -169,6 +171,15 @@ func InitHuobi(config *exchange.Config) {
 func InitBibox(config *exchange.Config) {
 	conf.Exchange(exchange.BIBOX, config)
 	ex := bibox.CreateBibox(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitOkex(config *exchange.Config) {
+	conf.Exchange(exchange.OKEX, config)
+	ex := okex.CreateOkex(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

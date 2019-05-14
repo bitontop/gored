@@ -13,6 +13,7 @@ import (
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
 
@@ -94,6 +95,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BIBOX:
 		ex := bibox.CreateBibox(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.OKEX:
+		ex := okex.CreateOkex(config)
 		e.exMan.Add(ex)
 		return ex
 
