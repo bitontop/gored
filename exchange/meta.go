@@ -91,4 +91,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, OTCBTC)
 	supportList = append(supportList, HUOBI)
 	supportList = append(supportList, BIBOX)
+	supportList = append(supportList, OKEX)
 }
