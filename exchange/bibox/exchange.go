@@ -215,12 +215,12 @@ func (e *Bibox) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bibox) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.Fee = true
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = false
-	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }

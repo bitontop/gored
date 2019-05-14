@@ -85,7 +85,6 @@ func (e *Okex) GetCoinsData() {
 				Coin:         c,
 				ExSymbol:     data.Currency,
 				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
 			}
 
 			if data.CanDeposit == "1" {
@@ -122,18 +121,22 @@ func (e *Okex) WithdrawFee() {
 	}
 
 	for _, data := range withdrawFee {
-		if data.MinFee != "" {
-			minFee, err := strconv.ParseFloat(data.MinFee, 64)
-			if err != nil {
-				log.Printf("%s minFee conver to float64 err: %v %+v", e.GetName(), err, data)
-			} else {
-				c := e.GetCoinBySymbol(data.Currency)
-				if c != nil {
-					coinConstraint := e.GetCoinConstraint(c)
+		c := e.GetCoinBySymbol(data.Currency)
+		if c != nil {
+			coinConstraint := e.GetCoinConstraint(c)
+			if data.MinFee != "" {
+				minFee, err := strconv.ParseFloat(data.MinFee, 64)
+				if err != nil {
+					log.Printf("%s minFee conver to float64 err: %v %+v", e.GetName(), err, data)
+				} else {
 					coinConstraint.TxFee = minFee
+					coinConstraint.Listed = true
 				}
+			} else {
+				coinConstraint.Listed = false
 			}
 		}
+
 	}
 }
 
@@ -165,6 +168,16 @@ func (e *Okex) GetPairsData() {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.InstrumentID)
 		}
+
+		lotSize, err := strconv.ParseFloat(data.SizeIncrement, 64)
+		if err != nil {
+			log.Printf("%s Convert lotSize to Float64 Err: %v %v", e.GetName(), err, data.SizeIncrement)
+		}
+		priceFilter, err := strconv.ParseFloat(data.TickSize, 64)
+		if err != nil {
+			log.Printf("%s Convert lotSize to Float64 Err: %v %v", e.GetName(), err, data.TickSize)
+		}
+
 		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
@@ -172,8 +185,8 @@ func (e *Okex) GetPairsData() {
 				ExSymbol:    data.InstrumentID,
 				MakerFee:    DEFAULT_MAKERER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
+				LotSize:     lotSize,
+				PriceFilter: priceFilter,
 				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
