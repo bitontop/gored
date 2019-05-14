@@ -16,21 +16,21 @@ Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https
 
 ## Exchange Support Table
 
-| Exchange | Public API | Private API | goCAD |
-|----------|------------|-------------|-------|
+|   Exchange   | Public API | Private API | goCAD |
+|--------------|------------|-------------|-------|
 | BiBox| Yes  | Yes  | NA  |
 | Binance| Yes  | Yes  | NA  |
 | BitMAX | Yes  | Yes  | NA  |
 | BitMEX | Yes | Yes  | NA |
-| Bitstamp | Yes  | No  | No  |
+| Bitstamp | Yes  | No  | NA  |
 | Bittrex | Yes | Yes  | NA |
 | BitZ | Yes | Yes  | NA |
 | CoinEX | Yes | Yes  | NA |
-| Huobi.Pro | Yes | Yes  | No|
+| Huobi PRO | Yes | Yes  | NA|
 | Huobi OTC | Yes | No  | NA |
-| KuCoin | Yes | Yes  | No |
-| OKEX | Yes | Yes  | No |
-| OTCBTCC | Yes | Yes  | NA |
+| KuCoin | Yes | Yes  | NA |
+| OKEX | Yes | Yes  | NA |
+| OTCBTC | Yes | Yes  | NA |
 | Stex | Yes | Yes  | NA |
 
 We are aiming to support the top 100 highest volume exchanges based off the [CoinMarketCap exchange data](https://coinmarketcap.com/exchanges/volume/24-hour/).
