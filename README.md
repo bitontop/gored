@@ -17,7 +17,7 @@ Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https
 ## Exchange Support Table
 
 | Exchange | Public API | Private API | goCAD |
-|----------|------|-----|
+|----------|------------|-------------|-------|
 | BiBox| Yes  | Yes  | NA  |
 | Binance| Yes  | Yes  | NA  |
 | BitMAX | Yes  | Yes  | NA  |
