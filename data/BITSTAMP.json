@@ -1,1 +1,263 @@
-{"CoinConstraint":[{"CoinID":2,"Coin":null,"ExSymbol":"BTC","TxFee":0.005,"Withdraw":true,"Deposit":true,"Confirmation":2,"Listed":true,"Issue":""},{"CoinID":4,"Coin":null,"ExSymbol":"ETH","TxFee":0.005,"Withdraw":true,"Deposit":true,"Confirmation":2,"Listed":true,"Issue":""},{"CoinID":5,"Coin":null,"ExSymbol":"LTC","TxFee":0.005,"Withdraw":true,"Deposit":true,"Confirmation":2,"Listed":true,"Issue":""},{"CoinID":50,"Coin":null,"ExSymbol":"XRP","TxFee":0.005,"Withdraw":true,"Deposit":true,"Confirmation":2,"Listed":true,"Issue":""},{"CoinID":296,"Coin":null,"ExSymbol":"BCH","TxFee":0.005,"Withdraw":true,"Deposit":true,"Confirmation":2,"Listed":true,"Issue":""},{"CoinID":311,"Coin":null,"ExSymbol":"USD","TxFee":0.005,"Withdraw":true,"Deposit":true,"Confirmation":2,"Listed":true,"Issue":""},{"CoinID":789,"Coin":null,"ExSymbol":"EUR","TxFee":0.005,"Withdraw":true,"Deposit":true,"Confirmation":2,"Listed":true,"Issue":""}],"PairConstraint":[{"PairID":1,"Pair":null,"ExID":"","ExSymbol":"ethbtc","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":1e-8,"Listed":true,"Issue":""},{"PairID":2,"Pair":null,"ExID":"","ExSymbol":"ltcbtc","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":1e-8,"Listed":true,"Issue":""},{"PairID":82,"Pair":null,"ExID":"","ExSymbol":"xrpbtc","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":1e-8,"Listed":true,"Issue":""},{"PairID":575,"Pair":null,"ExID":"","ExSymbol":"bchbtc","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":1e-8,"Listed":true,"Issue":""},{"PairID":604,"Pair":null,"ExID":"","ExSymbol":"btcusd","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":610,"Pair":null,"ExID":"","ExSymbol":"ethusd","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":615,"Pair":null,"ExID":"","ExSymbol":"xrpusd","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.00001,"Listed":true,"Issue":""},{"PairID":624,"Pair":null,"ExID":"","ExSymbol":"ltcusd","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":630,"Pair":null,"ExID":"","ExSymbol":"bchusd","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":1435,"Pair":null,"ExID":"","ExSymbol":"btceur","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":1438,"Pair":null,"ExID":"","ExSymbol":"etheur","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":1439,"Pair":null,"ExID":"","ExSymbol":"ltceur","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":1883,"Pair":null,"ExID":"","ExSymbol":"xrpeur","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.00001,"Listed":true,"Issue":""},{"PairID":1884,"Pair":null,"ExID":"","ExSymbol":"bcheur","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":1e-8,"PriceFilter":0.01,"Listed":true,"Issue":""},{"PairID":1885,"Pair":null,"ExID":"","ExSymbol":"eurusd","MakerFee":0.0025,"TakerFee":0.0025,"LotSize":0.00001,"PriceFilter":0.00001,"Listed":true,"Issue":""}]}
+{
+    "CoinConstraint": [
+        {
+            "CoinID": 2,
+            "Coin": null,
+            "ExSymbol": "BTC",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 4,
+            "Coin": null,
+            "ExSymbol": "ETH",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 5,
+            "Coin": null,
+            "ExSymbol": "LTC",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 50,
+            "Coin": null,
+            "ExSymbol": "XRP",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 296,
+            "Coin": null,
+            "ExSymbol": "BCH",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 311,
+            "Coin": null,
+            "ExSymbol": "USD",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 791,
+            "Coin": null,
+            "ExSymbol": "EUR",
+            "TxFee": 0.005,
+            "Withdraw": true,
+            "Deposit": true,
+            "Confirmation": 2,
+            "Listed": true,
+            "Issue": ""
+        }
+    ],
+    "PairConstraint": [
+        {
+            "PairID": 1,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ethbtc",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 2,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ltcbtc",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 82,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "xrpbtc",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 575,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "bchbtc",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 604,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "btcusd",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 610,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ethusd",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 615,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "xrpusd",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.00001,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 624,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ltcusd",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 630,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "bchusd",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 1440,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "btceur",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 1443,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "etheur",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 1444,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "ltceur",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 1891,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "xrpeur",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.00001,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 1892,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "bcheur",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 1e-8,
+            "PriceFilter": 0.01,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 1893,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "eurusd",
+            "MakerFee": 0.0025,
+            "TakerFee": 0.0025,
+            "LotSize": 0.00001,
+            "PriceFilter": 0.00001,
+            "Listed": true,
+            "Issue": ""
+        }
+    ]
+}
