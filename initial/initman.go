@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
@@ -88,6 +89,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.HUOBI:
 		ex := huobi.CreateHuobi(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BIBOX:
+		ex := bibox.CreateBibox(config)
 		e.exMan.Add(ex)
 		return ex
 
