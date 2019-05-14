@@ -353,7 +353,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 564,
+            "CoinID": 565,
             "Coin": null,
             "ExSymbol": "BHD",
             "TxFee": 0.1,
@@ -364,7 +364,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 932,
+            "CoinID": 933,
             "Coin": null,
             "ExSymbol": "MIX",
             "TxFee": 50,
@@ -375,7 +375,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1066,
+            "CoinID": 1067,
             "Coin": null,
             "ExSymbol": "FTM",
             "TxFee": 100,
@@ -386,7 +386,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1079,
+            "CoinID": 1080,
             "Coin": null,
             "ExSymbol": "KCS",
             "TxFee": 0.5,
@@ -397,7 +397,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1133,
+            "CoinID": 1134,
             "Coin": null,
             "ExSymbol": "LTO",
             "TxFee": 10,
@@ -408,7 +408,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1134,
+            "CoinID": 1135,
             "Coin": null,
             "ExSymbol": "OKB",
             "TxFee": 0.5,
@@ -419,7 +419,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1135,
+            "CoinID": 1136,
             "Coin": null,
             "ExSymbol": "CHX",
             "TxFee": 2,
@@ -430,7 +430,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1136,
+            "CoinID": 1137,
             "Coin": null,
             "ExSymbol": "ABBC",
             "TxFee": 0.01,
@@ -441,7 +441,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1137,
+            "CoinID": 1138,
             "Coin": null,
             "ExSymbol": "BOLT",
             "TxFee": 20,
@@ -452,7 +452,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1138,
+            "CoinID": 1139,
             "Coin": null,
             "ExSymbol": "RNT",
             "TxFee": 5,
@@ -463,7 +463,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1139,
+            "CoinID": 1140,
             "Coin": null,
             "ExSymbol": "LAMBLCK",
             "TxFee": 50,
@@ -474,7 +474,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1140,
+            "CoinID": 1141,
             "Coin": null,
             "ExSymbol": "ABBCLCK",
             "TxFee": 0.01,
@@ -485,7 +485,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1141,
+            "CoinID": 1142,
             "Coin": null,
             "ExSymbol": "QCX",
             "TxFee": 10,
@@ -496,7 +496,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1142,
+            "CoinID": 1143,
             "Coin": null,
             "ExSymbol": "DOS",
             "TxFee": 50,
@@ -507,7 +507,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1143,
+            "CoinID": 1144,
             "Coin": null,
             "ExSymbol": "BTMX",
             "TxFee": 11,
@@ -518,7 +518,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1144,
+            "CoinID": 1145,
             "Coin": null,
             "ExSymbol": "HT",
             "TxFee": 0.5,
@@ -529,7 +529,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1145,
+            "CoinID": 1146,
             "Coin": null,
             "ExSymbol": "COVA",
             "TxFee": 50,
@@ -540,7 +540,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1146,
+            "CoinID": 1147,
             "Coin": null,
             "ExSymbol": "BXA",
             "TxFee": 2,
@@ -551,7 +551,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1147,
+            "CoinID": 1148,
             "Coin": null,
             "ExSymbol": "ETZ",
             "TxFee": 0,
@@ -562,7 +562,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1148,
+            "CoinID": 1149,
             "Coin": null,
             "ExSymbol": "XTZ",
             "TxFee": 2,
@@ -573,7 +573,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1149,
+            "CoinID": 1150,
             "Coin": null,
             "ExSymbol": "CVNT",
             "TxFee": 30,
@@ -584,7 +584,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1150,
+            "CoinID": 1151,
             "Coin": null,
             "ExSymbol": "DUO",
             "TxFee": 2,
@@ -595,7 +595,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1151,
+            "CoinID": 1152,
             "Coin": null,
             "ExSymbol": "FSNLCK",
             "TxFee": 1,
@@ -606,7 +606,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1152,
+            "CoinID": 1153,
             "Coin": null,
             "ExSymbol": "VALOR",
             "TxFee": 0.1,
@@ -617,7 +617,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1153,
+            "CoinID": 1154,
             "Coin": null,
             "ExSymbol": "DUOLCK",
             "TxFee": 2,
@@ -1434,31 +1434,7 @@
             "Issue": ""
         },
         {
-            "PairID": 710,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "LAMB/BTC",
-            "MakerFee": 0.0004,
-            "TakerFee": 0.0004,
-            "LotSize": 0.1,
-            "PriceFilter": 1e-8,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 727,
-            "Pair": null,
-            "ExID": "",
-            "ExSymbol": "LAMB/ETH",
-            "MakerFee": 0.0004,
-            "TakerFee": 0.0004,
-            "LotSize": 0.1,
-            "PriceFilter": 1e-8,
-            "Listed": true,
-            "Issue": ""
-        },
-        {
-            "PairID": 731,
+            "PairID": 720,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "SEELE/BTC",
@@ -1470,7 +1446,7 @@
             "Issue": ""
         },
         {
-            "PairID": 736,
+            "PairID": 741,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "OLT/BTC",
@@ -1482,7 +1458,19 @@
             "Issue": ""
         },
         {
-            "PairID": 765,
+            "PairID": 743,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "SEELE/ETH",
+            "MakerFee": 0.0004,
+            "TakerFee": 0.0004,
+            "LotSize": 1,
+            "PriceFilter": 1e-9,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 744,
             "Pair": null,
             "ExID": "",
             "ExSymbol": "LAMB/USDT",
@@ -1494,14 +1482,26 @@
             "Issue": ""
         },
         {
-            "PairID": 770,
+            "PairID": 749,
             "Pair": null,
             "ExID": "",
-            "ExSymbol": "SEELE/ETH",
+            "ExSymbol": "LAMB/BTC",
             "MakerFee": 0.0004,
             "TakerFee": 0.0004,
-            "LotSize": 1,
-            "PriceFilter": 1e-9,
+            "LotSize": 0.1,
+            "PriceFilter": 1e-8,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "PairID": 767,
+            "Pair": null,
+            "ExID": "",
+            "ExSymbol": "LAMB/ETH",
+            "MakerFee": 0.0004,
+            "TakerFee": 0.0004,
+            "LotSize": 0.1,
+            "PriceFilter": 1e-8,
             "Listed": true,
             "Issue": ""
         },

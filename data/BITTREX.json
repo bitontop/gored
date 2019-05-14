@@ -1567,8 +1567,8 @@
             "Coin": null,
             "ExSymbol": "AEON",
             "TxFee": 0.1,
-            "Withdraw": false,
-            "Deposit": false,
+            "Withdraw": true,
+            "Deposit": true,
             "Confirmation": 400,
             "Listed": true,
             "Issue": ""
@@ -2590,8 +2590,8 @@
             "Coin": null,
             "ExSymbol": "XHV",
             "TxFee": 0.01,
-            "Withdraw": true,
-            "Deposit": true,
+            "Withdraw": false,
+            "Deposit": false,
             "Confirmation": 20,
             "Listed": true,
             "Issue": ""
@@ -3087,6 +3087,17 @@
             "TxFee": 1,
             "Withdraw": true,
             "Deposit": true,
+            "Confirmation": 36,
+            "Listed": true,
+            "Issue": ""
+        },
+        {
+            "CoinID": 372,
+            "Coin": null,
+            "ExSymbol": "VDX",
+            "TxFee": 1,
+            "Withdraw": false,
+            "Deposit": false,
             "Confirmation": 36,
             "Listed": true,
             "Issue": ""
