@@ -73,6 +73,12 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.Passphrase = ""
 		config.TradePassword = ""
 		break
+
+	case exchange.BITZ:
+		config.API_KEY = ""
+		config.API_SECRET = ""
+		config.TradePassword = ""
+		break
 	}
 
 }

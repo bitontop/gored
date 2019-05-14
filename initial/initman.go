@@ -9,6 +9,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bittrex"
+	"github.com/bitontop/gored/exchange/bitz"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobiotc"
@@ -100,6 +101,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.OKEX:
 		ex := okex.CreateOkex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BITZ:
+		ex := bitz.CreateBitz(config)
 		e.exMan.Add(ex)
 		return ex
 
