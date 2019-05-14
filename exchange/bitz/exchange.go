@@ -45,7 +45,7 @@ func CreateBitz(config *exchange.Config) *Bitz {
 		instance = &Bitz{
 			ID:      DEFAULT_ID,
 			Name:    "Bitz",
-			Website: "https://www.bittrex.com/",
+			Website: "https://www.bit-z.com/",
 
 			API_KEY:       config.API_KEY,
 			API_SECRET:    config.API_SECRET,
