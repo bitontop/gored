@@ -27,8 +27,6 @@ const (
 	API_URL string = "https://bitmax.io"
 )
 
-var coID string
-
 /*API Base Knowledge
 Path: API function. Usually after the base endpoint URL
 Method:
@@ -201,7 +199,6 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-
 func (e *Bitmax) AccountGroup() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -235,7 +232,7 @@ func (e *Bitmax) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Code)
+		log.Printf("%s UpdateAllBalances Failed: %v %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 		return
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
@@ -265,7 +262,7 @@ func (e *Bitmax) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 		return false
 	}
 
-	withdraw := Withdrawal{}
+	/* withdraw := Withdrawal{}
 	strRequest := fmt.Sprintf("/%v/api/v1/withdraw", e.Account_Group)
 
 	mapParams := make(map[string]string)
@@ -282,7 +279,8 @@ func (e *Bitmax) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 		log.Printf("%s Withdraw Failed: %v", e.GetName(), withdraw.Msg)
 		return false
 	}
-	return true
+	return true */
+	return false
 }
 
 func (e *Bitmax) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
@@ -291,11 +289,11 @@ func (e *Bitmax) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	}
 
 	jsonResponse := &JsonResponse{}
-	bitmaxOrder := PlaceOrder{}
+	placeOrder := PlaceOrder{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order", e.Account_Group)
 
 	mapParams := make(map[string]string)
-	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano()/1000000, time.Now().UTC().UnixNano())
+	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano(), time.Now().UTC().UnixNano()/1000000)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["orderPrice"] = fmt.Sprintf("%v", rate)
 	mapParams["orderQty"] = fmt.Sprintf("%v", quantity)
@@ -306,17 +304,17 @@ func (e *Bitmax) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
-		return nil, fmt.Errorf("%s LimitSell Failed: Code %v ::: Msg=> %+v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v %+v", e.GetName(), jsonResponse.Code, jsonResponse)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &bitmaxOrder); err != nil {
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-	} else if !bitmaxOrder.Success {
-		return nil, fmt.Errorf("bitmax LimitSell failed :%v", bitmaxOrder.Success)
+	} else if !placeOrder.Success {
+		return nil, fmt.Errorf("%s LimitSell failed :%v", e.GetName(), placeOrder.Success)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      bitmaxOrder.Coid,
+		OrderID:      placeOrder.Coid,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -333,11 +331,11 @@ func (e *Bitmax) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	}
 
 	jsonResponse := &JsonResponse{}
-	bitmaxOrder := PlaceOrder{}
+	placeOrder := PlaceOrder{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order", e.Account_Group)
 
 	mapParams := make(map[string]string)
-	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano()/1000000, time.Now().UTC().UnixNano())
+	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano(), time.Now().UTC().UnixNano()/1000000)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["orderPrice"] = fmt.Sprintf("%v", rate)
 	mapParams["orderQty"] = fmt.Sprintf("%v", quantity)
@@ -348,17 +346,17 @@ func (e *Bitmax) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Code)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &bitmaxOrder); err != nil {
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-	} else if !bitmaxOrder.Success {
-		return nil, fmt.Errorf("bitmax LimitBuy failed :%v", bitmaxOrder.Success)
+	} else if !placeOrder.Success {
+		return nil, fmt.Errorf("%s LimitBuy failed :%v", e.GetName(), placeOrder.Success)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      bitmaxOrder.Coid,
+		OrderID:      placeOrder.Coid,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -378,11 +376,11 @@ func (e *Bitmax) OrderStatus(order *exchange.Order) error {
 	orderStatus := OrderStatus{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order/%v", e.Account_Group, order.OrderID)
 
-	jsonOrderStatus := e.ApiKeyRequest(nil, "GET", strRequestUrl, "order")
+	jsonOrderStatus := e.ApiKeyGet(nil, strRequestUrl, "order")
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 0 {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Code)
+		return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -414,7 +412,7 @@ func (e *Bitmax) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := CancelOrder{}
+	cancelOrder := PlaceOrder{}
 	strRequestUrl := fmt.Sprintf("/%v/api/v1/order", e.Account_Group)
 
 	mapParams := make(map[string]string)
@@ -426,7 +424,7 @@ func (e *Bitmax) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != 0 {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Code)
+		return fmt.Errorf("%s CancelOrder Failed: %v %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -483,34 +481,28 @@ func (e *Bitmax) ApiKeyGet(mapParams map[string]string, strRequestPath, path str
 func (e *Bitmax) ApiKeyRequest(mapParams map[string]string, strMethod, strRequestPath, path string) string {
 	timestamp := fmt.Sprintf("%v", time.Now().UTC().UnixNano()/1000000)
 	strUrl := API_URL + strRequestPath
-	coID = fmt.Sprintf("%v%v", timestamp, time.Now().UTC().UnixNano())
 
-	if mapParams != nil {
-		mapParams["time"] = timestamp
-	}
+	mapParams["time"] = timestamp
 
 	jsonParams := ""
-
 	if nil != mapParams {
 		bytesParams, _ := json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
-	postBody := strings.NewReader(jsonParams)
 
-	request, err := http.NewRequest(strMethod, strUrl, postBody)
+	httpClient := &http.Client{}
 
+	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
 	if nil != err {
 		return err.Error()
 	}
-
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("x-auth-key", e.API_KEY)
 	request.Header.Add("x-auth-timestamp", timestamp)
-	request.Header.Add("x-auth-signature", ComputeHmac256EncodingTwice(CreatePayload(timestamp, path, coID), e.API_SECRET))
-	request.Header.Add("x-auth-coid", coID)
+	request.Header.Add("x-auth-signature", ComputeHmac256EncodingTwice(CreatePayload(timestamp, path, mapParams["coid"]), e.API_SECRET))
+	request.Header.Add("x-auth-coid", mapParams["coid"])
 
 	// 发出请求
-	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
 	if nil != err {
 		return err.Error()

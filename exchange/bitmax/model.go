@@ -84,9 +84,3 @@ type OrderStatus struct {
 	FeeAsset   string `json:"feeAsset"`
 	Status     string `json:"status"`
 }
-
-type CancelOrder struct {
-	Coid    string `json:"coid"`
-	Action  string `json:"action"`
-	Success bool   `json:"success"`
-}
