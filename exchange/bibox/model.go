@@ -55,27 +55,25 @@ type OrderBook struct {
 }
 
 type AccountBalances []struct {
-	TotalBtc   string `json:"total_btc"`
-	TotalCny   string `json:"total_cny"`
-	TotalUsd   string `json:"total_usd"`
-	AssetsList []struct {
-		CoinSymbol string `json:"coin_symbol"`
-		Balance    string `json:"balance"`
-		Freeze     string `json:"freeze"`
-		BTCValue   string `json:"BTCValue"`
-		CNYValue   string `json:"CNYValue"`
-		USDValue   string `json:"USDValue"`
-	} `json:"assets_list"`
+	Result struct {
+		TotalBtc   string `json:"total_btc"`
+		TotalCny   string `json:"total_cny"`
+		TotalUsd   string `json:"total_usd"`
+		AssetsList []struct {
+			CoinSymbol string `json:"coin_symbol"`
+			Balance    string `json:"balance"`
+			Freeze     string `json:"freeze"`
+			BTCValue   string `json:"BTCValue"`
+			CNYValue   string `json:"CNYValue"`
+			USDValue   string `json:"USDValue"`
+		} `json:"assets_list"`
+	} `json:"result"`
+	Cmd string `json:"cmd"`
 }
 
 type PlaceOrder []struct {
-	Error struct {
-		Code string `json:"code"`
-		Msg  string `json:"msg"`
-	} `json:"error"`
 	Result int    `json:"result"`
 	Cmd    string `json:"cmd"`
-	Index  int    `json:"index"`
 }
 
 type OrderStatus []struct {
@@ -105,5 +103,4 @@ type OrderStatus []struct {
 type CancelOrder []struct {
 	Result string `json:"result"`
 	Cmd    string `json:"cmd"`
-	Index  int    `json:"index"`
 }

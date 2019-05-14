@@ -474,7 +474,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 387,
+            "CoinID": 388,
             "Coin": null,
             "ExSymbol": "ARDR0",
             "TxFee": 1,
@@ -485,7 +485,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 388,
+            "CoinID": 389,
             "Coin": null,
             "ExSymbol": "JNS0",
             "TxFee": 1,
@@ -496,7 +496,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 389,
+            "CoinID": 390,
             "Coin": null,
             "ExSymbol": "LNK",
             "TxFee": 2,
@@ -507,7 +507,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 390,
+            "CoinID": 391,
             "Coin": null,
             "ExSymbol": "STEX",
             "TxFee": 2,
@@ -518,7 +518,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 391,
+            "CoinID": 392,
             "Coin": null,
             "ExSymbol": "ADL0",
             "TxFee": 1,
@@ -529,7 +529,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 392,
+            "CoinID": 393,
             "Coin": null,
             "ExSymbol": "ICE",
             "TxFee": 0.007,
@@ -540,7 +540,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 393,
+            "CoinID": 394,
             "Coin": null,
             "ExSymbol": "SMART",
             "TxFee": 0.5,
@@ -551,7 +551,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 394,
+            "CoinID": 395,
             "Coin": null,
             "ExSymbol": "DIX",
             "TxFee": 2,
@@ -562,7 +562,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 395,
+            "CoinID": 396,
             "Coin": null,
             "ExSymbol": "JET",
             "TxFee": 0.007,
@@ -573,7 +573,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 396,
+            "CoinID": 397,
             "Coin": null,
             "ExSymbol": "Ohni",
             "TxFee": 0.007,
@@ -584,7 +584,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 397,
+            "CoinID": 398,
             "Coin": null,
             "ExSymbol": "BULL",
             "TxFee": 0.007,
@@ -595,7 +595,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 398,
+            "CoinID": 399,
             "Coin": null,
             "ExSymbol": "RLX",
             "TxFee": 0.007,
@@ -606,7 +606,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 399,
+            "CoinID": 400,
             "Coin": null,
             "ExSymbol": "ALTCOM",
             "TxFee": 0.002,
@@ -617,7 +617,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 400,
+            "CoinID": 401,
             "Coin": null,
             "ExSymbol": "BRAT",
             "TxFee": 0.007,
@@ -628,7 +628,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 401,
+            "CoinID": 402,
             "Coin": null,
             "ExSymbol": "SIGT",
             "TxFee": 0.001,
@@ -639,7 +639,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 402,
+            "CoinID": 403,
             "Coin": null,
             "ExSymbol": "TZC",
             "TxFee": 0.01,
@@ -650,7 +650,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 403,
+            "CoinID": 404,
             "Coin": null,
             "ExSymbol": "ONEA",
             "TxFee": 0.002,
@@ -661,7 +661,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 404,
+            "CoinID": 405,
             "Coin": null,
             "ExSymbol": "PGC",
             "TxFee": 0.002,
@@ -672,7 +672,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 405,
+            "CoinID": 406,
             "Coin": null,
             "ExSymbol": "WHL",
             "TxFee": 0.002,
@@ -683,7 +683,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 406,
+            "CoinID": 407,
             "Coin": null,
             "ExSymbol": "PIRL",
             "TxFee": 1,
@@ -694,7 +694,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 407,
+            "CoinID": 408,
             "Coin": null,
             "ExSymbol": "SHF",
             "TxFee": 0.004,
@@ -705,7 +705,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 408,
+            "CoinID": 409,
             "Coin": null,
             "ExSymbol": "BCN",
             "TxFee": 5,
@@ -716,7 +716,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 409,
+            "CoinID": 410,
             "Coin": null,
             "ExSymbol": "ITNS0",
             "TxFee": 0.01,
@@ -727,7 +727,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 410,
+            "CoinID": 411,
             "Coin": null,
             "ExSymbol": "XSH",
             "TxFee": 15,
@@ -738,7 +738,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 411,
+            "CoinID": 412,
             "Coin": null,
             "ExSymbol": "BBR",
             "TxFee": 0.3,
@@ -749,7 +749,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 412,
+            "CoinID": 413,
             "Coin": null,
             "ExSymbol": "ELLA",
             "TxFee": 0.3,
@@ -760,7 +760,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 413,
+            "CoinID": 414,
             "Coin": null,
             "ExSymbol": "XIOS",
             "TxFee": 0.01,
@@ -771,7 +771,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 414,
+            "CoinID": 415,
             "Coin": null,
             "ExSymbol": "AAA",
             "TxFee": 0.01,
@@ -782,7 +782,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 415,
+            "CoinID": 416,
             "Coin": null,
             "ExSymbol": "PRG",
             "TxFee": 0.007,
@@ -793,7 +793,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 416,
+            "CoinID": 417,
             "Coin": null,
             "ExSymbol": "INN",
             "TxFee": 0.001,
@@ -804,7 +804,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 417,
+            "CoinID": 418,
             "Coin": null,
             "ExSymbol": "LTK",
             "TxFee": 0.001,
@@ -815,7 +815,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 418,
+            "CoinID": 419,
             "Coin": null,
             "ExSymbol": "MFC",
             "TxFee": 0.3,
@@ -826,7 +826,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 419,
+            "CoinID": 420,
             "Coin": null,
             "ExSymbol": "FOR",
             "TxFee": 0.001,
@@ -837,7 +837,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 420,
+            "CoinID": 421,
             "Coin": null,
             "ExSymbol": "EQT",
             "TxFee": 0.001,
@@ -848,7 +848,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 421,
+            "CoinID": 422,
             "Coin": null,
             "ExSymbol": "ONION",
             "TxFee": 0.003,
@@ -859,7 +859,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 422,
+            "CoinID": 423,
             "Coin": null,
             "ExSymbol": "NUKO",
             "TxFee": 0.005,
@@ -870,7 +870,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 423,
+            "CoinID": 424,
             "Coin": null,
             "ExSymbol": "ETHCA",
             "TxFee": 0.001,
@@ -881,7 +881,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 424,
+            "CoinID": 425,
             "Coin": null,
             "ExSymbol": "JIYOX",
             "TxFee": 0.001,
@@ -892,7 +892,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 425,
+            "CoinID": 426,
             "Coin": null,
             "ExSymbol": "EGX",
             "TxFee": 0,
@@ -903,7 +903,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 426,
+            "CoinID": 427,
             "Coin": null,
             "ExSymbol": "RUPX",
             "TxFee": 2,
@@ -914,7 +914,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 427,
+            "CoinID": 428,
             "Coin": null,
             "ExSymbol": "PNX",
             "TxFee": 10,
@@ -925,7 +925,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 428,
+            "CoinID": 429,
             "Coin": null,
             "ExSymbol": "USA",
             "TxFee": 0.001,
@@ -936,7 +936,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 429,
+            "CoinID": 430,
             "Coin": null,
             "ExSymbol": "GRIM",
             "TxFee": 0.002,
@@ -947,7 +947,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 430,
+            "CoinID": 431,
             "Coin": null,
             "ExSymbol": "COMP",
             "TxFee": 0.001,
@@ -958,7 +958,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 431,
+            "CoinID": 432,
             "Coin": null,
             "ExSymbol": "EAG",
             "TxFee": 0.001,
@@ -969,7 +969,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 432,
+            "CoinID": 433,
             "Coin": null,
             "ExSymbol": "MSR",
             "TxFee": 0.05,
@@ -980,7 +980,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 433,
+            "CoinID": 434,
             "Coin": null,
             "ExSymbol": "DRT",
             "TxFee": 0.007,
@@ -991,7 +991,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 434,
+            "CoinID": 435,
             "Coin": null,
             "ExSymbol": "HUSH",
             "TxFee": 0.001,
@@ -1002,7 +1002,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 435,
+            "CoinID": 436,
             "Coin": null,
             "ExSymbol": "MBCH",
             "TxFee": 0.001,
@@ -1013,7 +1013,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 436,
+            "CoinID": 437,
             "Coin": null,
             "ExSymbol": "TRDC",
             "TxFee": 0.01,
@@ -1024,7 +1024,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 437,
+            "CoinID": 438,
             "Coin": null,
             "ExSymbol": "GFX",
             "TxFee": 0.001,
@@ -1035,7 +1035,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 438,
+            "CoinID": 439,
             "Coin": null,
             "ExSymbol": "ASIC",
             "TxFee": 0.001,
@@ -1046,7 +1046,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 439,
+            "CoinID": 440,
             "Coin": null,
             "ExSymbol": "ABJ",
             "TxFee": 0.001,
@@ -1057,7 +1057,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 440,
+            "CoinID": 441,
             "Coin": null,
             "ExSymbol": "DSR",
             "TxFee": 0.001,
@@ -1068,7 +1068,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 441,
+            "CoinID": 442,
             "Coin": null,
             "ExSymbol": "TOTN",
             "TxFee": 0.001,
@@ -1079,7 +1079,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 442,
+            "CoinID": 443,
             "Coin": null,
             "ExSymbol": "EVN",
             "TxFee": 0.007,
@@ -1090,7 +1090,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 443,
+            "CoinID": 444,
             "Coin": null,
             "ExSymbol": "SUP",
             "TxFee": 100,
@@ -1101,7 +1101,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 444,
+            "CoinID": 445,
             "Coin": null,
             "ExSymbol": "SBIT",
             "TxFee": 0.003,
@@ -1112,7 +1112,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 445,
+            "CoinID": 446,
             "Coin": null,
             "ExSymbol": "POS",
             "TxFee": 0.003,
@@ -1123,7 +1123,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 446,
+            "CoinID": 447,
             "Coin": null,
             "ExSymbol": "CNBC",
             "TxFee": 0.003,
@@ -1134,7 +1134,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 447,
+            "CoinID": 448,
             "Coin": null,
             "ExSymbol": "D",
             "TxFee": 0.003,
@@ -1145,7 +1145,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 448,
+            "CoinID": 449,
             "Coin": null,
             "ExSymbol": "XCPO",
             "TxFee": 0.003,
@@ -1156,7 +1156,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 449,
+            "CoinID": 450,
             "Coin": null,
             "ExSymbol": "AEX",
             "TxFee": 0.5,
@@ -1167,7 +1167,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 450,
+            "CoinID": 451,
             "Coin": null,
             "ExSymbol": "GBX",
             "TxFee": 0.05,
@@ -1178,7 +1178,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 451,
+            "CoinID": 452,
             "Coin": null,
             "ExSymbol": "YTN",
             "TxFee": 0.003,
@@ -1189,7 +1189,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 452,
+            "CoinID": 453,
             "Coin": null,
             "ExSymbol": "FNO",
             "TxFee": 1,
@@ -1200,7 +1200,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 453,
+            "CoinID": 454,
             "Coin": null,
             "ExSymbol": "DRIP0",
             "TxFee": 0.007,
@@ -1211,7 +1211,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 454,
+            "CoinID": 455,
             "Coin": null,
             "ExSymbol": "CSTL",
             "TxFee": 0.003,
@@ -1222,7 +1222,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 455,
+            "CoinID": 456,
             "Coin": null,
             "ExSymbol": "PFR",
             "TxFee": 0.007,
@@ -1233,7 +1233,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 456,
+            "CoinID": 457,
             "Coin": null,
             "ExSymbol": "ZNY",
             "TxFee": 0.003,
@@ -1244,7 +1244,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 457,
+            "CoinID": 458,
             "Coin": null,
             "ExSymbol": "BOXY",
             "TxFee": 0.003,
@@ -1255,7 +1255,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 458,
+            "CoinID": 459,
             "Coin": null,
             "ExSymbol": "TYC",
             "TxFee": 0.003,
@@ -1266,7 +1266,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 459,
+            "CoinID": 460,
             "Coin": null,
             "ExSymbol": "XUN",
             "TxFee": 70.02,
@@ -1277,7 +1277,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 460,
+            "CoinID": 461,
             "Coin": null,
             "ExSymbol": "XLQ",
             "TxFee": 0.003,
@@ -1288,7 +1288,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 461,
+            "CoinID": 462,
             "Coin": null,
             "ExSymbol": "XGOX",
             "TxFee": 0.003,
@@ -1299,7 +1299,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 462,
+            "CoinID": 463,
             "Coin": null,
             "ExSymbol": "JOY",
             "TxFee": 0.003,
@@ -1310,7 +1310,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 463,
+            "CoinID": 464,
             "Coin": null,
             "ExSymbol": "BTCZ",
             "TxFee": 15,
@@ -1321,7 +1321,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 464,
+            "CoinID": 465,
             "Coin": null,
             "ExSymbol": "WOKE",
             "TxFee": 0.003,
@@ -1332,7 +1332,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 465,
+            "CoinID": 466,
             "Coin": null,
             "ExSymbol": "KMC",
             "TxFee": 0.01,
@@ -1343,7 +1343,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 466,
+            "CoinID": 467,
             "Coin": null,
             "ExSymbol": "EGOLD",
             "TxFee": 0.007,
@@ -1354,7 +1354,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 467,
+            "CoinID": 468,
             "Coin": null,
             "ExSymbol": "JEW",
             "TxFee": 0.003,
@@ -1365,7 +1365,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 468,
+            "CoinID": 469,
             "Coin": null,
             "ExSymbol": "EBCH",
             "TxFee": 0.007,
@@ -1376,7 +1376,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 469,
+            "CoinID": 470,
             "Coin": null,
             "ExSymbol": "ERC",
             "TxFee": 0.003,
@@ -1387,7 +1387,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 470,
+            "CoinID": 471,
             "Coin": null,
             "ExSymbol": "CRC",
             "TxFee": 100,
@@ -1398,7 +1398,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 471,
+            "CoinID": 472,
             "Coin": null,
             "ExSymbol": "BWK",
             "TxFee": 0.003,
@@ -1409,7 +1409,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 472,
+            "CoinID": 473,
             "Coin": null,
             "ExSymbol": "TPC",
             "TxFee": 0.003,
@@ -1420,7 +1420,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 473,
+            "CoinID": 474,
             "Coin": null,
             "ExSymbol": "MGC",
             "TxFee": 0.003,
@@ -1431,7 +1431,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 474,
+            "CoinID": 475,
             "Coin": null,
             "ExSymbol": "AIC",
             "TxFee": 0.003,
@@ -1442,7 +1442,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 475,
+            "CoinID": 476,
             "Coin": null,
             "ExSymbol": "PAS",
             "TxFee": 0.007,
@@ -1453,7 +1453,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 476,
+            "CoinID": 477,
             "Coin": null,
             "ExSymbol": "PYY",
             "TxFee": 0.003,
@@ -1464,7 +1464,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 477,
+            "CoinID": 478,
             "Coin": null,
             "ExSymbol": "KLK",
             "TxFee": 0.003,
@@ -1475,7 +1475,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 478,
+            "CoinID": 479,
             "Coin": null,
             "ExSymbol": "STAK",
             "TxFee": 0.3,
@@ -1486,7 +1486,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 479,
+            "CoinID": 480,
             "Coin": null,
             "ExSymbol": "STCN",
             "TxFee": 0.003,
@@ -1497,7 +1497,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 480,
+            "CoinID": 481,
             "Coin": null,
             "ExSymbol": "ONEX",
             "TxFee": 0.003,
@@ -1508,7 +1508,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 481,
+            "CoinID": 482,
             "Coin": null,
             "ExSymbol": "ASAP",
             "TxFee": 0.003,
@@ -1519,7 +1519,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 482,
+            "CoinID": 483,
             "Coin": null,
             "ExSymbol": "NDK",
             "TxFee": 0.003,
@@ -1530,7 +1530,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 483,
+            "CoinID": 484,
             "Coin": null,
             "ExSymbol": "BRIM",
             "TxFee": 0.003,
@@ -1541,7 +1541,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 484,
+            "CoinID": 485,
             "Coin": null,
             "ExSymbol": "XM",
             "TxFee": 0.003,
@@ -1552,7 +1552,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 485,
+            "CoinID": 486,
             "Coin": null,
             "ExSymbol": "LTD",
             "TxFee": 0.007,
@@ -1563,7 +1563,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 486,
+            "CoinID": 487,
             "Coin": null,
             "ExSymbol": "RTN",
             "TxFee": 0.007,
@@ -1574,7 +1574,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 487,
+            "CoinID": 488,
             "Coin": null,
             "ExSymbol": "TRDT",
             "TxFee": 0.007,
@@ -1585,7 +1585,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 488,
+            "CoinID": 489,
             "Coin": null,
             "ExSymbol": "EBTC",
             "TxFee": 0.007,
@@ -1596,7 +1596,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 489,
+            "CoinID": 490,
             "Coin": null,
             "ExSymbol": "BOLD",
             "TxFee": 1.48,
@@ -1607,7 +1607,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 490,
+            "CoinID": 491,
             "Coin": null,
             "ExSymbol": "VNC",
             "TxFee": 0.007,
@@ -1618,7 +1618,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 491,
+            "CoinID": 492,
             "Coin": null,
             "ExSymbol": "BSDC",
             "TxFee": 0.007,
@@ -1629,7 +1629,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 492,
+            "CoinID": 493,
             "Coin": null,
             "ExSymbol": "FLS",
             "TxFee": 0.003,
@@ -1640,7 +1640,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 493,
+            "CoinID": 494,
             "Coin": null,
             "ExSymbol": "XZM",
             "TxFee": 0.003,
@@ -1651,7 +1651,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 494,
+            "CoinID": 495,
             "Coin": null,
             "ExSymbol": "GIRO",
             "TxFee": 0.003,
@@ -1662,7 +1662,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 495,
+            "CoinID": 496,
             "Coin": null,
             "ExSymbol": "HYTV",
             "TxFee": 0.007,
@@ -1673,7 +1673,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 496,
+            "CoinID": 497,
             "Coin": null,
             "ExSymbol": "OMGC",
             "TxFee": 0.003,
@@ -1684,7 +1684,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 497,
+            "CoinID": 498,
             "Coin": null,
             "ExSymbol": "BZL",
             "TxFee": 0.7,
@@ -1695,7 +1695,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 498,
+            "CoinID": 499,
             "Coin": null,
             "ExSymbol": "DERO",
             "TxFee": 0.07,
@@ -1706,7 +1706,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 499,
+            "CoinID": 500,
             "Coin": null,
             "ExSymbol": "CMPCO",
             "TxFee": 0.003,
@@ -1717,7 +1717,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 500,
+            "CoinID": 501,
             "Coin": null,
             "ExSymbol": "IC",
             "TxFee": 0.003,
@@ -1728,18 +1728,18 @@
             "Issue": ""
         },
         {
-            "CoinID": 501,
+            "CoinID": 502,
             "Coin": null,
             "ExSymbol": "POLIS",
             "TxFee": 0.003,
-            "Withdraw": false,
-            "Deposit": false,
+            "Withdraw": true,
+            "Deposit": true,
             "Confirmation": 2,
             "Listed": true,
             "Issue": ""
         },
         {
-            "CoinID": 502,
+            "CoinID": 503,
             "Coin": null,
             "ExSymbol": "XGT",
             "TxFee": 0.007,
@@ -1750,7 +1750,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 503,
+            "CoinID": 504,
             "Coin": null,
             "ExSymbol": "ICC",
             "TxFee": 0.007,
@@ -1761,7 +1761,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 504,
+            "CoinID": 505,
             "Coin": null,
             "ExSymbol": "BLAS",
             "TxFee": 0.003,
@@ -1772,7 +1772,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 505,
+            "CoinID": 506,
             "Coin": null,
             "ExSymbol": "LINDA",
             "TxFee": 0.003,
@@ -1783,7 +1783,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 506,
+            "CoinID": 507,
             "Coin": null,
             "ExSymbol": "B2B",
             "TxFee": 1,
@@ -1794,7 +1794,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 507,
+            "CoinID": 508,
             "Coin": null,
             "ExSymbol": "RRC",
             "TxFee": 1,
@@ -1805,7 +1805,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 508,
+            "CoinID": 509,
             "Coin": null,
             "ExSymbol": "SCORE",
             "TxFee": 0.003,
@@ -1816,7 +1816,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 509,
+            "CoinID": 510,
             "Coin": null,
             "ExSymbol": "BTLLC",
             "TxFee": 0.003,
@@ -1827,7 +1827,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 510,
+            "CoinID": 511,
             "Coin": null,
             "ExSymbol": "BTCL",
             "TxFee": 0.007,
@@ -1838,7 +1838,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 511,
+            "CoinID": 512,
             "Coin": null,
             "ExSymbol": "ETM",
             "TxFee": 0.007,
@@ -1849,7 +1849,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 512,
+            "CoinID": 513,
             "Coin": null,
             "ExSymbol": "EXCC",
             "TxFee": 0.003,
@@ -1860,7 +1860,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 513,
+            "CoinID": 514,
             "Coin": null,
             "ExSymbol": "BOSS",
             "TxFee": 0.007,
@@ -1871,7 +1871,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 514,
+            "CoinID": 515,
             "Coin": null,
             "ExSymbol": "PCOIN",
             "TxFee": 0.003,
@@ -1882,7 +1882,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 515,
+            "CoinID": 516,
             "Coin": null,
             "ExSymbol": "DALC",
             "TxFee": 0.007,
@@ -1893,7 +1893,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 516,
+            "CoinID": 517,
             "Coin": null,
             "ExSymbol": "BTCX",
             "TxFee": 0.003,
@@ -1904,7 +1904,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 517,
+            "CoinID": 518,
             "Coin": null,
             "ExSymbol": "BSS",
             "TxFee": 0.003,
@@ -1915,7 +1915,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 518,
+            "CoinID": 519,
             "Coin": null,
             "ExSymbol": "DVRS",
             "TxFee": 0.003,
@@ -1926,7 +1926,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 519,
+            "CoinID": 520,
             "Coin": null,
             "ExSymbol": "MUN",
             "TxFee": 0.003,
@@ -1937,7 +1937,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 520,
+            "CoinID": 521,
             "Coin": null,
             "ExSymbol": "ORE",
             "TxFee": 0.1,
@@ -1948,7 +1948,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 521,
+            "CoinID": 522,
             "Coin": null,
             "ExSymbol": "GUESS",
             "TxFee": 0.007,
@@ -1959,7 +1959,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 522,
+            "CoinID": 523,
             "Coin": null,
             "ExSymbol": "PHILS",
             "TxFee": 0.003,
@@ -1970,7 +1970,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 523,
+            "CoinID": 524,
             "Coin": null,
             "ExSymbol": "NUM",
             "TxFee": 0.003,
@@ -1981,7 +1981,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 524,
+            "CoinID": 525,
             "Coin": null,
             "ExSymbol": "TUN",
             "TxFee": 0.003,
@@ -1992,7 +1992,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 525,
+            "CoinID": 526,
             "Coin": null,
             "ExSymbol": "KLT",
             "TxFee": 0.003,
@@ -2003,7 +2003,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 526,
+            "CoinID": 527,
             "Coin": null,
             "ExSymbol": "SPK",
             "TxFee": 0.3,
@@ -2014,7 +2014,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 527,
+            "CoinID": 528,
             "Coin": null,
             "ExSymbol": "GOA",
             "TxFee": 0.003,
@@ -2025,7 +2025,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 528,
+            "CoinID": 529,
             "Coin": null,
             "ExSymbol": "EQL",
             "TxFee": 0.007,
@@ -2036,7 +2036,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 529,
+            "CoinID": 530,
             "Coin": null,
             "ExSymbol": "AC3",
             "TxFee": 0.003,
@@ -2047,7 +2047,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 530,
+            "CoinID": 531,
             "Coin": null,
             "ExSymbol": "VIC",
             "TxFee": 0.003,
@@ -2058,7 +2058,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 531,
+            "CoinID": 532,
             "Coin": null,
             "ExSymbol": "XSG",
             "TxFee": 0.5,
@@ -2069,7 +2069,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 532,
+            "CoinID": 533,
             "Coin": null,
             "ExSymbol": "HPP",
             "TxFee": 0.003,
@@ -2080,7 +2080,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 533,
+            "CoinID": 534,
             "Coin": null,
             "ExSymbol": "ONEUP",
             "TxFee": 0.003,
@@ -2091,7 +2091,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 534,
+            "CoinID": 535,
             "Coin": null,
             "ExSymbol": "PROC",
             "TxFee": 0.003,
@@ -2102,7 +2102,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 535,
+            "CoinID": 536,
             "Coin": null,
             "ExSymbol": "MNB",
             "TxFee": 0.003,
@@ -2113,7 +2113,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 536,
+            "CoinID": 537,
             "Coin": null,
             "ExSymbol": "SAGA",
             "TxFee": 0.003,
@@ -2124,7 +2124,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 537,
+            "CoinID": 538,
             "Coin": null,
             "ExSymbol": "MYCE",
             "TxFee": 0.003,
@@ -2135,7 +2135,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 538,
+            "CoinID": 539,
             "Coin": null,
             "ExSymbol": "BWS",
             "TxFee": 0.003,
@@ -2146,7 +2146,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 539,
+            "CoinID": 540,
             "Coin": null,
             "ExSymbol": "BLAST",
             "TxFee": 5,
@@ -2157,7 +2157,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 540,
+            "CoinID": 541,
             "Coin": null,
             "ExSymbol": "XAX",
             "TxFee": 0.003,
@@ -2168,7 +2168,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 541,
+            "CoinID": 542,
             "Coin": null,
             "ExSymbol": "BLTG",
             "TxFee": 0.3,
@@ -2179,7 +2179,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 542,
+            "CoinID": 543,
             "Coin": null,
             "ExSymbol": "CHEESE",
             "TxFee": 0.003,
@@ -2190,7 +2190,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 543,
+            "CoinID": 544,
             "Coin": null,
             "ExSymbol": "MGN",
             "TxFee": 0.003,
@@ -2201,7 +2201,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 544,
+            "CoinID": 545,
             "Coin": null,
             "ExSymbol": "SGL",
             "TxFee": 0.003,
@@ -2212,7 +2212,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 545,
+            "CoinID": 546,
             "Coin": null,
             "ExSymbol": "BCP",
             "TxFee": 0.003,
@@ -2223,7 +2223,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 546,
+            "CoinID": 547,
             "Coin": null,
             "ExSymbol": "BTF",
             "TxFee": 0.003,
@@ -2234,7 +2234,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 547,
+            "CoinID": 548,
             "Coin": null,
             "ExSymbol": "CBS",
             "TxFee": 0.003,
@@ -2245,7 +2245,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 548,
+            "CoinID": 549,
             "Coin": null,
             "ExSymbol": "YIC",
             "TxFee": 0.003,
@@ -2256,7 +2256,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 549,
+            "CoinID": 550,
             "Coin": null,
             "ExSymbol": "CRU",
             "TxFee": 0.003,
@@ -2267,7 +2267,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 550,
+            "CoinID": 551,
             "Coin": null,
             "ExSymbol": "LIZ",
             "TxFee": 0.003,
@@ -2278,7 +2278,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 551,
+            "CoinID": 552,
             "Coin": null,
             "ExSymbol": "MDCR",
             "TxFee": 0.003,
@@ -2289,7 +2289,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 552,
+            "CoinID": 553,
             "Coin": null,
             "ExSymbol": "MEDIC",
             "TxFee": 0.003,
@@ -2300,7 +2300,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 553,
+            "CoinID": 554,
             "Coin": null,
             "ExSymbol": "JC",
             "TxFee": 0.007,
@@ -2311,7 +2311,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 554,
+            "CoinID": 555,
             "Coin": null,
             "ExSymbol": "FERMA",
             "TxFee": 0.001,
@@ -2322,7 +2322,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 555,
+            "CoinID": 556,
             "Coin": null,
             "ExSymbol": "HAT",
             "TxFee": 0.007,
@@ -2333,7 +2333,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 556,
+            "CoinID": 557,
             "Coin": null,
             "ExSymbol": "TSS",
             "TxFee": 0.007,
@@ -2344,7 +2344,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 557,
+            "CoinID": 558,
             "Coin": null,
             "ExSymbol": "ETG",
             "TxFee": 0.007,
@@ -2355,7 +2355,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 558,
+            "CoinID": 559,
             "Coin": null,
             "ExSymbol": "BART",
             "TxFee": 0.007,
@@ -2366,7 +2366,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 559,
+            "CoinID": 560,
             "Coin": null,
             "ExSymbol": "VIVO",
             "TxFee": 0.003,
@@ -2377,7 +2377,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 560,
+            "CoinID": 561,
             "Coin": null,
             "ExSymbol": "XLC",
             "TxFee": 1,
@@ -2388,7 +2388,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 561,
+            "CoinID": 562,
             "Coin": null,
             "ExSymbol": "MOUSE",
             "TxFee": 0.003,
@@ -2399,7 +2399,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 562,
+            "CoinID": 563,
             "Coin": null,
             "ExSymbol": "ADV",
             "TxFee": 0.003,
@@ -2410,7 +2410,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 563,
+            "CoinID": 564,
             "Coin": null,
             "ExSymbol": "RAP",
             "TxFee": 0.003,
@@ -2421,7 +2421,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 564,
+            "CoinID": 565,
             "Coin": null,
             "ExSymbol": "BHD",
             "TxFee": 10,
@@ -2432,7 +2432,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 565,
+            "CoinID": 566,
             "Coin": null,
             "ExSymbol": "KRB",
             "TxFee": 0.1,
@@ -2443,7 +2443,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 566,
+            "CoinID": 567,
             "Coin": null,
             "ExSymbol": "PRDC",
             "TxFee": 30,
@@ -2454,7 +2454,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 567,
+            "CoinID": 568,
             "Coin": null,
             "ExSymbol": "XGOD",
             "TxFee": 0.003,
@@ -2465,7 +2465,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 568,
+            "CoinID": 569,
             "Coin": null,
             "ExSymbol": "SAROS",
             "TxFee": 0.003,
@@ -2476,7 +2476,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 569,
+            "CoinID": 570,
             "Coin": null,
             "ExSymbol": "QBIC",
             "TxFee": 0.003,
@@ -2487,7 +2487,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 570,
+            "CoinID": 571,
             "Coin": null,
             "ExSymbol": "TIN",
             "TxFee": 0.003,
@@ -2498,7 +2498,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 571,
+            "CoinID": 572,
             "Coin": null,
             "ExSymbol": "BEET",
             "TxFee": 0.3,
@@ -2509,7 +2509,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 572,
+            "CoinID": 573,
             "Coin": null,
             "ExSymbol": "STONE",
             "TxFee": 0.003,
@@ -2520,7 +2520,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 573,
+            "CoinID": 574,
             "Coin": null,
             "ExSymbol": "PBS",
             "TxFee": 0.003,
@@ -2531,7 +2531,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 574,
+            "CoinID": 575,
             "Coin": null,
             "ExSymbol": "BITG",
             "TxFee": 0.01,
@@ -2542,7 +2542,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 575,
+            "CoinID": 576,
             "Coin": null,
             "ExSymbol": "BRC",
             "TxFee": 0.007,
@@ -2553,7 +2553,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 576,
+            "CoinID": 577,
             "Coin": null,
             "ExSymbol": "ZEL",
             "TxFee": 1,
@@ -2564,7 +2564,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 577,
+            "CoinID": 578,
             "Coin": null,
             "ExSymbol": "REDV",
             "TxFee": 0.007,
@@ -2575,7 +2575,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 578,
+            "CoinID": 579,
             "Coin": null,
             "ExSymbol": "BINS",
             "TxFee": 0.007,
@@ -2586,7 +2586,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 579,
+            "CoinID": 580,
             "Coin": null,
             "ExSymbol": "DIN",
             "TxFee": 0.003,
@@ -2597,7 +2597,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 580,
+            "CoinID": 581,
             "Coin": null,
             "ExSymbol": "ITC",
             "TxFee": 0.003,
@@ -2608,7 +2608,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 581,
+            "CoinID": 582,
             "Coin": null,
             "ExSymbol": "EDL",
             "TxFee": 100,
@@ -2619,7 +2619,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 582,
+            "CoinID": 583,
             "Coin": null,
             "ExSymbol": "BTCP",
             "TxFee": 50,
@@ -2630,7 +2630,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 583,
+            "CoinID": 584,
             "Coin": null,
             "ExSymbol": "DEV",
             "TxFee": 0.003,
@@ -2641,7 +2641,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 584,
+            "CoinID": 585,
             "Coin": null,
             "ExSymbol": "DIGIFEL",
             "TxFee": 0.003,
@@ -2652,7 +2652,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 585,
+            "CoinID": 586,
             "Coin": null,
             "ExSymbol": "SBC",
             "TxFee": 0.003,
@@ -2663,7 +2663,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 586,
+            "CoinID": 587,
             "Coin": null,
             "ExSymbol": "UFR",
             "TxFee": 0.007,
@@ -2674,7 +2674,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 587,
+            "CoinID": 588,
             "Coin": null,
             "ExSymbol": "ATR",
             "TxFee": 0.003,
@@ -2685,7 +2685,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 588,
+            "CoinID": 589,
             "Coin": null,
             "ExSymbol": "BBK",
             "TxFee": 10,
@@ -2696,7 +2696,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 589,
+            "CoinID": 590,
             "Coin": null,
             "ExSymbol": "HIGHT",
             "TxFee": 0.003,
@@ -2707,7 +2707,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 590,
+            "CoinID": 591,
             "Coin": null,
             "ExSymbol": "DV7",
             "TxFee": 0.003,
@@ -2718,7 +2718,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 591,
+            "CoinID": 592,
             "Coin": null,
             "ExSymbol": "CTF",
             "TxFee": 0.003,
@@ -2729,7 +2729,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 592,
+            "CoinID": 593,
             "Coin": null,
             "ExSymbol": "F0ME",
             "TxFee": 0.003,
@@ -2740,7 +2740,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 593,
+            "CoinID": 594,
             "Coin": null,
             "ExSymbol": "DATO",
             "TxFee": 0.007,
@@ -2751,7 +2751,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 594,
+            "CoinID": 595,
             "Coin": null,
             "ExSymbol": "TRRP",
             "TxFee": 0.007,
@@ -2762,7 +2762,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 595,
+            "CoinID": 596,
             "Coin": null,
             "ExSymbol": "JBX",
             "TxFee": 0.007,
@@ -2773,7 +2773,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 596,
+            "CoinID": 597,
             "Coin": null,
             "ExSymbol": "HBF",
             "TxFee": 0.004,
@@ -2784,7 +2784,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 597,
+            "CoinID": 598,
             "Coin": null,
             "ExSymbol": "RACE",
             "TxFee": 0.003,
@@ -2795,7 +2795,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 598,
+            "CoinID": 599,
             "Coin": null,
             "ExSymbol": "SHND",
             "TxFee": 500,
@@ -2806,7 +2806,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 599,
+            "CoinID": 600,
             "Coin": null,
             "ExSymbol": "CIF",
             "TxFee": 0.003,
@@ -2817,7 +2817,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 600,
+            "CoinID": 601,
             "Coin": null,
             "ExSymbol": "BTCQ",
             "TxFee": 0.007,
@@ -2828,7 +2828,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 601,
+            "CoinID": 602,
             "Coin": null,
             "ExSymbol": "XAR",
             "TxFee": 0.003,
@@ -2839,7 +2839,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 602,
+            "CoinID": 603,
             "Coin": null,
             "ExSymbol": "EXUS",
             "TxFee": 0.003,
@@ -2850,7 +2850,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 603,
+            "CoinID": 604,
             "Coin": null,
             "ExSymbol": "XBR",
             "TxFee": 0.003,
@@ -2861,7 +2861,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 604,
+            "CoinID": 605,
             "Coin": null,
             "ExSymbol": "BTW",
             "TxFee": 0.1,
@@ -2872,7 +2872,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 605,
+            "CoinID": 606,
             "Coin": null,
             "ExSymbol": "CMOS",
             "TxFee": 0.003,
@@ -2883,7 +2883,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 606,
+            "CoinID": 607,
             "Coin": null,
             "ExSymbol": "SUPPO",
             "TxFee": 0.003,
@@ -2894,7 +2894,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 607,
+            "CoinID": 608,
             "Coin": null,
             "ExSymbol": "VTAR",
             "TxFee": 0.003,
@@ -2905,7 +2905,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 608,
+            "CoinID": 609,
             "Coin": null,
             "ExSymbol": "DIC",
             "TxFee": 2,
@@ -2916,7 +2916,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 609,
+            "CoinID": 610,
             "Coin": null,
             "ExSymbol": "BTCN",
             "TxFee": 1,
@@ -2927,7 +2927,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 610,
+            "CoinID": 611,
             "Coin": null,
             "ExSymbol": "AKA",
             "TxFee": 0.005,
@@ -2938,7 +2938,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 611,
+            "CoinID": 612,
             "Coin": null,
             "ExSymbol": "XDX",
             "TxFee": 0.003,
@@ -2949,7 +2949,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 612,
+            "CoinID": 613,
             "Coin": null,
             "ExSymbol": "ARA",
             "TxFee": 0.005,
@@ -2960,7 +2960,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 613,
+            "CoinID": 614,
             "Coin": null,
             "ExSymbol": "MDZ",
             "TxFee": 0.007,
@@ -2971,7 +2971,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 614,
+            "CoinID": 615,
             "Coin": null,
             "ExSymbol": "TKC",
             "TxFee": 0.007,
@@ -2982,7 +2982,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 615,
+            "CoinID": 616,
             "Coin": null,
             "ExSymbol": "ITL",
             "TxFee": 0.007,
@@ -2993,7 +2993,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 616,
+            "CoinID": 617,
             "Coin": null,
             "ExSymbol": "WAND",
             "TxFee": 0.007,
@@ -3004,7 +3004,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 617,
+            "CoinID": 618,
             "Coin": null,
             "ExSymbol": "ADL",
             "TxFee": 0.007,
@@ -3015,7 +3015,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 618,
+            "CoinID": 619,
             "Coin": null,
             "ExSymbol": "LUM",
             "TxFee": 0.007,
@@ -3026,7 +3026,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 619,
+            "CoinID": 620,
             "Coin": null,
             "ExSymbol": "ABS",
             "TxFee": 0.5,
@@ -3037,7 +3037,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 620,
+            "CoinID": 621,
             "Coin": null,
             "ExSymbol": "NIHL",
             "TxFee": 0.003,
@@ -3048,7 +3048,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 621,
+            "CoinID": 622,
             "Coin": null,
             "ExSymbol": "BTK",
             "TxFee": 200,
@@ -3059,7 +3059,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 622,
+            "CoinID": 623,
             "Coin": null,
             "ExSymbol": "YOC",
             "TxFee": 0.005,
@@ -3070,7 +3070,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 623,
+            "CoinID": 624,
             "Coin": null,
             "ExSymbol": "TWIST",
             "TxFee": 0.003,
@@ -3081,7 +3081,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 624,
+            "CoinID": 625,
             "Coin": null,
             "ExSymbol": "TT",
             "TxFee": 0.007,
@@ -3092,7 +3092,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 625,
+            "CoinID": 626,
             "Coin": null,
             "ExSymbol": "AEUR",
             "TxFee": 1,
@@ -3103,7 +3103,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 626,
+            "CoinID": 627,
             "Coin": null,
             "ExSymbol": "KAI",
             "TxFee": 20,
@@ -3114,7 +3114,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 627,
+            "CoinID": 628,
             "Coin": null,
             "ExSymbol": "LELE",
             "TxFee": 2.02,
@@ -3125,7 +3125,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 628,
+            "CoinID": 629,
             "Coin": null,
             "ExSymbol": "THOR",
             "TxFee": 0.003,
@@ -3136,7 +3136,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 629,
+            "CoinID": 630,
             "Coin": null,
             "ExSymbol": "BSM",
             "TxFee": 100,
@@ -3147,7 +3147,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 630,
+            "CoinID": 631,
             "Coin": null,
             "ExSymbol": "BTGA",
             "TxFee": 0.003,
@@ -3158,7 +3158,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 631,
+            "CoinID": 632,
             "Coin": null,
             "ExSymbol": "TRCN",
             "TxFee": 0.007,
@@ -3169,7 +3169,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 632,
+            "CoinID": 633,
             "Coin": null,
             "ExSymbol": "LEGIT",
             "TxFee": 0.007,
@@ -3180,7 +3180,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 633,
+            "CoinID": 634,
             "Coin": null,
             "ExSymbol": "BBN",
             "TxFee": 0.003,
@@ -3191,7 +3191,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 634,
+            "CoinID": 635,
             "Coin": null,
             "ExSymbol": "NYX",
             "TxFee": 0.003,
@@ -3202,7 +3202,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 635,
+            "CoinID": 636,
             "Coin": null,
             "ExSymbol": "TRF",
             "TxFee": 0.003,
@@ -3213,7 +3213,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 636,
+            "CoinID": 637,
             "Coin": null,
             "ExSymbol": "ATC",
             "TxFee": 0.003,
@@ -3224,7 +3224,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 637,
+            "CoinID": 638,
             "Coin": null,
             "ExSymbol": "STRN",
             "TxFee": 0.001,
@@ -3235,7 +3235,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 638,
+            "CoinID": 639,
             "Coin": null,
             "ExSymbol": "MCH",
             "TxFee": 0.003,
@@ -3246,7 +3246,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 639,
+            "CoinID": 640,
             "Coin": null,
             "ExSymbol": "SLRM",
             "TxFee": 0.007,
@@ -3257,7 +3257,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 640,
+            "CoinID": 641,
             "Coin": null,
             "ExSymbol": "C2C",
             "TxFee": 3.05,
@@ -3268,7 +3268,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 641,
+            "CoinID": 642,
             "Coin": null,
             "ExSymbol": "XBCN",
             "TxFee": 0.003,
@@ -3279,7 +3279,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 642,
+            "CoinID": 643,
             "Coin": null,
             "ExSymbol": "JNS",
             "TxFee": 2.02,
@@ -3290,7 +3290,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 643,
+            "CoinID": 644,
             "Coin": null,
             "ExSymbol": "TPCC",
             "TxFee": 0.003,
@@ -3301,7 +3301,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 644,
+            "CoinID": 645,
             "Coin": null,
             "ExSymbol": "OMB",
             "TxFee": 0.3,
@@ -3312,7 +3312,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 645,
+            "CoinID": 646,
             "Coin": null,
             "ExSymbol": "HELL",
             "TxFee": 0.007,
@@ -3323,7 +3323,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 646,
+            "CoinID": 647,
             "Coin": null,
             "ExSymbol": "PTR",
             "TxFee": 0.007,
@@ -3334,7 +3334,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 647,
+            "CoinID": 648,
             "Coin": null,
             "ExSymbol": "LCC",
             "TxFee": 0.5,
@@ -3345,7 +3345,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 648,
+            "CoinID": 649,
             "Coin": null,
             "ExSymbol": "LYF",
             "TxFee": 0.003,
@@ -3356,7 +3356,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 649,
+            "CoinID": 650,
             "Coin": null,
             "ExSymbol": "ELYA",
             "TxFee": 50,
@@ -3367,7 +3367,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 650,
+            "CoinID": 651,
             "Coin": null,
             "ExSymbol": "RBMC",
             "TxFee": 15,
@@ -3378,7 +3378,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 651,
+            "CoinID": 652,
             "Coin": null,
             "ExSymbol": "IOTN",
             "TxFee": 0.003,
@@ -3389,7 +3389,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 652,
+            "CoinID": 653,
             "Coin": null,
             "ExSymbol": "RECO",
             "TxFee": 0.003,
@@ -3400,7 +3400,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 653,
+            "CoinID": 654,
             "Coin": null,
             "ExSymbol": "XDRAC",
             "TxFee": 0.001,
@@ -3411,7 +3411,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 654,
+            "CoinID": 655,
             "Coin": null,
             "ExSymbol": "PLURA",
             "TxFee": 0.01,
@@ -3422,7 +3422,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 655,
+            "CoinID": 656,
             "Coin": null,
             "ExSymbol": "EXD",
             "TxFee": 0.001,
@@ -3433,7 +3433,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 656,
+            "CoinID": 657,
             "Coin": null,
             "ExSymbol": "LTCP",
             "TxFee": 0.003,
@@ -3444,7 +3444,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 657,
+            "CoinID": 658,
             "Coin": null,
             "ExSymbol": "VIT",
             "TxFee": 0.007,
@@ -3455,7 +3455,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 658,
+            "CoinID": 659,
             "Coin": null,
             "ExSymbol": "EXM",
             "TxFee": 15,
@@ -3466,7 +3466,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 659,
+            "CoinID": 660,
             "Coin": null,
             "ExSymbol": "WCO",
             "TxFee": 0.007,
@@ -3477,7 +3477,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 660,
+            "CoinID": 661,
             "Coin": null,
             "ExSymbol": "STY",
             "TxFee": 0.007,
@@ -3488,7 +3488,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 661,
+            "CoinID": 662,
             "Coin": null,
             "ExSymbol": "NXB",
             "TxFee": 0.1,
@@ -3499,7 +3499,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 662,
+            "CoinID": 663,
             "Coin": null,
             "ExSymbol": "GRFT",
             "TxFee": 1,
@@ -3510,7 +3510,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 663,
+            "CoinID": 664,
             "Coin": null,
             "ExSymbol": "BANK",
             "TxFee": 1,
@@ -3521,7 +3521,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 664,
+            "CoinID": 665,
             "Coin": null,
             "ExSymbol": "CROAT",
             "TxFee": 1,
@@ -3532,7 +3532,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 665,
+            "CoinID": 666,
             "Coin": null,
             "ExSymbol": "BUCK",
             "TxFee": 0.003,
@@ -3543,7 +3543,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 666,
+            "CoinID": 667,
             "Coin": null,
             "ExSymbol": "CTT",
             "TxFee": 0.003,
@@ -3554,7 +3554,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 667,
+            "CoinID": 668,
             "Coin": null,
             "ExSymbol": "SONO",
             "TxFee": 0.003,
@@ -3565,7 +3565,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 668,
+            "CoinID": 669,
             "Coin": null,
             "ExSymbol": "LCE",
             "TxFee": 0.003,
@@ -3576,7 +3576,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 669,
+            "CoinID": 670,
             "Coin": null,
             "ExSymbol": "BCA",
             "TxFee": 0.05,
@@ -3587,7 +3587,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 670,
+            "CoinID": 671,
             "Coin": null,
             "ExSymbol": "VLU",
             "TxFee": 0.003,
@@ -3598,18 +3598,18 @@
             "Issue": ""
         },
         {
-            "CoinID": 671,
+            "CoinID": 672,
             "Coin": null,
             "ExSymbol": "NCP",
             "TxFee": 200,
-            "Withdraw": true,
-            "Deposit": true,
+            "Withdraw": false,
+            "Deposit": false,
             "Confirmation": 2,
             "Listed": true,
             "Issue": ""
         },
         {
-            "CoinID": 672,
+            "CoinID": 673,
             "Coin": null,
             "ExSymbol": "VEN",
             "TxFee": 0.007,
@@ -3620,7 +3620,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 673,
+            "CoinID": 674,
             "Coin": null,
             "ExSymbol": "CST",
             "TxFee": 0.003,
@@ -3631,7 +3631,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 674,
+            "CoinID": 675,
             "Coin": null,
             "ExSymbol": "ENDO",
             "TxFee": 0.2,
@@ -3642,7 +3642,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 675,
+            "CoinID": 676,
             "Coin": null,
             "ExSymbol": "LTHN",
             "TxFee": 5,
@@ -3653,7 +3653,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 676,
+            "CoinID": 677,
             "Coin": null,
             "ExSymbol": "CRT",
             "TxFee": 0.007,
@@ -3664,7 +3664,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 677,
+            "CoinID": 678,
             "Coin": null,
             "ExSymbol": "OID",
             "TxFee": 0.003,
@@ -3675,7 +3675,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 678,
+            "CoinID": 679,
             "Coin": null,
             "ExSymbol": "ISC",
             "TxFee": 2,
@@ -3686,7 +3686,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 679,
+            "CoinID": 680,
             "Coin": null,
             "ExSymbol": "PGX",
             "TxFee": 0.003,
@@ -3697,7 +3697,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 680,
+            "CoinID": 681,
             "Coin": null,
             "ExSymbol": "ETSC",
             "TxFee": 0.005,
@@ -3708,7 +3708,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 681,
+            "CoinID": 682,
             "Coin": null,
             "ExSymbol": "DEC",
             "TxFee": 0.003,
@@ -3719,7 +3719,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 682,
+            "CoinID": 683,
             "Coin": null,
             "ExSymbol": "CJT",
             "TxFee": 0.007,
@@ -3730,7 +3730,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 683,
+            "CoinID": 684,
             "Coin": null,
             "ExSymbol": "MTC",
             "TxFee": 0.007,
@@ -3741,7 +3741,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 684,
+            "CoinID": 685,
             "Coin": null,
             "ExSymbol": "SKL",
             "TxFee": 0.003,
@@ -3752,7 +3752,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 685,
+            "CoinID": 686,
             "Coin": null,
             "ExSymbol": "LXC",
             "TxFee": 0.007,
@@ -3763,7 +3763,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 686,
+            "CoinID": 687,
             "Coin": null,
             "ExSymbol": "TOU",
             "TxFee": 0.003,
@@ -3774,7 +3774,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 687,
+            "CoinID": 688,
             "Coin": null,
             "ExSymbol": "ACTN",
             "TxFee": 2,
@@ -3785,7 +3785,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 688,
+            "CoinID": 689,
             "Coin": null,
             "ExSymbol": "NEXO",
             "TxFee": 0.007,
@@ -3796,7 +3796,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 689,
+            "CoinID": 690,
             "Coin": null,
             "ExSymbol": "BABA",
             "TxFee": 0.003,
@@ -3807,7 +3807,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 690,
+            "CoinID": 691,
             "Coin": null,
             "ExSymbol": "EPLUS",
             "TxFee": 0.007,
@@ -3818,7 +3818,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 691,
+            "CoinID": 692,
             "Coin": null,
             "ExSymbol": "RTH",
             "TxFee": 0.007,
@@ -3829,7 +3829,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 692,
+            "CoinID": 693,
             "Coin": null,
             "ExSymbol": "KKC",
             "TxFee": 0.003,
@@ -3840,7 +3840,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 693,
+            "CoinID": 694,
             "Coin": null,
             "ExSymbol": "ECR",
             "TxFee": 0.003,
@@ -3851,7 +3851,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 694,
+            "CoinID": 695,
             "Coin": null,
             "ExSymbol": "BRF",
             "TxFee": 0.007,
@@ -3862,7 +3862,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 695,
+            "CoinID": 696,
             "Coin": null,
             "ExSymbol": "TLR",
             "TxFee": 5,
@@ -3873,7 +3873,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 696,
+            "CoinID": 697,
             "Coin": null,
             "ExSymbol": "COI",
             "TxFee": 0.007,
@@ -3884,7 +3884,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 697,
+            "CoinID": 698,
             "Coin": null,
             "ExSymbol": "FRAS",
             "TxFee": 0.007,
@@ -3895,7 +3895,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 698,
+            "CoinID": 699,
             "Coin": null,
             "ExSymbol": "THRN",
             "TxFee": 0.007,
@@ -3906,7 +3906,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 699,
+            "CoinID": 700,
             "Coin": null,
             "ExSymbol": "CLO",
             "TxFee": 10,
@@ -3917,7 +3917,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 700,
+            "CoinID": 701,
             "Coin": null,
             "ExSymbol": "PLAN",
             "TxFee": 0.003,
@@ -3928,7 +3928,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 701,
+            "CoinID": 702,
             "Coin": null,
             "ExSymbol": "IPR",
             "TxFee": 0.007,
@@ -3939,7 +3939,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 702,
+            "CoinID": 703,
             "Coin": null,
             "ExSymbol": "INC",
             "TxFee": 0.01,
@@ -3950,7 +3950,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 703,
+            "CoinID": 704,
             "Coin": null,
             "ExSymbol": "SEM",
             "TxFee": 0.005,
@@ -3961,7 +3961,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 704,
+            "CoinID": 705,
             "Coin": null,
             "ExSymbol": "DRV",
             "TxFee": 0.003,
@@ -3972,7 +3972,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 705,
+            "CoinID": 706,
             "Coin": null,
             "ExSymbol": "DEAL",
             "TxFee": 0.003,
@@ -3983,7 +3983,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 706,
+            "CoinID": 707,
             "Coin": null,
             "ExSymbol": "MUSD",
             "TxFee": 1,
@@ -3994,7 +3994,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 707,
+            "CoinID": 708,
             "Coin": null,
             "ExSymbol": "RICH",
             "TxFee": 500,
@@ -4005,7 +4005,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 708,
+            "CoinID": 709,
             "Coin": null,
             "ExSymbol": "CHE",
             "TxFee": 0.007,
@@ -4016,7 +4016,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 709,
+            "CoinID": 710,
             "Coin": null,
             "ExSymbol": "XPONZ",
             "TxFee": 0.001,
@@ -4027,7 +4027,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 710,
+            "CoinID": 711,
             "Coin": null,
             "ExSymbol": "NILU",
             "TxFee": 0.003,
@@ -4038,7 +4038,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 711,
+            "CoinID": 712,
             "Coin": null,
             "ExSymbol": "XSC",
             "TxFee": 0.003,
@@ -4049,7 +4049,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 712,
+            "CoinID": 713,
             "Coin": null,
             "ExSymbol": "ATH",
             "TxFee": 0.003,
@@ -4060,7 +4060,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 713,
+            "CoinID": 714,
             "Coin": null,
             "ExSymbol": "ETHO",
             "TxFee": 0.003,
@@ -4071,7 +4071,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 714,
+            "CoinID": 715,
             "Coin": null,
             "ExSymbol": "NYEX",
             "TxFee": 10,
@@ -4082,7 +4082,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 715,
+            "CoinID": 716,
             "Coin": null,
             "ExSymbol": "NPW",
             "TxFee": 0.003,
@@ -4093,7 +4093,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 716,
+            "CoinID": 717,
             "Coin": null,
             "ExSymbol": "WSP",
             "TxFee": 0.1,
@@ -4104,7 +4104,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 717,
+            "CoinID": 718,
             "Coin": null,
             "ExSymbol": "OASIS",
             "TxFee": 0.003,
@@ -4115,7 +4115,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 718,
+            "CoinID": 719,
             "Coin": null,
             "ExSymbol": "SKILL",
             "TxFee": 0.007,
@@ -4126,7 +4126,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 719,
+            "CoinID": 720,
             "Coin": null,
             "ExSymbol": "WEB",
             "TxFee": 0.003,
@@ -4137,7 +4137,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 720,
+            "CoinID": 721,
             "Coin": null,
             "ExSymbol": "RPI",
             "TxFee": 100,
@@ -4148,7 +4148,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 721,
+            "CoinID": 722,
             "Coin": null,
             "ExSymbol": "NOTE",
             "TxFee": 0.5,
@@ -4159,7 +4159,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 722,
+            "CoinID": 723,
             "Coin": null,
             "ExSymbol": "KAC",
             "TxFee": 0.1,
@@ -4170,7 +4170,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 723,
+            "CoinID": 724,
             "Coin": null,
             "ExSymbol": "ENDOV2",
             "TxFee": 0.003,
@@ -4181,7 +4181,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 724,
+            "CoinID": 725,
             "Coin": null,
             "ExSymbol": "RIG",
             "TxFee": 0.007,
@@ -4192,7 +4192,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 725,
+            "CoinID": 726,
             "Coin": null,
             "ExSymbol": "NANJ",
             "TxFee": 0.007,
@@ -4203,7 +4203,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 726,
+            "CoinID": 727,
             "Coin": null,
             "ExSymbol": "SENX",
             "TxFee": 0.007,
@@ -4214,7 +4214,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 727,
+            "CoinID": 728,
             "Coin": null,
             "ExSymbol": "RE",
             "TxFee": 0.007,
@@ -4225,7 +4225,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 728,
+            "CoinID": 729,
             "Coin": null,
             "ExSymbol": "TRIP",
             "TxFee": 0.003,
@@ -4236,7 +4236,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 729,
+            "CoinID": 730,
             "Coin": null,
             "ExSymbol": "MDC",
             "TxFee": 0.003,
@@ -4247,7 +4247,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 730,
+            "CoinID": 731,
             "Coin": null,
             "ExSymbol": "LPC",
             "TxFee": 0.003,
@@ -4258,7 +4258,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 731,
+            "CoinID": 732,
             "Coin": null,
             "ExSymbol": "ABJC",
             "TxFee": 0.003,
@@ -4269,7 +4269,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 732,
+            "CoinID": 733,
             "Coin": null,
             "ExSymbol": "BTCS",
             "TxFee": 0.003,
@@ -4280,7 +4280,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 733,
+            "CoinID": 734,
             "Coin": null,
             "ExSymbol": "FOIN",
             "TxFee": 0.003,
@@ -4291,7 +4291,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 734,
+            "CoinID": 735,
             "Coin": null,
             "ExSymbol": "DRIP",
             "TxFee": 0.003,
@@ -4302,7 +4302,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 735,
+            "CoinID": 736,
             "Coin": null,
             "ExSymbol": "OWD",
             "TxFee": 0.007,
@@ -4313,7 +4313,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 736,
+            "CoinID": 737,
             "Coin": null,
             "ExSymbol": "INM",
             "TxFee": 0.007,
@@ -4324,7 +4324,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 737,
+            "CoinID": 738,
             "Coin": null,
             "ExSymbol": "BTCONE",
             "TxFee": 20,
@@ -4335,7 +4335,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 738,
+            "CoinID": 739,
             "Coin": null,
             "ExSymbol": "NSOK",
             "TxFee": 0.007,
@@ -4346,7 +4346,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 739,
+            "CoinID": 740,
             "Coin": null,
             "ExSymbol": "SKB",
             "TxFee": 0.007,
@@ -4357,7 +4357,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 740,
+            "CoinID": 741,
             "Coin": null,
             "ExSymbol": "ONEPAY",
             "TxFee": 0.007,
@@ -4368,7 +4368,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 741,
+            "CoinID": 742,
             "Coin": null,
             "ExSymbol": "TSC",
             "TxFee": 150,
@@ -4379,7 +4379,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 742,
+            "CoinID": 743,
             "Coin": null,
             "ExSymbol": "BENGO",
             "TxFee": 0.007,
@@ -4390,7 +4390,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 743,
+            "CoinID": 744,
             "Coin": null,
             "ExSymbol": "DOW",
             "TxFee": 0.007,
@@ -4401,7 +4401,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 744,
+            "CoinID": 745,
             "Coin": null,
             "ExSymbol": "FIC",
             "TxFee": 0.007,
@@ -4412,7 +4412,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 745,
+            "CoinID": 746,
             "Coin": null,
             "ExSymbol": "ICR",
             "TxFee": 0.5,
@@ -4423,7 +4423,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 746,
+            "CoinID": 747,
             "Coin": null,
             "ExSymbol": "GMC",
             "TxFee": 15,
@@ -4434,7 +4434,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 747,
+            "CoinID": 748,
             "Coin": null,
             "ExSymbol": "MRG",
             "TxFee": 0.01,
@@ -4445,7 +4445,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 748,
+            "CoinID": 749,
             "Coin": null,
             "ExSymbol": "YOKOCHO",
             "TxFee": 0.009,
@@ -4456,7 +4456,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 749,
+            "CoinID": 750,
             "Coin": null,
             "ExSymbol": "LGC",
             "TxFee": 500,
@@ -4467,7 +4467,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 750,
+            "CoinID": 751,
             "Coin": null,
             "ExSymbol": "TFC",
             "TxFee": 0.003,
@@ -4478,7 +4478,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 751,
+            "CoinID": 752,
             "Coin": null,
             "ExSymbol": "AIVA",
             "TxFee": 0.005,
@@ -4489,7 +4489,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 752,
+            "CoinID": 753,
             "Coin": null,
             "ExSymbol": "CREW",
             "TxFee": 0.003,
@@ -4500,7 +4500,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 753,
+            "CoinID": 754,
             "Coin": null,
             "ExSymbol": "MBLC",
             "TxFee": 0.003,
@@ -4511,7 +4511,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 754,
+            "CoinID": 755,
             "Coin": null,
             "ExSymbol": "UEC",
             "TxFee": 0.003,
@@ -4522,7 +4522,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 755,
+            "CoinID": 756,
             "Coin": null,
             "ExSymbol": "DOVE",
             "TxFee": 0.007,
@@ -4533,7 +4533,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 756,
+            "CoinID": 757,
             "Coin": null,
             "ExSymbol": "SAKE",
             "TxFee": 0.007,
@@ -4544,7 +4544,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 757,
+            "CoinID": 758,
             "Coin": null,
             "ExSymbol": "AFRO",
             "TxFee": 100,
@@ -4555,7 +4555,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 758,
+            "CoinID": 759,
             "Coin": null,
             "ExSymbol": "EUNO",
             "TxFee": 0.3,
@@ -4566,7 +4566,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 759,
+            "CoinID": 760,
             "Coin": null,
             "ExSymbol": "LDG",
             "TxFee": 0.007,
@@ -4577,7 +4577,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 760,
+            "CoinID": 761,
             "Coin": null,
             "ExSymbol": "VITES",
             "TxFee": 100,
@@ -4588,7 +4588,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 761,
+            "CoinID": 762,
             "Coin": null,
             "ExSymbol": "FLX",
             "TxFee": 0.003,
@@ -4599,7 +4599,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 762,
+            "CoinID": 763,
             "Coin": null,
             "ExSymbol": "XSF",
             "TxFee": 0.07,
@@ -4610,7 +4610,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 763,
+            "CoinID": 764,
             "Coin": null,
             "ExSymbol": "CBX",
             "TxFee": 0.007,
@@ -4621,7 +4621,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 764,
+            "CoinID": 765,
             "Coin": null,
             "ExSymbol": "BTRL",
             "TxFee": 0.007,
@@ -4632,7 +4632,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 765,
+            "CoinID": 766,
             "Coin": null,
             "ExSymbol": "RDC",
             "TxFee": 0.007,
@@ -4643,7 +4643,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 766,
+            "CoinID": 767,
             "Coin": null,
             "ExSymbol": "NOBS",
             "TxFee": 0.007,
@@ -4654,7 +4654,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 767,
+            "CoinID": 768,
             "Coin": null,
             "ExSymbol": "GMCN",
             "TxFee": 0.003,
@@ -4665,7 +4665,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 768,
+            "CoinID": 769,
             "Coin": null,
             "ExSymbol": "SQR",
             "TxFee": 0.003,
@@ -4676,7 +4676,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 769,
+            "CoinID": 770,
             "Coin": null,
             "ExSymbol": "CMIT",
             "TxFee": 0.007,
@@ -4687,7 +4687,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 770,
+            "CoinID": 771,
             "Coin": null,
             "ExSymbol": "BFF",
             "TxFee": 0.007,
@@ -4698,7 +4698,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 771,
+            "CoinID": 772,
             "Coin": null,
             "ExSymbol": "EMRO",
             "TxFee": 0.003,
@@ -4709,7 +4709,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 772,
+            "CoinID": 773,
             "Coin": null,
             "ExSymbol": "SCAL",
             "TxFee": 0.007,
@@ -4720,7 +4720,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 773,
+            "CoinID": 774,
             "Coin": null,
             "ExSymbol": "MRJA",
             "TxFee": 0.003,
@@ -4731,7 +4731,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 774,
+            "CoinID": 775,
             "Coin": null,
             "ExSymbol": "QURO",
             "TxFee": 0.007,
@@ -4742,7 +4742,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 775,
+            "CoinID": 776,
             "Coin": null,
             "ExSymbol": "GPKR",
             "TxFee": 0.3,
@@ -4753,7 +4753,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 776,
+            "CoinID": 777,
             "Coin": null,
             "ExSymbol": "VIS",
             "TxFee": 0.007,
@@ -4764,7 +4764,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 777,
+            "CoinID": 778,
             "Coin": null,
             "ExSymbol": "QSHC",
             "TxFee": 0.007,
@@ -4775,7 +4775,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 778,
+            "CoinID": 779,
             "Coin": null,
             "ExSymbol": "ATCC",
             "TxFee": 0.005,
@@ -4786,7 +4786,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 779,
+            "CoinID": 780,
             "Coin": null,
             "ExSymbol": "BUNNY",
             "TxFee": 0.007,
@@ -4797,7 +4797,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 780,
+            "CoinID": 781,
             "Coin": null,
             "ExSymbol": "XEV",
             "TxFee": 0.007,
@@ -4808,7 +4808,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 781,
+            "CoinID": 782,
             "Coin": null,
             "ExSymbol": "VRJT",
             "TxFee": 0.007,
@@ -4819,7 +4819,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 782,
+            "CoinID": 783,
             "Coin": null,
             "ExSymbol": "MOX",
             "TxFee": 0.5,
@@ -4830,7 +4830,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 783,
+            "CoinID": 784,
             "Coin": null,
             "ExSymbol": "MNP",
             "TxFee": 0.05,
@@ -4841,7 +4841,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 784,
+            "CoinID": 785,
             "Coin": null,
             "ExSymbol": "ROCK",
             "TxFee": 200,
@@ -4852,7 +4852,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 785,
+            "CoinID": 786,
             "Coin": null,
             "ExSymbol": "DVS",
             "TxFee": 10,
@@ -4863,7 +4863,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 786,
+            "CoinID": 787,
             "Coin": null,
             "ExSymbol": "DART",
             "TxFee": 0.007,
@@ -4874,7 +4874,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 787,
+            "CoinID": 788,
             "Coin": null,
             "ExSymbol": "PLTS",
             "TxFee": 0.007,
@@ -4885,7 +4885,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 788,
+            "CoinID": 789,
             "Coin": null,
             "ExSymbol": "XTW",
             "TxFee": 0.007,
@@ -4896,7 +4896,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 789,
+            "CoinID": 790,
             "Coin": null,
             "ExSymbol": "ELY",
             "TxFee": 0.007,
@@ -4907,7 +4907,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 790,
+            "CoinID": 791,
             "Coin": null,
             "ExSymbol": "EIB",
             "TxFee": 0.007,
@@ -4918,7 +4918,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 791,
+            "CoinID": 792,
             "Coin": null,
             "ExSymbol": "EUR",
             "TxFee": 0,
@@ -4929,7 +4929,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 792,
+            "CoinID": 793,
             "Coin": null,
             "ExSymbol": "JPY",
             "TxFee": 0,
@@ -4940,7 +4940,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 793,
+            "CoinID": 794,
             "Coin": null,
             "ExSymbol": "HKD",
             "TxFee": 0,
@@ -4951,7 +4951,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 794,
+            "CoinID": 795,
             "Coin": null,
             "ExSymbol": "GBP",
             "TxFee": 0,
@@ -4962,7 +4962,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 795,
+            "CoinID": 796,
             "Coin": null,
             "ExSymbol": "NAZA",
             "TxFee": 150,
@@ -4973,7 +4973,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 796,
+            "CoinID": 797,
             "Coin": null,
             "ExSymbol": "GRP",
             "TxFee": 0.007,
@@ -4984,7 +4984,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 797,
+            "CoinID": 798,
             "Coin": null,
             "ExSymbol": "FA",
             "TxFee": 2,
@@ -4995,7 +4995,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 798,
+            "CoinID": 799,
             "Coin": null,
             "ExSymbol": "AZART",
             "TxFee": 0.3,
@@ -5006,7 +5006,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 799,
+            "CoinID": 800,
             "Coin": null,
             "ExSymbol": "YOB",
             "TxFee": 0.007,
@@ -5017,7 +5017,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 800,
+            "CoinID": 801,
             "Coin": null,
             "ExSymbol": "BENZ",
             "TxFee": 0.01,
@@ -5028,7 +5028,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 801,
+            "CoinID": 802,
             "Coin": null,
             "ExSymbol": "CDM",
             "TxFee": 50,
@@ -5039,7 +5039,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 802,
+            "CoinID": 803,
             "Coin": null,
             "ExSymbol": "XSM",
             "TxFee": 100,
@@ -5050,7 +5050,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 803,
+            "CoinID": 804,
             "Coin": null,
             "ExSymbol": "XCASH",
             "TxFee": 100,
@@ -5061,7 +5061,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 804,
+            "CoinID": 805,
             "Coin": null,
             "ExSymbol": "LSC",
             "TxFee": 0.5,
@@ -5072,7 +5072,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 805,
+            "CoinID": 806,
             "Coin": null,
             "ExSymbol": "PYX",
             "TxFee": 2,
@@ -5083,7 +5083,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 806,
+            "CoinID": 807,
             "Coin": null,
             "ExSymbol": "WXC",
             "TxFee": 1,
@@ -5094,7 +5094,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 807,
+            "CoinID": 808,
             "Coin": null,
             "ExSymbol": "ETHM",
             "TxFee": 0.007,
@@ -5105,7 +5105,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 808,
+            "CoinID": 809,
             "Coin": null,
             "ExSymbol": "DSC",
             "TxFee": 0.007,
@@ -5116,7 +5116,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 809,
+            "CoinID": 810,
             "Coin": null,
             "ExSymbol": "RUB",
             "TxFee": 0,
@@ -5127,7 +5127,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 810,
+            "CoinID": 811,
             "Coin": null,
             "ExSymbol": "DOGX",
             "TxFee": 0.003,
@@ -5138,7 +5138,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 811,
+            "CoinID": 812,
             "Coin": null,
             "ExSymbol": "MASH",
             "TxFee": 0.007,
@@ -5149,7 +5149,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 812,
+            "CoinID": 813,
             "Coin": null,
             "ExSymbol": "BEVERAGE",
             "TxFee": 0.001,
@@ -5160,7 +5160,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 813,
+            "CoinID": 814,
             "Coin": null,
             "ExSymbol": "ZEUS",
             "TxFee": 0.007,
@@ -5171,7 +5171,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 814,
+            "CoinID": 815,
             "Coin": null,
             "ExSymbol": "ESBC",
             "TxFee": 0.3,
@@ -5182,7 +5182,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 815,
+            "CoinID": 816,
             "Coin": null,
             "ExSymbol": "MUTX",
             "TxFee": 100,
@@ -5193,7 +5193,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 816,
+            "CoinID": 817,
             "Coin": null,
             "ExSymbol": "TIM",
             "TxFee": 0.003,
@@ -5204,7 +5204,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 817,
+            "CoinID": 818,
             "Coin": null,
             "ExSymbol": "BITF",
             "TxFee": 0.003,
@@ -5215,7 +5215,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 818,
+            "CoinID": 819,
             "Coin": null,
             "ExSymbol": "EVI",
             "TxFee": 0.001,
@@ -5226,7 +5226,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 819,
+            "CoinID": 820,
             "Coin": null,
             "ExSymbol": "ADK",
             "TxFee": 0,
@@ -5237,7 +5237,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 820,
+            "CoinID": 821,
             "Coin": null,
             "ExSymbol": "BCI",
             "TxFee": 0.3,
@@ -5248,7 +5248,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 821,
+            "CoinID": 822,
             "Coin": null,
             "ExSymbol": "RPM",
             "TxFee": 10,
@@ -5259,7 +5259,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 822,
+            "CoinID": 823,
             "Coin": null,
             "ExSymbol": "SPHX",
             "TxFee": 0.003,
@@ -5270,7 +5270,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 823,
+            "CoinID": 824,
             "Coin": null,
             "ExSymbol": "DVD",
             "TxFee": 0.003,
@@ -5281,7 +5281,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 824,
+            "CoinID": 825,
             "Coin": null,
             "ExSymbol": "EXBT",
             "TxFee": 0.007,
@@ -5292,7 +5292,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 825,
+            "CoinID": 826,
             "Coin": null,
             "ExSymbol": "OMEN",
             "TxFee": 200,
@@ -5303,7 +5303,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 826,
+            "CoinID": 827,
             "Coin": null,
             "ExSymbol": "CENT",
             "TxFee": 5,
@@ -5314,7 +5314,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 827,
+            "CoinID": 828,
             "Coin": null,
             "ExSymbol": "MBC",
             "TxFee": 100,
@@ -5325,7 +5325,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 828,
+            "CoinID": 829,
             "Coin": null,
             "ExSymbol": "SPTDC",
             "TxFee": 150,
@@ -5336,7 +5336,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 829,
+            "CoinID": 830,
             "Coin": null,
             "ExSymbol": "VSF",
             "TxFee": 0.007,
@@ -5347,7 +5347,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 830,
+            "CoinID": 831,
             "Coin": null,
             "ExSymbol": "OTR",
             "TxFee": 0.003,
@@ -5358,7 +5358,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 831,
+            "CoinID": 832,
             "Coin": null,
             "ExSymbol": "HNDC",
             "TxFee": 200,
@@ -5369,7 +5369,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 832,
+            "CoinID": 833,
             "Coin": null,
             "ExSymbol": "DAPS",
             "TxFee": 0.007,
@@ -5380,7 +5380,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 833,
+            "CoinID": 834,
             "Coin": null,
             "ExSymbol": "BLOC",
             "TxFee": 1,
@@ -5391,7 +5391,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 834,
+            "CoinID": 835,
             "Coin": null,
             "ExSymbol": "CSC",
             "TxFee": 30,
@@ -5402,7 +5402,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 835,
+            "CoinID": 836,
             "Coin": null,
             "ExSymbol": "BAK",
             "TxFee": 0.007,
@@ -5413,7 +5413,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 836,
+            "CoinID": 837,
             "Coin": null,
             "ExSymbol": "NNSH",
             "TxFee": 0.007,
@@ -5424,7 +5424,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 837,
+            "CoinID": 838,
             "Coin": null,
             "ExSymbol": "XTC",
             "TxFee": 0.02,
@@ -5435,7 +5435,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 838,
+            "CoinID": 839,
             "Coin": null,
             "ExSymbol": "APC",
             "TxFee": 0.007,
@@ -5446,7 +5446,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 839,
+            "CoinID": 840,
             "Coin": null,
             "ExSymbol": "XPASC",
             "TxFee": 0.001,
@@ -5457,7 +5457,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 840,
+            "CoinID": 841,
             "Coin": null,
             "ExSymbol": "SICA",
             "TxFee": 0.001,
@@ -5468,7 +5468,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 841,
+            "CoinID": 842,
             "Coin": null,
             "ExSymbol": "QA",
             "TxFee": 0.007,
@@ -5479,7 +5479,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 842,
+            "CoinID": 843,
             "Coin": null,
             "ExSymbol": "XBI",
             "TxFee": 0.1,
@@ -5490,7 +5490,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 843,
+            "CoinID": 844,
             "Coin": null,
             "ExSymbol": "XGK",
             "TxFee": 0.003,
@@ -5501,7 +5501,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 844,
+            "CoinID": 845,
             "Coin": null,
             "ExSymbol": "FREE",
             "TxFee": 0.007,
@@ -5512,7 +5512,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 845,
+            "CoinID": 846,
             "Coin": null,
             "ExSymbol": "DKPC",
             "TxFee": 0.7,
@@ -5523,7 +5523,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 846,
+            "CoinID": 847,
             "Coin": null,
             "ExSymbol": "KUBO",
             "TxFee": 0.007,
@@ -5534,7 +5534,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 847,
+            "CoinID": 848,
             "Coin": null,
             "ExSymbol": "RSCT",
             "TxFee": 0.007,
@@ -5545,7 +5545,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 848,
+            "CoinID": 849,
             "Coin": null,
             "ExSymbol": "SICC",
             "TxFee": 20,
@@ -5556,7 +5556,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 849,
+            "CoinID": 850,
             "Coin": null,
             "ExSymbol": "TTP",
             "TxFee": 0.007,
@@ -5567,7 +5567,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 850,
+            "CoinID": 851,
             "Coin": null,
             "ExSymbol": "SUQA",
             "TxFee": 0.003,
@@ -5578,7 +5578,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 851,
+            "CoinID": 852,
             "Coin": null,
             "ExSymbol": "DLTT",
             "TxFee": 0.007,
@@ -5589,7 +5589,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 852,
+            "CoinID": 853,
             "Coin": null,
             "ExSymbol": "CCX",
             "TxFee": 0.01,
@@ -5600,7 +5600,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 853,
+            "CoinID": 854,
             "Coin": null,
             "ExSymbol": "MFIT",
             "TxFee": 0.003,
@@ -5611,7 +5611,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 854,
+            "CoinID": 855,
             "Coin": null,
             "ExSymbol": "VRSC",
             "TxFee": 0.003,
@@ -5622,7 +5622,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 855,
+            "CoinID": 856,
             "Coin": null,
             "ExSymbol": "ETI",
             "TxFee": 0.003,
@@ -5633,7 +5633,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 856,
+            "CoinID": 857,
             "Coin": null,
             "ExSymbol": "BZE",
             "TxFee": 20,
@@ -5644,7 +5644,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 857,
+            "CoinID": 858,
             "Coin": null,
             "ExSymbol": "LTG",
             "TxFee": 0.007,
@@ -5655,7 +5655,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 858,
+            "CoinID": 859,
             "Coin": null,
             "ExSymbol": "DCTO",
             "TxFee": 0.007,
@@ -5666,7 +5666,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 859,
+            "CoinID": 860,
             "Coin": null,
             "ExSymbol": "BBY",
             "TxFee": 0.007,
@@ -5677,7 +5677,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 860,
+            "CoinID": 861,
             "Coin": null,
             "ExSymbol": "LUNES",
             "TxFee": 0.001,
@@ -5688,7 +5688,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 861,
+            "CoinID": 862,
             "Coin": null,
             "ExSymbol": "EJOB",
             "TxFee": 0.007,
@@ -5699,7 +5699,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 862,
+            "CoinID": 863,
             "Coin": null,
             "ExSymbol": "SCRIV",
             "TxFee": 0.003,
@@ -5710,7 +5710,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 863,
+            "CoinID": 864,
             "Coin": null,
             "ExSymbol": "HERB",
             "TxFee": 0.007,
@@ -5721,7 +5721,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 864,
+            "CoinID": 865,
             "Coin": null,
             "ExSymbol": "NPAY",
             "TxFee": 0.003,
@@ -5732,7 +5732,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 865,
+            "CoinID": 866,
             "Coin": null,
             "ExSymbol": "ILC",
             "TxFee": 0.02,
@@ -5743,7 +5743,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 866,
+            "CoinID": 867,
             "Coin": null,
             "ExSymbol": "TUP",
             "TxFee": 0.003,
@@ -5754,7 +5754,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 867,
+            "CoinID": 868,
             "Coin": null,
             "ExSymbol": "EQLI",
             "TxFee": 0.003,
@@ -5765,7 +5765,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 868,
+            "CoinID": 869,
             "Coin": null,
             "ExSymbol": "GENX",
             "TxFee": 0.003,
@@ -5776,7 +5776,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 869,
+            "CoinID": 870,
             "Coin": null,
             "ExSymbol": "LMO",
             "TxFee": 0.1,
@@ -5787,7 +5787,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 870,
+            "CoinID": 871,
             "Coin": null,
             "ExSymbol": "MTT",
             "TxFee": 0.003,
@@ -5798,7 +5798,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 871,
+            "CoinID": 872,
             "Coin": null,
             "ExSymbol": "IZE",
             "TxFee": 0.003,
@@ -5809,7 +5809,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 872,
+            "CoinID": 873,
             "Coin": null,
             "ExSymbol": "REOSC",
             "TxFee": 0.003,
@@ -5820,7 +5820,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 873,
+            "CoinID": 874,
             "Coin": null,
             "ExSymbol": "GMCI",
             "TxFee": 0.007,
@@ -5831,7 +5831,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 874,
+            "CoinID": 875,
             "Coin": null,
             "ExSymbol": "GEX",
             "TxFee": 0.007,
@@ -5842,7 +5842,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 875,
+            "CoinID": 876,
             "Coin": null,
             "ExSymbol": "XNB",
             "TxFee": 1,
@@ -5853,7 +5853,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 876,
+            "CoinID": 877,
             "Coin": null,
             "ExSymbol": "RAI",
             "TxFee": 0.007,
@@ -5864,7 +5864,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 877,
+            "CoinID": 878,
             "Coin": null,
             "ExSymbol": "CCN",
             "TxFee": 0.007,
@@ -5875,7 +5875,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 878,
+            "CoinID": 879,
             "Coin": null,
             "ExSymbol": "EGEM",
             "TxFee": 0.003,
@@ -5886,7 +5886,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 879,
+            "CoinID": 880,
             "Coin": null,
             "ExSymbol": "CLM",
             "TxFee": 0.007,
@@ -5897,7 +5897,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 880,
+            "CoinID": 881,
             "Coin": null,
             "ExSymbol": "ARRR",
             "TxFee": 0.003,
@@ -5908,7 +5908,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 881,
+            "CoinID": 882,
             "Coin": null,
             "ExSymbol": "HELP",
             "TxFee": 0.5,
@@ -5919,7 +5919,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 882,
+            "CoinID": 883,
             "Coin": null,
             "ExSymbol": "MRC",
             "TxFee": 0.003,
@@ -5930,7 +5930,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 883,
+            "CoinID": 884,
             "Coin": null,
             "ExSymbol": "PIK",
             "TxFee": 0.007,
@@ -5941,7 +5941,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 884,
+            "CoinID": 885,
             "Coin": null,
             "ExSymbol": "IMC",
             "TxFee": 0.007,
@@ -5952,7 +5952,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 885,
+            "CoinID": 886,
             "Coin": null,
             "ExSymbol": "TRET",
             "TxFee": 0.007,
@@ -5963,7 +5963,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 886,
+            "CoinID": 887,
             "Coin": null,
             "ExSymbol": "OHC",
             "TxFee": 0.003,
@@ -5974,7 +5974,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 887,
+            "CoinID": 888,
             "Coin": null,
             "ExSymbol": "PLE",
             "TxFee": 200,
@@ -5985,7 +5985,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 888,
+            "CoinID": 889,
             "Coin": null,
             "ExSymbol": "HTA",
             "TxFee": 0.003,
@@ -5996,7 +5996,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 889,
+            "CoinID": 890,
             "Coin": null,
             "ExSymbol": "HALO",
             "TxFee": 0.003,
@@ -6007,7 +6007,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 890,
+            "CoinID": 891,
             "Coin": null,
             "ExSymbol": "ETNXP",
             "TxFee": 150.01,
@@ -6018,7 +6018,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 891,
+            "CoinID": 892,
             "Coin": null,
             "ExSymbol": "BZX",
             "TxFee": 0.5,
@@ -6029,7 +6029,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 892,
+            "CoinID": 893,
             "Coin": null,
             "ExSymbol": "GROO",
             "TxFee": 0.007,
@@ -6040,7 +6040,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 893,
+            "CoinID": 894,
             "Coin": null,
             "ExSymbol": "EPIC",
             "TxFee": 0.003,
@@ -6051,7 +6051,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 894,
+            "CoinID": 895,
             "Coin": null,
             "ExSymbol": "LRM",
             "TxFee": 0.003,
@@ -6062,7 +6062,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 895,
+            "CoinID": 896,
             "Coin": null,
             "ExSymbol": "SNTVT",
             "TxFee": 0.007,
@@ -6073,7 +6073,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 896,
+            "CoinID": 897,
             "Coin": null,
             "ExSymbol": "BDX",
             "TxFee": 5,
@@ -6084,7 +6084,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 897,
+            "CoinID": 898,
             "Coin": null,
             "ExSymbol": "TRXC",
             "TxFee": 0.007,
@@ -6095,7 +6095,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 898,
+            "CoinID": 899,
             "Coin": null,
             "ExSymbol": "KOLIN",
             "TxFee": 0.001,
@@ -6106,7 +6106,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 899,
+            "CoinID": 900,
             "Coin": null,
             "ExSymbol": "FRAG",
             "TxFee": 0.003,
@@ -6117,7 +6117,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 900,
+            "CoinID": 901,
             "Coin": null,
             "ExSymbol": "TCNX",
             "TxFee": 0.007,
@@ -6128,7 +6128,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 901,
+            "CoinID": 902,
             "Coin": null,
             "ExSymbol": "OCTC",
             "TxFee": 0.007,
@@ -6139,7 +6139,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 902,
+            "CoinID": 903,
             "Coin": null,
             "ExSymbol": "RKC",
             "TxFee": 0.001,
@@ -6150,7 +6150,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 903,
+            "CoinID": 904,
             "Coin": null,
             "ExSymbol": "GNVA",
             "TxFee": 0.007,
@@ -6161,7 +6161,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 904,
+            "CoinID": 905,
             "Coin": null,
             "ExSymbol": "X42",
             "TxFee": 0.003,
@@ -6172,7 +6172,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 905,
+            "CoinID": 906,
             "Coin": null,
             "ExSymbol": "GIT",
             "TxFee": 0.007,
@@ -6183,7 +6183,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 906,
+            "CoinID": 907,
             "Coin": null,
             "ExSymbol": "B2N",
             "TxFee": 0.01,
@@ -6194,7 +6194,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 907,
+            "CoinID": 908,
             "Coin": null,
             "ExSymbol": "EthID",
             "TxFee": 0.007,
@@ -6205,7 +6205,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 908,
+            "CoinID": 909,
             "Coin": null,
             "ExSymbol": "VEY",
             "TxFee": 0.007,
@@ -6216,7 +6216,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 909,
+            "CoinID": 910,
             "Coin": null,
             "ExSymbol": "BUL",
             "TxFee": 0.007,
@@ -6227,7 +6227,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 910,
+            "CoinID": 911,
             "Coin": null,
             "ExSymbol": "KOKU",
             "TxFee": 0.007,
@@ -6238,7 +6238,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 911,
+            "CoinID": 912,
             "Coin": null,
             "ExSymbol": "RNG",
             "TxFee": 0.003,
@@ -6249,7 +6249,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 912,
+            "CoinID": 913,
             "Coin": null,
             "ExSymbol": "DOGEC",
             "TxFee": 0.003,
@@ -6260,7 +6260,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 913,
+            "CoinID": 914,
             "Coin": null,
             "ExSymbol": "FWY",
             "TxFee": 0.007,
@@ -6271,7 +6271,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 914,
+            "CoinID": 915,
             "Coin": null,
             "ExSymbol": "LIQUID",
             "TxFee": 0.007,
@@ -6282,7 +6282,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 915,
+            "CoinID": 916,
             "Coin": null,
             "ExSymbol": "BLE",
             "TxFee": 0.003,
@@ -6293,7 +6293,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 916,
+            "CoinID": 917,
             "Coin": null,
             "ExSymbol": "HLIX",
             "TxFee": 0.003,
@@ -6304,7 +6304,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 917,
+            "CoinID": 918,
             "Coin": null,
             "ExSymbol": "BGX",
             "TxFee": 0.003,
@@ -6315,7 +6315,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 918,
+            "CoinID": 919,
             "Coin": null,
             "ExSymbol": "VDL",
             "TxFee": 0.003,
@@ -6326,7 +6326,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 919,
+            "CoinID": 920,
             "Coin": null,
             "ExSymbol": "MPG",
             "TxFee": 1.01,
@@ -6337,7 +6337,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 920,
+            "CoinID": 921,
             "Coin": null,
             "ExSymbol": "TOC",
             "TxFee": 0.003,
@@ -6348,7 +6348,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 921,
+            "CoinID": 922,
             "Coin": null,
             "ExSymbol": "EUSD",
             "TxFee": 0.007,
@@ -6359,7 +6359,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 922,
+            "CoinID": 923,
             "Coin": null,
             "ExSymbol": "CIR",
             "TxFee": 0.003,
@@ -6370,7 +6370,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 923,
+            "CoinID": 924,
             "Coin": null,
             "ExSymbol": "UPX",
             "TxFee": 0.01,
@@ -6381,7 +6381,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 924,
+            "CoinID": 925,
             "Coin": null,
             "ExSymbol": "RYA",
             "TxFee": 1,
@@ -6392,7 +6392,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 925,
+            "CoinID": 926,
             "Coin": null,
             "ExSymbol": "INVC",
             "TxFee": 0.01,
@@ -6403,7 +6403,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 926,
+            "CoinID": 927,
             "Coin": null,
             "ExSymbol": "TBOX",
             "TxFee": 0.001,
@@ -6414,7 +6414,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 927,
+            "CoinID": 928,
             "Coin": null,
             "ExSymbol": "AIB",
             "TxFee": 0.003,
@@ -6425,7 +6425,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 928,
+            "CoinID": 929,
             "Coin": null,
             "ExSymbol": "LINX",
             "TxFee": 0.003,
@@ -6436,7 +6436,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 929,
+            "CoinID": 930,
             "Coin": null,
             "ExSymbol": "VPC",
             "TxFee": 0.003,
@@ -6447,7 +6447,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 930,
+            "CoinID": 931,
             "Coin": null,
             "ExSymbol": "RPD",
             "TxFee": 0.003,
@@ -6458,7 +6458,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 931,
+            "CoinID": 932,
             "Coin": null,
             "ExSymbol": "PENG",
             "TxFee": 0.003,
@@ -6469,7 +6469,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 932,
+            "CoinID": 933,
             "Coin": null,
             "ExSymbol": "MIX",
             "TxFee": 0.003,
@@ -6480,7 +6480,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 933,
+            "CoinID": 934,
             "Coin": null,
             "ExSymbol": "DASHG",
             "TxFee": 0.003,
@@ -6491,7 +6491,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 934,
+            "CoinID": 935,
             "Coin": null,
             "ExSymbol": "QAC",
             "TxFee": 0.003,
@@ -6502,7 +6502,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 935,
+            "CoinID": 936,
             "Coin": null,
             "ExSymbol": "TASK",
             "TxFee": 0.001,
@@ -6513,7 +6513,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 936,
+            "CoinID": 937,
             "Coin": null,
             "ExSymbol": "JOOS",
             "TxFee": 0.007,
@@ -6524,7 +6524,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 937,
+            "CoinID": 938,
             "Coin": null,
             "ExSymbol": "OWT",
             "TxFee": 0.007,
@@ -6535,7 +6535,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 938,
+            "CoinID": 939,
             "Coin": null,
             "ExSymbol": "VESTX",
             "TxFee": 0.003,
@@ -6546,7 +6546,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 939,
+            "CoinID": 940,
             "Coin": null,
             "ExSymbol": "BHIG",
             "TxFee": 0.007,
@@ -6557,7 +6557,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 940,
+            "CoinID": 941,
             "Coin": null,
             "ExSymbol": "TEUR",
             "TxFee": 0.007,
@@ -6568,7 +6568,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 941,
+            "CoinID": 942,
             "Coin": null,
             "ExSymbol": "CUT",
             "TxFee": 0.01,
@@ -6579,7 +6579,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 942,
+            "CoinID": 943,
             "Coin": null,
             "ExSymbol": "BRT",
             "TxFee": 0.007,
@@ -6590,7 +6590,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 943,
+            "CoinID": 944,
             "Coin": null,
             "ExSymbol": "VEST",
             "TxFee": 0.007,
@@ -6601,7 +6601,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 944,
+            "CoinID": 945,
             "Coin": null,
             "ExSymbol": "GVC",
             "TxFee": 0.007,
@@ -6612,7 +6612,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 945,
+            "CoinID": 946,
             "Coin": null,
             "ExSymbol": "ABET",
             "TxFee": 0.003,
@@ -6623,7 +6623,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 946,
+            "CoinID": 947,
             "Coin": null,
             "ExSymbol": "MNPR",
             "TxFee": 0.003,
@@ -6634,7 +6634,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 947,
+            "CoinID": 948,
             "Coin": null,
             "ExSymbol": "OWC",
             "TxFee": 0.003,
@@ -6645,7 +6645,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 948,
+            "CoinID": 949,
             "Coin": null,
             "ExSymbol": "ORM",
             "TxFee": 0.007,
@@ -6656,7 +6656,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 949,
+            "CoinID": 950,
             "Coin": null,
             "ExSymbol": "ABST",
             "TxFee": 0.007,
@@ -6667,7 +6667,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 950,
+            "CoinID": 951,
             "Coin": null,
             "ExSymbol": "OCUL",
             "TxFee": 0.003,
@@ -6678,18 +6678,18 @@
             "Issue": ""
         },
         {
-            "CoinID": 951,
+            "CoinID": 952,
             "Coin": null,
             "ExSymbol": "PNY",
             "TxFee": 0.003,
-            "Withdraw": true,
-            "Deposit": true,
+            "Withdraw": false,
+            "Deposit": false,
             "Confirmation": 2,
             "Listed": true,
             "Issue": ""
         },
         {
-            "CoinID": 952,
+            "CoinID": 953,
             "Coin": null,
             "ExSymbol": "SPRKL",
             "TxFee": 0.007,
@@ -6700,7 +6700,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 953,
+            "CoinID": 954,
             "Coin": null,
             "ExSymbol": "LTFG",
             "TxFee": 0.001,
@@ -6711,7 +6711,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 954,
+            "CoinID": 955,
             "Coin": null,
             "ExSymbol": "QUAN",
             "TxFee": 0.003,
@@ -6722,7 +6722,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 955,
+            "CoinID": 956,
             "Coin": null,
             "ExSymbol": "ELD",
             "TxFee": 0.007,
@@ -6733,7 +6733,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 956,
+            "CoinID": 957,
             "Coin": null,
             "ExSymbol": "EUM",
             "TxFee": 0.007,
@@ -6744,7 +6744,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 957,
+            "CoinID": 958,
             "Coin": null,
             "ExSymbol": "B2G",
             "TxFee": 0.003,
@@ -6755,7 +6755,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 958,
+            "CoinID": 959,
             "Coin": null,
             "ExSymbol": "BITC",
             "TxFee": 0.003,
@@ -6766,7 +6766,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 959,
+            "CoinID": 960,
             "Coin": null,
             "ExSymbol": "HBX",
             "TxFee": 0.007,
@@ -6777,7 +6777,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 960,
+            "CoinID": 961,
             "Coin": null,
             "ExSymbol": "VJC",
             "TxFee": 0.007,
@@ -6788,7 +6788,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 961,
+            "CoinID": 962,
             "Coin": null,
             "ExSymbol": "MNC",
             "TxFee": 0.005,
@@ -6799,7 +6799,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 962,
+            "CoinID": 963,
             "Coin": null,
             "ExSymbol": "FUSION",
             "TxFee": 0.003,
@@ -6810,7 +6810,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 963,
+            "CoinID": 964,
             "Coin": null,
             "ExSymbol": "MAR",
             "TxFee": 0.003,
@@ -6821,7 +6821,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 964,
+            "CoinID": 965,
             "Coin": null,
             "ExSymbol": "VCCO",
             "TxFee": 0.003,
@@ -6832,7 +6832,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 965,
+            "CoinID": 966,
             "Coin": null,
             "ExSymbol": "AMR",
             "TxFee": 0.007,
@@ -6843,7 +6843,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 966,
+            "CoinID": 967,
             "Coin": null,
             "ExSymbol": "OBX",
             "TxFee": 0.007,
@@ -6854,7 +6854,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 967,
+            "CoinID": 968,
             "Coin": null,
             "ExSymbol": "E2C",
             "TxFee": 0.007,
@@ -6865,7 +6865,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 968,
+            "CoinID": 969,
             "Coin": null,
             "ExSymbol": "OWO",
             "TxFee": 0.003,
@@ -6876,7 +6876,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 969,
+            "CoinID": 970,
             "Coin": null,
             "ExSymbol": "RC20",
             "TxFee": 0.007,
@@ -6887,7 +6887,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 970,
+            "CoinID": 971,
             "Coin": null,
             "ExSymbol": "SVR",
             "TxFee": 0.003,
@@ -6898,7 +6898,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 971,
+            "CoinID": 972,
             "Coin": null,
             "ExSymbol": "RENTOO",
             "TxFee": 0.001,
@@ -6909,7 +6909,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 972,
+            "CoinID": 973,
             "Coin": null,
             "ExSymbol": "VEIL",
             "TxFee": 0.003,
@@ -6920,7 +6920,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 973,
+            "CoinID": 974,
             "Coin": null,
             "ExSymbol": "ZCOR",
             "TxFee": 0.007,
@@ -6931,7 +6931,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 974,
+            "CoinID": 975,
             "Coin": null,
             "ExSymbol": "OMNES",
             "TxFee": 0.007,
@@ -6942,7 +6942,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 975,
+            "CoinID": 976,
             "Coin": null,
             "ExSymbol": "PRKL",
             "TxFee": 0.003,
@@ -6953,7 +6953,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 976,
+            "CoinID": 977,
             "Coin": null,
             "ExSymbol": "ITN",
             "TxFee": 0.007,
@@ -6964,7 +6964,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 977,
+            "CoinID": 978,
             "Coin": null,
             "ExSymbol": "IDC",
             "TxFee": 0.007,
@@ -6975,7 +6975,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 978,
+            "CoinID": 979,
             "Coin": null,
             "ExSymbol": "WBET",
             "TxFee": 0.001,
@@ -6986,7 +6986,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 979,
+            "CoinID": 980,
             "Coin": null,
             "ExSymbol": "PSD",
             "TxFee": 0.007,
@@ -6997,7 +6997,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 980,
+            "CoinID": 981,
             "Coin": null,
             "ExSymbol": "TSF",
             "TxFee": 0.003,
@@ -7008,7 +7008,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 981,
+            "CoinID": 982,
             "Coin": null,
             "ExSymbol": "LENS",
             "TxFee": 0.007,
@@ -7019,7 +7019,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 982,
+            "CoinID": 983,
             "Coin": null,
             "ExSymbol": "BTH",
             "TxFee": 0.003,
@@ -7030,7 +7030,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 983,
+            "CoinID": 984,
             "Coin": null,
             "ExSymbol": "BCEO",
             "TxFee": 0.007,
@@ -7041,7 +7041,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 984,
+            "CoinID": 985,
             "Coin": null,
             "ExSymbol": "EXO",
             "TxFee": 0.003,
@@ -7052,7 +7052,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 985,
+            "CoinID": 986,
             "Coin": null,
             "ExSymbol": "TRIBE",
             "TxFee": 0.001,
@@ -7063,7 +7063,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 986,
+            "CoinID": 987,
             "Coin": null,
             "ExSymbol": "CLASSY",
             "TxFee": 0.007,
@@ -7074,7 +7074,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 987,
+            "CoinID": 988,
             "Coin": null,
             "ExSymbol": "BST",
             "TxFee": 0.003,
@@ -7085,7 +7085,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 988,
+            "CoinID": 989,
             "Coin": null,
             "ExSymbol": "ACRYL",
             "TxFee": 0.001,
@@ -7096,7 +7096,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 989,
+            "CoinID": 990,
             "Coin": null,
             "ExSymbol": "TVT",
             "TxFee": 0.007,
@@ -7107,7 +7107,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 990,
+            "CoinID": 991,
             "Coin": null,
             "ExSymbol": "RELAY",
             "TxFee": 0.001,
@@ -7118,7 +7118,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 991,
+            "CoinID": 992,
             "Coin": null,
             "ExSymbol": "TELE",
             "TxFee": 0.007,
@@ -7129,7 +7129,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 992,
+            "CoinID": 993,
             "Coin": null,
             "ExSymbol": "BC",
             "TxFee": 0.05,
@@ -7140,7 +7140,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 993,
+            "CoinID": 994,
             "Coin": null,
             "ExSymbol": "xEUR",
             "TxFee": 0.005,
@@ -7151,7 +7151,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 994,
+            "CoinID": 995,
             "Coin": null,
             "ExSymbol": "WEC",
             "TxFee": 0.001,
@@ -7162,7 +7162,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 995,
+            "CoinID": 996,
             "Coin": null,
             "ExSymbol": "ANON",
             "TxFee": 0.003,
@@ -7173,7 +7173,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 996,
+            "CoinID": 997,
             "Coin": null,
             "ExSymbol": "GMCC",
             "TxFee": 0.007,
@@ -7184,7 +7184,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 997,
+            "CoinID": 998,
             "Coin": null,
             "ExSymbol": "MRS",
             "TxFee": 0.007,
@@ -7195,7 +7195,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 998,
+            "CoinID": 999,
             "Coin": null,
             "ExSymbol": "VOCO",
             "TxFee": 0.007,
@@ -7206,7 +7206,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 999,
+            "CoinID": 1000,
             "Coin": null,
             "ExSymbol": "ZNN",
             "TxFee": 0.003,
@@ -7217,7 +7217,7 @@
             "Issue": ""
         },
         {
-            "CoinID": 1000,
+            "CoinID": 1001,
             "Coin": null,
             "ExSymbol": "AZT",
             "TxFee": 0.007,

@@ -219,9 +219,9 @@ func (e *Okex) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Okex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.Fee = true
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = true
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true

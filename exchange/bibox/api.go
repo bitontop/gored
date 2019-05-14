@@ -272,7 +272,7 @@ func (e *Bibox) UpdateAllBalances() {
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} else if jsonResponse.Error != (Error{}) {
+	} else if jsonResponse.Error.Code != "" {
 		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Error)
 		return
 	}
@@ -281,17 +281,20 @@ func (e *Bibox) UpdateAllBalances() {
 		return
 	}
 
-	for _, v := range accountBalance[0].AssetsList {
-		freeamount, err := strconv.ParseFloat(v.Balance, 64)
-		if err == nil {
-			c := e.GetCoinBySymbol(v.CoinSymbol)
-			if c != nil {
-				balanceMap.Set(c.Code, freeamount)
+	for _, result := range accountBalance {
+		for _, v := range result.Result.AssetsList {
+			freeamount, err := strconv.ParseFloat(v.Balance, 64)
+			if err == nil {
+				c := e.GetCoinBySymbol(v.CoinSymbol)
+				if c != nil {
+					balanceMap.Set(c.Code, freeamount)
+				}
+			} else {
+				log.Printf("%s %s Get Balance Err: %s\n", e.GetName(), v.CoinSymbol, err)
 			}
-		} else {
-			log.Printf("%s %s Get Balance Err: %s\n", e.GetName(), v.CoinSymbol, err)
 		}
 	}
+
 }
 
 func (e *Bibox) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
@@ -323,7 +326,7 @@ func (e *Bibox) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	jsonPlaceReturn := e.ApiKeyPOST(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if jsonResponse.Error != (Error{}) {
+	} else if jsonResponse.Error.Code != "" {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Error)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderReturn); err != nil {
@@ -368,7 +371,7 @@ func (e *Bibox) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	jsonPlaceReturn := e.ApiKeyPOST(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if jsonResponse.Error != (Error{}) {
+	} else if jsonResponse.Error.Code != "" {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Error)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderReturn); err != nil {
@@ -413,7 +416,7 @@ func (e *Bibox) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyPOST(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if jsonResponse.Error != (Error{}) {
+	} else if jsonResponse.Error.Code != "" {
 		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Error)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderStatus); err != nil {
@@ -465,10 +468,10 @@ func (e *Bibox) CancelOrder(order *exchange.Order) error {
 
 	mapParams["body"] = body
 
-	jsonCancelOrder := e.ApiKeyPOST(strRequest, nil)
+	jsonCancelOrder := e.ApiKeyPOST(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if jsonResponse.Error != (Error{}) {
+	} else if jsonResponse.Error.Code != "" {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Error)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &cancelOrder); err != nil {
