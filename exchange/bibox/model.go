@@ -8,25 +8,29 @@ import (
 	"encoding/json"
 )
 
-/* type JsonResponse struct {
-	Success bool            `json:"success"`
-	Message string          `json:"message"`
-	Result  json.RawMessage `json:"result"`
-} */
+type JsonResponse struct {
+	Error  Error           `json:"error"`
+	Result json.RawMessage `json:"result"`
+	Cmd    string          `json:"cmd"`
+	Ver    string          `json:"ver"`
+}
 
 type Error struct {
 	Code string `json:"code"`
 	Msg  string `json:"msg"`
 }
 
-type JsonResponse struct {
-	Error struct {
-		Code string `json:"code"`
-		Msg  string `json:"msg"`
-	} `json:"error"`
-	Result json.RawMessage `json:"result"`
-	Cmd    string          `json:"cmd"`
-	Ver    string          `json:"ver"`
+type CoinsData []struct {
+	Result []struct {
+		CoinSymbol       string  `json:"coin_symbol"`
+		IsActive         int     `json:"is_active"`
+		OriginalDecimals int     `json:"original_decimals"`
+		EnableDeposit    int     `json:"enable_deposit"`
+		EnableWithdraw   int     `json:"enable_withdraw"`
+		WithdrawFee      float64 `json:"withdraw_fee"`
+		WithdrawMin      float64 `json:"withdraw_min"`
+	} `json:"result"`
+	Cmd string `json:"cmd"`
 }
 
 type PairsData []struct {
@@ -64,30 +68,6 @@ type AccountBalances []struct {
 	} `json:"assets_list"`
 }
 
-type Asset struct {
-	Cmd  string       `json:"cmd"`
-	Body *AssetDetail `json:"body"`
-}
-
-type AssetDetail struct {
-	Select int `json:"select"`
-}
-
-type OrderParam struct {
-	Cmd         string             `json:"cmd"`
-	Index       int                `json:"index"`
-	BodyDetails *OrderParamDetails `json:"body"`
-}
-
-type OrderParamDetails struct {
-	Pair        string  `json:"pair"`
-	AccountType int     `json:"account_type"`
-	OrderType   int     `json:"order_type"`
-	OrderSide   int     `json:"order_side"`
-	Price       float64 `json:"price"`
-	Amount      float64 `json:"amount"`
-}
-
 type PlaceOrder []struct {
 	Error struct {
 		Code string `json:"code"`
@@ -122,25 +102,8 @@ type OrderStatus []struct {
 	Cmd string `json:"cmd"`
 }
 
-type StatusParam struct {
-	Cmd         string              `json:"cmd"`
-	BodyDetails *StatusParamDetails `json:"body"`
-}
-type StatusParamDetails struct {
-	Id int `json:"id"`
-}
-
 type CancelOrder []struct {
 	Result string `json:"result"`
 	Cmd    string `json:"cmd"`
 	Index  int    `json:"index"`
-}
-
-type CancelParam struct {
-	Cmd         string              `json:"cmd"`
-	Index       int                 `json:"index"`
-	BodyDetails *CancelParamDetails `json:"body"`
-}
-type CancelParamDetails struct {
-	OrdersId int `json:"orders_id"`
 }

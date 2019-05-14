@@ -98,7 +98,7 @@ func (e *Bibox) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Bibox) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bibox.com/exchange?coinPair=%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.bibox.com/exchange?coinPair=%s", e.GetSymbolByPair(pair))
 }
 
 /*************** Coins on the Exchanges ***************/
