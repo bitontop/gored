@@ -57,10 +57,10 @@ func (e *Okex) GetCoinsData() {
 	coinsData := CoinsData{}
 
 	strRequestUrl := "/api/account/v3/currencies"
-
 	jsonCurrencyReturn := e.ApiKeyRequest("GET", nil, strRequestUrl)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, []byte(jsonCurrencyReturn))
+		return
 	}
 
 	for _, data := range coinsData {
@@ -79,30 +79,60 @@ func (e *Okex) GetCoinsData() {
 			c = e.GetCoinBySymbol(data.Currency) //data.Currency)
 		}
 
-		canWithdraw := false
-		canDeposit := false
-		if data.CanWithdraw == "1" {
-			canWithdraw = true
-		}
-		if data.CanDeposit == "1" {
-			canDeposit = true
-		}
-
 		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     data.Currency, //data.Currency,
-				Withdraw:     canWithdraw,
-				Deposit:      canDeposit,
+				ExSymbol:     data.Currency,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       DEFAULT_LISTED,
 			}
-			e.SetCoinConstraint(coinConstraint)
 
-			// get txFee:
-			// ↓ this spend more than 30s
-			//e.WithdrawFee(c)
+			if data.CanDeposit == "1" {
+				coinConstraint.Deposit = true
+			} else {
+				coinConstraint.Deposit = false
+			}
+
+			if data.CanWithdraw == "1" {
+				coinConstraint.Withdraw = true
+			} else {
+				coinConstraint.Withdraw = false
+			}
+
+			e.SetCoinConstraint(coinConstraint)
+		}
+	}
+	e.WithdrawFee()
+}
+
+func (e *Okex) WithdrawFee() {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		log.Printf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+		return
+	}
+
+	withdrawFee := WithdrawFee{}
+	strRequest := "/api/account/v3/withdrawal/fee"
+
+	jsonWithdrawFee := e.ApiKeyRequest("GET", nil, strRequest)
+	if err := json.Unmarshal([]byte(jsonWithdrawFee), &withdrawFee); err != nil {
+		log.Printf("%s WithdrawFee Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawFee)
+		return
+	}
+
+	for _, data := range withdrawFee {
+		if data.MinFee != "" {
+			minFee, err := strconv.ParseFloat(data.MinFee, 64)
+			if err != nil {
+				log.Printf("%s minFee conver to float64 err: %v %+v", e.GetName(), err, data)
+			} else {
+				c := e.GetCoinBySymbol(data.Currency)
+				if c != nil {
+					coinConstraint := e.GetCoinConstraint(c)
+					coinConstraint.TxFee = minFee
+				}
+			}
 		}
 	}
 }
@@ -205,7 +235,7 @@ func (e *Okex) UpdateAllBalances() {
 	jsonBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		errorJson := ErrorMsg{}
-		if err1 := json.Unmarshal([]byte(jsonBalanceReturn), &errorJson); err1 != nil {
+		if err := json.Unmarshal([]byte(jsonBalanceReturn), &errorJson); err != nil {
 			log.Printf("%s UpdateAllBalances Err: Code: %v Msg: %v", e.GetName(), errorJson.Code, errorJson.Msg)
 		} else {
 			log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
@@ -256,42 +286,6 @@ func (e *Okex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 	}
 
 	return true
-}
-
-func (e *Okex) WithdrawFee(coin *coin.Coin) {
-	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
-		log.Printf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
-		return
-	}
-
-	withdrawFee := WithdrawFee{}
-	strRequest := "/api/account/v3/withdrawal/fee"
-
-	mapParams := make(map[string]string)
-	mapParams["currency"] = e.GetSymbolByCoin(coin)
-
-	strRequest += fmt.Sprintf("?%s", exchange.Map2UrlQuery(mapParams))
-
-	jsonWithdrawFee := e.ApiKeyRequest("GET", nil, strRequest)
-	if err := json.Unmarshal([]byte(jsonWithdrawFee), &withdrawFee); err != nil {
-		log.Printf("%s WithdrawFee Unmarshal Err: %v %v", e.GetName, err, jsonWithdrawFee)
-		return
-	}
-
-	var minFee float64
-	var err error
-	if withdrawFee[0].MinFee == "" {
-		minFee = 0.0
-	} else {
-		minFee, err = strconv.ParseFloat(withdrawFee[0].MinFee, 64)
-		if err != nil {
-			log.Printf("%s minFee conver to float64 err : %v, fee: %v", e.GetName, err, withdrawFee[0].MinFee)
-
-		}
-	}
-
-	coinConstraint := e.GetCoinConstraint(coin)
-	coinConstraint.TxFee = minFee
 }
 
 func (e *Okex) Transfer(coin *coin.Coin, quantity float64, from, to int) bool {
