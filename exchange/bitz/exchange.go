@@ -100,7 +100,7 @@ func (e *Bitz) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Bitz) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bit-z.com/exchange/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.bit-z.com/exchange/%s", e.GetSymbolByPair(pair))
 }
 
 /*************** Coins on the Exchanges ***************/

@@ -50,9 +50,9 @@ Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitz) GetCoinsData() {
 	jsonResponse := &JsonResponse{}
-	pairsData := make(map[string]*PairsData)
+	coinsData := make(map[string]interface{})
 
-	strRequestUrl := "/Market/symbolList"
+	strRequestUrl := "/Market/coinRate"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -61,51 +61,29 @@ func (e *Bitz) GetCoinsData() {
 	} else if jsonResponse.Status != 200 {
 		log.Printf("%s Get Coins Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
+	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
 		log.Printf("%s Get Coins Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	for _, data := range pairsData {
-		base := &coin.Coin{}
-		target := &coin.Coin{}
+	for coinName, _ := range coinsData {
+		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base = coin.GetCoin(data.CoinTo)
-			if base == nil {
-				base = &coin.Coin{}
-				base.Code = data.CoinTo
-				coin.AddCoin(base)
-			}
-			target = coin.GetCoin(data.CoinFrom)
-			if target == nil {
-				target = &coin.Coin{}
-				target.Code = data.CoinFrom
-				coin.AddCoin(target)
+			c = coin.GetCoin(coinName)
+			if c == nil {
+				c = &coin.Coin{}
+				c.Code = coinName
+				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			base = e.GetCoinBySymbol(data.CoinTo)
-			target = e.GetCoinBySymbol(data.CoinFrom)
+			c = e.GetCoinBySymbol(coinName)
 		}
 
-		if base != nil {
+		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.CoinTo,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
-			}
-			e.SetCoinConstraint(coinConstraint)
-		}
-
-		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.CoinFrom,
+				CoinID:       c.ID,
+				Coin:         c,
+				ExSymbol:     coinName,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -138,25 +116,25 @@ func (e *Bitz) GetPairsData() {
 		log.Printf("%s Get Pairs Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	for symbol := range pairsData {
+	for _, data := range pairsData {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(pairsData[symbol].CoinTo)
-			target := coin.GetCoin(pairsData[symbol].CoinFrom)
+			base := coin.GetCoin(data.CoinTo)
+			target := coin.GetCoin(data.CoinFrom)
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(pairsData[symbol].Name)
+			p = e.GetPairBySymbol(data.Name)
 		}
 		if p != nil {
-			lotSize, _ := strconv.ParseFloat(pairsData[symbol].NumberFloat, 64)
-			priceFilter, _ := strconv.ParseFloat(pairsData[symbol].PriceFloat, 64)
+			lotSize, _ := strconv.ParseFloat(data.NumberFloat, 64)
+			priceFilter, _ := strconv.ParseFloat(data.PriceFloat, 64)
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    pairsData[symbol].Name,
+				ExSymbol:    data.Name,
 				MakerFee:    DEFAULT_MAKERER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     lotSize,
@@ -180,13 +158,17 @@ func (e *Bitz) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	strUrl := fmt.Sprintf("%s/Market/depth?symbol=%s", API_URL, symbol)
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = symbol
+
+	strRequestUrl := "/Market/depth"
+	strUrl := API_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Status != 200 {
@@ -263,18 +245,17 @@ func (e *Bitz) UpdateAllBalances() {
 	for _, v := range accountBalance {
 		c := e.GetCoinBySymbol(v.Name)
 		if c != nil {
-			balanceFloat, err := strconv.ParseFloat(v.Over, 64)
+			freeamount, err := strconv.ParseFloat(v.Over, 64)
 			if err != nil {
-				log.Printf("Bitz balance parse to float64 error: %v", err)
-				balanceFloat = 0.0
+				log.Printf("%s balance Convert to float64 Error: %v %v", e.GetName(), err, v.Over)
+			} else {
+				balanceMap.Set(c.Code, freeamount)
 			}
-			balanceMap.Set(c.Code, balanceFloat)
 		}
 	}
 }
 
 func (e *Bitz) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-
 	return false
 }
 

@@ -16,22 +16,22 @@ Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https
 
 ## Exchange Support Table
 
-| Exchange | REST API | goCAD |
-|----------|------|-----|
-| Binance| Yes  | NA  |
-| Bitfinex | Yes  | NA  |
-| BitMEX | Yes | NA |
-| Bitstamp | Yes  | No  |
-| Bittrex | Yes | NA |
-| Exmo | Yes | NA |
-| CoinbasePro | Yes | No|
-| GateIO | Yes | NA |
-| HitBTC | Yes  No |
-| Huobi.Pro | Yes | NA |
-| Kraken | Yes | NA |
-| OKEX | Yes | No |
-| Poloniex | Yes | NA |
-| ZB.COM | Yes | NA |
+|   Exchange   | Public API | Private API | goCAD |
+|--------------|------------|-------------|-------|
+| BiBox| Yes  | Yes  | NA  |
+| Binance| Yes  | Yes  | NA  |
+| BitMAX | Yes  | Yes  | NA  |
+| BitMEX | Yes | Yes  | NA |
+| Bitstamp | Yes  | No  | NA  |
+| Bittrex | Yes | Yes  | NA |
+| BitZ | Yes | Yes  | NA |
+| CoinEX | Yes | Yes  | NA |
+| Huobi PRO | Yes | Yes  | NA|
+| Huobi OTC | Yes | No  | NA |
+| KuCoin | Yes | Yes  | NA |
+| OKEX | Yes | Yes  | NA |
+| OTCBTC | Yes | Yes  | NA |
+| Stex | Yes | Yes  | NA |
 
 We are aiming to support the top 100 highest volume exchanges based off the [CoinMarketCap exchange data](https://coinmarketcap.com/exchanges/volume/24-hour/).
 
@@ -120,3 +120,4 @@ Binaries will be published once the codebase reaches a stable condition.
 | chunlee1991 | https://github.com/chunlee1991 | 302 |
 | 9cat | https://github.com/9cat | 116 |
 | temple | https://github.com/botemple | 129 |
+| tony0408 | https://github.com/tony0408 | 52 |
