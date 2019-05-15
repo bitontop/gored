@@ -293,6 +293,8 @@ func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
 
+	log.Printf("%s LimitSell Rate: %f   Quantity: %f", e.GetName(), rate, quantity)
+
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
@@ -338,6 +340,8 @@ func (e *Huobi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	jsonResponse := &JsonResponse{}
 	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
+
+	log.Printf("%s LimitSell Rate: %f   Quantity: %f", e.GetName(), rate, quantity)
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
