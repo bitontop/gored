@@ -216,8 +216,8 @@ func (e *Dragonex) DeletePair(pair *pair.Pair) {
 func (e *Dragonex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false

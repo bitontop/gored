@@ -103,7 +103,7 @@ func (e *Dragonex) GetPairsData() {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestUrl := "/api/v1/symbol/all/"
+	strRequestUrl := "/api/v1/symbol/all2/"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -115,11 +115,10 @@ func (e *Dragonex) GetPairsData() {
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
 		log.Printf("%s Get Pairs Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
-
-	for _, data := range pairsData {
+	for _, list := range pairsData.List {
 		p := &pair.Pair{}
-		baseSymbol := strings.Split(data.Symbol, "_")[1]
-		targetSymbol := strings.Split(data.Symbol, "_")[0]
+		baseSymbol := strings.Split(fmt.Sprintf("%v", list[1]), "_")[1]
+		targetSymbol := strings.Split(fmt.Sprintf("%v", list[1]), "_")[0]
 		switch e.Source {
 		case exchange.EXCHANGE_API:
 			base := coin.GetCoin(baseSymbol)
@@ -128,17 +127,17 @@ func (e *Dragonex) GetPairsData() {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data.Symbol)
+			p = e.GetPairBySymbol(fmt.Sprintf("%v", list[1]))
 		}
 		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    fmt.Sprintf("%v", data.SymbolID),
+				ExSymbol:    fmt.Sprintf("%0.0f", list[0].(float64)),
 				MakerFee:    DEFAULT_MAKERER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
+				LotSize:     list[7].(float64),
+				PriceFilter: list[5].(float64),
 				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)

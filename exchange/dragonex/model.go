@@ -20,9 +20,9 @@ type CoinsData []struct {
 	Code   string `json:"code"`
 }
 
-type PairsData []struct {
-	Symbol   string `json:"symbol"`
-	SymbolID int    `json:"symbol_id"`
+type PairsData struct {
+	Columns []string        `json:"columns"`
+	List    [][]interface{} `json:"list"`
 }
 
 type OrderBook struct {
