@@ -121,19 +121,19 @@ func (e *Hitbtc) GetPairsData() {
 		if p != nil {
 			lotSize, err := strconv.ParseFloat(data.QuantityIncrement, 64)
 			if err != nil {
-				log.Printf("HitBTC Lot_Size Err: %s\n", err)
+				log.Printf("%s Lot Size Err: %s", e.GetName(), err)
 			}
-			tickSize, err := strconv.ParseFloat(data.TickSize, 64)
+			priceFilter, err := strconv.ParseFloat(data.TickSize, 64)
 			if err != nil {
-				log.Printf("HitBTC Tick_Size Err: %s\n", err)
+				log.Printf("%s Price Filter Err: %s", e.GetName(), err)
 			}
 			makerFee, err := strconv.ParseFloat(data.ProvideLiquidityRate, 64)
 			if err != nil {
-				log.Printf("HitBTC Tick_Size Err: %s\n", err)
+				log.Printf("%s Maker Fee Err: %s", e.GetName(), err)
 			}
 			takerFee, err := strconv.ParseFloat(data.TakeLiquidityRate, 64)
 			if err != nil {
-				log.Printf("HitBTC Tick_Size Err: %s\n", err)
+				log.Printf("%s Taker Fee Err: %s", e.GetName(), err)
 			}
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
@@ -142,7 +142,7 @@ func (e *Hitbtc) GetPairsData() {
 				MakerFee:    makerFee,
 				TakerFee:    takerFee,
 				LotSize:     lotSize,
-				PriceFilter: tickSize,
+				PriceFilter: priceFilter,
 				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
@@ -180,11 +180,11 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 		buydata.Rate, err = strconv.ParseFloat(bid.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("Hitbtc Bids Rate ParseFloat error:%v", err)
+			return nil, fmt.Errorf("%s Bids Rate ParseFloat error: %v", e.GetName(), err)
 		}
 		buydata.Quantity, err = strconv.ParseFloat(bid.Size, 64)
 		if err != nil {
-			return nil, fmt.Errorf("Hitbtc Bids Quantity ParseFloat error:%v", err)
+			return nil, fmt.Errorf("%s Bids Quantity ParseFloat error: %v", e.GetName(), err)
 		}
 
 		maker.Bids = append(maker.Bids, buydata)
@@ -194,11 +194,11 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("Hitbtc Asks Rate ParseFloat error:%v", err)
+			return nil, fmt.Errorf("%s Asks Rate ParseFloat error: %v", e.GetName(), err)
 		}
 		selldata.Quantity, err = strconv.ParseFloat(ask.Size, 64)
 		if err != nil {
-			return nil, fmt.Errorf("Hitbtc Asks Quantity ParseFloat error:%v", err)
+			return nil, fmt.Errorf("%s Asks Quantity ParseFloat error: %v", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)
@@ -235,13 +235,12 @@ func (e *Hitbtc) UpdateAllBalances() {
 				balanceMap.Set(c.Code, freeamount)
 			}
 		} else {
-			log.Printf("%s %s Get Balance Err: %s\n", e.GetName, v.Currency, err)
+			log.Printf("%s %s Get Balance Err: %s\n", e.GetName(), v.Currency, err)
 		}
 	}
 }
 
 func (e *Hitbtc) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-
 	return false
 }
 
@@ -341,12 +340,8 @@ func (e *Hitbtc) OrderStatus(order *exchange.Order) error {
 	if err == nil && errResponse.Error.Code == 0 {
 		if orderStatus.Status == "Filled" {
 			order.Status = exchange.Filled
-			order.DealRate = order.Rate
-			order.DealQuantity, _ = strconv.ParseFloat(orderStatus.CumQuantity, 64)
 		} else if orderStatus.Status == "partiallyFilled" {
 			order.Status = exchange.Partial
-			order.DealRate = order.Rate
-			order.DealQuantity, _ = strconv.ParseFloat(orderStatus.CumQuantity, 64)
 		} else if orderStatus.Status == "canceled" {
 			order.Status = exchange.Canceled
 		} else if orderStatus.Status == "expired" {
@@ -354,6 +349,9 @@ func (e *Hitbtc) OrderStatus(order *exchange.Order) error {
 		} else if orderStatus.Status == "suspended" {
 			order.Status = exchange.Other
 		}
+
+		order.DealRate = order.Rate
+		order.DealQuantity, _ = strconv.ParseFloat(orderStatus.CumQuantity, 64)
 	}
 
 	return nil
@@ -369,7 +367,7 @@ func (e *Hitbtc) CancelOrder(order *exchange.Order) error {
 	}
 
 	errResponse := &ErrResponse{}
-	cancelOrder := []PlaceOrder{}
+	cancelOrder := []*PlaceOrder{}
 	strRequest := "/api/2/order"
 
 	jsonCancelOrder := e.ApiKeyRequest("DELETE", make(map[string]string), strRequest)
