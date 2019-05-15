@@ -61,19 +61,34 @@ type UserInfo struct {
 }
 
 type PlaceOrder struct {
-	ID              interface{} `json:"id"`
-	UID             interface{} `json:"uId"`
-	Price           string      `json:"price"`
-	Number          string      `json:"number"`
-	Total           string      `json:"total"`
-	NumberOver      string      `json:"numberOver"`
-	NumberDeal      interface{} `json:"numberDeal"`
-	Flag            string      `json:"flag"`
-	Status          int         `json:"status"`
-	CoinFrom        string      `json:"coinFrom"`
-	CoinTo          string      `json:"coinTo"`
-	OrderTotalPrice string      `json:"orderTotalPrice"`
-	Created         string      `json:"created"`
+	ID         int64       `json:"id"`
+	UID        int         `json:"uId"`
+	Price      string      `json:"price"`
+	Number     string      `json:"number"`
+	NumberOver string      `json:"numberOver"`
+	NumberDeal interface{} `json:"numberDeal"`
+	Flag       string      `json:"flag"`
+	Status     int         `json:"status"`
+	CoinFrom   string      `json:"coinFrom"`
+	CoinTo     string      `json:"coinTo"`
+}
+
+type OrderDetails struct {
+	ID              string `json:"id"`
+	UID             string `json:"uId"`
+	Price           string `json:"price"`
+	Number          string `json:"number"`
+	Total           string `json:"total"`
+	NumberOver      string `json:"numberOver"`
+	NumberDeal      string `json:"numberDeal"`
+	Flag            string `json:"flag"`
+	Status          int    `json:"status"`
+	CoinFrom        string `json:"coinFrom"`
+	CoinTo          string `json:"coinTo"`
+	AveragePrice    string `json:"averagePrice"`
+	OrderTotalPrice string `json:"orderTotalPrice"`
+	TradeType       string `json:"tradeType"`
+	Created         string `json:"created"`
 }
 
 type CancelOrder struct {

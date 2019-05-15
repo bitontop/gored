@@ -264,8 +264,6 @@ func (e *Bitz) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		return nil, fmt.Errorf("%s API Key, Secret Key or TradePassword are nil", e.GetName())
 	}
 
-	tradePwd := e.TradePassword
-
 	jsonResponse := JsonResponse{}
 	placeOrder := PlaceOrder{}
 	strRequest := "/Trade/addEntrustSheet"
@@ -275,13 +273,13 @@ func (e *Bitz) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams["price"] = fmt.Sprintf("%v", rate)
 	mapParams["type"] = "2"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["tradePwd"] = tradePwd
+	mapParams["tradePwd"] = e.TradePassword
 
 	jsonPlaceReturn := e.ApiKeyPOST(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Status != 200 {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v %+v", e.GetName(), jsonResponse.Status, jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -306,8 +304,6 @@ func (e *Bitz) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		return nil, fmt.Errorf("%s API Key, Secret Key or TradePassword are nil", e.GetName())
 	}
 
-	tradePwd := e.TradePassword
-
 	jsonResponse := JsonResponse{}
 	placeOrder := PlaceOrder{}
 	strRequest := "/Trade/addEntrustSheet"
@@ -317,13 +313,13 @@ func (e *Bitz) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	mapParams["price"] = fmt.Sprintf("%v", rate)
 	mapParams["type"] = "1"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["tradePwd"] = tradePwd
+	mapParams["tradePwd"] = e.TradePassword
 
 	jsonPlaceReturn := e.ApiKeyPOST(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Status != 200 {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v %+v", e.GetName(), jsonResponse.Status, jsonPlaceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -349,14 +345,14 @@ func (e *Bitz) OrderStatus(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
+	orderStatus := OrderDetails{}
 	strRequest := "/Trade/getEntrustSheetInfo"
 
 	mapParams := make(map[string]string)
 	if order.Pair != nil {
 		mapParams["entrustSheetId"] = order.OrderID
 	} else {
-		return fmt.Errorf("Bitz Order Status Pair cannot be null!")
+		return fmt.Errorf("%s Order Status Pair cannot be null!", e.GetName())
 	}
 
 	jsonOrderStatus := e.ApiKeyPOST(mapParams, strRequest)
@@ -432,17 +428,16 @@ func (e *Bitz) ApiKeyPOST(mapParams map[string]string, strRequestPath string) st
 
 	mapParams["apiKey"] = e.API_KEY
 	mapParams["timeStamp"] = timestamp
-	mapParams["nonce"] = timestamp[4:9]
+	mapParams["nonce"] = timestamp[4:]
 
 	params := exchange.Map2UrlQuery(mapParams) + e.API_SECRET
-
 	mapParams["sign"] = exchange.ComputeMD5(params)
 
 	request, err := http.NewRequest("POST", strUrl, strings.NewReader(exchange.Map2UrlQuery(mapParams)))
 	if err != nil {
 		return err.Error()
 	}
-
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	request.Header.Add("Accept", "application/json")
 

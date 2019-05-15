@@ -158,19 +158,6 @@ func Map2UrlQuery(mapParams map[string]string) string {
 	return strParams
 }
 
-func Map2UrlQueryNoSort(mapParams map[string]string) string {
-	var strParams string
-	for key, value := range mapParams {
-		strParams += (key + "=" + value + "&")
-	}
-
-	if 0 < len(strParams) {
-		strParams = string([]rune(strParams)[:len(strParams)-1])
-	}
-
-	return strParams
-}
-
 func GetExternalIP() string {
 	httpClient := &http.Client{}
 
