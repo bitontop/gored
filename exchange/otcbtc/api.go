@@ -65,35 +65,33 @@ func (e *Otcbtc) GetCoinsData() {
 	}
 
 	for _, data := range pairsData {
+		coinStrs := strings.Split(data.TickerID, "_")
 		base := &coin.Coin{}
 		target := &coin.Coin{}
-		baseSymbol := strings.Split(data.TickerID, "_")[1]
-		targetSymbol := strings.Split(data.TickerID, "_")[0]
-
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base = coin.GetCoin(baseSymbol)
+			base = coin.GetCoin(coinStrs[1])
 			if base == nil {
 				base = &coin.Coin{}
-				base.Code = baseSymbol
+				base.Code = coinStrs[1]
 				coin.AddCoin(base)
 			}
-			target = coin.GetCoin(targetSymbol)
+			target = coin.GetCoin(coinStrs[0])
 			if target == nil {
 				target = &coin.Coin{}
-				target.Code = targetSymbol
+				target.Code = coinStrs[0]
 				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			base = e.GetCoinBySymbol(baseSymbol)
-			target = e.GetCoinBySymbol(targetSymbol)
+			base = e.GetCoinBySymbol(coinStrs[1])
+			target = e.GetCoinBySymbol(coinStrs[0])
 		}
 
 		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       base.ID,
 				Coin:         base,
-				ExSymbol:     baseSymbol,
+				ExSymbol:     coinStrs[1],
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -107,7 +105,7 @@ func (e *Otcbtc) GetCoinsData() {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       target.ID,
 				Coin:         target,
-				ExSymbol:     targetSymbol,
+				ExSymbol:     coinStrs[0],
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -140,14 +138,13 @@ func (e *Otcbtc) GetPairsData() {
 	}
 
 	for _, data := range pairsData {
+		pairStrs := strings.Split(data.TickerID, "_")
 		p := &pair.Pair{}
-		baseSymbol := strings.Split(data.TickerID, "_")[1]
-		targetSymbol := strings.Split(data.TickerID, "_")[0]
 
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(baseSymbol)
-			target := coin.GetCoin(targetSymbol)
+			base := coin.GetCoin(pairStrs[1])
+			target := coin.GetCoin(pairStrs[0])
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}

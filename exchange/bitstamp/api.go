@@ -61,32 +61,30 @@ func (e *Bitstamp) GetCoinsData() {
 	}
 
 	for _, data := range pairsData {
+		coinStrs := strings.Split(data.Name, "/")
+		coinNameStrs := strings.Split(data.Description, "/")
 		base := &coin.Coin{}
 		target := &coin.Coin{}
-		baseSymbol := strings.Split(data.Name, "/")[1]
-		targetSymbol := strings.Split(data.Name, "/")[0]
-		baseName := strings.Split(data.Description, " / ")[1]
-		targetName := strings.Split(data.Description, " / ")[0]
 
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base = coin.GetCoin(baseSymbol)
+			base = coin.GetCoin(coinStrs[1])
 			if base == nil {
 				base = &coin.Coin{}
-				base.Code = baseSymbol
-				base.Name = baseName
+				base.Code = coinStrs[1]
+				base.Name = coinNameStrs[1]
 				coin.AddCoin(base)
 			}
-			target = coin.GetCoin(targetSymbol)
+			target = coin.GetCoin(coinStrs[0])
 			if target == nil {
 				target = &coin.Coin{}
-				target.Code = targetSymbol
-				target.Name = targetName
+				target.Code = coinStrs[0]
+				target.Name = coinNameStrs[0]
 				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			base = e.GetCoinBySymbol(baseSymbol)
-			target = e.GetCoinBySymbol(targetSymbol)
+			base = e.GetCoinBySymbol(coinStrs[1])
+			target = e.GetCoinBySymbol(coinStrs[0])
 		}
 
 		trading := true
@@ -98,7 +96,7 @@ func (e *Bitstamp) GetCoinsData() {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       base.ID,
 				Coin:         base,
-				ExSymbol:     baseSymbol,
+				ExSymbol:     coinStrs[1],
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     trading,
 				Deposit:      trading,
@@ -112,7 +110,7 @@ func (e *Bitstamp) GetCoinsData() {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       target.ID,
 				Coin:         target,
-				ExSymbol:     targetSymbol,
+				ExSymbol:     coinStrs[0],
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     trading,
 				Deposit:      trading,
@@ -140,14 +138,12 @@ func (e *Bitstamp) GetPairsData() {
 	}
 
 	for _, data := range pairsData {
+		pairStrs := strings.Split(data.Name, "/")
 		p := &pair.Pair{}
-		baseSymbol := strings.Split(data.Name, "/")[1]
-		targetSymbol := strings.Split(data.Name, "/")[0]
-
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(baseSymbol)
-			target := coin.GetCoin(targetSymbol)
+			base := coin.GetCoin(pairStrs[1])
+			target := coin.GetCoin(pairStrs[0])
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}

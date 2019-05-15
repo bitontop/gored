@@ -76,7 +76,7 @@ func (e *Dragonex) GetCoinsData() {
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.Code)
+			c = e.GetCoinBySymbol(fmt.Sprintf("%v", data.CoinID))
 		}
 
 		if c != nil {
@@ -115,20 +115,21 @@ func (e *Dragonex) GetPairsData() {
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
 		log.Printf("%s Get Pairs Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
+
 	for _, list := range pairsData.List {
+		pairStrs := strings.Split(list[1].(string), "_")
 		p := &pair.Pair{}
-		baseSymbol := strings.Split(fmt.Sprintf("%v", list[1]), "_")[1]
-		targetSymbol := strings.Split(fmt.Sprintf("%v", list[1]), "_")[0]
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(baseSymbol)
-			target := coin.GetCoin(targetSymbol)
+			base := coin.GetCoin(pairStrs[1])
+			target := coin.GetCoin(pairStrs[0])
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(fmt.Sprintf("%v", list[1]))
+			p = e.GetPairBySymbol(fmt.Sprintf("%0.0f", list[0].(float64)))
 		}
+
 		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
