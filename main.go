@@ -12,6 +12,7 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/bibox"
+	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitstamp"
@@ -91,6 +92,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBitz(config)
 	InitHitbtc(config)
 	InitDragonex(config)
+	InitBigone(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -213,6 +215,15 @@ func InitHitbtc(config *exchange.Config) {
 func InitDragonex(config *exchange.Config) {
 	conf.Exchange(exchange.DRAGONEX, config)
 	ex := dragonex.CreateDragonex(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBigone(config *exchange.Config) {
+	conf.Exchange(exchange.BIGONE, config)
+	ex := bigone.CreateBigone(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

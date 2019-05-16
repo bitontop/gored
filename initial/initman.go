@@ -5,6 +5,7 @@ import (
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/bibox"
+	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
@@ -118,6 +119,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.DRAGONEX:
 		ex := dragonex.CreateDragonex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BIGONE:
+		ex := bigone.CreateBigone(config)
 		e.exMan.Add(ex)
 		return ex
 

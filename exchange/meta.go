@@ -95,4 +95,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BITZ)
 	supportList = append(supportList, HITBTC)
 	supportList = append(supportList, DRAGONEX)
+	supportList = append(supportList, BIGONE)
 }
