@@ -293,10 +293,13 @@ func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
 
+	price, _ := strconv.ParseFloat(fmt.Sprintf("%.8f", rate), 64)
+	qty, _ := strconv.ParseFloat(fmt.Sprintf("%.8f", quantity), 64)
+
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = fmt.Sprintf("%v", qty)
+	mapParams["price"] = fmt.Sprintf("%v", price)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "sell-limit"
 
@@ -339,10 +342,13 @@ func (e *Huobi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
 
+	price, _ := strconv.ParseFloat(fmt.Sprintf("%.8f", rate), 64)
+	qty, _ := strconv.ParseFloat(fmt.Sprintf("%.8f", quantity), 64)
+
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = fmt.Sprintf("%v", qty)
+	mapParams["price"] = fmt.Sprintf("%v", price)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "buy-limit"
 
