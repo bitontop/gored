@@ -135,7 +135,7 @@ func (e *Dragonex) GetPairsData() {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    fmt.Sprintf("%0.0f", list[0].(float64)),
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     list[7].(float64),
 				PriceFilter: list[5].(float64),

@@ -147,7 +147,7 @@ func (e *Binance) GetPairsData() {
 					PairID:      p.ID,
 					Pair:        p,
 					ExSymbol:    data.Symbol,
-					MakerFee:    DEFAULT_MAKERER_FEE,
+					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
 					LotSize:     lotsize,
 					PriceFilter: priceFilter,

@@ -7,7 +7,7 @@ package bitz
 const (
 	DEFAULT_ID           = 14
 	DEFAULT_TAKER_FEE    = 0.0012
-	DEFAULT_MAKERER_FEE  = 0.0008
+	DEFAULT_MAKER_FEE  = 0.0008
 	DEFAULT_TXFEE        = 0.005
 	DEFAULT_WITHDRAW     = true
 	DEFAULT_DEPOSIT      = true

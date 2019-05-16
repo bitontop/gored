@@ -159,7 +159,7 @@ func (e *Bigone) GetPairsData() {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.Name,
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.BaseScale),
 				PriceFilter: math.Pow10(-1 * data.QuoteScale),

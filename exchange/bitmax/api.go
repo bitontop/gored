@@ -130,7 +130,7 @@ func (e *Bitmax) GetPairsData() {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.QtyScale),
 				PriceFilter: math.Pow10(-1 * data.PriceScale),

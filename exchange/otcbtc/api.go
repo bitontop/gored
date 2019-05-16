@@ -156,7 +156,7 @@ func (e *Otcbtc) GetPairsData() {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.ID,
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     data.TradingRule.MinAmount,
 				PriceFilter: data.TradingRule.MinPrice,

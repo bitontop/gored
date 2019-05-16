@@ -139,7 +139,7 @@ func (e *Huobi) GetPairsData() {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.AmountPrecision * -1),
 				PriceFilter: math.Pow10(data.PricePrecision * -1),
