@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -129,16 +130,16 @@ func (e *Bitz) GetPairsData() {
 			p = e.GetPairBySymbol(data.Name)
 		}
 		if p != nil {
-			lotSize, _ := strconv.ParseFloat(data.NumberFloat, 64)
-			priceFilter, _ := strconv.ParseFloat(data.PriceFloat, 64)
+			lotSize, _ := strconv.Atoi(data.NumberFloat)
+			priceFilter, _ := strconv.Atoi(data.PriceFloat)
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.Name,
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     lotSize,
-				PriceFilter: priceFilter,
+				LotSize:     math.Pow10(lotSize * -1),
+				PriceFilter: math.Pow10(priceFilter * -1),
 				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
