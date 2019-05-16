@@ -146,7 +146,6 @@ func (e *Bitfinex) GetWithdrawFees() {
 	strRequestUrl := "/v1/account_fees"
 
 	jsonFeesReturn := e.ApiKeyPost(make(map[string]interface{}), strRequestUrl)
-	log.Printf("jsonFeesReturn: %s", jsonFeesReturn)
 	if err := json.Unmarshal([]byte(jsonFeesReturn), &withdrawFee); err != nil {
 		log.Printf("%s GetWithdrawFees Data Unmarshal Err: %v %v", e.GetName(), err, jsonFeesReturn)
 		return
