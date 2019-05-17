@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"sync"
+	"time"
 
 	cmap "github.com/orcaman/concurrent-map"
 
@@ -65,6 +66,7 @@ func (e *Bitforex) InitData() {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		e.GetCoinsData()
+		time.Sleep(time.Second * 10)
 		e.GetPairsData()
 		break
 	case exchange.MICROSERVICE_API:
