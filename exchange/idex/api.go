@@ -468,5 +468,7 @@ func SoliditySha3(mapParams map[string]interface{}, strSecret string) string {
 		solsha3.Address(mapParams["address"]),
 	)
 
+	// Sign Hash Message by Private Key to get V S R message
+
 	return fmt.Sprintln(hex.EncodeToString(hash))
 }
