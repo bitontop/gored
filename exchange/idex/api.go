@@ -114,10 +114,12 @@ func (e *Idex) GetPairsData() {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(pairStrs[0])
-			target := coin.GetCoin(pairStrs[1])
-			if base != nil && target != nil {
-				p = pair.GetPair(base, target)
+			if len(pairStrs) >= 2 {
+				base := coin.GetCoin(pairStrs[0])
+				target := coin.GetCoin(pairStrs[1])
+				if base != nil && target != nil {
+					p = pair.GetPair(base, target)
+				}
 			}
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(symbol)
