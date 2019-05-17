@@ -14,6 +14,7 @@ import (
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
@@ -97,6 +98,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBigone(config)
 	InitGateio(config)
 	InitLiquid(config)
+	InitBitforex(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -246,6 +248,15 @@ func InitGateio(config *exchange.Config) {
 func InitLiquid(config *exchange.Config) {
 	conf.Exchange(exchange.LIQUID, config)
 	ex := liquid.CreateLiquid(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBitforex(config *exchange.Config) {
+	conf.Exchange(exchange.BITFOREX, config)
+	ex := bitforex.CreateBitforex(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

@@ -411,7 +411,7 @@ func (e *Liquid) ApiKeyRequest(strMethod string, mapParams map[string]interface{
 		payload = string(bytesParams)
 	}
 	payload64 := base64.StdEncoding.EncodeToString([]byte(payload))
-	signature = exchange.ComputeHmac256NoDecode(header64+"."+payload64, e.API_SECRET)
+	signature = exchange.ComputeHmac256URL(header64+"."+payload64, e.API_SECRET)
 
 	// final signature
 	fullSignature := header64 + "." + payload64 + "." + signature
