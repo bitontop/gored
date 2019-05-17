@@ -79,23 +79,24 @@ const (
 )
 
 func (e *ExchangeManager) initExchangeNames() {
-	supportList = append(supportList, BINANCE)
-	supportList = append(supportList, BITTREX)
-	supportList = append(supportList, COINEX)
-	supportList = append(supportList, STEX)
-	supportList = append(supportList, BITMEX)
-	supportList = append(supportList, KUCOIN)
-	supportList = append(supportList, BITMAX)
-	supportList = append(supportList, HUOBIOTC)
-	supportList = append(supportList, BITSTAMP)
-	supportList = append(supportList, OTCBTC)
-	supportList = append(supportList, HUOBI)
-	supportList = append(supportList, BIBOX)
-	supportList = append(supportList, OKEX)
-	supportList = append(supportList, BITZ)
-	supportList = append(supportList, HITBTC)
-	supportList = append(supportList, DRAGONEX)
-	supportList = append(supportList, BIGONE)
-	supportList = append(supportList, BITFINEX)
-	supportList = append(supportList, GATEIO)
+	supportList = append(supportList, BINANCE)  // ID = 1
+	supportList = append(supportList, BITTREX)  // ID = 2
+	supportList = append(supportList, COINEX)   // ID = 3
+	supportList = append(supportList, STEX)     // ID = 4
+	supportList = append(supportList, BITMEX)   // ID = 5
+	supportList = append(supportList, KUCOIN)   // ID = 6
+	supportList = append(supportList, BITMAX)   // ID = 7
+	supportList = append(supportList, HUOBIOTC) // ID = 8
+	supportList = append(supportList, BITSTAMP) // ID = 9
+	supportList = append(supportList, OTCBTC)   // ID = 10
+	supportList = append(supportList, HUOBI)    // ID = 11
+	supportList = append(supportList, BIBOX)    // ID = 12
+	supportList = append(supportList, OKEX)     // ID = 13
+	supportList = append(supportList, BITZ)     // ID = 14
+	supportList = append(supportList, HITBTC)   // ID = 15
+	supportList = append(supportList, DRAGONEX) // ID = 16
+	supportList = append(supportList, BIGONE)   // ID = 17
+	supportList = append(supportList, BITFINEX) // ID = 18
+	supportList = append(supportList, GATEIO)   // ID = 19
+	supportList = append(supportList, IDEX)     // ID = 20
 }
