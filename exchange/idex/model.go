@@ -89,9 +89,26 @@ type AccountBalances []struct {
 	Cmd string `json:"cmd"`
 }
 
-type PlaceOrder []struct {
-	Result int    `json:"result"`
-	Cmd    string `json:"cmd"`
+type PlaceOrder struct {
+	Timestamp   int    `json:"timestamp"`
+	Market      string `json:"market"`
+	OrderNumber int    `json:"orderNumber"`
+	OrderHash   string `json:"orderHash"`
+	Price       string `json:"price"`
+	Amount      string `json:"amount"`
+	Total       string `json:"total"`
+	Type        string `json:"type"`
+	Params      struct {
+		TokenBuy      string `json:"tokenBuy"`
+		BuyPrecision  int    `json:"buyPrecision"`
+		AmountBuy     string `json:"amountBuy"`
+		TokenSell     string `json:"tokenSell"`
+		SellPrecision int    `json:"sellPrecision"`
+		AmountSell    string `json:"amountSell"`
+		Expires       int    `json:"expires"`
+		Nonce         string `json:"nonce"`
+		User          string `json:"user"`
+	} `json:"params"`
 }
 
 type OrderStatus []struct {
