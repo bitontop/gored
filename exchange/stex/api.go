@@ -142,7 +142,7 @@ func (e *Stex) GetPairsData() {
 				Pair:        p,
 				ExID:        fmt.Sprintf("%d", data.ID),
 				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.CurrencyPrecision * -1),
 				PriceFilter: math.Pow10(data.MarketPrecision * -1),

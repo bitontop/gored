@@ -111,7 +111,7 @@ func (e *HuobiOTC) GetPairsData() {
 					PairID:      p.ID,
 					Pair:        p,
 					ExSymbol:    fmt.Sprintf("%s_%s", currency, c),
-					MakerFee:    DEFAULT_MAKERER_FEE,
+					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
 					LotSize:     DEFAULT_LOT_SIZE,
 					PriceFilter: DEFAULT_PRICE_FILTER,

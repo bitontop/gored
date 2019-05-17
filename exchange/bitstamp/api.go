@@ -155,7 +155,7 @@ func (e *Bitstamp) GetPairsData() {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.URLSymbol,
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.BaseDecimals),
 				PriceFilter: math.Pow10(-1 * data.CounterDecimals),

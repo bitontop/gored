@@ -7,6 +7,7 @@ import (
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/bitfinex"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bittrex"
@@ -362,6 +363,10 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		// 	ex := fcoin.CreateFcoin(config)
 		// 	e.exMan.Add(ex)
 		// 	return ex
+	case exchange.BITFINEX:
+		ex := bitfinex.CreateBitfinex(config)
+		e.exMan.Add(ex)
+		return ex
 	}
 	return nil
 }

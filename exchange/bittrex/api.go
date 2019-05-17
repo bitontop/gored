@@ -137,7 +137,7 @@ func (e *Bittrex) GetPairsData() {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.MarketName,
-				MakerFee:    DEFAULT_MAKERER_FEE,
+				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     DEFAULT_LOT_SIZE,
 				PriceFilter: DEFAULT_PRICE_FILTER,
