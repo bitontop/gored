@@ -13,6 +13,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitz"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/dragonex"
+	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobiotc"
@@ -124,6 +125,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BIGONE:
 		ex := bigone.CreateBigone(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.GATEIO:
+		ex := gateio.CreateGateio(config)
 		e.exMan.Add(ex)
 		return ex
 
