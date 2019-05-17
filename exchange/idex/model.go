@@ -29,9 +29,7 @@ type CoinDetails struct {
 	Slug     string `json:"slug"`
 }
 
-type PairsData map[string]PairDetails
-
-type PairDetails map[string]string
+type PairsData map[string]interface{}
 
 type OrderBook struct {
 	Asks []struct {
