@@ -18,6 +18,7 @@ import (
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobiotc"
+	"github.com/bitontop/gored/exchange/idex"
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/okex"
@@ -127,6 +128,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BIGONE:
 		ex := bigone.CreateBigone(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BITFINEX:
+		ex := bitfinex.CreateBitfinex(config)
 		e.exMan.Add(ex)
 		return ex
 
@@ -371,6 +377,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		// 	return ex
 	case exchange.BITFINEX:
 		ex := bitfinex.CreateBitfinex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.IDEX:
+		ex := idex.CreateIdex(config)
 		e.exMan.Add(ex)
 		return ex
 	}

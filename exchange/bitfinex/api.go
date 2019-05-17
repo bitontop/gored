@@ -100,6 +100,7 @@ func (e *Bitfinex) GetCoinsData() {
 			}
 		case 1:
 			for _, symbol := range coinsData[0] {
+
 				c := e.GetCoinBySymbol(symbol[0])
 				switch e.Source {
 				case exchange.EXCHANGE_API:
@@ -116,7 +117,7 @@ func (e *Bitfinex) GetCoinsData() {
 					c = e.GetCoinBySymbol(symbol[0])
 				}
 
-				if c != nil {
+				if c != nil && e.GetCoinConstraint(c) == nil {
 					coinConstraint := &exchange.CoinConstraint{
 						CoinID:       c.ID,
 						Coin:         c,

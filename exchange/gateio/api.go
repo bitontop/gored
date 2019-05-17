@@ -62,7 +62,7 @@ func (e *Gateio) GetCoinsData() {
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if coinsData.Result != "true" {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), coinsData)
+		log.Printf("%s Get Coins Failed: %+v", e.GetName(), coinsData)
 	}
 
 	for _, data := range coinsData.Data {
@@ -108,7 +108,7 @@ func (e *Gateio) SetConstraint() {
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsConstrain); err != nil {
 		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if coinsConstrain.Result != "true" {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), coinsConstrain)
+		log.Printf("%s Get Coins Failed: %+v", e.GetName(), coinsConstrain)
 	}
 
 	for _, coins := range coinsConstrain.Coins {
@@ -138,7 +138,7 @@ func (e *Gateio) GetPairsData() {
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if pairsData.Result != "true" {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), pairsData)
+		log.Printf("%s Get Pairs Failed: %+v", e.GetName(), pairsData)
 	}
 
 	for _, pairs := range pairsData.Pairs {
@@ -198,7 +198,7 @@ func (e *Gateio) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if orderBook.Result != "true" {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), orderBook)
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %+v", e.GetName(), orderBook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
@@ -252,7 +252,7 @@ func (e *Gateio) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if accountBalance.Result != "true" {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), accountBalance)
+		log.Printf("%s UpdateAllBalances Failed: %+v", e.GetName(), accountBalance)
 		return
 	}
 	if string(accountBalance.Available) != "[]" {
@@ -300,7 +300,7 @@ func (e *Gateio) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Result != "true" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), placeOrder)
+		return nil, fmt.Errorf("%s LimitSell Failed: %+v", e.GetName(), placeOrder)
 	}
 
 	order := &exchange.Order{
@@ -334,7 +334,7 @@ func (e *Gateio) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Result != "true" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), placeOrder)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %+v", e.GetName(), placeOrder)
 	}
 
 	order := &exchange.Order{
@@ -366,7 +366,7 @@ func (e *Gateio) OrderStatus(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if orderStatus.Result != "true" {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), orderStatus)
+		return fmt.Errorf("%s OrderStatus Failed: %+v", e.GetName(), orderStatus)
 	}
 
 	order.StatusMessage = jsonOrderStatus
@@ -405,7 +405,7 @@ func (e *Gateio) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if cancelOrder.Result != "true" {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), cancelOrder)
+		return fmt.Errorf("%s CancelOrder Failed: %+v", e.GetName(), cancelOrder)
 	}
 
 	order.Status = exchange.Canceling
