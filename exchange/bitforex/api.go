@@ -117,8 +117,6 @@ func (e *Bitforex) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
-	// 请求太频繁,请稍后再试
-	time.Sleep(10000 * time.Millisecond)
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
@@ -156,16 +154,14 @@ func (e *Bitforex) GetPairsData() {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil {
-			lotSize := math.Pow10(-1 * data.AmountPrecision)
-			priceFilter := math.Pow10(-1 * data.PricePrecision)
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.Symbol,
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     lotSize,
-				PriceFilter: priceFilter,
+				LotSize:     math.Pow10(-1 * data.AmountPrecision),
+				PriceFilter: math.Pow10(-1 * data.PricePrecision),
 				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
@@ -223,8 +219,7 @@ func (e *Bitforex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-// 请求太频繁,请稍后再试
-// 请求间隔 > 30s
+
 func (e *Bitforex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

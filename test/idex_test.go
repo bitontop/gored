@@ -20,7 +20,7 @@ import (
 func Test_Idex(t *testing.T) {
 	e := InitIdex()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("ETH|IDEX")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -30,7 +30,7 @@ func Test_Idex(t *testing.T) {
 	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	Test_Trading(e, pair, 0.0001, 1500)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 

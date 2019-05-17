@@ -5,6 +5,7 @@ package idex
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -18,6 +19,7 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
+	solsha3 "github.com/miguelmota/go-solidity-sha3"
 )
 
 const (
@@ -226,8 +228,8 @@ func (e *Idex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	}
 
 	jsonResponse := &JsonResponse{}
-	orderReturn := PlaceOrder{}
-	strRequest := "/orderpending"
+	placeOrder := PlaceOrder{}
+	strRequest := "/order"
 
 	baseDecimal := 0
 	if tmp, ok := coinDecimals.Get(pair.Base.Code); ok {
@@ -240,24 +242,20 @@ func (e *Idex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	mapParams := make(map[string]interface{})
 	mapParams["tokenBuy"] = e.GetSymbolByCoin(pair.Base)
-	mapParams["amountBuy"] = fmt.Sprintf("%0f", rate*math.Pow10(baseDecimal))
+	mapParams["amountBuy"] = fmt.Sprintf("%0.0f", quantity*rate*math.Pow10(baseDecimal))
 	mapParams["tokenSell"] = e.GetSymbolByCoin(pair.Target)
-	mapParams["amountSell"] = fmt.Sprintf("%0f", quantity*math.Pow10(targetDecimal))
+	mapParams["amountSell"] = fmt.Sprintf("%0.0f", quantity*math.Pow10(targetDecimal))
 	mapParams["expires"] = EXPIRES
 
 	jsonPlaceReturn := e.ApiKeyPOST(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if jsonResponse.Error.Code != "" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Error)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &orderReturn); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	log.Printf("jsonPlaceReturn: %s", jsonPlaceReturn)
+	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      fmt.Sprintf("%v", orderReturn[0].Result),
+		OrderID:      fmt.Sprintf("%v", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -274,38 +272,37 @@ func (e *Idex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	}
 
 	jsonResponse := &JsonResponse{}
-	orderReturn := PlaceOrder{}
-	strRequest := "/orderpending"
+	placeOrder := PlaceOrder{}
+	strRequest := "/order"
+
+	baseDecimal := 0
+	if tmp, ok := coinDecimals.Get(pair.Base.Code); ok {
+		baseDecimal = tmp.(int)
+	}
+	targetDecimal := 0
+	if tmp, ok := coinDecimals.Get(pair.Target.Code); ok {
+		targetDecimal = tmp.(int)
+	}
 
 	mapParams := make(map[string]interface{})
-	mapParams["cmd"] = "orderpending/trade"
-
-	body := make(map[string]interface{})
-	body["pair"] = e.GetSymbolByPair(pair)
-	body["account_type"] = 0
-	body["order_type"] = 2
-	body["order_side"] = 1
-	body["price"] = fmt.Sprintf("%f", rate)
-	body["amount"] = fmt.Sprintf("%f", quantity)
-
-	mapParams["body"] = body
+	mapParams["tokenBuy"] = e.GetSymbolByCoin(pair.Target)
+	mapParams["amountBuy"] = fmt.Sprintf("%0.0f", quantity*math.Pow10(baseDecimal))
+	mapParams["tokenSell"] = e.GetSymbolByCoin(pair.Base)
+	mapParams["amountSell"] = fmt.Sprintf("%0.0f", rate*quantity*math.Pow10(targetDecimal))
+	mapParams["expires"] = EXPIRES
 
 	jsonPlaceReturn := e.ApiKeyPOST(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if jsonResponse.Error.Code != "" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Error)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &orderReturn); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	log.Printf("jsonPlaceReturn: %s", jsonPlaceReturn)
+	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      fmt.Sprintf("%v", orderReturn[0].Result),
+		OrderID:      fmt.Sprintf("%v", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:         "Sell",
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -422,15 +419,20 @@ func (e *Idex) ApiKeyPOST(strRequestPath string, mapParams map[string]interface{
 
 	mapParams["address"] = e.API_KEY
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().Unix())
-	// mapParams["v"]
-	// mapParams["r"]
-	// mapParams["s"]
+	signature := SoliditySha3(mapParams, e.API_SECRET)
+	log.Printf("signature: %d %s", len(signature), signature)
+	log.Printf("v: %d %d", signature[64], int(signature[64]))
+	mapParams["v"] = int(signature[64]) + 27
+	mapParams["r"] = signature[:32]
+	mapParams["s"] = signature[32:64]
 
 	jsonParams := ""
 	if nil != mapParams {
 		bytesParams, _ := json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
+
+	log.Printf("jsonParams: %s", jsonParams)
 
 	request, err := http.NewRequest("POST", strRequestUrl, strings.NewReader(jsonParams))
 	if err != nil {
@@ -452,4 +454,19 @@ func (e *Idex) ApiKeyPOST(strRequestPath string, mapParams map[string]interface{
 	}
 
 	return string(body)
+}
+
+func SoliditySha3(mapParams map[string]interface{}, strSecret string) string {
+	hash := solsha3.SoliditySHA3(
+		solsha3.Address(CONTRACT_ADDRESS),
+		solsha3.Address(mapParams["tokenBuy"]),
+		solsha3.Uint256(mapParams["amountBuy"]),
+		solsha3.Address(mapParams["tokenSell"]),
+		solsha3.Uint256(mapParams["amountSell"]),
+		solsha3.Uint256(mapParams["expires"]),
+		solsha3.Uint256(mapParams["nonce"]),
+		solsha3.Address(mapParams["address"]),
+	)
+
+	return fmt.Sprintln(hex.EncodeToString(hash))
 }
