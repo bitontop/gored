@@ -24,6 +24,7 @@ import (
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
@@ -95,6 +96,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitDragonex(config)
 	InitBigone(config)
 	InitGateio(config)
+	InitLiquid(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -235,6 +237,15 @@ func InitBigone(config *exchange.Config) {
 func InitGateio(config *exchange.Config) {
 	conf.Exchange(exchange.GATEIO, config)
 	ex := gateio.CreateGateio(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitLiquid(config *exchange.Config) {
+	conf.Exchange(exchange.LIQUID, config)
+	ex := liquid.CreateLiquid(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
