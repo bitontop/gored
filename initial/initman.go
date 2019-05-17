@@ -19,6 +19,7 @@ import (
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
@@ -131,6 +132,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.GATEIO:
 		ex := gateio.CreateGateio(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.LIQUID:
+		ex := liquid.CreateLiquid(config)
 		e.exMan.Add(ex)
 		return ex
 
