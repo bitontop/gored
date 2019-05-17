@@ -11,6 +11,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
+	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
 	"github.com/bitontop/gored/exchange/coinex"
@@ -25,8 +26,7 @@ import (
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
-
-	"github.com/bitontop/gored/exchange/bitstamp"
+	"github.com/bitontop/gored/exchange/tokok"
 )
 
 var instance *InitManager
@@ -154,6 +154,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITFOREX:
 		ex := bitforex.CreateBitforex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.TOKOK:
+		ex := tokok.CreateTokok(config)
 		e.exMan.Add(ex)
 		return ex
 
