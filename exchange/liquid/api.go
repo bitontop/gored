@@ -5,10 +5,7 @@ package liquid
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
 	"encoding/base64"
-	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -245,7 +242,6 @@ func (e *Liquid) UpdateAllBalances() {
 }
 
 func (e *Liquid) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-
 	return false
 }
 
@@ -415,7 +411,7 @@ func (e *Liquid) ApiKeyRequest(strMethod string, mapParams map[string]interface{
 		payload = string(bytesParams)
 	}
 	payload64 := base64.StdEncoding.EncodeToString([]byte(payload))
-	signature = ComputeHmac256(header64+"."+payload64, e.API_SECRET)
+	signature = exchange.ComputeHmac256NoDecode(header64+"."+payload64, e.API_SECRET)
 
 	// final signature
 	fullSignature := header64 + "." + payload64 + "." + signature
@@ -429,46 +425,6 @@ func (e *Liquid) ApiKeyRequest(strMethod string, mapParams map[string]interface{
 	request.Header.Add("X-Quoine-API-Version", "2")
 	request.Header.Add("X-Quoine-Auth", fullSignature)
 	request.Header.Add("Content-Type", "application/json;charset=utf-8")
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-}
-
-//Signature加密
-func ComputeHmac256(strMessage string, strSecret string) string {
-	key := []byte(strSecret)
-	h := hmac.New(sha256.New, key)
-	h.Write([]byte(strMessage))
-
-	return b64.URLEncoding.EncodeToString(h.Sum(nil))
-}
-
-func (e *Liquid) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["apikey"] = e.API_KEY
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
-
-	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
-	httpClient := &http.Client{}
-
-	request, err := http.NewRequest("GET", strUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("Content-Type", "application/json;charset=utf-8")
-	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
 
 	response, err := httpClient.Do(request)
 	if nil != err {
