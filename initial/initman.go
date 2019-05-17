@@ -8,6 +8,7 @@ import (
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitfinex"
+	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bittrex"
@@ -148,6 +149,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.LIQUID:
 		ex := liquid.CreateLiquid(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BITFOREX:
+		ex := bitforex.CreateBitforex(config)
 		e.exMan.Add(ex)
 		return ex
 
