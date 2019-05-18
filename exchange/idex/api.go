@@ -5,7 +5,6 @@ package idex
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -19,7 +18,6 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-	solsha3 "github.com/miguelmota/go-solidity-sha3"
 )
 
 const (
@@ -419,12 +417,12 @@ func (e *Idex) ApiKeyPOST(strRequestPath string, mapParams map[string]interface{
 
 	mapParams["address"] = e.API_KEY
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().Unix())
-	signature := SoliditySha3(mapParams, e.API_SECRET)
-	log.Printf("signature: %d %s", len(signature), signature)
-	log.Printf("v: %d %d", signature[64], int(signature[64]))
-	mapParams["v"] = int(signature[64]) + 27
-	mapParams["r"] = signature[:32]
-	mapParams["s"] = signature[32:64]
+	// signature := SoliditySha3(mapParams, e.API_SECRET)
+	// log.Printf("signature: %d %s", len(signature), signature)
+	// log.Printf("v: %d %d", signature[64], int(signature[64]))
+	// mapParams["v"] = int(signature[64]) + 27
+	// mapParams["r"] = signature[:32]
+	// mapParams["s"] = signature[32:64]
 
 	jsonParams := ""
 	if nil != mapParams {
@@ -456,7 +454,7 @@ func (e *Idex) ApiKeyPOST(strRequestPath string, mapParams map[string]interface{
 	return string(body)
 }
 
-func SoliditySha3(mapParams map[string]interface{}, strSecret string) string {
+/* func SoliditySha3(mapParams map[string]interface{}, strSecret string) string {
 	hash := solsha3.SoliditySHA3(
 		solsha3.Address(CONTRACT_ADDRESS),
 		solsha3.Address(mapParams["tokenBuy"]),
@@ -471,4 +469,4 @@ func SoliditySha3(mapParams map[string]interface{}, strSecret string) string {
 	// Sign Hash Message by Private Key to get V S R message
 
 	return fmt.Sprintln(hex.EncodeToString(hash))
-}
+} */
