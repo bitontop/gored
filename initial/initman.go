@@ -23,6 +23,7 @@ import (
 	"github.com/bitontop/gored/exchange/idex"
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/liquid"
+	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
@@ -159,6 +160,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.TOKOK:
 		ex := tokok.CreateTokok(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.MXC:
+		ex := mxc.CreateMxc(config)
 		e.exMan.Add(ex)
 		return ex
 

@@ -26,6 +26,7 @@ import (
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/liquid"
+	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
@@ -101,6 +102,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitLiquid(config)
 	InitBitforex(config)
 	InitTokok(config)
+	InitMxc(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -268,6 +270,15 @@ func InitBitforex(config *exchange.Config) {
 func InitTokok(config *exchange.Config) {
 	conf.Exchange(exchange.TOKOK, config)
 	ex := tokok.CreateTokok(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitMxc(config *exchange.Config) {
+	conf.Exchange(exchange.MXC, config)
+	ex := mxc.CreateMxc(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
