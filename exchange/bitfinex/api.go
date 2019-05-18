@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -88,7 +89,7 @@ func (e *Bitfinex) GetCoinsData() {
 					coinConstraint := &exchange.CoinConstraint{
 						CoinID:       c.ID,
 						Coin:         c,
-						ExSymbol:     fixSymbol[0],
+						ExSymbol:     strings.ToLower(fixSymbol[0]),
 						TxFee:        DEFAULT_TXFEE,
 						Withdraw:     DEFAULT_WITHDRAW,
 						Deposit:      DEFAULT_DEPOSIT,
@@ -121,7 +122,7 @@ func (e *Bitfinex) GetCoinsData() {
 					coinConstraint := &exchange.CoinConstraint{
 						CoinID:       c.ID,
 						Coin:         c,
-						ExSymbol:     symbol[0],
+						ExSymbol:     strings.ToLower(symbol[0]),
 						TxFee:        DEFAULT_TXFEE,
 						Withdraw:     DEFAULT_WITHDRAW,
 						Deposit:      DEFAULT_DEPOSIT,
@@ -292,7 +293,6 @@ func (e *Bitfinex) UpdateAllBalances() {
 			freeamount, err := strconv.ParseFloat(balance.Available, 64)
 			if err != nil {
 				log.Printf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
-				return
 			} else {
 				c := e.GetCoinBySymbol(balance.Currency)
 				if c != nil {
