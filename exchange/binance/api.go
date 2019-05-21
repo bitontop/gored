@@ -289,7 +289,7 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	log.Printf("API Key: %s \n API Secret: %s", e.API_KEY, e.API_SECRET)
+	log.Printf("%s\nAPI Key: %s \nAPI Secret: %s", e.GetName(), e.API_KEY, e.API_SECRET)
 	placeOrder := PlaceOrder{}
 	strRequest := "/api/v3/order"
 
@@ -325,6 +325,8 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
+	log.Printf("%s\nAPI Key: %s \nAPI Secret: %s", e.GetName(), e.API_KEY, e.API_SECRET)
+
 	placeOrder := PlaceOrder{}
 	strRequest := "/api/v3/order"
 
@@ -338,9 +340,9 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+		return nil, fmt.Errorf("%s LimitBuy Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Code != 0 {
-		return nil, fmt.Errorf("%s LimitSell failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
+		return nil, fmt.Errorf("%s LimitBuy failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
 	}
 
 	order := &exchange.Order{
