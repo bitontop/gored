@@ -289,7 +289,6 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	log.Printf("%s\nAPI Key: %s \nAPI Secret: %s", e.GetName(), e.API_KEY, e.API_SECRET)
 	placeOrder := PlaceOrder{}
 	strRequest := "/api/v3/order"
 
@@ -324,8 +323,6 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
-
-	log.Printf("%s\nAPI Key: %s \nAPI Secret: %s", e.GetName(), e.API_KEY, e.API_SECRET)
 
 	placeOrder := PlaceOrder{}
 	strRequest := "/api/v3/order"
@@ -440,7 +437,7 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyGet(mapParams map[string]string, strRequestPath string) string {
 	mapParams["recvWindow"] = "50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
-	mapParams["signature"] = exchange.ComputeHmac256(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + payload
@@ -474,7 +471,7 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
 	mapParams["recvWindow"] = "50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
-	mapParams["signature"] = exchange.ComputeHmac256(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath
