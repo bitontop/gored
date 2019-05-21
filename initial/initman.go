@@ -11,6 +11,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
+	"github.com/bitontop/gored/exchange/bitrue"
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
@@ -165,6 +166,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.MXC:
 		ex := mxc.CreateMxc(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.BITRUE:
+		ex := bitrue.CreateBitrue(config)
 		e.exMan.Add(ex)
 		return ex
 

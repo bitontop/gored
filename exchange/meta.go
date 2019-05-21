@@ -103,4 +103,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BITFOREX) // ID = 22
 	supportList = append(supportList, TOKOK)    // ID = 23
 	supportList = append(supportList, MXC)      // ID = 24
+	supportList = append(supportList, BITRUE)   // ID = 25
 }
