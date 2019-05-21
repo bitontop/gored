@@ -5,6 +5,7 @@ package binance
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -231,7 +232,7 @@ func (e *Binance) UpdateAllBalances() {
 	accountBalance := AccountBalances{}
 	strRequest := "/api/v3/account"
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", make(map[string]string), strRequest)
+	jsonBalanceReturn := e.ApiKeyGet(make(map[string]string), strRequest)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances json Unmarshal error: %v %s", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -288,6 +289,7 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
+	log.Printf("API Key: %s \n API Secret: %s", e.API_KEY, e.API_SECRET)
 	placeOrder := PlaceOrder{}
 	strRequest := "/api/v3/order"
 
@@ -296,8 +298,8 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "LIMIT"
 	mapParams["timeInForce"] = "GTC"
-	mapParams["price"] = fmt.Sprintf("%f", rate)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -331,8 +333,8 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "LIMIT"
 	mapParams["timeInForce"] = "GTC"
-	mapParams["price"] = fmt.Sprintf("%f", rate)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -366,7 +368,7 @@ func (e *Binance) OrderStatus(order *exchange.Order) error {
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 	mapParams["orderId"] = order.OrderID
 
-	jsonOrderStatus := e.ApiKeyRequest("GET", mapParams, strRequest)
+	jsonOrderStatus := e.ApiKeyGet(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if orderStatus.Code != 0 {
@@ -433,7 +435,7 @@ func (e *Binance) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
+func (e *Binance) ApiKeyGet(mapParams map[string]string, strRequestPath string) string {
 	mapParams["recvWindow"] = "50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	mapParams["signature"] = exchange.ComputeHmac256(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
@@ -441,7 +443,41 @@ func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, s
 	payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + payload
 
-	request, err := http.NewRequest(strMethod, strUrl, nil)
+	request, err := http.NewRequest("GET", strUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/json; charset=utf-8")
+	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+/*Method: API Request and Signature is required
+Step 1: Change Instance Name    (e *<exchange Instance Name>)
+Step 2: Create mapParams Depend on API Signature request
+Step 3: Add HttpGetRequest below strUrl if API has different requests*/
+func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
+	mapParams["recvWindow"] = "50000000"
+	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
+	mapParams["signature"] = exchange.ComputeHmac256(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+
+	payload := exchange.Map2UrlQuery(mapParams)
+	strUrl := API_URL + strRequestPath
+
+	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
 	if nil != err {
 		return err.Error()
 	}
