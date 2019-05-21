@@ -5,13 +5,13 @@ package binance
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -297,8 +297,8 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "LIMIT"
 	mapParams["timeInForce"] = "GTC"
-	mapParams["price"] = fmt.Sprintf("%f", rate)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -332,14 +332,14 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "LIMIT"
 	mapParams["timeInForce"] = "GTC"
-	mapParams["price"] = fmt.Sprintf("%f", rate)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+		return nil, fmt.Errorf("%s LimitBuy Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Code != 0 {
-		return nil, fmt.Errorf("%s LimitSell failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
+		return nil, fmt.Errorf("%s LimitBuy failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
 	}
 
 	order := &exchange.Order{
@@ -437,12 +437,12 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyGet(mapParams map[string]string, strRequestPath string) string {
 	mapParams["recvWindow"] = "50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
-	mapParams["signature"] = exchange.ComputeHmac256(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + payload
 
-	request, err := http.NewRequest(http.MethodGet, strUrl, nil)
+	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
@@ -471,12 +471,12 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
 	mapParams["recvWindow"] = "50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
-	mapParams["signature"] = exchange.ComputeHmac256(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath
 
-	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(payload))
+	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
 	if nil != err {
 		return err.Error()
 	}
