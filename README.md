@@ -19,19 +19,29 @@ Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https
 |   Exchange   | Public API | Private API | goCAD |
 |--------------|------------|-------------|-------|
 | BiBox| Yes  | Yes  | NA  |
+| BigONE | Yes | Yes  | NA|
 | Binance| Yes  | Yes  | NA  |
+| BitFinex | Yes | Yes  | NA|
+| BitForex | Yes | No  | NA|
 | BitMAX | Yes  | Yes  | NA  |
 | BitMEX | Yes | Yes  | NA |
-| Bitstamp | Yes  | No  | NA  |
+| BitStamp | Yes  | No  | NA  |
 | Bittrex | Yes | Yes  | NA |
 | BitZ | Yes | Yes  | NA |
 | CoinEX | Yes | Yes  | NA |
-| Huobi PRO | Yes | Yes  | NA|
+| DargonEX | Yes | No  | NA |
+| GateIO | Yes | Yes  | NA |
+| HitBTC | Yes | Yes  | NA |
+| Huobi PRO | Yes | Yes  | NA |
 | Huobi OTC | Yes | No  | NA |
+| IDEX | Yes | No  | NA |
 | KuCoin | Yes | Yes  | NA |
+| Liquid | Yes | Yes  | NA |
+| MXC | Yes | No  | NA |
 | OKEX | Yes | Yes  | NA |
 | OTCBTC | Yes | Yes  | NA |
 | Stex | Yes | Yes  | NA |
+| TOKOK | Yes | Yes  | NA |
 
 We are aiming to support the top 100 highest volume exchanges based off the [CoinMarketCap exchange data](https://coinmarketcap.com/exchanges/volume/24-hour/).
 
@@ -116,8 +126,11 @@ Binaries will be published once the codebase reaches a stable condition.
 
 |User|Github|Contribution Amount|
 |--|--|--|
-| iobond | https://github.com/iobond | 526 |
-| chunlee1991 | https://github.com/chunlee1991 | 302 |
-| 9cat | https://github.com/9cat | 116 |
-| temple | https://github.com/botemple | 129 |
-| tony0408 | https://github.com/tony0408 | 52 |
+| chunlee1991 | https://github.com/chunlee1991 | 133 |
+| tony0408 | https://github.com/tony0408 | 44 |
+| 9cat | https://github.com/9cat | 7 |
+| botemple | https://github.com/botemple | 6 |
+| iobond | https://github.com/iobond | 1 |
+
+
+
