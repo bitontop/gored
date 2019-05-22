@@ -72,7 +72,7 @@ type AccountBalances []struct {
 }
 
 type PlaceOrder []struct {
-	Result int    `json:"result"`
+	Result string `json:"result"`
 	Cmd    string `json:"cmd"`
 }
 
