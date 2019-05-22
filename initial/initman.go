@@ -29,6 +29,7 @@ import (
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/exchange/tokok"
+	"github.com/bitontop/gored/exchange/tradesatoshi"
 )
 
 var instance *InitManager
@@ -171,6 +172,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITRUE:
 		ex := bitrue.CreateBitrue(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.TRADESATOSHI:
+		ex := tradesatoshi.CreateTradeSatoshi(config)
 		e.exMan.Add(ex)
 		return ex
 

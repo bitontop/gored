@@ -32,6 +32,7 @@ import (
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/exchange/tokok"
+	"github.com/bitontop/gored/exchange/tradesatoshi"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 	"github.com/bitontop/gored/utils"
@@ -105,6 +106,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitTokok(config)
 	InitMxc(config)
 	InitBitrue(config)
+	InitTradeSatoshi(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -290,6 +292,15 @@ func InitMxc(config *exchange.Config) {
 func InitBitrue(config *exchange.Config) {
 	conf.Exchange(exchange.BITRUE, config)
 	ex := bitrue.CreateBitrue(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitTradeSatoshi(config *exchange.Config) {
+	conf.Exchange(exchange.TRADESATOSHI, config)
+	ex := tradesatoshi.CreateTradeSatoshi(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

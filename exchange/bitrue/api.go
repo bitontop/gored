@@ -161,7 +161,7 @@ func (e *Bitrue) GetPairsData() {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.BaseAssetPrecision),
 				PriceFilter: math.Pow10(-1 * data.QuotePrecision),
-				Listed:      data.Status == "TRADING",
+				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
