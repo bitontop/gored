@@ -28,6 +28,7 @@ import (
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/otcbtc"
+	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
@@ -183,6 +184,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.KRAKEN:
 		ex := kraken.CreateKraken(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.POLONIEX:
+		ex := poloniex.CreatePoloniex(config)
 		e.exMan.Add(ex)
 		return ex
 
