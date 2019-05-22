@@ -22,6 +22,7 @@ import (
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/idex"
+	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
@@ -177,6 +178,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.TRADESATOSHI:
 		ex := tradesatoshi.CreateTradeSatoshi(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.KRAKEN:
+		ex := kraken.CreateKraken(config)
 		e.exMan.Add(ex)
 		return ex
 

@@ -25,6 +25,7 @@ import (
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
+	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
@@ -107,6 +108,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitMxc(config)
 	InitBitrue(config)
 	InitTradeSatoshi(config)
+	InitKraken(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -301,6 +303,15 @@ func InitBitrue(config *exchange.Config) {
 func InitTradeSatoshi(config *exchange.Config) {
 	conf.Exchange(exchange.TRADESATOSHI, config)
 	ex := tradesatoshi.CreateTradeSatoshi(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitKraken(config *exchange.Config) {
+	conf.Exchange(exchange.KRAKEN, config)
+	ex := kraken.CreateKraken(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
