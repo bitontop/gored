@@ -60,6 +60,9 @@ func (e *Poloniex) GetCoinsData() {
 	}
 
 	for key, data := range coinsData {
+		if data.Delisted == 1 {
+			continue
+		}
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
