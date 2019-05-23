@@ -110,4 +110,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, TRADESATOSHI) // ID = 27
 	supportList = append(supportList, KRAKEN)       // ID = 28
 	supportList = append(supportList, POLONIEX)     // ID = 29
+	supportList = append(supportList, COINEAL)      // ID = 30
 }

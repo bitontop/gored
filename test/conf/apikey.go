@@ -149,5 +149,10 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.API_KEY = ""
 		config.API_SECRET = ""
 		break
+
+	case exchange.COINEAL:
+		config.API_KEY = ""
+		config.API_SECRET = ""
+		break
 	}
 }

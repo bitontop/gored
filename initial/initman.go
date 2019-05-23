@@ -15,6 +15,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/coineal"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
@@ -189,6 +190,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.POLONIEX:
 		ex := poloniex.CreatePoloniex(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.COINEAL:
+		ex := coineal.CreateCoineal(config)
 		e.exMan.Add(ex)
 		return ex
 
