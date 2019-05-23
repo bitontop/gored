@@ -422,7 +422,7 @@ func (e *Bitfinex) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	cancelOrder := PlaceOrder{}
+	cancelOrder := CancelOrder{}
 	strRequest := "/v1/order/cancel"
 
 	mapParams := make(map[string]interface{})
@@ -431,7 +431,7 @@ func (e *Bitfinex) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyPost(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if cancelOrder.OrderID == 0 {
+	} else if cancelOrder.ID == 0 {
 		return fmt.Errorf("%s CancelOrder Failed: %s", e.GetName(), jsonCancelOrder)
 	}
 

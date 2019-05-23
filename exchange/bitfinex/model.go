@@ -60,3 +60,26 @@ type PlaceOrder struct {
 	OrderID           int    `json:"order_id"`
 	Message           string `json:"message"`
 }
+
+type CancelOrder struct {
+	ID                int64       `json:"id"`
+	Cid               int         `json:"cid"`
+	CidDate           string      `json:"cid_date"`
+	Gid               interface{} `json:"gid"`
+	Symbol            string      `json:"symbol"`
+	Exchange          string      `json:"exchange"`
+	Price             string      `json:"price"`
+	AvgExecutionPrice string      `json:"avg_execution_price"`
+	Side              string      `json:"side"`
+	Type              string      `json:"type"`
+	Timestamp         string      `json:"timestamp"`
+	IsLive            bool        `json:"is_live"`
+	IsCancelled       bool        `json:"is_cancelled"`
+	IsHidden          bool        `json:"is_hidden"`
+	OcoOrder          interface{} `json:"oco_order"`
+	WasForced         bool        `json:"was_forced"`
+	OriginalAmount    string      `json:"original_amount"`
+	RemainingAmount   string      `json:"remaining_amount"`
+	ExecutedAmount    string      `json:"executed_amount"`
+	Src               string      `json:"src"`
+}
