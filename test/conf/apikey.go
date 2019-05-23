@@ -154,5 +154,10 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.API_KEY = ""
 		config.API_SECRET = ""
 		break
+
+	case exchange.TRADEOGRE:
+		config.API_KEY = ""
+		config.API_SECRET = ""
+		break
 	}
 }

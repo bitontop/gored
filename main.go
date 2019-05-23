@@ -35,6 +35,7 @@ import (
 	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/exchange/tokok"
+	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
@@ -113,6 +114,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitKraken(config)
 	InitPoloniex(config)
 	InitCoineal(config)
+	InitTradeogre(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -334,6 +336,15 @@ func InitPoloniex(config *exchange.Config) {
 func InitCoineal(config *exchange.Config) {
 	conf.Exchange(exchange.COINEAL, config)
 	ex := coineal.CreateCoineal(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitTradeogre(config *exchange.Config) {
+	conf.Exchange(exchange.TRADEOGRE, config)
+	ex := tradeogre.CreateTradeogre(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

@@ -32,6 +32,7 @@ import (
 	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/exchange/tokok"
+	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
 )
 
@@ -195,6 +196,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.COINEAL:
 		ex := coineal.CreateCoineal(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.TRADEOGRE:
+		ex := tradeogre.CreateTradeogre(config)
 		e.exMan.Add(ex)
 		return ex
 
