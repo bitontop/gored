@@ -114,7 +114,25 @@ type OrderStatus struct {
 }
 
 type CancelOrder struct {
-	Result  string `json:"result"`
-	Code    int    `json:"code"`
+	Result string `json:"result"`
+	Order  struct {
+		OrderNumber   string  `json:"orderNumber"`
+		Status        string  `json:"status"`
+		CurrencyPair  string  `json:"currencyPair"`
+		Type          string  `json:"type"`
+		Rate          string  `json:"rate"`
+		Amount        string  `json:"amount"`
+		InitialRate   string  `json:"initialRate"`
+		InitialAmount string  `json:"initialAmount"`
+		FilledAmount  string  `json:"filledAmount"`
+		FilledRate    string  `json:"filledRate"`
+		FeePercentage float64 `json:"feePercentage"`
+		FeeValue      string  `json:"feeValue"`
+		FeeCurrency   string  `json:"feeCurrency"`
+		Fee           string  `json:"fee"`
+		Timestamp     int     `json:"timestamp"`
+	} `json:"order"`
 	Message string `json:"message"`
+	Code    int    `json:"code"`
+	Elapsed string `json:"elapsed"`
 }

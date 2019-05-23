@@ -405,7 +405,7 @@ func (e *Gateio) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if cancelOrder.Result != "true" {
-		return fmt.Errorf("%s CancelOrder Failed: %+v", e.GetName(), cancelOrder)
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), cancelOrder.Message)
 	}
 
 	order.Status = exchange.Canceling
