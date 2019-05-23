@@ -15,14 +15,24 @@ import (
 
 /********************Public API********************/
 func Test_Coins(e exchange.Exchange) {
-	for _, coin := range e.GetCoins() {
-		log.Printf("%s Coin %+v", e.GetName(), coin)
+	coins := e.GetCoins()
+	if len(coins) > 0 {
+		for _, coin := range coins {
+			log.Printf("%s Coin %+v", e.GetName(), coin)
+		}
+	} else {
+		log.Panicf("%s didn't get coins' data.", e.GetName())
 	}
 }
 
 func Test_Pairs(e exchange.Exchange) {
-	for _, pair := range e.GetPairs() {
-		log.Printf("%s Pair %+v", e.GetName(), pair)
+	pairs := e.GetPairs()
+	if len(pairs) > 0 {
+		for _, pair := range pairs {
+			log.Printf("%s Pair %+v", e.GetName(), pair)
+		}
+	} else {
+		log.Panicf("%s didn't get pairs' data.", e.GetName())
 	}
 }
 
