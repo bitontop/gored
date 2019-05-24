@@ -99,7 +99,7 @@ type PlaceOrder struct {
 }
 
 type OrderStatus struct {
-	Result bool `json:"result"`
+	Result string `json:"result"`
 	Order  struct {
 		ID            string `json:"id"`
 		Status        string `json:"status"`
@@ -114,7 +114,7 @@ type OrderStatus struct {
 }
 
 type CancelOrder struct {
-	Result string `json:"result"`
+	Result bool `json:"result"`
 	Order  struct {
 		OrderNumber   string  `json:"orderNumber"`
 		Status        string  `json:"status"`
