@@ -18,8 +18,8 @@ type PairsData []struct {
 	BtcMinimumWithdraw  interface{} `json:"btc_minimum_withdraw"`
 	FiatMinimumWithdraw interface{} `json:"fiat_minimum_withdraw"`
 	PusherChannel       string      `json:"pusher_channel"`
-	TakerFee            float64     `json:"taker_fee"`
-	MakerFee            float64     `json:"maker_fee"`
+	TakerFee            string      `json:"taker_fee"`
+	MakerFee            string      `json:"maker_fee"`
 	LowMarketBid        string      `json:"low_market_bid"`
 	HighMarketAsk       string      `json:"high_market_ask"`
 	Volume24H           string      `json:"volume_24h"`

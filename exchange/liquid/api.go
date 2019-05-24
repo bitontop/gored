@@ -140,12 +140,14 @@ func (e *Liquid) GetPairsData() {
 			p = e.GetPairBySymbol(data.CurrencyPairCode)
 		}
 		if p != nil {
+			makerfee, _ := strconv.ParseFloat(data.MakerFee, 64)
+			takerfee, _ := strconv.ParseFloat(data.TakerFee, 64)
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.ID,
-				MakerFee:    data.MakerFee,
-				TakerFee:    data.TakerFee,
+				MakerFee:    makerfee,
+				TakerFee:    takerfee,
 				LotSize:     DEFAULT_LOT_SIZE,
 				PriceFilter: DEFAULT_PRICE_FILTER,
 				Listed:      !data.Disabled,
