@@ -287,8 +287,8 @@ func (e *Bitrue) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "LIMIT"
-	mapParams["price"] = fmt.Sprint(rate)
-	mapParams["quantity"] = fmt.Sprint(quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', 8, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -326,8 +326,8 @@ func (e *Bitrue) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "LIMIT"
-	mapParams["price"] = fmt.Sprint(rate)
-	mapParams["quantity"] = fmt.Sprint(quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', 8, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
