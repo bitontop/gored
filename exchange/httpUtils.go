@@ -14,6 +14,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 )
@@ -157,6 +158,25 @@ func Map2UrlQuery(mapParams map[string]string) string {
 
 	for _, key := range mapSort {
 		strParams += (key + "=" + mapParams[key] + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
+}
+
+func Map2UrlQueryUrl(mapParams map[string]string) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + "=" + url.QueryEscape(mapParams[key]) + "&")
 	}
 
 	if 0 < len(strParams) {
