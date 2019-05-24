@@ -305,7 +305,7 @@ func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
+		OrderID:      placeOrder.ID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -343,7 +343,7 @@ func (e *Bigone) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      fmt.Sprintf("%s", placeOrder.ID),
+		OrderID:      placeOrder.ID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",

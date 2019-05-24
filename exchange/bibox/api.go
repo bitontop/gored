@@ -410,6 +410,7 @@ func (e *Bibox) OrderStatus(order *exchange.Order) error {
 
 	body := make(map[string]interface{})
 	body["id"] = orderID
+	body["account_type"] = 0
 
 	mapParams["body"] = body
 
