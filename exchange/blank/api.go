@@ -253,7 +253,7 @@ func (e *Blank) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bo
 	mapParams := make(map[string]string)
 	mapParams["asset"] = e.GetSymbolByCoin(coin)
 	mapParams["address"] = addr
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', 8, 64)
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
 	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequestPath, mapParams)
