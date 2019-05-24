@@ -404,7 +404,7 @@ func (e *Gateio) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if cancelOrder.Result != "true" {
+	} else if !cancelOrder.Result {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), cancelOrder.Message)
 	}
 
