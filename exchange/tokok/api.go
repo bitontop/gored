@@ -145,7 +145,7 @@ func (e *Tokok) GetPairsData() {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    data.Symbol,
+				ExSymbol:    strings.ToLower(data.Symbol),
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.BaseAssetPrecision),
