@@ -114,4 +114,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, TRADEOGRE)    // ID = 31
 	supportList = append(supportList, COINBENE)     // ID = 32
 	supportList = append(supportList, IBANKDIGITAL) // ID = 33
+	supportList = append(supportList, LBANK)        // ID = 34
 }

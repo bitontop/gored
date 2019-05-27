@@ -30,6 +30,7 @@ import (
 	"github.com/bitontop/gored/exchange/ibankdigital"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
@@ -119,6 +120,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitTradeogre(config)
 	InitCoinbene(config)
 	InitIbankdigital(config)
+	InitLbank(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -367,6 +369,15 @@ func InitCoinbene(config *exchange.Config) {
 func InitIbankdigital(config *exchange.Config) {
 	conf.Exchange(exchange.IBANKDIGITAL, config)
 	ex := ibankdigital.CreateIbankdigital(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitLbank(config *exchange.Config) {
+	conf.Exchange(exchange.LBANK, config)
+	ex := lbank.CreateLbank(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

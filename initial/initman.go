@@ -27,6 +27,7 @@ import (
 	"github.com/bitontop/gored/exchange/idex"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
@@ -213,6 +214,11 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.IBANKDIGITAL:
 		ex := ibankdigital.CreateIbankdigital(config)
+		e.exMan.Add(ex)
+		return ex
+
+	case exchange.LBANK:
+		ex := lbank.CreateLbank(config)
 		e.exMan.Add(ex)
 		return ex
 
