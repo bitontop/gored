@@ -235,36 +235,57 @@ func (e *Binance) UpdateConstraint() {
 /**************** Coin Constraint ****************/
 func (e *Binance) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil{
+		return 0.0
+	}
 	return coinConstraint.TxFee
 }
 
 func (e *Binance) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Withdraw
 }
 
 func (e *Binance) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Deposit
 }
 
 func (e *Binance) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return 0
+	}
 	return coinConstraint.Confirmation
 }
 
 /**************** Pair Constraint ****************/
 func (e *Binance) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.TakerFee
 }
 
 func (e *Binance) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.LotSize
 }
 
 func (e *Binance) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.PriceFilter
 }

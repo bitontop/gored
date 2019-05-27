@@ -233,36 +233,57 @@ func (e *Otcbtc) UpdateConstraint() {
 /**************** Coin Constraint ****************/
 func (e *Otcbtc) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil{
+		return 0.0
+	}
 	return coinConstraint.TxFee
 }
 
 func (e *Otcbtc) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Withdraw
 }
 
 func (e *Otcbtc) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Deposit
 }
 
 func (e *Otcbtc) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return 0
+	}
 	return coinConstraint.Confirmation
 }
 
 /**************** Pair Constraint ****************/
 func (e *Otcbtc) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.TakerFee
 }
 
 func (e *Otcbtc) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.LotSize
 }
 
 func (e *Otcbtc) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.PriceFilter
 }

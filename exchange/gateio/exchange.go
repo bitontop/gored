@@ -233,36 +233,57 @@ func (e *Gateio) UpdateConstraint() {
 /**************** Coin Constraint ****************/
 func (e *Gateio) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil{
+		return 0.0
+	}
 	return coinConstraint.TxFee
 }
 
 func (e *Gateio) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Withdraw
 }
 
 func (e *Gateio) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Deposit
 }
 
 func (e *Gateio) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return 0
+	}
 	return coinConstraint.Confirmation
 }
 
 /**************** Pair Constraint ****************/
 func (e *Gateio) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.TakerFee
 }
 
 func (e *Gateio) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.LotSize
 }
 
 func (e *Gateio) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.PriceFilter
 }
