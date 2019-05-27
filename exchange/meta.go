@@ -23,6 +23,7 @@ const (
 	BIGONE       ExchangeName = "BIGONE"
 	BIKI         ExchangeName = "BIKI"
 	BINANCE      ExchangeName = "BINANCE"
+	BINANCEDEX   ExchangeName = "BINANCEDEX"
 	BITATM       ExchangeName = "BITATM"
 	BITFINEX     ExchangeName = "BITFINEX"
 	BITFOREX     ExchangeName = "BITFOREX"
@@ -115,4 +116,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, COINBENE)     // ID = 32
 	supportList = append(supportList, IBANKDIGITAL) // ID = 33
 	supportList = append(supportList, LBANK)        // ID = 34
+	// supportList = append(supportList, BINANCEDEX)   // ID = 35
 }
