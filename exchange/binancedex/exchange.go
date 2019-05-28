@@ -59,6 +59,7 @@ func CreateBinanceDex(config *exchange.Config) *BinanceDex {
 
 		instance.recoveryFromPrivateKey(config.API_SECRET)
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

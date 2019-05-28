@@ -56,6 +56,7 @@ func CreateCoineal(config *exchange.Config) *Coineal {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

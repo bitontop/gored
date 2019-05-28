@@ -58,6 +58,7 @@ func CreateIdex(config *exchange.Config) *Idex {
 		coinDecimals = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

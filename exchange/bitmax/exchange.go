@@ -60,6 +60,7 @@ func CreateBitmax(config *exchange.Config) *Bitmax {
 			instance.AccountGroup()
 		}
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

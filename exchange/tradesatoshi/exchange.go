@@ -56,6 +56,7 @@ func CreateTradeSatoshi(config *exchange.Config) *TradeSatoshi {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

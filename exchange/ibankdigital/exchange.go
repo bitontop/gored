@@ -62,6 +62,7 @@ func CreateIbankdigital(config *exchange.Config) *Ibankdigital {
 		}
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

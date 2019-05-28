@@ -60,6 +60,7 @@ func CreateOkex(config *exchange.Config) *Okex {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

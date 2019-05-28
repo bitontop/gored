@@ -60,6 +60,7 @@ func CreateHuobi(config *exchange.Config) *Huobi {
 			instance.GetAccounts()
 		}
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

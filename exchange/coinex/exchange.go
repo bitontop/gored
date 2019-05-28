@@ -57,6 +57,7 @@ func CreateCoinex(config *exchange.Config) *Coinex {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

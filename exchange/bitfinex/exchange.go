@@ -56,6 +56,7 @@ func CreateBitfinex(config *exchange.Config) *Bitfinex {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

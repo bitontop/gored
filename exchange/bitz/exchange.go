@@ -58,6 +58,7 @@ func CreateBitz(config *exchange.Config) *Bitz {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

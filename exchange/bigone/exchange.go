@@ -56,6 +56,7 @@ func CreateBigone(config *exchange.Config) *Bigone {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

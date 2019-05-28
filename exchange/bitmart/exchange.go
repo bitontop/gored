@@ -58,6 +58,7 @@ func CreateBitmart(config *exchange.Config) *Bitmart {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})

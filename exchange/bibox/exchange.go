@@ -6,6 +6,7 @@ package bibox
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"
@@ -56,6 +57,7 @@ func CreateBibox(config *exchange.Config) *Bibox {
 		pairConstraintMap = cmap.New()
 
 		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
 			instance = nil
 		}
 	})
