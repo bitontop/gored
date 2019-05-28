@@ -15,6 +15,7 @@ import (
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitforex"
+	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitrue"
 	"github.com/bitontop/gored/exchange/bitstamp"
@@ -121,6 +122,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitCoinbene(config)
 	InitIbankdigital(config)
 	InitLbank(config)
+	InitBitmart(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -378,6 +380,15 @@ func InitIbankdigital(config *exchange.Config) {
 func InitLbank(config *exchange.Config) {
 	conf.Exchange(exchange.LBANK, config)
 	ex := lbank.CreateLbank(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBitmart(config *exchange.Config) {
+	conf.Exchange(exchange.BITMART, config)
+	ex := bitmart.CreateBitmart(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
