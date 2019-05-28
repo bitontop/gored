@@ -87,7 +87,7 @@ func (e *Huobi) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Name,
-				ChianType:    exchange.MAINNET,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     data.WithdrawEnabled,
 				Deposit:      data.DepositEnabled,

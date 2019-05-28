@@ -80,7 +80,7 @@ func (e *Hitbtc) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.ID,
-				ChianType:    exchange.MAINNET,
+				ChainType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.PayoutEnabled,
 				Deposit:      data.PayinEnabled,

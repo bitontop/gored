@@ -83,7 +83,7 @@ func (e *Bittrex) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Currency,
-				ChianType:    exchange.MAINNET,
+				ChainType:    exchange.MAINNET,
 				TxFee:        data.TxFee,
 				Withdraw:     data.IsActive,
 				Deposit:      data.IsActive,

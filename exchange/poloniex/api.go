@@ -86,7 +86,7 @@ func (e *Poloniex) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     key,
-				ChianType:    exchange.MAINNET,
+				ChainType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.Disabled == 0,
 				Deposit:      data.Disabled == 0,

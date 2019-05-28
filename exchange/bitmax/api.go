@@ -87,7 +87,7 @@ func (e *Bitmax) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.AssetCode,
-				ChianType:    exchange.MAINNET,
+				ChainType:    exchange.MAINNET,
 				TxFee:        data.WithdrawalFee,
 				Withdraw:     isActive,
 				Deposit:      isActive,
