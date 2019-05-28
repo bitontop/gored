@@ -50,7 +50,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Coinbene) GetCoinsData() {
+func (e *Coinbene) GetCoinsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/v1/market/symbol"
@@ -58,9 +58,9 @@ func (e *Coinbene) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &pairsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if pairsData.Status != "ok" {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), pairsData.Description)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), pairsData.Description)
 	}
 
 	for _, data := range pairsData.Symbol {
@@ -113,13 +113,14 @@ func (e *Coinbene) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Coinbene) GetPairsData() {
+func (e *Coinbene) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/v1/market/symbol"
@@ -127,9 +128,9 @@ func (e *Coinbene) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if pairsData.Status != "ok" {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), pairsData.Description)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), pairsData.Description)
 	}
 
 	for _, data := range pairsData.Symbol {
@@ -147,23 +148,19 @@ func (e *Coinbene) GetPairsData() {
 		if p != nil {
 			makerFee, err := strconv.ParseFloat(data.MakerFee, 64)
 			if err != nil {
-				log.Printf("%s makerFee parse error: %v, %v", e.GetName(), err, data.MakerFee)
-				return
+				return fmt.Errorf("%s makerFee parse error: %v, %v", e.GetName(), err, data.MakerFee)
 			}
 			takerFee, err := strconv.ParseFloat(data.TakerFee, 64)
 			if err != nil {
-				log.Printf("%s takerFee parse error: %v, %v", e.GetName(), err, data.TakerFee)
-				return
+				return fmt.Errorf("%s takerFee parse error: %v, %v", e.GetName(), err, data.TakerFee)
 			}
 			lotSize, err := strconv.Atoi(data.LotStepSize)
 			if err != nil {
-				log.Printf("%s lot size parse error: %v, %v", e.GetName(), err, data.LotStepSize)
-				return
+				return fmt.Errorf("%s lot size parse error: %v, %v", e.GetName(), err, data.LotStepSize)
 			}
 			priceSize, err := strconv.Atoi(data.TickSize)
 			if err != nil {
-				log.Printf("%s price size parse error: %v, %v", e.GetName(), err, data.TickSize)
-				return
+				return fmt.Errorf("%s price size parse error: %v, %v", e.GetName(), err, data.TickSize)
 			}
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
@@ -178,6 +175,7 @@ func (e *Coinbene) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth

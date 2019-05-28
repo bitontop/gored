@@ -49,7 +49,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitmart) GetCoinsData() {
+func (e *Bitmart) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	strRequestUrl := "/v2/currencies"
@@ -57,7 +57,7 @@ func (e *Bitmart) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range coinsData {
@@ -89,13 +89,14 @@ func (e *Bitmart) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitmart) GetPairsData() {
+func (e *Bitmart) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/v2/symbols_details"
@@ -103,7 +104,7 @@ func (e *Bitmart) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData {
@@ -123,8 +124,7 @@ func (e *Bitmart) GetPairsData() {
 		if p != nil {
 			lotSize, err := strconv.ParseFloat(data.QuoteIncrement, 64)
 			if err != nil {
-				log.Printf("%s lotSize parse error: %v, %v", e.GetName(), err, data.QuoteIncrement)
-				return
+				return fmt.Errorf("%s lotSize parse error: %v, %v", e.GetName(), err, data.QuoteIncrement)
 			}
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
@@ -139,6 +139,7 @@ func (e *Bitmart) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth

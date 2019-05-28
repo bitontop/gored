@@ -55,7 +55,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitfinex) GetCoinsData() {
+func (e *Bitfinex) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	fields := []string{"pub:map:currency:sym", "pub:map:currency:label"}
@@ -66,8 +66,7 @@ func (e *Bitfinex) GetCoinsData() {
 
 		jsonCurrencyReturn := exchange.HttpGetRequest(strURL, nil)
 		if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-			log.Printf("%s Get Coins Data Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-			return
+			return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 		}
 
 		switch i {
@@ -135,13 +134,12 @@ func (e *Bitfinex) GetCoinsData() {
 		}
 	}
 
-	e.GetWithdrawFees()
+	return e.GetWithdrawFees()
 }
 
-func (e *Bitfinex) GetWithdrawFees() {
+func (e *Bitfinex) GetWithdrawFees() error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
-		return
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
 	withdrawFee := WithdrawFee{}
@@ -149,8 +147,7 @@ func (e *Bitfinex) GetWithdrawFees() {
 
 	jsonFeesReturn := e.ApiKeyPost(make(map[string]interface{}), strRequestUrl)
 	if err := json.Unmarshal([]byte(jsonFeesReturn), &withdrawFee); err != nil {
-		log.Printf("%s GetWithdrawFees Data Unmarshal Err: %v %v", e.GetName(), err, jsonFeesReturn)
-		return
+		return fmt.Errorf("%s GetWithdrawFees Data Unmarshal Err: %v %v", e.GetName(), err, jsonFeesReturn)
 	}
 
 	for symbol, fee := range withdrawFee.Withdraw {
@@ -161,13 +158,14 @@ func (e *Bitfinex) GetWithdrawFees() {
 			coinConstraint.TxFee, _ = strconv.ParseFloat(fmt.Sprintf("%v", fee), 64)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitfinex) GetPairsData() {
+func (e *Bitfinex) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/v1/symbols_details"
@@ -175,8 +173,7 @@ func (e *Bitfinex) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Data Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-		return
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	baseList := []string{"usd", "eur", "gbp", "jpy", "btc", "eth", "eos", "xlm", "dai", "ust"}
@@ -216,6 +213,7 @@ func (e *Bitfinex) GetPairsData() {
 			}
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth

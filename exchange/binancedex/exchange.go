@@ -58,7 +58,9 @@ func CreateBinanceDex(config *exchange.Config) *BinanceDex {
 		pairConstraintMap = cmap.New()
 
 		instance.recoveryFromPrivateKey(config.API_SECRET)
-		instance.InitData()
+		if err := instance.InitData(); err != nil {
+			instance = nil
+		}
 	})
 	return instance
 }
@@ -80,23 +82,32 @@ func (e *BinanceDex) recoveryFromPrivateKey(privateKey string) error {
 	return nil
 }
 
-func (e *BinanceDex) InitData() {
+func (e *BinanceDex) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
-		e.GetCoinsData()
-		e.GetPairsData()
+		if err := e.GetCoinsData(); err != nil {
+			return err
+		}
+		if err := e.GetPairsData(); err != nil {
+			return err
+		}
 		break
 	case exchange.MICROSERVICE_API:
 		break
 	case exchange.JSON_FILE:
 		exchangeData := utils.GetExchangeDataFromJSON(e.SourceURI, e.GetName())
-		coinConstraintMap = exchangeData.CoinConstraint
-		pairConstraintMap = exchangeData.PairConstraint
+		if exchangeData == nil {
+			return fmt.Errorf("%s Initial Data Error.", e.GetName())
+		} else {
+			coinConstraintMap = exchangeData.CoinConstraint
+			pairConstraintMap = exchangeData.PairConstraint
+		}
 		break
 	case exchange.PSQL:
 	default:
-		log.Printf("BinanceDex Initial Coin: There is not selected data source.")
+		return fmt.Errorf("%s Initial Coin: There is not selected data source.", e.GetName())
 	}
+	return nil
 }
 
 /**************** Exchange Information ****************/

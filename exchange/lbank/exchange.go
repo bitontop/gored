@@ -6,7 +6,6 @@ package lbank
 
 import (
 	"fmt"
-	"log"
 	"sort"
 	"strconv"
 	"sync"
@@ -56,28 +55,39 @@ func CreateLbank(config *exchange.Config) *Lbank {
 		coinConstraintMap = cmap.New()
 		pairConstraintMap = cmap.New()
 
-		instance.InitData()
+		if err := instance.InitData(); err != nil {
+			instance = nil
+		}
 	})
 	return instance
 }
 
-func (e *Lbank) InitData() {
+func (e *Lbank) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
-		e.GetCoinsData()
-		e.GetPairsData()
+		if err := e.GetCoinsData(); err != nil {
+			return err
+		}
+		if err := e.GetPairsData(); err != nil {
+			return err
+		}
 		break
 	case exchange.MICROSERVICE_API:
 		break
 	case exchange.JSON_FILE:
 		exchangeData := utils.GetExchangeDataFromJSON(e.SourceURI, e.GetName())
-		coinConstraintMap = exchangeData.CoinConstraint
-		pairConstraintMap = exchangeData.PairConstraint
+		if exchangeData == nil {
+			return fmt.Errorf("%s Initial Data Error.", e.GetName())
+		} else {
+			coinConstraintMap = exchangeData.CoinConstraint
+			pairConstraintMap = exchangeData.PairConstraint
+		}
 		break
 	case exchange.PSQL:
 	default:
-		log.Printf("Lbank Initial Coin: There is not selected data source.")
+		return fmt.Errorf("%s Initial Coin: There is not selected data source.", e.GetName())
 	}
+	return nil
 }
 
 /**************** Exchange Information ****************/

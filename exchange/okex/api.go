@@ -48,10 +48,9 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Okex) GetCoinsData() {
+func (e *Okex) GetCoinsData() error {
 	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
-		log.Printf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
-		return
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
 	}
 
 	coinsData := CoinsData{}
@@ -59,8 +58,7 @@ func (e *Okex) GetCoinsData() {
 	strRequestUrl := "/api/account/v3/currencies"
 	jsonCurrencyReturn := e.ApiKeyRequest("GET", nil, strRequestUrl)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, []byte(jsonCurrencyReturn))
-		return
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, []byte(jsonCurrencyReturn))
 	}
 
 	for _, data := range coinsData {
@@ -102,13 +100,12 @@ func (e *Okex) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
-	e.WithdrawFee()
+	return e.WithdrawFee()
 }
 
-func (e *Okex) WithdrawFee() {
+func (e *Okex) WithdrawFee() error {
 	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
-		log.Printf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
-		return
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
 	}
 
 	withdrawFee := WithdrawFee{}
@@ -116,8 +113,7 @@ func (e *Okex) WithdrawFee() {
 
 	jsonWithdrawFee := e.ApiKeyRequest("GET", nil, strRequest)
 	if err := json.Unmarshal([]byte(jsonWithdrawFee), &withdrawFee); err != nil {
-		log.Printf("%s WithdrawFee Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawFee)
-		return
+		return fmt.Errorf("%s WithdrawFee Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawFee)
 	}
 
 	for _, data := range withdrawFee {
@@ -127,7 +123,7 @@ func (e *Okex) WithdrawFee() {
 			if data.MinFee != "" {
 				minFee, err := strconv.ParseFloat(data.MinFee, 64)
 				if err != nil {
-					log.Printf("%s minFee conver to float64 err: %v %+v", e.GetName(), err, data)
+					return fmt.Errorf("%s minFee conver to float64 err: %v %+v", e.GetName(), err, data)
 				} else {
 					coinConstraint.TxFee = minFee
 					coinConstraint.Listed = true
@@ -138,13 +134,14 @@ func (e *Okex) WithdrawFee() {
 		}
 
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Okex) GetPairsData() {
+func (e *Okex) GetPairsData() error {
 	//jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -153,7 +150,7 @@ func (e *Okex) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData {
@@ -171,11 +168,11 @@ func (e *Okex) GetPairsData() {
 
 		lotSize, err := strconv.ParseFloat(data.SizeIncrement, 64)
 		if err != nil {
-			log.Printf("%s Convert lotSize to Float64 Err: %v %v", e.GetName(), err, data.SizeIncrement)
+			return fmt.Errorf("%s Convert lotSize to Float64 Err: %v %v", e.GetName(), err, data.SizeIncrement)
 		}
 		priceFilter, err := strconv.ParseFloat(data.TickSize, 64)
 		if err != nil {
-			log.Printf("%s Convert lotSize to Float64 Err: %v %v", e.GetName(), err, data.TickSize)
+			return fmt.Errorf("%s Convert lotSize to Float64 Err: %v %v", e.GetName(), err, data.TickSize)
 		}
 
 		if p != nil {
@@ -192,6 +189,7 @@ func (e *Okex) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth

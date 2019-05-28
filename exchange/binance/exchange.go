@@ -56,28 +56,39 @@ func CreateBinance(config *exchange.Config) *Binance {
 		coinConstraintMap = cmap.New()
 		pairConstraintMap = cmap.New()
 
-		instance.InitData()
+		if err := instance.InitData(); err != nil {
+			instance = nil
+		}
 	})
 	return instance
 }
 
-func (e *Binance) InitData() {
+func (e *Binance) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
-		e.GetCoinsData()
-		e.GetPairsData()
+		if err := e.GetCoinsData(); err != nil {
+			return err
+		}
+		if err := e.GetPairsData(); err != nil {
+			return err
+		}
 		break
 	case exchange.MICROSERVICE_API:
 		break
 	case exchange.JSON_FILE:
 		exchangeData := utils.GetExchangeDataFromJSON(e.SourceURI, e.GetName())
-		coinConstraintMap = exchangeData.CoinConstraint
-		pairConstraintMap = exchangeData.PairConstraint
+		if exchangeData == nil {
+			return fmt.Errorf("%s Initial Data Error.", e.GetName())
+		} else {
+			coinConstraintMap = exchangeData.CoinConstraint
+			pairConstraintMap = exchangeData.PairConstraint
+		}
 		break
 	case exchange.PSQL:
 	default:
-		log.Printf("Binance Initial Coin: There is not selected data source.")
+		return fmt.Errorf("%s Initial Coin: There is not selected data source.", e.GetName())
 	}
+	return nil
 }
 
 /**************** Exchange Information ****************/
@@ -235,7 +246,7 @@ func (e *Binance) UpdateConstraint() {
 /**************** Coin Constraint ****************/
 func (e *Binance) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
-	if coinConstraint == nil{
+	if coinConstraint == nil {
 		return 0.0
 	}
 	return coinConstraint.TxFee

@@ -19,7 +19,7 @@ import (
 )
 
 type Exchange interface {
-	InitData()
+	InitData() error
 
 	/***** Exchange Information *****/
 	GetID() int
@@ -45,8 +45,8 @@ type Exchange interface {
 	DeletePair(pair *pair.Pair)
 
 	/***** Public API *****/
-	GetCoinsData()
-	GetPairsData()
+	GetCoinsData() error
+	GetPairsData() error
 	OrderBook(p *pair.Pair) (*Maker, error)
 
 	/***** Private API *****/
@@ -193,10 +193,11 @@ func (e *ExchangeManager) UpdateExData(conf *Update) {
 			for _, exName := range conf.ExNames {
 				eInstance := e.Get(exName)
 				if eInstance != nil {
-					eInstance.InitData()
-					log.Printf("%s Data Updated. Coin: %d   Pair: %d", exName, len(eInstance.GetCoins()), len(eInstance.GetPairs()))
-				} else {
-					log.Printf("Updating %s Data is failed.", exName)
+					if err := eInstance.InitData(); err != nil {
+						log.Printf("Updating %s Data is failed.", exName)
+					} else {
+						log.Printf("%s Data Updated. Coin: %d   Pair: %d", exName, len(eInstance.GetCoins()), len(eInstance.GetPairs()))
+					}
 				}
 			}
 			time.Sleep(conf.Time)

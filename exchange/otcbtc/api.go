@@ -48,7 +48,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Otcbtc) GetCoinsData() {
+func (e *Otcbtc) GetCoinsData() error {
 	errResponse := &ErrorResponse{}
 	pairsData := PairsData{}
 
@@ -58,9 +58,9 @@ func (e *Otcbtc) GetCoinsData() {
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &pairsData); err != nil {
 		if err := json.Unmarshal([]byte(jsonCurrencyReturn), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+			return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
+			return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
 		}
 	}
 
@@ -115,13 +115,14 @@ func (e *Otcbtc) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Otcbtc) GetPairsData() {
+func (e *Otcbtc) GetPairsData() error {
 	errResponse := &ErrorResponse{}
 	pairsData := PairsData{}
 
@@ -131,9 +132,9 @@ func (e *Otcbtc) GetPairsData() {
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		if err := json.Unmarshal([]byte(jsonSymbolsReturn), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+			return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
+			return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), errResponse.Error.Code)
 		}
 	}
 
@@ -165,6 +166,7 @@ func (e *Otcbtc) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -193,9 +195,9 @@ func (e *Otcbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		if err := json.Unmarshal([]byte(jsonOrderbook), &errResponse); err != nil {
-			log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
+			return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 		} else {
-			log.Printf("%s Get Coins Failed: %v", e.GetName(), errResponse.Error.Code)
+			return nil, fmt.Errorf("%s Get Orderbook Failed: %v %v", e.GetName(), errResponse.Error.Code, errResponse.Error.Message)
 		}
 	}
 

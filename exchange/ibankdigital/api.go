@@ -48,7 +48,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Ibankdigital) GetCoinsData() {
+func (e *Ibankdigital) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	var coinsData []string
 
@@ -57,12 +57,12 @@ func (e *Ibankdigital) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if jsonResponse.Status != "ok" {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
-		log.Printf("%s Get Coins Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range coinsData {
@@ -93,13 +93,14 @@ func (e *Ibankdigital) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Ibankdigital) GetPairsData() {
+func (e *Ibankdigital) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -108,12 +109,12 @@ func (e *Ibankdigital) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Status != "ok" {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		log.Printf("%s Get Pairs Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
@@ -142,6 +143,7 @@ func (e *Ibankdigital) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
