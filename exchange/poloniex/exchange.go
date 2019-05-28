@@ -6,6 +6,7 @@ package poloniex
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

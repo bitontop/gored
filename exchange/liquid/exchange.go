@@ -6,6 +6,7 @@ package liquid
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

@@ -6,6 +6,7 @@ package tradesatoshi
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

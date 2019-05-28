@@ -6,6 +6,7 @@ package otcbtc
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

@@ -6,6 +6,7 @@ package bitz
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

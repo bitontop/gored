@@ -6,6 +6,7 @@ package bittrex
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

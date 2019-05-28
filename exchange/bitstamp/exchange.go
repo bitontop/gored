@@ -6,6 +6,7 @@ package bitstamp
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

@@ -6,6 +6,7 @@ package bitmax
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

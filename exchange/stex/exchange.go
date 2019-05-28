@@ -6,6 +6,7 @@ package stex
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

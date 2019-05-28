@@ -6,6 +6,7 @@ package kraken
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

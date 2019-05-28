@@ -6,6 +6,7 @@ package coinbene
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

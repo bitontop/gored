@@ -6,6 +6,7 @@ package hitbtc
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

@@ -6,6 +6,7 @@ package tradeogre
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

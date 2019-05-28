@@ -6,6 +6,7 @@ package gateio
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

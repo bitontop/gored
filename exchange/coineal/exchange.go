@@ -6,6 +6,7 @@ package coineal
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

@@ -6,6 +6,7 @@ package bitforex
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

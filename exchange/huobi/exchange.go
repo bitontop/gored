@@ -6,6 +6,7 @@ package huobi
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"

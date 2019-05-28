@@ -6,6 +6,7 @@ package bitmart
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"sync"
