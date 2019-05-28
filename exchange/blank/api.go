@@ -73,11 +73,10 @@ func (e *Blank) GetCoinsData() error {
 			c = coin.GetCoin(data.AssetCode)
 			if c == nil {
 				c = &coin.Coin{
-					Code:         data.AssetCode,
-					Name:         data.AssetName,
-					Website:      data.Website,
-					Explorer:     data.BlockURL,
-					CurrencyType: data.CurrencyType,
+					Code:     data.AssetCode,
+					Name:     data.AssetName,
+					Website:  data.Website,
+					Explorer: data.BlockURL,
 				}
 				coin.AddCoin(c)
 			}
@@ -90,6 +89,7 @@ func (e *Blank) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.AssetCode,
+				ChianType:    exchange.MAINNET,
 				TxFee:        data.TransactionFee,
 				Withdraw:     data.EnableWithdraw,
 				Deposit:      data.EnableCharge,

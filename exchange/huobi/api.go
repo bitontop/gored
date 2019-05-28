@@ -76,10 +76,7 @@ func (e *Huobi) GetCoinsData() error {
 			if c == nil {
 				c = &coin.Coin{}
 				c.Code = data.DisplayName
-				c.CurrencyType = data.CurrencyType
 				coin.AddCoin(c)
-			} else if c.CurrencyType == "" {
-				c.CurrencyType = data.CurrencyType
 			}
 		case exchange.JSON_FILE:
 			c = e.GetCoinBySymbol(data.DisplayName)
@@ -90,6 +87,7 @@ func (e *Huobi) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Name,
+				ChianType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     data.WithdrawEnabled,
 				Deposit:      data.DepositEnabled,

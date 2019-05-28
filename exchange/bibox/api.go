@@ -93,6 +93,7 @@ func (e *Bibox) GetCoinsData() error {
 					CoinID:       c.ID,
 					Coin:         c,
 					ExSymbol:     data.CoinSymbol,
+					ChianType:    exchange.MAINNET,
 					TxFee:        data.WithdrawFee,
 					Confirmation: DEFAULT_CONFIRMATION,
 				}

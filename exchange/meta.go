@@ -6,6 +6,7 @@ package exchange
 
 type ExchangeName string
 type DataSource string
+type ChainType string
 type UpdateMethod string
 
 const (
@@ -16,6 +17,13 @@ const (
 	MICROSERVICE_API DataSource = "MICROSERVICE_API"
 	JSON_FILE        DataSource = "JSON_FILE"
 	PSQL             DataSource = "PSQL"
+
+	MAINNET ChainType = "MAINNET"
+	BEP2    ChainType = "BEP2"
+	ERC20   ChainType = "ERC20"
+	NEP5    ChainType = "NEP5"
+	OMNI    ChainType = "OMNI"
+	TRC20   ChainType = "TRC20"
 
 	BCEX         ExchangeName = "BCEX"
 	BGOGO        ExchangeName = "BGOGO"

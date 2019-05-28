@@ -88,6 +88,7 @@ func (e *Kucoin) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Currency,
+				ChianType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.IsWithdrawEnabled,
 				Deposit:      data.IsDepositEnabled,

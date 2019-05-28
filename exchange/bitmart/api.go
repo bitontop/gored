@@ -80,6 +80,7 @@ func (e *Bitmart) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.ID,
+				ChianType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     data.WithdrawEnabled,
 				Deposit:      data.DepositEnabled,

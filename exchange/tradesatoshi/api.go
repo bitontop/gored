@@ -90,6 +90,7 @@ func (e *TradeSatoshi) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Currency,
+				ChianType:    exchange.MAINNET,
 				TxFee:        data.TxFee,
 				Withdraw:     data.Status == "OK",
 				Deposit:      data.Status == "OK",

@@ -90,6 +90,7 @@ func (e *Lbank) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.AssetCode,
+				ChianType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.CanWithDraw,
 				Deposit:      DEFAULT_DEPOSIT,
