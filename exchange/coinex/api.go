@@ -297,8 +297,8 @@ func (e *Coinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["access_id"] = e.API_KEY
 	mapParams["market"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "sell"
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
-	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["amount"] = fmt.Sprintf("%.10f", quantity)
+	mapParams["price"] = fmt.Sprintf("%.10f", rate)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -336,8 +336,8 @@ func (e *Coinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["access_id"] = e.API_KEY
 	mapParams["market"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "buy"
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
-	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["amount"] = fmt.Sprintf("%.10f", quantity)
+	mapParams["price"] = fmt.Sprintf("%.10f", rate)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
