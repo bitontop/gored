@@ -52,6 +52,7 @@ const (
 	FATBTC       ExchangeName = "FATBTC"
 	FCOIN        ExchangeName = "FCOIN"
 	GATEIO       ExchangeName = "GATEIO"
+	GEMINI       ExchangeName = "GEMINI"
 	GRAVIEX      ExchangeName = "GRAVIEX"
 	HITBTC       ExchangeName = "HITBTC"
 	HOTBIT       ExchangeName = "HOTBIT"
@@ -118,4 +119,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, LBANK)        // ID = 34
 	// supportList = append(supportList, BINANCEDEX)   // ID = 35
 	supportList = append(supportList, BITMART) // ID = 36
+	// supportList = append(supportList, GIMINI)  // ID = 37
 }
