@@ -273,8 +273,8 @@ func (e *Poloniex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	mapParams := make(map[string]string)
 	mapParams["command"] = "sell"
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -307,8 +307,8 @@ func (e *Poloniex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams := make(map[string]string)
 	mapParams["command"] = "buy"
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {

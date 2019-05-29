@@ -273,7 +273,7 @@ func (e *Kucoin) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 	mapParams := make(map[string]string)
 	mapParams["currency"] = fmt.Sprintf("%v", strings.ToUpper(coin.Code))
 	mapParams["address"] = addr
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &jsonResponse); err != nil {

@@ -289,8 +289,8 @@ func (e *Coineal) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
-	mapParams["volume"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "1"
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
@@ -328,8 +328,8 @@ func (e *Coineal) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
-	mapParams["volume"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "1"
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)

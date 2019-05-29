@@ -260,8 +260,8 @@ func (e *Hitbtc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "sell"
 	mapParams["type"] = "limit"
-	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	json.Unmarshal([]byte(jsonPlaceReturn), &errResponse)
@@ -297,8 +297,8 @@ func (e *Hitbtc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "buy"
 	mapParams["type"] = "limit"
-	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	json.Unmarshal([]byte(jsonPlaceReturn), &errResponse)

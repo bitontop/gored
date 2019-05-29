@@ -318,8 +318,8 @@ func (e *Bitfinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 
 	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', 8, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "sell"
 	mapParams["type"] = "exchange limit"
 
@@ -350,8 +350,8 @@ func (e *Bitfinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', 8, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "buy"
 	mapParams["type"] = "exchange limit"
 

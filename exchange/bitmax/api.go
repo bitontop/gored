@@ -272,7 +272,7 @@ func (e *Bitmax) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 	mapParams := make(map[string]string)
 	mapParams["requestId"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano()/1000000, time.Now().UTC().UnixNano())
 	mapParams["assetCode"] = e.GetSymbolByCoin(coin)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["address"] = addr
 
 	jsonSubmitWithdraw := e.ApiKeyRequest(mapParams, "POST", strRequest, "withdraw")
@@ -299,8 +299,8 @@ func (e *Bitmax) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams := make(map[string]string)
 	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano(), time.Now().UTC().UnixNano()/1000000)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["orderPrice"] = fmt.Sprintf("%v", rate)
-	mapParams["orderQty"] = fmt.Sprintf("%v", quantity)
+	mapParams["orderPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["orderQty"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "limit"
 	mapParams["side"] = "sell"
 
@@ -341,8 +341,8 @@ func (e *Bitmax) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams := make(map[string]string)
 	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano(), time.Now().UTC().UnixNano()/1000000)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["orderPrice"] = fmt.Sprintf("%v", rate)
-	mapParams["orderQty"] = fmt.Sprintf("%v", quantity)
+	mapParams["orderPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["orderQty"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "limit"
 	mapParams["side"] = "buy"
 

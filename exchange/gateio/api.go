@@ -295,8 +295,8 @@ func (e *Gateio) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	mapParams := make(map[string]string)
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "" //ioc: immediate order cancel
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
@@ -329,8 +329,8 @@ func (e *Gateio) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	mapParams := make(map[string]string)
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "" //ioc: immediate order cancel
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)

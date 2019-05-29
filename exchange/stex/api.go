@@ -280,7 +280,7 @@ func (e *Stex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 	mapParams["method"] = "Withdraw"
 	mapParams["currency"] = e.GetSymbolByCoin(coin)
 	mapParams["address"] = addr
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonResponse := &JsonResponse{}
 	jsonSubmitWithdraw := e.ApiKeyPost(mapParams)
@@ -310,8 +310,8 @@ func (e *Stex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	mapParams := make(map[string]string)
 	mapParams["method"] = "Trade"
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "SELL"
 	mapParams["pair"] = e.GetSymbolByPair(pair)
 
@@ -349,8 +349,8 @@ func (e *Stex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 
 	mapParams := make(map[string]string)
 	mapParams["method"] = "Trade"
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "BUY"
 	mapParams["pair"] = e.GetSymbolByPair(pair)
 

@@ -255,7 +255,7 @@ func (e *Blank) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bo
 	mapParams := make(map[string]string)
 	mapParams["asset"] = e.GetSymbolByCoin(coin)
 	mapParams["address"] = addr
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', 8, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
 	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequestPath, mapParams)
@@ -287,8 +287,8 @@ func (e *Blank) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "LIMIT"
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', 8, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -325,8 +325,8 @@ func (e *Blank) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "LIMIT"
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', 8, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {

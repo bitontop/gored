@@ -247,8 +247,8 @@ func (e *Lbank) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "sell"
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -281,8 +281,8 @@ func (e *Lbank) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "buy"
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {

@@ -277,8 +277,8 @@ func (e *Bitforex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["tradeType"] = "2"
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
@@ -315,8 +315,8 @@ func (e *Bitforex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["tradeType"] = "1"
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)

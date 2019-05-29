@@ -268,7 +268,7 @@ func (e *Ibankdigital) Withdraw(coin *coin.Coin, quantity float64, addr, tag str
 
 	mapParams := make(map[string]string)
 	mapParams["address"] = addr
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["currency"] = e.GetSymbolByCoin(coin)
 
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)

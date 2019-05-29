@@ -340,8 +340,8 @@ func (e *Okex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams["side"] = "sell"
 	mapParams["instrument_id"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "limit"
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["size"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -375,8 +375,8 @@ func (e *Okex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	mapParams["side"] = "buy"
 	mapParams["instrument_id"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "limit"
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["size"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {

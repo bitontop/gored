@@ -273,8 +273,8 @@ func (e *Bitz) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	strRequest := "/Trade/addEntrustSheet"
 
 	mapParams := make(map[string]string)
-	mapParams["number"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["number"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "2"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["tradePwd"] = e.TradePassword
@@ -313,8 +313,8 @@ func (e *Bitz) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	strRequest := "/Trade/addEntrustSheet"
 
 	mapParams := make(map[string]string)
-	mapParams["number"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["number"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "1"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["tradePwd"] = e.TradePassword

@@ -292,8 +292,8 @@ func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	strRequest := "/viewer/orders"
 
 	mapParams := make(map[string]string)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "ASK"
 	mapParams["market_id"] = e.GetSymbolByPair(pair)
 
@@ -330,8 +330,8 @@ func (e *Bigone) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	strRequest := "/viewer/orders"
 
 	mapParams := make(map[string]string)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "BID"
 	mapParams["market_id"] = e.GetSymbolByPair(pair)
 
