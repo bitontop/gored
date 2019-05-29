@@ -174,6 +174,7 @@ func (e *Coinbene) GetPairsData() error {
 				PriceFilter: math.Pow10(-1 * priceSize),
 				Listed:      DEFAULT_LISTED,
 			}
+			log.Printf("====price filter: %v", math.Pow10(-1*priceSize))
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
@@ -279,8 +280,8 @@ func (e *Coinbene) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	mapParams := make(map[string]string)
 	mapParams["type"] = "sell-limit"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = fmt.Sprintf("%.10f", rate)
+	mapParams["quantity"] = fmt.Sprintf("%.10f", quantity)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -313,8 +314,8 @@ func (e *Coinbene) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams := make(map[string]string)
 	mapParams["type"] = "buy-limit"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
-	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
+	mapParams["price"] = fmt.Sprintf("%.10f", rate)
+	mapParams["quantity"] = fmt.Sprintf("%.10f", quantity)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
