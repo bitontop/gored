@@ -269,7 +269,7 @@ func (e *Binance) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	if tag != "" { //this part is not working yet
 		mapParams["addressTag"] = tag
 	}
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
 	jsonSubmitWithdraw := e.ApiKeyRequest("POST", mapParams, strRequest)

@@ -307,8 +307,8 @@ func (e *Kucoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["side"] = "sell"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "limit"
-	mapParams["price"] = fmt.Sprintf("%f", rate)
-	mapParams["size"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -347,8 +347,8 @@ func (e *Kucoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["side"] = "buy"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "limit"
-	mapParams["price"] = fmt.Sprintf("%f", rate)
-	mapParams["size"] = fmt.Sprintf("%f", quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {

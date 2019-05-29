@@ -282,7 +282,7 @@ func (e *Okex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 
 	mapParams := make(map[string]interface{})
 	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["destination"] = "4"
 	mapParams["to_address"] = addr
 	mapParams["trade_pwd"] = e.TradePassword

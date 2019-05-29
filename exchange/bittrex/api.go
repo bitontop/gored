@@ -231,7 +231,7 @@ func (e *Bittrex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 
 	mapParams := make(map[string]string)
 	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["address"] = addr
 
 	jsonResponse := &JsonResponse{}
@@ -260,8 +260,8 @@ func (e *Bittrex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
-	mapParams["rate"] = fmt.Sprintf("%f", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
@@ -297,8 +297,8 @@ func (e *Bittrex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
-	mapParams["rate"] = fmt.Sprintf("%f", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}

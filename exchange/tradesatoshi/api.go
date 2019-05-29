@@ -253,7 +253,7 @@ func (e *TradeSatoshi) Withdraw(coin *coin.Coin, quantity float64, addr, tag str
 	mapParams := make(map[string]interface{})
 	mapParams["Currency"] = e.GetSymbolByCoin(coin)
 	mapParams["Address"] = addr
-	mapParams["Amount"] = fmt.Sprintf("%f", quantity)
+	mapParams["Amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {

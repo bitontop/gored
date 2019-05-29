@@ -317,8 +317,8 @@ func (e *Bibox) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	body["account_type"] = 0
 	body["order_type"] = 2
 	body["order_side"] = 2
-	body["price"] = fmt.Sprintf("%f", rate)
-	body["amount"] = fmt.Sprintf("%f", quantity)
+	body["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	body["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	mapParams["body"] = body
 
@@ -362,8 +362,8 @@ func (e *Bibox) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	body["account_type"] = 0
 	body["order_type"] = 2
 	body["order_side"] = 1
-	body["price"] = fmt.Sprintf("%f", rate)
-	body["amount"] = fmt.Sprintf("%f", quantity)
+	body["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	body["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	mapParams["body"] = body
 
