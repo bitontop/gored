@@ -174,7 +174,6 @@ func (e *Coinbene) GetPairsData() error {
 				PriceFilter: math.Pow10(-1 * priceSize),
 				Listed:      DEFAULT_LISTED,
 			}
-			log.Printf("====price filter: %v", math.Pow10(-1*priceSize))
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
