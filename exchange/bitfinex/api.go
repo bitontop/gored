@@ -422,7 +422,7 @@ func (e *Bitfinex) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	cancelOrder := CancelOrder{}
+	cancelOrder := PlaceOrder{}
 	strRequest := "/v1/order/cancel"
 
 	mapParams := make(map[string]interface{})
