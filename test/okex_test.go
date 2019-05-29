@@ -20,7 +20,7 @@ import (
 func Test_Okex(t *testing.T) {
 	e := InitOkex()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USDT|BSV")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -37,8 +37,13 @@ func Test_Okex(t *testing.T) {
 func InitOkex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
+
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+
+	// utils.GetCommonDataFromJSON(config.SourceURI)
 	conf.Exchange(exchange.OKEX, config)
 
 	ex := okex.CreateOkex(config)
