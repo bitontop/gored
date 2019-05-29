@@ -37,9 +37,14 @@ func Test_Coinex(t *testing.T) {
 func InitCoinex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
+
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
+
 	conf.Exchange(exchange.COINEX, config)
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	// utils.GetCommonDataFromJSON(config.SourceURI)
 
 	ex := coinex.CreateCoinex(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())

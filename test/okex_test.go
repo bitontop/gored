@@ -40,10 +40,6 @@ func InitOkex() exchange.Exchange {
 
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-
-	// utils.GetCommonDataFromJSON(config.SourceURI)
 	conf.Exchange(exchange.OKEX, config)
 
 	ex := okex.CreateOkex(config)
