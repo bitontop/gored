@@ -346,7 +346,7 @@ func (e *Tradeogre) OrderStatus(order *exchange.Order) error {
 	}
 
 	orderStatus := OrderStatus{}
-	strRequest := "/account/order/"
+	strRequest := "/account/order"
 
 	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
