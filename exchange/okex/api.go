@@ -82,6 +82,7 @@ func (e *Okex) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Currency,
+				ChainType:    exchange.MAINNET,
 				Confirmation: DEFAULT_CONFIRMATION,
 			}
 
