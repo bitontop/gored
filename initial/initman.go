@@ -7,14 +7,17 @@ import (
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/binancedex"
 	"github.com/bitontop/gored/exchange/bitfinex"
 	"github.com/bitontop/gored/exchange/bitforex"
+	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
 	"github.com/bitontop/gored/exchange/bitrue"
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/coinbene"
 	"github.com/bitontop/gored/exchange/coineal"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/dragonex"
@@ -22,9 +25,11 @@ import (
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobiotc"
+	"github.com/bitontop/gored/exchange/ibankdigital"
 	"github.com/bitontop/gored/exchange/idex"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
@@ -56,154 +61,248 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 	switch config.ExName {
 	case exchange.BINANCE:
 		ex := binance.CreateBinance(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITTREX:
 		ex := bittrex.CreateBittrex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.COINEX:
 		ex := coinex.CreateCoinex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.STEX:
 		ex := stex.CreateStex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITMEX:
 		ex := bitmex.CreateBitmex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.KUCOIN:
 		ex := kucoin.CreateKucoin(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.HUOBIOTC:
 		ex := huobiotc.CreateHuobiOTC(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITMAX:
 		ex := bitmax.CreateBitmax(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITSTAMP:
 		ex := bitstamp.CreateBitstamp(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.OTCBTC:
 		ex := otcbtc.CreateOtcbtc(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.HUOBI:
 		ex := huobi.CreateHuobi(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BIBOX:
 		ex := bibox.CreateBibox(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.OKEX:
 		ex := okex.CreateOkex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITZ:
 		ex := bitz.CreateBitz(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.HITBTC:
 		ex := hitbtc.CreateHitbtc(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.DRAGONEX:
 		ex := dragonex.CreateDragonex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BIGONE:
 		ex := bigone.CreateBigone(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITFINEX:
 		ex := bitfinex.CreateBitfinex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.GATEIO:
 		ex := gateio.CreateGateio(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.IDEX:
 		ex := idex.CreateIdex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.LIQUID:
 		ex := liquid.CreateLiquid(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITFOREX:
 		ex := bitforex.CreateBitforex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.TOKOK:
 		ex := tokok.CreateTokok(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.MXC:
 		ex := mxc.CreateMxc(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.BITRUE:
 		ex := bitrue.CreateBitrue(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.TRADESATOSHI:
 		ex := tradesatoshi.CreateTradeSatoshi(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.KRAKEN:
 		ex := kraken.CreateKraken(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.POLONIEX:
 		ex := poloniex.CreatePoloniex(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.COINEAL:
 		ex := coineal.CreateCoineal(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
 	case exchange.TRADEOGRE:
 		ex := tradeogre.CreateTradeogre(config)
-		e.exMan.Add(ex)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
 		return ex
 
+	case exchange.COINBENE:
+		ex := coinbene.CreateCoinbene(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.IBANKDIGITAL:
+		ex := ibankdigital.CreateIbankdigital(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.LBANK:
+		ex := lbank.CreateLbank(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BINANCEDEX:
+		ex := binancedex.CreateBinanceDex(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BITMART:
+		ex := bitmart.CreateBitmart(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
 	}
 	return nil
 }

@@ -48,7 +48,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitrue) GetCoinsData() {
+func (e *Bitrue) GetCoinsData() error {
 	pairsData := PairsData{}
 	jsonResponse := JsonResponse{}
 
@@ -57,12 +57,12 @@ func (e *Bitrue) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &pairsData); err != nil {
-		log.Printf("%s Get Coins Data Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range pairsData.Symbols {
@@ -92,6 +92,7 @@ func (e *Bitrue) GetCoinsData() {
 				CoinID:       base.ID,
 				Coin:         base,
 				ExSymbol:     data.QuoteAsset,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -106,6 +107,7 @@ func (e *Bitrue) GetCoinsData() {
 				CoinID:       target.ID,
 				Coin:         target,
 				ExSymbol:     data.BaseAsset,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -115,13 +117,14 @@ func (e *Bitrue) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitrue) GetPairsData() {
+func (e *Bitrue) GetPairsData() error {
 	pairsData := PairsData{}
 	jsonResponse := JsonResponse{}
 
@@ -130,12 +133,12 @@ func (e *Bitrue) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Data Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData.Symbols {
@@ -166,6 +169,7 @@ func (e *Bitrue) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -287,8 +291,8 @@ func (e *Bitrue) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "LIMIT"
-	mapParams["price"] = fmt.Sprint(rate)
-	mapParams["quantity"] = fmt.Sprint(quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -326,8 +330,8 @@ func (e *Bitrue) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "LIMIT"
-	mapParams["price"] = fmt.Sprint(rate)
-	mapParams["quantity"] = fmt.Sprint(quantity)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {

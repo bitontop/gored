@@ -48,7 +48,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Hitbtc) GetCoinsData() {
+func (e *Hitbtc) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	strRequestUrl := "/api/2/public/currency"
@@ -56,7 +56,7 @@ func (e *Hitbtc) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range coinsData {
@@ -80,6 +80,7 @@ func (e *Hitbtc) GetCoinsData() {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.ID,
+				ChainType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.PayoutEnabled,
 				Deposit:      data.PayinEnabled,
@@ -89,13 +90,14 @@ func (e *Hitbtc) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Hitbtc) GetPairsData() {
+func (e *Hitbtc) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/api/2/public/symbol"
@@ -103,7 +105,7 @@ func (e *Hitbtc) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData {
@@ -148,6 +150,7 @@ func (e *Hitbtc) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -257,8 +260,8 @@ func (e *Hitbtc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "sell"
 	mapParams["type"] = "limit"
-	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	json.Unmarshal([]byte(jsonPlaceReturn), &errResponse)
@@ -294,8 +297,8 @@ func (e *Hitbtc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "buy"
 	mapParams["type"] = "limit"
-	mapParams["quantity"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	json.Unmarshal([]byte(jsonPlaceReturn), &errResponse)

@@ -20,7 +20,7 @@ import (
 func Test_Okex(t *testing.T) {
 	e := InitOkex()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USDT|BSV")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -37,6 +37,7 @@ func Test_Okex(t *testing.T) {
 func InitOkex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
+
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
 	conf.Exchange(exchange.OKEX, config)

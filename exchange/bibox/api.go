@@ -48,10 +48,9 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bibox) GetCoinsData() {
+func (e *Bibox) GetCoinsData() error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
-		return
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
 	jsonResponse := &JsonResponse{}
@@ -66,15 +65,12 @@ func (e *Bibox) GetCoinsData() {
 
 	jsonCurrencyReturn := e.ApiKeyPOST(strRequestUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-		return
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if jsonResponse.Error != (Error{}) {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Error)
-		return
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Error)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
-		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
-		return
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	for _, result := range coinsData {
@@ -97,6 +93,7 @@ func (e *Bibox) GetCoinsData() {
 					CoinID:       c.ID,
 					Coin:         c,
 					ExSymbol:     data.CoinSymbol,
+					ChainType:    exchange.MAINNET,
 					TxFee:        data.WithdrawFee,
 					Confirmation: DEFAULT_CONFIRMATION,
 				}
@@ -122,13 +119,14 @@ func (e *Bibox) GetCoinsData() {
 			}
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bibox) GetPairsData() {
+func (e *Bibox) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -140,12 +138,12 @@ func (e *Bibox) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Error != (Error{}) {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Error)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Error)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
-		log.Printf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	for _, data := range pairsData {
@@ -181,6 +179,7 @@ func (e *Bibox) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -318,8 +317,8 @@ func (e *Bibox) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	body["account_type"] = 0
 	body["order_type"] = 2
 	body["order_side"] = 2
-	body["price"] = fmt.Sprintf("%f", rate)
-	body["amount"] = fmt.Sprintf("%f", quantity)
+	body["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	body["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	mapParams["body"] = body
 
@@ -363,8 +362,8 @@ func (e *Bibox) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	body["account_type"] = 0
 	body["order_type"] = 2
 	body["order_side"] = 1
-	body["price"] = fmt.Sprintf("%f", rate)
-	body["amount"] = fmt.Sprintf("%f", quantity)
+	body["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	body["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	mapParams["body"] = body
 
@@ -410,6 +409,7 @@ func (e *Bibox) OrderStatus(order *exchange.Order) error {
 
 	body := make(map[string]interface{})
 	body["id"] = orderID
+	body["account_type"] = 0
 
 	mapParams["body"] = body
 

@@ -49,7 +49,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitmex) GetCoinsData() {
+func (e *Bitmex) GetCoinsData() error {
 	coinsData := PairsData{}
 
 	strRequestUrl := "/instrument/active"
@@ -57,8 +57,7 @@ func (e *Bitmex) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Data Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-		return
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range coinsData {
@@ -89,6 +88,7 @@ func (e *Bitmex) GetCoinsData() {
 				CoinID:       base.ID,
 				Coin:         base,
 				ExSymbol:     data.QuoteCurrency,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -104,6 +104,7 @@ func (e *Bitmex) GetCoinsData() {
 				CoinID:       target.ID,
 				Coin:         target,
 				ExSymbol:     data.RootSymbol,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -114,13 +115,14 @@ func (e *Bitmex) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitmex) GetPairsData() {
+func (e *Bitmex) GetPairsData() error {
 	pairsData := &PairsData{}
 
 	strRequestUrl := "/instrument/active"
@@ -128,8 +130,7 @@ func (e *Bitmex) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Data Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-		return
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range *pairsData {
@@ -159,6 +160,7 @@ func (e *Bitmex) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -248,8 +250,8 @@ func (e *Bitmex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "Sell"
-	mapParams["simpleOrderQty"] = fmt.Sprintf("%f", quantity)
-	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["simpleOrderQty"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -284,8 +286,8 @@ func (e *Bitmex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "Buy"
-	mapParams["simpleOrderQty"] = fmt.Sprintf("%f", quantity)
-	mapParams["price"] = fmt.Sprintf("%f", rate)
+	mapParams["simpleOrderQty"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {

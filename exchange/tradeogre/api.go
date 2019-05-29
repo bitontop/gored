@@ -49,7 +49,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Tradeogre) GetCoinsData() {
+func (e *Tradeogre) GetCoinsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/markets"
@@ -57,7 +57,7 @@ func (e *Tradeogre) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &pairsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, pairs := range pairsData {
@@ -89,6 +89,7 @@ func (e *Tradeogre) GetCoinsData() {
 					CoinID:       base.ID,
 					Coin:         base,
 					ExSymbol:     coinStrs[0],
+					ChainType:    exchange.MAINNET,
 					TxFee:        DEFAULT_TXFEE,
 					Withdraw:     DEFAULT_WITHDRAW,
 					Deposit:      DEFAULT_DEPOSIT,
@@ -103,6 +104,7 @@ func (e *Tradeogre) GetCoinsData() {
 					CoinID:       target.ID,
 					Coin:         target,
 					ExSymbol:     coinStrs[1],
+					ChainType:    exchange.MAINNET,
 					TxFee:        DEFAULT_TXFEE,
 					Withdraw:     DEFAULT_WITHDRAW,
 					Deposit:      DEFAULT_DEPOSIT,
@@ -113,13 +115,14 @@ func (e *Tradeogre) GetCoinsData() {
 			}
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Tradeogre) GetPairsData() {
+func (e *Tradeogre) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/markets"
@@ -127,7 +130,7 @@ func (e *Tradeogre) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, pairs := range pairsData {
@@ -159,6 +162,7 @@ func (e *Tradeogre) GetPairsData() {
 			}
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -342,7 +346,7 @@ func (e *Tradeogre) OrderStatus(order *exchange.Order) error {
 	}
 
 	orderStatus := OrderStatus{}
-	strRequest := "/account/order/"
+	strRequest := "/account/order"
 
 	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {

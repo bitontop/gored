@@ -6,6 +6,7 @@ package exchange
 
 type ExchangeName string
 type DataSource string
+type ChainType string
 type UpdateMethod string
 
 const (
@@ -17,12 +18,20 @@ const (
 	JSON_FILE        DataSource = "JSON_FILE"
 	PSQL             DataSource = "PSQL"
 
+	MAINNET ChainType = "MAINNET"
+	BEP2    ChainType = "BEP2"
+	ERC20   ChainType = "ERC20"
+	NEP5    ChainType = "NEP5"
+	OMNI    ChainType = "OMNI"
+	TRC20   ChainType = "TRC20"
+
 	BCEX         ExchangeName = "BCEX"
 	BGOGO        ExchangeName = "BGOGO"
 	BIBOX        ExchangeName = "BIBOX"
 	BIGONE       ExchangeName = "BIGONE"
 	BIKI         ExchangeName = "BIKI"
 	BINANCE      ExchangeName = "BINANCE"
+	BINANCEDEX   ExchangeName = "BINANCEDEX"
 	BITATM       ExchangeName = "BITATM"
 	BITFINEX     ExchangeName = "BITFINEX"
 	BITFOREX     ExchangeName = "BITFOREX"
@@ -51,6 +60,7 @@ const (
 	FATBTC       ExchangeName = "FATBTC"
 	FCOIN        ExchangeName = "FCOIN"
 	GATEIO       ExchangeName = "GATEIO"
+	GEMINI       ExchangeName = "GEMINI"
 	GRAVIEX      ExchangeName = "GRAVIEX"
 	HITBTC       ExchangeName = "HITBTC"
 	HOTBIT       ExchangeName = "HOTBIT"
@@ -112,4 +122,10 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, POLONIEX)     // ID = 29
 	supportList = append(supportList, COINEAL)      // ID = 30
 	supportList = append(supportList, TRADEOGRE)    // ID = 31
+	supportList = append(supportList, COINBENE)     // ID = 32
+	supportList = append(supportList, IBANKDIGITAL) // ID = 33
+	supportList = append(supportList, LBANK)        // ID = 34
+	// supportList = append(supportList, BINANCEDEX)   // ID = 35
+	supportList = append(supportList, BITMART) // ID = 36
+	// supportList = append(supportList, GIMINI)  // ID = 37
 }

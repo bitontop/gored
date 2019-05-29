@@ -49,7 +49,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitz) GetCoinsData() {
+func (e *Bitz) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := make(map[string]interface{})
 
@@ -58,12 +58,12 @@ func (e *Bitz) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if jsonResponse.Status != 200 {
-		log.Printf("%s Get Coins Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
+		return fmt.Errorf("%s Get Coins Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
-		log.Printf("%s Get Coins Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for coinName, _ := range coinsData {
@@ -85,6 +85,7 @@ func (e *Bitz) GetCoinsData() {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     coinName,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -94,13 +95,14 @@ func (e *Bitz) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitz) GetPairsData() {
+func (e *Bitz) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := make(map[string]*PairsData)
 
@@ -109,12 +111,12 @@ func (e *Bitz) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Status != 200 {
-		log.Printf("%s Get Pairs Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
+		return fmt.Errorf("%s Get Pairs Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		log.Printf("%s Get Pairs Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
@@ -145,6 +147,7 @@ func (e *Bitz) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -270,8 +273,8 @@ func (e *Bitz) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	strRequest := "/Trade/addEntrustSheet"
 
 	mapParams := make(map[string]string)
-	mapParams["number"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["number"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "2"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["tradePwd"] = e.TradePassword
@@ -310,8 +313,8 @@ func (e *Bitz) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	strRequest := "/Trade/addEntrustSheet"
 
 	mapParams := make(map[string]string)
-	mapParams["number"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["number"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["type"] = "1"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["tradePwd"] = e.TradePassword

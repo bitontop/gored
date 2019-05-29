@@ -15,19 +15,23 @@ import (
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitforex"
+	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitrue"
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/coinbene"
 	"github.com/bitontop/gored/exchange/coineal"
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
+	"github.com/bitontop/gored/exchange/ibankdigital"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
@@ -115,6 +119,10 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitPoloniex(config)
 	InitCoineal(config)
 	InitTradeogre(config)
+	InitCoinbene(config)
+	InitIbankdigital(config)
+	InitLbank(config)
+	InitBitmart(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -345,6 +353,42 @@ func InitCoineal(config *exchange.Config) {
 func InitTradeogre(config *exchange.Config) {
 	conf.Exchange(exchange.TRADEOGRE, config)
 	ex := tradeogre.CreateTradeogre(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitCoinbene(config *exchange.Config) {
+	conf.Exchange(exchange.COINBENE, config)
+	ex := coinbene.CreateCoinbene(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitIbankdigital(config *exchange.Config) {
+	conf.Exchange(exchange.IBANKDIGITAL, config)
+	ex := ibankdigital.CreateIbankdigital(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitLbank(config *exchange.Config) {
+	conf.Exchange(exchange.LBANK, config)
+	ex := lbank.CreateLbank(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBitmart(config *exchange.Config) {
+	conf.Exchange(exchange.BITMART, config)
+	ex := bitmart.CreateBitmart(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

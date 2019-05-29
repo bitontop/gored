@@ -19,7 +19,6 @@ type CoinsData []struct {
 	AssetName      string  `json:"assetName"`
 	Website        string  `json:"website"`
 	BlockURL       string  `json:"blockUrl"`
-	CurrencyType   string  `json:"currencyType"`
 	TransactionFee float64 `json:"transactionFee"`
 	EnableCharge   bool    `json:"enableCharge"`
 	EnableWithdraw bool    `json:"enableWithdraw"`

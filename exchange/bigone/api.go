@@ -50,7 +50,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bigone) GetCoinsData() {
+func (e *Bigone) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -59,12 +59,12 @@ func (e *Bigone) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if false {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		log.Printf("%s Get Coins Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
@@ -96,6 +96,7 @@ func (e *Bigone) GetCoinsData() {
 				CoinID:       base.ID,
 				Coin:         base,
 				ExSymbol:     data.QuoteAsset.Symbol,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -110,6 +111,7 @@ func (e *Bigone) GetCoinsData() {
 				CoinID:       target.ID,
 				Coin:         target,
 				ExSymbol:     data.BaseAsset.Symbol,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -119,13 +121,14 @@ func (e *Bigone) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bigone) GetPairsData() {
+func (e *Bigone) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -134,12 +137,12 @@ func (e *Bigone) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if false {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		log.Printf("%s Get Pairs Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
@@ -168,6 +171,7 @@ func (e *Bigone) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -288,8 +292,8 @@ func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	strRequest := "/viewer/orders"
 
 	mapParams := make(map[string]string)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "ASK"
 	mapParams["market_id"] = e.GetSymbolByPair(pair)
 
@@ -305,7 +309,7 @@ func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
+		OrderID:      placeOrder.ID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -326,8 +330,8 @@ func (e *Bigone) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	strRequest := "/viewer/orders"
 
 	mapParams := make(map[string]string)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
-	mapParams["price"] = fmt.Sprintf("%v", rate)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "BID"
 	mapParams["market_id"] = e.GetSymbolByPair(pair)
 
@@ -343,7 +347,7 @@ func (e *Bigone) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      fmt.Sprintf("%s", placeOrder.ID),
+		OrderID:      placeOrder.ID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",

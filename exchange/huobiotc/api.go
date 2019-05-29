@@ -45,7 +45,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *HuobiOTC) GetCoinsData() {
+func (e *HuobiOTC) GetCoinsData() error {
 	currency := make(map[string]string)
 	currency["CNY"] = "1"
 	currency["BTC"] = "1"
@@ -70,6 +70,7 @@ func (e *HuobiOTC) GetCoinsData() {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     id,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -79,13 +80,14 @@ func (e *HuobiOTC) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *HuobiOTC) GetPairsData() {
+func (e *HuobiOTC) GetPairsData() error {
 	currency := make(map[string]string)
 	currency["CNY"] = "1"
 	coinID := make(map[string]string)
@@ -121,6 +123,7 @@ func (e *HuobiOTC) GetPairsData() {
 			}
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth

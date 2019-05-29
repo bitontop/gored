@@ -114,7 +114,7 @@ type OrderStatus struct {
 }
 
 type CancelOrder struct {
-	Result string `json:"result"`
+	Result bool `json:"result"`
 	Order  struct {
 		OrderNumber   string  `json:"orderNumber"`
 		Status        string  `json:"status"`

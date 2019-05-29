@@ -46,7 +46,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bittrex) GetCoinsData() {
+func (e *Bittrex) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
@@ -55,12 +55,12 @@ func (e *Bittrex) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if !jsonResponse.Success {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
-		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	for _, data := range coinsData {
@@ -72,10 +72,7 @@ func (e *Bittrex) GetCoinsData() {
 				c = &coin.Coin{}
 				c.Code = data.Currency
 				c.Name = data.CurrencyLong
-				c.CurrencyType = data.CoinType
 				coin.AddCoin(c)
-			} else if c.CurrencyType == "" {
-				c.CurrencyType = data.CoinType
 			}
 		case exchange.JSON_FILE:
 			c = e.GetCoinBySymbol(data.Currency)
@@ -86,6 +83,7 @@ func (e *Bittrex) GetCoinsData() {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Currency,
+				ChainType:    exchange.MAINNET,
 				TxFee:        data.TxFee,
 				Withdraw:     data.IsActive,
 				Deposit:      data.IsActive,
@@ -95,13 +93,14 @@ func (e *Bittrex) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bittrex) GetPairsData() {
+func (e *Bittrex) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -110,12 +109,12 @@ func (e *Bittrex) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if !jsonResponse.Success {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
-		log.Printf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	for _, data := range pairsData {
@@ -146,6 +145,7 @@ func (e *Bittrex) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -231,7 +231,7 @@ func (e *Bittrex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 
 	mapParams := make(map[string]string)
 	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["address"] = addr
 
 	jsonResponse := &JsonResponse{}
@@ -260,8 +260,8 @@ func (e *Bittrex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
-	mapParams["rate"] = fmt.Sprintf("%f", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
@@ -297,8 +297,8 @@ func (e *Bittrex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = fmt.Sprintf("%f", quantity)
-	mapParams["rate"] = fmt.Sprintf("%f", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}

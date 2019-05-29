@@ -49,7 +49,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Idex) GetCoinsData() {
+func (e *Idex) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	strRequestUrl := "/returnCurrencies"
@@ -57,8 +57,7 @@ func (e *Idex) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-		return
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for symbol, data := range coinsData {
@@ -81,6 +80,7 @@ func (e *Idex) GetCoinsData() {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Address,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -91,13 +91,14 @@ func (e *Idex) GetCoinsData() {
 			coinDecimals.Set(c.Code, data.Decimals)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Idex) GetPairsData() {
+func (e *Idex) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/return24Volume"
@@ -105,8 +106,7 @@ func (e *Idex) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-		return
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for symbol := range pairsData {
@@ -140,6 +140,7 @@ func (e *Idex) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth

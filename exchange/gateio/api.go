@@ -52,7 +52,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Gateio) GetCoinsData() {
+func (e *Gateio) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	strRequestUrl := "/api2/1/marketlist"
@@ -60,9 +60,9 @@ func (e *Gateio) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if coinsData.Result != "true" {
-		log.Printf("%s Get Coins Failed: %+v", e.GetName(), coinsData)
+		return fmt.Errorf("%s Get Coins Failed: %+v", e.GetName(), coinsData)
 	}
 
 	for _, data := range coinsData.Data {
@@ -85,6 +85,7 @@ func (e *Gateio) GetCoinsData() {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Symbol,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -95,10 +96,10 @@ func (e *Gateio) GetCoinsData() {
 		}
 	}
 
-	e.SetConstraint()
+	return e.SetConstraint()
 }
 
-func (e *Gateio) SetConstraint() {
+func (e *Gateio) SetConstraint() error {
 	coinsConstrain := CoinsConstrain{}
 
 	strRequestUrl := "/api2/1/coininfo"
@@ -106,9 +107,9 @@ func (e *Gateio) SetConstraint() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsConstrain); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins' Constraint Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if coinsConstrain.Result != "true" {
-		log.Printf("%s Get Coins Failed: %+v", e.GetName(), coinsConstrain)
+		return fmt.Errorf("%s Get Coins' Constraint Failed: %+v", e.GetName(), coinsConstrain)
 	}
 
 	for _, coins := range coinsConstrain.Coins {
@@ -122,13 +123,14 @@ func (e *Gateio) SetConstraint() {
 			}
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Gateio) GetPairsData() {
+func (e *Gateio) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/api2/1/marketinfo"
@@ -136,9 +138,9 @@ func (e *Gateio) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if pairsData.Result != "true" {
-		log.Printf("%s Get Pairs Failed: %+v", e.GetName(), pairsData)
+		return fmt.Errorf("%s Get Pairs Failed: %+v", e.GetName(), pairsData)
 	}
 
 	for _, pairs := range pairsData.Pairs {
@@ -174,6 +176,7 @@ func (e *Gateio) GetPairsData() {
 			}
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -292,8 +295,8 @@ func (e *Gateio) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	mapParams := make(map[string]string)
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "" //ioc: immediate order cancel
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
@@ -326,8 +329,8 @@ func (e *Gateio) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	mapParams := make(map[string]string)
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "" //ioc: immediate order cancel
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
@@ -404,7 +407,7 @@ func (e *Gateio) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if cancelOrder.Result != "true" {
+	} else if !cancelOrder.Result {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), cancelOrder.Message)
 	}
 

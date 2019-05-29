@@ -48,7 +48,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Poloniex) GetCoinsData() {
+func (e *Poloniex) GetCoinsData() error {
 	coinsData := make(map[string]*CoinsData)
 
 	strRequestUrl := "/public?command=returnCurrencies"
@@ -56,7 +56,7 @@ func (e *Poloniex) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for key, data := range coinsData {
@@ -71,10 +71,7 @@ func (e *Poloniex) GetCoinsData() {
 				c = &coin.Coin{}
 				c.Code = key
 				c.Name = data.Name
-				c.CurrencyType = data.CurrencyType
 				coin.AddCoin(c)
-			} else if c.CurrencyType == "" {
-				c.CurrencyType = data.CurrencyType
 			}
 		case exchange.JSON_FILE:
 			c = e.GetCoinBySymbol(key)
@@ -83,13 +80,13 @@ func (e *Poloniex) GetCoinsData() {
 		if c != nil {
 			txFee, err := strconv.ParseFloat(data.TxFee, 64)
 			if err != nil {
-				log.Printf("%s txFee parse error: %v", e.GetName, err)
-				return
+				return fmt.Errorf("%s txFee parse error: %v", e.GetName, err)
 			}
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     key,
+				ChainType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.Disabled == 0,
 				Deposit:      data.Disabled == 0,
@@ -99,13 +96,14 @@ func (e *Poloniex) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Poloniex) GetPairsData() {
+func (e *Poloniex) GetPairsData() error {
 	pairsData := make(map[string]*PairsData)
 
 	strRequestUrl := "/public?command=returnTicker"
@@ -113,7 +111,7 @@ func (e *Poloniex) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for key, _ := range pairsData {
@@ -143,6 +141,7 @@ func (e *Poloniex) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -248,7 +247,7 @@ func (e *Poloniex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string)
 	mapParams := make(map[string]string)
 	mapParams["command"] = "withdraw"
 	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["amount"] = fmt.Sprintf("%f", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["address"] = addr
 
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
@@ -274,8 +273,8 @@ func (e *Poloniex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	mapParams := make(map[string]string)
 	mapParams["command"] = "sell"
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -308,8 +307,8 @@ func (e *Poloniex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams := make(map[string]string)
 	mapParams["command"] = "buy"
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = fmt.Sprintf("%v", rate)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {

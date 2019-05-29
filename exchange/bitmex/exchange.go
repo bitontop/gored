@@ -56,28 +56,40 @@ func CreateBitmex(config *exchange.Config) *Bitmex {
 		coinConstraintMap = cmap.New()
 		pairConstraintMap = cmap.New()
 
-		instance.InitData()
+		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
+			instance = nil
+		}
 	})
 	return instance
 }
 
-func (e *Bitmex) InitData() {
+func (e *Bitmex) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
-		e.GetCoinsData()
-		e.GetPairsData()
+		if err := e.GetCoinsData(); err != nil {
+			return err
+		}
+		if err := e.GetPairsData(); err != nil {
+			return err
+		}
 		break
 	case exchange.MICROSERVICE_API:
 		break
 	case exchange.JSON_FILE:
 		exchangeData := utils.GetExchangeDataFromJSON(e.SourceURI, e.GetName())
-		coinConstraintMap = exchangeData.CoinConstraint
-		pairConstraintMap = exchangeData.PairConstraint
+		if exchangeData == nil {
+			return fmt.Errorf("%s Initial Data Error.", e.GetName())
+		} else {
+			coinConstraintMap = exchangeData.CoinConstraint
+			pairConstraintMap = exchangeData.PairConstraint
+		}
 		break
 	case exchange.PSQL:
 	default:
-		log.Printf("Bitmex Initial Coin: There is not selected data source.")
+		return fmt.Errorf("%s Initial Coin: There is not selected data source.", e.GetName())
 	}
+	return nil
 }
 
 /**************** Exchange Information ****************/
@@ -235,36 +247,57 @@ func (e *Bitmex) UpdateConstraint() {
 /**************** Coin Constraint ****************/
 func (e *Bitmex) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return 0.0
+	}
 	return coinConstraint.TxFee
 }
 
 func (e *Bitmex) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Withdraw
 }
 
 func (e *Bitmex) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Deposit
 }
 
 func (e *Bitmex) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return 0
+	}
 	return coinConstraint.Confirmation
 }
 
 /**************** Pair Constraint ****************/
 func (e *Bitmex) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.TakerFee
 }
 
 func (e *Bitmex) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.LotSize
 }
 
 func (e *Bitmex) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.PriceFilter
 }

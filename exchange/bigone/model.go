@@ -56,7 +56,7 @@ type AccountBalances []struct {
 }
 
 type PlaceOrder struct {
-	ID           int    `json:"id"`
+	ID           string `json:"id"`
 	MarketID     string `json:"market_id"`
 	Price        string `json:"price"`
 	Amount       string `json:"amount"`

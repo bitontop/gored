@@ -52,7 +52,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitmax) GetCoinsData() {
+func (e *Bitmax) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	strRequestUrl := "/api/v1/assets"
@@ -60,7 +60,7 @@ func (e *Bitmax) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %s", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range coinsData {
@@ -79,30 +79,38 @@ func (e *Bitmax) GetCoinsData() {
 		}
 
 		if c != nil {
-			isActive := true
-			if data.Status == "NotTrading" {
-				isActive = false
+			deposit := true
+			withdraw := true
+			if data.Status == "NotTrading" || data.Status == "NoTransaction" {
+				deposit = false
+				withdraw = false
+			} else if data.Status == "NoWithdraw" {
+				withdraw = false
+			} else if data.Status == "NoDeposit" {
+				deposit = false
 			}
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.AssetCode,
-				TxFee:        float64(data.WithdrawalFee),
-				Withdraw:     isActive,
-				Deposit:      isActive,
+				ChainType:    exchange.MAINNET,
+				TxFee:        data.WithdrawalFee,
+				Withdraw:     withdraw,
+				Deposit:      deposit,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       DEFAULT_LISTED,
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bitmax) GetPairsData() {
+func (e *Bitmax) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/api/v1/products"
@@ -110,7 +118,7 @@ func (e *Bitmax) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %s", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData {
@@ -139,6 +147,7 @@ func (e *Bitmax) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -269,7 +278,7 @@ func (e *Bitmax) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 	mapParams := make(map[string]string)
 	mapParams["requestId"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano()/1000000, time.Now().UTC().UnixNano())
 	mapParams["assetCode"] = e.GetSymbolByCoin(coin)
-	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["address"] = addr
 
 	jsonSubmitWithdraw := e.ApiKeyRequest(mapParams, "POST", strRequest, "withdraw")
@@ -296,8 +305,8 @@ func (e *Bitmax) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams := make(map[string]string)
 	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano(), time.Now().UTC().UnixNano()/1000000)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["orderPrice"] = fmt.Sprintf("%v", rate)
-	mapParams["orderQty"] = fmt.Sprintf("%v", quantity)
+	mapParams["orderPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["orderQty"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "limit"
 	mapParams["side"] = "sell"
 
@@ -338,8 +347,8 @@ func (e *Bitmax) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams := make(map[string]string)
 	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano(), time.Now().UTC().UnixNano()/1000000)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["orderPrice"] = fmt.Sprintf("%v", rate)
-	mapParams["orderQty"] = fmt.Sprintf("%v", quantity)
+	mapParams["orderPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["orderQty"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["orderType"] = "limit"
 	mapParams["side"] = "buy"
 

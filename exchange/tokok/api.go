@@ -49,7 +49,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Tokok) GetCoinsData() {
+func (e *Tokok) GetCoinsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/exchangeInfo"
@@ -57,7 +57,7 @@ func (e *Tokok) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &pairsData); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range pairsData {
@@ -87,6 +87,7 @@ func (e *Tokok) GetCoinsData() {
 				CoinID:       base.ID,
 				Coin:         base,
 				ExSymbol:     data.QuoteAsset,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -101,6 +102,7 @@ func (e *Tokok) GetCoinsData() {
 				CoinID:       target.ID,
 				Coin:         target,
 				ExSymbol:     data.BaseAsset,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -110,13 +112,14 @@ func (e *Tokok) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Tokok) GetPairsData() {
+func (e *Tokok) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestUrl := "/exchangeInfo"
@@ -124,7 +127,7 @@ func (e *Tokok) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData {
@@ -145,7 +148,7 @@ func (e *Tokok) GetPairsData() {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    data.Symbol,
+				ExSymbol:    strings.ToLower(data.Symbol),
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.BaseAssetPrecision),
@@ -155,6 +158,7 @@ func (e *Tokok) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -269,8 +273,8 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "2"
-	mapParams["entrustPrice"] = fmt.Sprintf("%v", rate)
-	mapParams["entrustCount"] = fmt.Sprintf("%v", quantity)
+	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -307,8 +311,8 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "1"
-	mapParams["entrustPrice"] = fmt.Sprintf("%v", rate)
-	mapParams["entrustCount"] = fmt.Sprintf("%v", quantity)
+	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
