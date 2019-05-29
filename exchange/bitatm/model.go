@@ -44,7 +44,7 @@ type PlaceOrder struct {
 }
 
 type PairsData []struct {
-	ID              int    `json:"id"`
+	ID              string `json:"id"`
 	Basecurrency    string `json:"basecurrency"`
 	Quotecurrency   string `json:"quotecurrency"`
 	Symbol          string `json:"symbol"`
@@ -53,18 +53,20 @@ type PairsData []struct {
 }
 
 type CoinsData []struct {
-	ID           int    `json:"id"`
+	ID           string `json:"id"`
 	Currencyname string `json:"currencyname"`
 }
 
 type OrderBook struct {
 	Ts   int `json:"ts"`
 	Bids []struct {
-		Price  int `json:"price"`
-		Amount int `json:"amount"`
+		Price  float64 `json:"price"`
+		Amount float64 `json:"amount"`
+		ID     int     `json:"id"`
 	} `json:"bids"`
 	Asks []struct {
-		Price  int `json:"price"`
-		Amount int `json:"amount"`
+		Price  float64 `json:"price"`
+		Amount float64 `json:"amount"`
+		ID     int     `json:"id"`
 	} `json:"asks"`
 }

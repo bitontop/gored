@@ -159,5 +159,15 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.API_KEY = ""
 		config.API_SECRET = ""
 		break
+
+	case exchange.BITATM:
+		config.API_KEY = "2f9db8a5-9d8c-496c-a1ce-a5657d41c3d9"
+		config.API_SECRET = "1f02b927-70ad-4de7-b7bd-26a1d9e4e9cc"
+		break
+
+	case exchange.DCOIN:
+		config.API_KEY = "1dbi4tegcy2oe3qfte6c84bcrywsm8f2"
+		config.API_SECRET = "1p3k53wtebqa129wht01sr6raq0q6ugb"
+		break
 	}
 }

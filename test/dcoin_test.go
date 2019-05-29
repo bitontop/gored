@@ -12,23 +12,23 @@ import (
 	"github.com/bitontop/gored/exchange"
 
 	"github.com/bitontop/gored/pair"
-	//"github.com/bitontop/gored/exchange/bitatm"
+	//"github.com/bitontop/gored/exchange/dcoin"
 	//"github.com/bitontop/gored/test/conf"
-	"../exchange/bitatm"
+	"../exchange/dcoin"
 	"./conf"
 )
 
 /********************Public API********************/
-func Test_BitATM(t *testing.T) {
-	e := InitBitATM()
+func Test_Dcoin(t *testing.T) {
+	e := InitDcoin()
 
-	pair := pair.GetPairByKey("BHD|BTC")
+	pair := pair.GetPairByKey("USDT|BTC")
 
-	Test_Coins(e)
-	Test_Pairs(e)
-	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
+	//Test_Coins(e)
+	//Test_Pairs(e)
+	//Test_Pair(e, pair)
+	//Test_Orderbook(e, pair)
+	//Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
 	//Test_Balance(e, pair)
@@ -36,14 +36,14 @@ func Test_BitATM(t *testing.T) {
 	//Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
-func InitBitATM() exchange.Exchange {
+func InitDcoin() exchange.Exchange {
 	coin.Init()
 	pair.Init()
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BITATM, config)
+	conf.Exchange(exchange.DCOIN, config)
 
-	ex := bitatm.CreateBitATM(config)
+	ex := dcoin.CreateDcoin(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())
 
 	config = nil

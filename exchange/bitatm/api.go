@@ -9,7 +9,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
+	"sort"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -56,41 +59,33 @@ func (e *BitATM) GetCoinsData() {
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+	} else if jsonResponse.Msg != "Ok." {
+		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
-		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
+		log.Printf("%s Get Coins Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range coinsData {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.Currency)
+			c = coin.GetCoin(data.Currencyname)
 			if c == nil {
 				c = &coin.Coin{}
-				c.Code = data.Currency
-				c.Name = data.CurrencyLong
-				c.CurrencyType = data.CoinType
+				c.Code = data.Currencyname
 				coin.AddCoin(c)
-			} else if c.CurrencyType == "" {
-				c.CurrencyType = data.CoinType
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.Currency)
+			c = e.GetCoinBySymbol(data.Currencyname)
 		}
 
 		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
-				TxFee:        data.TxFee,
-				Withdraw:     data.IsActive,
-				Deposit:      data.IsActive,
-				Confirmation: data.MinConfirmation,
-				Listed:       true,
+				CoinID:   c.ID,
+				Coin:     c,
+				ExSymbol: data.Currencyname,
+				Listed:   true,
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -105,38 +100,38 @@ func (e *BitATM) GetPairsData() {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestUrl := "/v1/comman/symbols"
+	strRequestUrl := "/v1/common/symbols"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
 		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	} else if !jsonResponse.Success {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
+	} else if jsonResponse.Msg != "Ok." {
+		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
-		log.Printf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
+		log.Printf("%s Get Coins Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.BaseCurrency)
-			target := coin.GetCoin(data.MarketCurrency)
+			base := coin.GetCoin(data.Basecurrency)
+			target := coin.GetCoin(data.Quotecurrency)
 			if base != nil && target != nil {
 
 				p = pair.GetPair(base, target)
 
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data.MarketName)
+			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    data.MarketName,
+				ExSymbol:    data.Symbol,
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     DEFAULT_LOT_SIZE,
@@ -160,39 +155,48 @@ func (e *BitATM) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = symbol
-	mapParams["type"] = "both"
+	//mapParams := make(map[string]string)
+	//mapParams["market"] = symbol
 
 	strRequestUrl := "/market/depth"
-	strUrl := API_URL + strRequestUrl
+	strUrl := API_URL + strRequestUrl + "?Symbol=" + symbol
 
 	maker := &exchange.Maker{}
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
+	} else if jsonResponse.Msg != "Ok." {
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %+v", e.GetName(), jsonResponse.Msg)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &orderBook); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
+		return nil, fmt.Errorf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
-	for _, bid := range orderBook.Buy {
-		maker.Bids = append(maker.Bids, bid)
+	for _, bid := range orderBook.Bids {
+		var buydata exchange.Order
+
+		//Modify according to type and structure
+		buydata.Rate = bid.Price
+		buydata.Quantity = bid.Amount
+		maker.Bids = append(maker.Bids, buydata)
 	}
-	for _, ask := range orderBook.Sell {
-		maker.Asks = append(maker.Asks, ask)
+	for _, ask := range orderBook.Asks {
+		var selldata exchange.Order
+
+		//Modify according to type and structure
+		selldata.Rate = ask.Price
+		selldata.Quantity = ask.Amount
+		maker.Asks = append(maker.Asks, selldata)
 	}
 	return maker, nil
 }
 
 /*************** Private API ***************/
-func (e *Bittrex) UpdateAllBalances() {
+func (e *BitATM) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
@@ -203,27 +207,28 @@ func (e *Bittrex) UpdateAllBalances() {
 	strRequest := "/v1/account/balance"
 
 	jsonBalanceReturn := e.ApiKeyGET(strRequest, make(map[string]string))
+	log.Printf(jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} else if !jsonResponse.Success {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
+	} else if jsonResponse.Msg != "Ok." {
+		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Msg)
 		return
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil {
-		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		log.Printf("%s UpdateAllBalances Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return
 	}
 
 	for _, v := range accountBalance {
 		c := e.GetCoinBySymbol(v.Currency)
 		if c != nil {
-			balanceMap.Set(c.Code, v.Available)
+			balanceMap.Set(c.Code, v.Balance)
 		}
 	}
 }
 
-func (e *Bittrex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+func (e *BitATM) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())
 		return false
@@ -242,18 +247,15 @@ func (e *Bittrex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
-	} else if !jsonResponse.Success {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Message)
-		return false
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &withdrawal); err != nil {
-		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Data, &withdrawal); err != nil {
+		log.Printf("%s Withdraw Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return false
 	}
 	return true
 }
 
-func (e *Bittrex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *BitATM) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
@@ -264,22 +266,15 @@ func (e *Bittrex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams["rate"] = fmt.Sprintf("%f", rate)
 
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/selllimit"
+	strRequest := "/v1/order/create"
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,s
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -290,7 +285,7 @@ func (e *Bittrex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	return order, nil
 }
 
-func (e *Bittrex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *BitATM) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
@@ -301,22 +296,15 @@ func (e *Bittrex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["rate"] = fmt.Sprintf("%f", rate)
 
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/buylimit"
+	strRequest := "/v1/order/create"
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -326,7 +314,7 @@ func (e *Bittrex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	return order, nil
 }
 
-func (e *Bittrex) OrderStatus(order *exchange.Order) error {
+func (e *BitATM) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
@@ -341,21 +329,19 @@ func (e *Bittrex) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &orderStatus); err != nil {
-		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.CancelInitiated {
+	if orderStatus.Orderstatus == 2 {
 		order.Status = exchange.Canceling
-	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
+	} else if orderStatus.Orderstatus == 4 {
 		order.Status = exchange.Canceled
-	} else if orderStatus.QuantityRemaining == 0 {
+	} else if orderStatus.Orderstatus == 3 {
 		order.Status = exchange.Filled
-	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {
+	} else if orderStatus.Orderstatus == 1 {
 		order.Status = exchange.Partial
 	} else {
 		order.Status = exchange.New
@@ -364,11 +350,11 @@ func (e *Bittrex) OrderStatus(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Bittrex) ListOrders() ([]*exchange.Order, error) {
+func (e *BitATM) ListOrders() ([]*exchange.Order, error) {
 	return nil, nil
 }
 
-func (e *Bittrex) CancelOrder(order *exchange.Order) error {
+func (e *BitATM) CancelOrder(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
@@ -378,16 +364,14 @@ func (e *Bittrex) CancelOrder(order *exchange.Order) error {
 
 	jsonResponse := &JsonResponse{}
 	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	strRequest := "/v1/order/cancel"
 
 	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
+		return fmt.Errorf("%s CancelOrder Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order.Status = exchange.Canceling
@@ -396,7 +380,7 @@ func (e *Bittrex) CancelOrder(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Bittrex) CancelAllOrder() error {
+func (e *BitATM) CancelAllOrder() error {
 	return nil
 }
 
@@ -405,22 +389,28 @@ func (e *Bittrex) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Bittrex) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["apikey"] = e.API_KEY
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+func (e *BitATM) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
+	mapParams["Accesskey"] = e.API_KEY
+	mapParams["Randstr"] = string(rand.Uint64())
+	mapParams["Timestamp"] = fmt.Sprintf("%d", time.Now().Unix())
+	payload := fmt.Sprintf("%s%s", createPayload(mapParams), e.API_SECRET)
+	mapParams["Signature"] = exchange.ComputeMD5(payload)
 
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
-
-	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
+	url := exchange.Map2UrlQuery(mapParams)
 	httpClient := &http.Client{}
+	strUrl := API_URL + strRequestPath + "?" + url
+
+	log.Printf(payload)
+	log.Printf(exchange.ComputeMD5(payload))
+	log.Printf(url)
 
 	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("Content-Type", "application/json;charset=utf-8")
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
+	//request.Header.Add("apisign", signature)
 
 	response, err := httpClient.Do(request)
 	if nil != err {
@@ -434,4 +424,18 @@ func (e *Bittrex) ApiKeyGET(strRequestPath string, mapParams map[string]string) 
 	}
 
 	return string(body)
+}
+func createPayload(mapParams map[string]string) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += key + "&" + mapParams[key]
+	}
+
+	return strings.ToLower(strParams)
 }
