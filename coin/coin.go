@@ -18,15 +18,14 @@ import (
 // don't modify unless bugs or new features
 
 type Coin struct { // might also understand as public chain or token
-	ID           int
-	Code         string `json:"code"`
-	Name         string `json:"name"`
-	Website      string `json:"website"`
-	Explorer     string `json:"explorer"`
-	CurrencyType string
-	Health       string // the health of the chain
-	Blockheigh   int
-	Blocktime    int // in seconds
+	ID         int
+	Code       string `json:"code"`
+	Name       string `json:"name"`
+	Website    string `json:"website"`
+	Explorer   string `json:"explorer"`
+	Health     string // the health of the chain
+	Blockheigh int
+	Blocktime  int // in seconds
 	// Chain      ChainType
 }
 

@@ -72,10 +72,7 @@ func (e *Bittrex) GetCoinsData() error {
 				c = &coin.Coin{}
 				c.Code = data.Currency
 				c.Name = data.CurrencyLong
-				c.CurrencyType = data.CoinType
 				coin.AddCoin(c)
-			} else if c.CurrencyType == "" {
-				c.CurrencyType = data.CoinType
 			}
 		case exchange.JSON_FILE:
 			c = e.GetCoinBySymbol(data.Currency)
@@ -86,6 +83,7 @@ func (e *Bittrex) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Currency,
+				ChainType:    exchange.MAINNET,
 				TxFee:        data.TxFee,
 				Withdraw:     data.IsActive,
 				Deposit:      data.IsActive,

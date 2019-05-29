@@ -82,6 +82,7 @@ func (e *Binance) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.AssetCode,
+				ChainType:    exchange.MAINNET,
 				TxFee:        data.TransactionFee,
 				Withdraw:     data.EnableWithdraw,
 				Deposit:      data.EnableCharge,

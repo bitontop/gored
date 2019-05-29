@@ -46,6 +46,7 @@ type CoinConstraint struct {
 	CoinID       int
 	Coin         *coin.Coin
 	ExSymbol     string
+	ChainType    ChainType
 	TxFee        float64 // the withdraw fee for this exchange
 	Withdraw     bool
 	Deposit      bool

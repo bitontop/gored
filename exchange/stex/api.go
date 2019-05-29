@@ -89,6 +89,7 @@ func (e *Stex) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.Code,
+				ChainType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.Active,
 				Deposit:      data.Active,

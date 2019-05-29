@@ -71,10 +71,7 @@ func (e *Poloniex) GetCoinsData() error {
 				c = &coin.Coin{}
 				c.Code = key
 				c.Name = data.Name
-				c.CurrencyType = data.CurrencyType
 				coin.AddCoin(c)
-			} else if c.CurrencyType == "" {
-				c.CurrencyType = data.CurrencyType
 			}
 		case exchange.JSON_FILE:
 			c = e.GetCoinBySymbol(key)
@@ -89,6 +86,7 @@ func (e *Poloniex) GetCoinsData() error {
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     key,
+				ChainType:    exchange.MAINNET,
 				TxFee:        txFee,
 				Withdraw:     data.Disabled == 0,
 				Deposit:      data.Disabled == 0,
