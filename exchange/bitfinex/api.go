@@ -387,7 +387,7 @@ func (e *Bitfinex) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyPost(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if orderStatus.OrderID == 0 {
+	} else if orderStatus.ID == 0 {
 		return fmt.Errorf("%s Get OrderStatus Failed: %s", e.GetName(), jsonOrderStatus)
 	}
 
