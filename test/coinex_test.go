@@ -40,11 +40,11 @@ func InitCoinex() exchange.Exchange {
 
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
-
-	conf.Exchange(exchange.COINEX, config)
 	// config.Source = exchange.JSON_FILE
 	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
 	// utils.GetCommonDataFromJSON(config.SourceURI)
+
+	conf.Exchange(exchange.COINEX, config)
 
 	ex := coinex.CreateCoinex(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())
