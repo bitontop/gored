@@ -79,9 +79,15 @@ func (e *Bitmax) GetCoinsData() error {
 		}
 
 		if c != nil {
-			isActive := true
-			if data.Status == "NotTrading" {
-				isActive = false
+			deposit := true
+			withdraw := true
+			if data.Status == "NotTrading" || data.Status == "NoTransaction" {
+				deposit = false
+				withdraw = false
+			} else if data.Status == "NoWithdraw" {
+				withdraw = false
+			} else if data.Status == "NoDeposit" {
+				deposit = false
 			}
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
@@ -89,8 +95,8 @@ func (e *Bitmax) GetCoinsData() error {
 				ExSymbol:     data.AssetCode,
 				ChainType:    exchange.MAINNET,
 				TxFee:        data.WithdrawalFee,
-				Withdraw:     isActive,
-				Deposit:      isActive,
+				Withdraw:     withdraw,
+				Deposit:      deposit,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       DEFAULT_LISTED,
 			}
