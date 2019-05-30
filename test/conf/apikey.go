@@ -187,7 +187,7 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.DCOIN:
-		config.API_KEY = "1dbi4tegcy2oe3qfte6c84bcrywsm8f2"
-		config.API_SECRET = "1p3k53wtebqa129wht01sr6raq0q6ugb"
+		config.API_KEY = ""
+		config.API_SECRET = ""
 	}
 }
