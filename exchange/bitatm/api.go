@@ -72,8 +72,9 @@ func (e *BitATM) GetCoinsData() error {
 		case exchange.EXCHANGE_API:
 			c = coin.GetCoin(data.Currencyname)
 			if c == nil {
-				c = &coin.Coin{}
-				c.Code = data.Currencyname
+				c = &coin.Coin{
+					Code: data.Currencyname,
+				}
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
@@ -82,11 +83,17 @@ func (e *BitATM) GetCoinsData() error {
 
 		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:   c.ID,
-				Coin:     c,
-				ExSymbol: data.Currencyname,
-				Listed:   true,
+				CoinID:       c.ID,
+				Coin:         c,
+				ExSymbol:     data.Currencyname,
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
 			}
+
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
@@ -137,7 +144,7 @@ func (e *BitATM) GetPairsData() error {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     DEFAULT_LOT_SIZE,
 				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      true,
+				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

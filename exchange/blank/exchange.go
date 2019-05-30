@@ -232,10 +232,10 @@ func (e *Blank) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = false
-	constrainFetchMethod.Deposit = false
-	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.TxFee = true
+	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.Deposit = true
+	constrainFetchMethod.Confirmation = true
 	return constrainFetchMethod
 }
 
