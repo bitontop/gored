@@ -49,7 +49,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *BitATM) GetCoinsData() {
+func (e *BitATM) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
@@ -90,13 +90,14 @@ func (e *BitATM) GetCoinsData() {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *BitATM) GetPairsData() {
+func (e *BitATM) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -141,6 +142,7 @@ func (e *BitATM) GetPairsData() {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
 }
 
 /*Get Pair Market Depth

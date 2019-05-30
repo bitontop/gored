@@ -56,28 +56,40 @@ func CreateBitATM(config *exchange.Config) *BitATM {
 		coinConstraintMap = cmap.New()
 		pairConstraintMap = cmap.New()
 
-		instance.InitData()
+		if err := instance.InitData(); err != nil {
+			log.Printf("%v", err)
+			instance = nil
+		}
 	})
 	return instance
 }
 
-func (e *BitATM) InitData() {
+func (e *BitATM) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
-		e.GetCoinsData()
-		e.GetPairsData()
+		if err := e.GetCoinsData(); err != nil {
+			return err
+		}
+		if err := e.GetPairsData(); err != nil {
+			return err
+		}
 		break
 	case exchange.MICROSERVICE_API:
 		break
 	case exchange.JSON_FILE:
 		exchangeData := utils.GetExchangeDataFromJSON(e.SourceURI, e.GetName())
-		coinConstraintMap = exchangeData.CoinConstraint
-		pairConstraintMap = exchangeData.PairConstraint
+		if exchangeData == nil {
+			return fmt.Errorf("%s Initial Data Error.", e.GetName())
+		} else {
+			coinConstraintMap = exchangeData.CoinConstraint
+			pairConstraintMap = exchangeData.PairConstraint
+		}
 		break
 	case exchange.PSQL:
 	default:
-		log.Printf("BitATM Initial Coin: There is not selected data source.")
+		return fmt.Errorf("%s Initial Coin: There is not selected data source.", e.GetName())
 	}
+	return nil
 }
 
 /**************** Exchange Information ****************/
@@ -89,16 +101,16 @@ func (e *BitATM) GetName() exchange.ExchangeName {
 	return exchange.BITATM
 }
 
+func (e *BitATM) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://www.bitatm.com/deal/pro/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+}
+
 func (e *BitATM) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
 		return 0.0
 	}
-}
-
-func (e *BitATM) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bitatm.com/deal/pro/%s", e.GetSymbolByPair(pair))
 }
 
 /*************** Coins on the Exchanges ***************/
@@ -130,15 +142,6 @@ func (e *BitATM) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *BitATM) GetSymbolByCoin(coin *coin.Coin) string {
-	key := fmt.Sprintf("%d", coin.ID)
-	if tmp, ok := coinConstraintMap.Get(key); ok {
-		cc := tmp.(*exchange.CoinConstraint)
-		return cc.ExSymbol
-	}
-	return ""
-}
-
 func (e *BitATM) GetCoinBySymbol(symbol string) *coin.Coin {
 	for _, id := range coinConstraintMap.Keys() {
 		if tmp, ok := coinConstraintMap.Get(id); ok {
@@ -146,9 +149,20 @@ func (e *BitATM) GetCoinBySymbol(symbol string) *coin.Coin {
 			if cc.ExSymbol == symbol {
 				return cc.Coin
 			}
+		} else {
+			log.Printf("Get ID %s CoinConstraint Err", id)
 		}
 	}
 	return nil
+}
+
+func (e *BitATM) GetSymbolByCoin(coin *coin.Coin) string {
+	key := fmt.Sprintf("%d", coin.ID)
+	if tmp, ok := coinConstraintMap.Get(key); ok {
+		cc := tmp.(*exchange.CoinConstraint)
+		return cc.ExSymbol
+	}
+	return ""
 }
 
 func (e *BitATM) DeleteCoin(coin *coin.Coin) {
@@ -233,36 +247,57 @@ func (e *BitATM) UpdateConstraint() {
 /**************** Coin Constraint ****************/
 func (e *BitATM) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return 0.0
+	}
 	return coinConstraint.TxFee
 }
 
 func (e *BitATM) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Withdraw
 }
 
 func (e *BitATM) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return false
+	}
 	return coinConstraint.Deposit
 }
 
 func (e *BitATM) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
+	if coinConstraint == nil {
+		return 0
+	}
 	return coinConstraint.Confirmation
 }
 
 /**************** Pair Constraint ****************/
 func (e *BitATM) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.TakerFee
 }
 
 func (e *BitATM) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.LotSize
 }
 
 func (e *BitATM) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint == nil {
+		return 0.0
+	}
 	return pairConstraint.PriceFilter
 }

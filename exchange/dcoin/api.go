@@ -11,8 +11,8 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"net/url"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -239,7 +239,7 @@ func (e *Dcoin) UpdateAllBalances() {
 
 	strRequestPath := "/user/account"
 
-	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
+	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]interface{}))
 	//log.Printf(jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
@@ -276,11 +276,11 @@ func (e *Dcoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := PlaceOrder{}
 	strRequestPath := "/create_order"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["side"] = "SELL"
-	mapParams["type"] = "1"
-	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', 8, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
+	mapParams["type"] = 1
+	mapParams["volume"] = quantity
+	mapParams["price"] = rate
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
@@ -315,11 +315,11 @@ func (e *Dcoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	placeOrder := PlaceOrder{}
 	strRequestPath := "/create_order"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["side"] = "BUY"
-	mapParams["type"] = "1"
-	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["type"] = 1
+	mapParams["volume"] = quantity
+	mapParams["price"] = rate
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
@@ -353,7 +353,7 @@ func (e *Dcoin) OrderStatus(order *exchange.Order) error {
 	orderStatus := OrderStatus{}
 	strRequestPath := "/all_order"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 	mapParams["order_id"] = order.OrderID
 
@@ -401,7 +401,7 @@ func (e *Dcoin) CancelOrder(order *exchange.Order) error {
 	jsonResponse := &JsonResponse{}
 	strRequestPath := "/cancel_order"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["orderId"] = order.OrderID
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 
@@ -427,12 +427,12 @@ func (e *Dcoin) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Dcoin) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
+func (e *Dcoin) ApiKeyGet(strRequestPath string, mapParams map[string]interface{}) string {
 	mapParams["api_key"] = e.API_KEY
 	payload := fmt.Sprintf("%s%s", createPayload(mapParams), e.API_SECRET)
 	mapParams["sign"] = exchange.ComputeMD5(payload)
 
-	url := exchange.Map2UrlQuery(mapParams)
+	url := Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + url
 
 	//log.Printf(strUrl)
@@ -458,24 +458,40 @@ func (e *Dcoin) ApiKeyGet(strRequestPath string, mapParams map[string]string) st
 	return string(body)
 }
 
+func Map2UrlQuery(mapParams map[string]interface{}) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + "=" + fmt.Sprintf("%v", mapParams[key]) + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
+}
+
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
-func (e *Dcoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
-	mapParams["api_key"] = e.API_KEY
-	payload := fmt.Sprintf("%s%s", createPayload(mapParams), e.API_SECRET)
-
-	mapParams["sign"] = exchange.ComputeMD5(payload)
-
+func (e *Dcoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]interface{}) string {
 	strUrl := API_URL + strRequestPath
 
-	/*jsonParams := ""
-	if nil != mapParams {
-		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
-	}*/
+	mapParams["api_key"] = e.API_KEY
+	payload := fmt.Sprintf("%s%s", createPayload(mapParams), e.API_SECRET)
+	mapParams["sign"] = exchange.ComputeMD5(payload)
 
-	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(exchange.Map2UrlQuery(mapParams)))
+	strParams := Map2UrlQueryUrl(mapParams)
+	log.Printf("mapParams: %+v", mapParams)
+	log.Printf("strParams: %v", strParams)
+
+	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(strParams))
 	if nil != err {
 		return err.Error()
 	}
@@ -498,7 +514,7 @@ func (e *Dcoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[st
 	return string(body)
 }
 
-func createPayload(mapParams map[string]string) string {
+func Map2UrlQueryUrl(mapParams map[string]interface{}) string {
 	var strParams string
 	mapSort := []string{}
 	for key := range mapParams {
@@ -507,7 +523,26 @@ func createPayload(mapParams map[string]string) string {
 	sort.Strings(mapSort)
 
 	for _, key := range mapSort {
-		strParams += key + mapParams[key]
+		strParams += fmt.Sprintf("%s=%v&", key, url.QueryEscape(fmt.Sprintf("%v", mapParams[key])))
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
+}
+
+func createPayload(mapParams map[string]interface{}) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += key + fmt.Sprintf("%v", mapParams[key])
 	}
 
 	return strParams
