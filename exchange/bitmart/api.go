@@ -258,7 +258,7 @@ func (e *Bitmart) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Message != "" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), placeOrder.Message)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -295,7 +295,7 @@ func (e *Bitmart) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if placeOrder.Message != "" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), placeOrder.Message)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
