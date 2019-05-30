@@ -129,5 +129,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	// supportList = append(supportList, BINANCEDEX)   // ID = 35
 	supportList = append(supportList, BITMART) // ID = 36
 	// supportList = append(supportList, GIMINI)  // ID = 37
-	// supportList = append(supportList, BIKI)   // ID = 38
+	supportList = append(supportList, BIKI) // ID = 38
 }

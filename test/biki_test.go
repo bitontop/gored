@@ -6,7 +6,7 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/coinex"
+	"github.com/bitontop/gored/exchange/biki"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 )
@@ -17,8 +17,8 @@ import (
 
 /********************Public API********************/
 
-func Test_Coinex(t *testing.T) {
-	e := InitCoinex()
+func Test_Biki(t *testing.T) {
+	e := InitBiki()
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
@@ -30,36 +30,18 @@ func Test_Coinex(t *testing.T) {
 	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Trading(e, pair, 0.0003, 1000)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
-// test url and signature
-func Test_CoinexOrder(t *testing.T) {
-	e := InitCoinex()
-
-	var order *exchange.Order
-	err := e.OrderStatus(order)
-	if err == nil {
-		log.Printf("%s Order Status: %v", e.GetName(), order)
-	} else {
-		log.Printf("%s Order Status Err: %s", e.GetName(), err)
-	}
-}
-
-func InitCoinex() exchange.Exchange {
+func InitBiki() exchange.Exchange {
 	coin.Init()
 	pair.Init()
-
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
+	conf.Exchange(exchange.BIKI, config)
 
-	conf.Exchange(exchange.COINEX, config)
-
-	ex := coinex.CreateCoinex(config)
+	ex := biki.CreateBiki(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())
 
 	config = nil
