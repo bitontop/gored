@@ -14,4 +14,5 @@ const (
 	DEFAULT_WITHDRAW     = true
 	DEFAULT_DEPOSIT      = true
 	DEFAULT_CONFIRMATION = 2
+	DEFAULT_LISTED       = true
 )

@@ -99,7 +99,7 @@ func (e *Dcoin) GetCoinsData() error {
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
 				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+				Listed:       DEFAULT_LISTED,
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -114,7 +114,7 @@ func (e *Dcoin) GetCoinsData() error {
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
 				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+				Listed:       DEFAULT_LISTED,
 			}
 
 			e.SetCoinConstraint(coinConstraint)
