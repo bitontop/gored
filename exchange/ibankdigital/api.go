@@ -213,7 +213,12 @@ func (e *Ibankdigital) GetAccounts() { //doesn't work well, always got err-msg o
 		log.Printf("%s GetAccounts Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	e.Account_ID = fmt.Sprintf("%v", accountId[0].ID)
+	if len(accountId) > 1 {
+		e.Account_ID = fmt.Sprintf("%v", accountId[0].ID)
+	} else {
+		e.Account_ID = "error"
+	}
+
 }
 
 func (e *Ibankdigital) UpdateAllBalances() {
