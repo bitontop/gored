@@ -34,6 +34,19 @@ func Test_Coinex(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
+// test url and signature
+func Test_Order(t *testing.T) {
+	e := InitCoinex()
+
+	var order *exchange.Order
+	err := e.OrderStatus(order)
+	if err == nil {
+		log.Printf("%s Order Status: %v", e.GetName(), order)
+	} else {
+		log.Printf("%s Order Status Err: %s", e.GetName(), err)
+	}
+}
+
 func InitCoinex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
