@@ -11,8 +11,6 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 
-	"../exchange/dcoin"
-	"./conf"
 	"github.com/bitontop/gored/exchange/dcoin"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
