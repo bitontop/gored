@@ -18,7 +18,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
+	"strconv"
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
