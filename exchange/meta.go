@@ -53,7 +53,6 @@ const (
 	COINSUPER    ExchangeName = "COINSUPER"
 	COINTIGER    ExchangeName = "COINTIGER"
 	CRYPTOPIA    ExchangeName = "CRYPTOPIA"
-	DCOIN        ExchangeName = "DCOIN"
 	DIGIFINEX    ExchangeName = "DIGIFINEX"
 	DRAGONEX     ExchangeName = "DRAGONEX"
 	EXMO         ExchangeName = "EXMO"
