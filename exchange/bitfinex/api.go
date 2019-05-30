@@ -206,7 +206,8 @@ func (e *Bitfinex) GetPairsData() error {
 						MakerFee:    DEFAULT_MAKER_FEE,
 						TakerFee:    DEFAULT_TAKER_FEE,
 						LotSize:     DEFAULT_LOT_SIZE,
-						PriceFilter: math.Pow10(data.PricePrecision * -1),
+						// api gives wrong precision value
+						PriceFilter: DEFAULT_PRICE_FILTER//math.Pow10(data.PricePrecision * -1),
 						Listed:      true,
 					}
 					e.SetPairConstraint(pairConstraint)
