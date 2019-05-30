@@ -51,7 +51,7 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestPath)*/
-func (e *Dcoin) GetCoinsData() {
+func (e *Dcoin) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := PairsData{}
 
@@ -60,12 +60,12 @@ func (e *Dcoin) GetCoinsData() {
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Msg)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
-		log.Printf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range coinsData {
@@ -109,22 +109,25 @@ func (e *Dcoin) GetCoinsData() {
 				CoinID:       target.ID,
 				Coin:         target,
 				ExSymbol:     data.CountCoin,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       true,
 			}
+
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
 }
 
 /* GetPairsData - Get Pairs Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Dcoin) GetPairsData() {
+func (e *Dcoin) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -133,12 +136,12 @@ func (e *Dcoin) GetPairsData() {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		log.Printf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Msg)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		log.Printf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
@@ -168,6 +171,7 @@ func (e *Dcoin) GetPairsData() {
 		}
 
 	}
+	return nil
 }
 
 /*Get Pair Market Depth
@@ -314,8 +318,8 @@ func (e *Dcoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams := make(map[string]string)
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "1"
-	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', 8, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', 8, 64)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
