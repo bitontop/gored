@@ -101,7 +101,7 @@ func (e *Bitfinex) GetName() exchange.ExchangeName {
 }
 
 func (e *Bitfinex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bitfinex.com/cn/trade/pro/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.bitfinex.com/t/%s:%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 func (e *Bitfinex) GetBalance(coin *coin.Coin) float64 {
