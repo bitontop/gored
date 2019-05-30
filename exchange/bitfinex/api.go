@@ -13,7 +13,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -200,14 +199,14 @@ func (e *Bitfinex) GetPairsData() error {
 
 				if p != nil {
 					pairConstraint := &exchange.PairConstraint{
-						PairID:      p.ID,
-						Pair:        p,
-						ExSymbol:    data.Pair,
-						MakerFee:    DEFAULT_MAKER_FEE,
-						TakerFee:    DEFAULT_TAKER_FEE,
-						LotSize:     DEFAULT_LOT_SIZE,
+						PairID:   p.ID,
+						Pair:     p,
+						ExSymbol: data.Pair,
+						MakerFee: DEFAULT_MAKER_FEE,
+						TakerFee: DEFAULT_TAKER_FEE,
+						LotSize:  DEFAULT_LOT_SIZE,
 						// api gives wrong precision value
-						PriceFilter: DEFAULT_PRICE_FILTER//math.Pow10(data.PricePrecision * -1),
+						PriceFilter: DEFAULT_PRICE_FILTER, //math.Pow10(data.PricePrecision * -1),
 						Listed:      true,
 					}
 					e.SetPairConstraint(pairConstraint)
