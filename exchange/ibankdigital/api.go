@@ -294,7 +294,7 @@ func (e *Ibankdigital) LimitSell(pair *pair.Pair, quantity, rate float64) (*exch
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
@@ -319,7 +319,7 @@ func (e *Ibankdigital) LimitSell(pair *pair.Pair, quantity, rate float64) (*exch
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -336,7 +336,7 @@ func (e *Ibankdigital) LimitBuy(pair *pair.Pair, quantity, rate float64) (*excha
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
@@ -361,7 +361,7 @@ func (e *Ibankdigital) LimitBuy(pair *pair.Pair, quantity, rate float64) (*excha
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
