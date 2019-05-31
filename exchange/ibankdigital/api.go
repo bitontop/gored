@@ -420,7 +420,7 @@ func (e *Ibankdigital) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
+	cancelOrder := ""
 	strRequest := fmt.Sprintf("/v1/order/orders/%s/submitcancel", order.OrderID)
 
 	mapParams := make(map[string]string)
