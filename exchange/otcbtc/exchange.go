@@ -110,7 +110,7 @@ func (e *Otcbtc) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Otcbtc) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://bb.otcbtc.com/exchange/markets/%s%s", e.GetSymbolByPair(pair))
+	return fmt.Sprintf("https://bb.otcbtc.com/exchange/markets/%s", e.GetSymbolByPair(pair))
 }
 
 /*************** Coins on the Exchanges ***************/
