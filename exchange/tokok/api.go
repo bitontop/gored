@@ -270,11 +270,14 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := PlaceOrder{}
 	strRequest := "/trade"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "2"
-	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -308,11 +311,14 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	placeOrder := PlaceOrder{}
 	strRequest := "/trade"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "1"
-	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
