@@ -5,7 +5,7 @@ package dcoin
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 const (
-	DEFAULT_ID           = 38
+	DEFAULT_ID           = 39
 	DEFAULT_TAKER_FEE    = 0.002
 	DEFAULT_MAKER_FEE    = 0.002
 	DEFAULT_LOT_SIZE     = 0.00000001
