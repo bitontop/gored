@@ -257,7 +257,6 @@ func (e *Tokok) UpdateAllBalances() {
 }
 
 func (e *Tokok) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-
 	return false
 }
 
