@@ -178,7 +178,12 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 	case exchange.BITMART:
 		config.API_KEY = ""
 		config.API_SECRET = ""
-		config.Passphrase = ""
+		config.Passphrase = "" // key name
+		break
+
+	case exchange.BIKI:
+		config.API_KEY = ""
+		config.API_SECRET = ""
 		break
 
 	case exchange.BIKI:

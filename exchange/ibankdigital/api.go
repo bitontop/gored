@@ -173,7 +173,7 @@ func (e *Ibankdigital) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if orderBook.Status != "ok" {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), orderBook)
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonOrderbook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
@@ -213,7 +213,12 @@ func (e *Ibankdigital) GetAccounts() { //doesn't work well, always got err-msg o
 		log.Printf("%s GetAccounts Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	e.Account_ID = fmt.Sprintf("%v", accountId[0].ID)
+	if len(accountId) > 1 {
+		e.Account_ID = fmt.Sprintf("%v", accountId[0].ID)
+	} else {
+		e.Account_ID = "error"
+	}
+
 }
 
 func (e *Ibankdigital) UpdateAllBalances() {

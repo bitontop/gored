@@ -1,4 +1,4 @@
-package bitfinex
+package biki
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -19,7 +19,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-type Bitfinex struct {
+type Biki struct {
 	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
@@ -35,16 +35,17 @@ var pairConstraintMap cmap.ConcurrentMap
 var coinConstraintMap cmap.ConcurrentMap
 var balanceMap cmap.ConcurrentMap
 
-var instance *Bitfinex
+var instance *Biki
 var once sync.Once
 
 /***************************************************/
-func CreateBitfinex(config *exchange.Config) *Bitfinex {
+func CreateBiki(config *exchange.Config) *Biki {
 	once.Do(func() {
-		instance = &Bitfinex{
-			ID:         DEFAULT_ID,
-			Name:       "Bitfinex",
-			Website:    "https://www.bitfinex.com/",
+		instance = &Biki{
+			ID:      DEFAULT_ID,
+			Name:    "Biki",
+			Website: "https://www.biki.com/",
+
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
 			Source:     config.Source,
@@ -63,7 +64,7 @@ func CreateBitfinex(config *exchange.Config) *Bitfinex {
 	return instance
 }
 
-func (e *Bitfinex) InitData() error {
+func (e *Biki) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		if err := e.GetCoinsData(); err != nil {
@@ -92,19 +93,15 @@ func (e *Bitfinex) InitData() error {
 }
 
 /**************** Exchange Information ****************/
-func (e *Bitfinex) GetID() int {
+func (e *Biki) GetID() int {
 	return e.ID
 }
 
-func (e *Bitfinex) GetName() exchange.ExchangeName {
-	return exchange.BITFINEX
+func (e *Biki) GetName() exchange.ExchangeName {
+	return exchange.BIKI
 }
 
-func (e *Bitfinex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bitfinex.com/t/%s:%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
-}
-
-func (e *Bitfinex) GetBalance(coin *coin.Coin) float64 {
+func (e *Biki) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
@@ -112,19 +109,23 @@ func (e *Bitfinex) GetBalance(coin *coin.Coin) float64 {
 	}
 }
 
+func (e *Biki) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://www.biki.com/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+}
+
 /*************** Coins on the Exchanges ***************/
-func (e *Bitfinex) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
+func (e *Biki) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
 	if tmp, ok := coinConstraintMap.Get(fmt.Sprintf("%d", coin.ID)); ok {
 		return tmp.(*exchange.CoinConstraint)
 	}
 	return nil
 }
 
-func (e *Bitfinex) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
+func (e *Biki) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
 	coinConstraintMap.Set(fmt.Sprintf("%d", coinConstraint.CoinID), coinConstraint)
 }
 
-func (e *Bitfinex) GetCoins() []*coin.Coin {
+func (e *Biki) GetCoins() []*coin.Coin {
 	coinList := []*coin.Coin{}
 	keySort := []int{}
 	for _, key := range coinConstraintMap.Keys() {
@@ -141,21 +142,7 @@ func (e *Bitfinex) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *Bitfinex) GetCoinBySymbol(symbol string) *coin.Coin {
-	for _, id := range coinConstraintMap.Keys() {
-		if tmp, ok := coinConstraintMap.Get(id); ok {
-			cc := tmp.(*exchange.CoinConstraint)
-			if cc.ExSymbol == symbol {
-				return cc.Coin
-			}
-		} else {
-			log.Printf("Get ID %s CoinConstraint Err", id)
-		}
-	}
-	return nil
-}
-
-func (e *Bitfinex) GetSymbolByCoin(coin *coin.Coin) string {
+func (e *Biki) GetSymbolByCoin(coin *coin.Coin) string {
 	key := fmt.Sprintf("%d", coin.ID)
 	if tmp, ok := coinConstraintMap.Get(key); ok {
 		cc := tmp.(*exchange.CoinConstraint)
@@ -164,23 +151,35 @@ func (e *Bitfinex) GetSymbolByCoin(coin *coin.Coin) string {
 	return ""
 }
 
-func (e *Bitfinex) DeleteCoin(coin *coin.Coin) {
+func (e *Biki) GetCoinBySymbol(symbol string) *coin.Coin {
+	for _, id := range coinConstraintMap.Keys() {
+		if tmp, ok := coinConstraintMap.Get(id); ok {
+			cc := tmp.(*exchange.CoinConstraint)
+			if cc.ExSymbol == symbol {
+				return cc.Coin
+			}
+		}
+	}
+	return nil
+}
+
+func (e *Biki) DeleteCoin(coin *coin.Coin) {
 	coinConstraintMap.Remove(fmt.Sprintf("%d", coin.ID))
 }
 
 /*************** Pairs on the Exchanges ***************/
-func (e *Bitfinex) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+func (e *Biki) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
 	return nil
 }
 
-func (e *Bitfinex) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
+func (e *Biki) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
 	pairConstraintMap.Set(fmt.Sprintf("%d", pairConstraint.PairID), pairConstraint)
 }
 
-func (e *Bitfinex) GetPairs() []*pair.Pair {
+func (e *Biki) GetPairs() []*pair.Pair {
 	pairList := []*pair.Pair{}
 	keySort := []int{}
 	for _, key := range pairConstraintMap.Keys() {
@@ -197,7 +196,7 @@ func (e *Bitfinex) GetPairs() []*pair.Pair {
 	return pairList
 }
 
-func (e *Bitfinex) GetPairBySymbol(symbol string) *pair.Pair {
+func (e *Biki) GetPairBySymbol(symbol string) *pair.Pair {
 	for _, id := range pairConstraintMap.Keys() {
 		if tmp, ok := pairConstraintMap.Get(id); ok {
 			pc := tmp.(*exchange.PairConstraint)
@@ -209,7 +208,7 @@ func (e *Bitfinex) GetPairBySymbol(symbol string) *pair.Pair {
 	return nil
 }
 
-func (e *Bitfinex) GetSymbolByPair(pair *pair.Pair) string {
+func (e *Biki) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
@@ -217,34 +216,34 @@ func (e *Bitfinex) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
-func (e *Bitfinex) HasPair(pair *pair.Pair) bool {
+func (e *Biki) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }
 
-func (e *Bitfinex) DeletePair(pair *pair.Pair) {
+func (e *Biki) DeletePair(pair *pair.Pair) {
 	pairConstraintMap.Remove(fmt.Sprintf("%d", pair.ID))
 }
 
 /**************** Exchange Constraint ****************/
-func (e *Bitfinex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
+func (e *Biki) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
-	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 
-func (e *Bitfinex) UpdateConstraint() {
+func (e *Biki) UpdateConstraint() {
 	e.GetCoinsData()
 	e.GetPairsData()
 }
 
 /**************** Coin Constraint ****************/
-func (e *Bitfinex) GetTxFee(coin *coin.Coin) float64 {
+func (e *Biki) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0.0
@@ -252,7 +251,7 @@ func (e *Bitfinex) GetTxFee(coin *coin.Coin) float64 {
 	return coinConstraint.TxFee
 }
 
-func (e *Bitfinex) CanWithdraw(coin *coin.Coin) bool {
+func (e *Biki) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -260,7 +259,7 @@ func (e *Bitfinex) CanWithdraw(coin *coin.Coin) bool {
 	return coinConstraint.Withdraw
 }
 
-func (e *Bitfinex) CanDeposit(coin *coin.Coin) bool {
+func (e *Biki) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -268,7 +267,7 @@ func (e *Bitfinex) CanDeposit(coin *coin.Coin) bool {
 	return coinConstraint.Deposit
 }
 
-func (e *Bitfinex) GetConfirmation(coin *coin.Coin) int {
+func (e *Biki) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0
@@ -277,7 +276,7 @@ func (e *Bitfinex) GetConfirmation(coin *coin.Coin) int {
 }
 
 /**************** Pair Constraint ****************/
-func (e *Bitfinex) GetFee(pair *pair.Pair) float64 {
+func (e *Biki) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -285,7 +284,7 @@ func (e *Bitfinex) GetFee(pair *pair.Pair) float64 {
 	return pairConstraint.TakerFee
 }
 
-func (e *Bitfinex) GetLotSize(pair *pair.Pair) float64 {
+func (e *Biki) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -293,7 +292,7 @@ func (e *Bitfinex) GetLotSize(pair *pair.Pair) float64 {
 	return pairConstraint.LotSize
 }
 
-func (e *Bitfinex) GetPriceFilter(pair *pair.Pair) float64 {
+func (e *Biki) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0

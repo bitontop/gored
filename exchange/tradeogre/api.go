@@ -283,8 +283,8 @@ func (e *Tradeogre) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchang
 	strRequest := "/order/sell"
 
 	mapParams := make(map[string]string)
-	mapParams["quantity"] = fmt.Sprintf("%.8f", quantity)
-	mapParams["price"] = fmt.Sprintf("%.8f", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["market"] = e.GetSymbolByPair(pair)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
@@ -316,8 +316,8 @@ func (e *Tradeogre) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange
 	strRequest := "/order/buy"
 
 	mapParams := make(map[string]string)
-	mapParams["quantity"] = fmt.Sprintf("%.8f", quantity)
-	mapParams["price"] = fmt.Sprintf("%.8f", rate)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["market"] = e.GetSymbolByPair(pair)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
@@ -346,7 +346,7 @@ func (e *Tradeogre) OrderStatus(order *exchange.Order) error {
 	}
 
 	orderStatus := OrderStatus{}
-	strRequest := "/account/order"
+	strRequest := fmt.Sprintf("/account/order/%v", order.OrderID)
 
 	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {

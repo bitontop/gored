@@ -6,6 +6,7 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
+	"github.com/bitontop/gored/exchange/biki"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/binancedex"
 	"github.com/bitontop/gored/exchange/bitfinex"
@@ -300,6 +301,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITMART:
 		ex := bitmart.CreateBitmart(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BIKI:
+		ex := biki.CreateBiki(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
