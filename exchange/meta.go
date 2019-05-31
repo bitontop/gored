@@ -53,6 +53,7 @@ const (
 	COINSUPER    ExchangeName = "COINSUPER"
 	COINTIGER    ExchangeName = "COINTIGER"
 	CRYPTOPIA    ExchangeName = "CRYPTOPIA"
+	DCOIN        ExchangeName = "DCOIN"
 	DIGIFINEX    ExchangeName = "DIGIFINEX"
 	DRAGONEX     ExchangeName = "DRAGONEX"
 	EXMO         ExchangeName = "EXMO"
@@ -128,4 +129,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	// supportList = append(supportList, BINANCEDEX)   // ID = 35
 	supportList = append(supportList, BITMART) // ID = 36
 	// supportList = append(supportList, GIMINI)  // ID = 37
+	supportList = append(supportList, DCOIN) // ID = 38
 }

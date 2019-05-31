@@ -303,6 +303,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 			e.exMan.Add(ex)
 		}
 		return ex
+
+	case exchange.DCOIN:
+		ex := dcoin.CreateDcoin(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
 	}
 	return nil
 }

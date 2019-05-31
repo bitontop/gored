@@ -394,3 +394,11 @@ func InitBitmart(config *exchange.Config) {
 	exMan := exchange.CreateExchangeManager()
 	exMan.Add(ex)
 }
+
+func InitDcoin(config *exchange.Config) {
+	conf.Exchange(exchange.DCOIN, config)
+	ex := coinex.CreateDcoin(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
