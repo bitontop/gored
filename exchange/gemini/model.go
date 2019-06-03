@@ -4,19 +4,14 @@ package gemini
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-import (
-	"encoding/json"
-
-	"github.com/bitontop/gored/exchange"
-)
-
-type JsonResponse struct {
-	Success bool            `json:"success"`
-	Message string          `json:"message"`
-	Result  json.RawMessage `json:"result"`
+type ErrorResponse struct {
+	// error return
+	Result  string `json:"result"`
+	Reason  string `json:"reason"`
+	Message string `json:"message"`
 }
 
-type PairsData []struct {
+type PairsFile []struct {
 	Symbol        string  `json:"symbol"`
 	Base          string  `json:"base"`
 	Quote         string  `json:"quote"`
@@ -24,6 +19,42 @@ type PairsData []struct {
 	MinOrderIncre float64 `json:"min_order_incre"`
 	MinPriceIncre float64 `json:"min_price_incre"`
 }
+
+type OrderBook struct {
+	Bids []struct {
+		Price     string `json:"price"`
+		Amount    string `json:"amount"`
+		Timestamp string `json:"timestamp"`
+	} `json:"bids"`
+	Asks []struct {
+		Price     string `json:"price"`
+		Amount    string `json:"amount"`
+		Timestamp string `json:"timestamp"`
+	} `json:"asks"`
+}
+
+type AccountBalances []struct {
+	Type                   string `json:"type"`
+	Currency               string `json:"currency"`
+	Amount                 string `json:"amount"`
+	Available              string `json:"available"`
+	AvailableForWithdrawal string `json:"availableForWithdrawal"`
+}
+
+/* type AccountBalances []struct {
+	Currency      string  `json:"Currency"`
+	Balance       float64 `json:"Balance"`
+	Available     float64 `json:"Available"`
+	Pending       float64 `json:"Pending"`
+	CryptoAddress string  `json:"CryptoAddress"`
+	Requested     bool    `json:"Requested"`
+	Uuid          string  `json:"Uuid"`
+} */
+
+/* type OrderBook struct {
+	Buy  []exchange.Order `json:"buy"`
+	Sell []exchange.Order `json:"sell"`
+} */
 
 /* type PairsData []struct {
 	MarketCurrency     string      `json:"MarketCurrency"`
@@ -38,16 +69,6 @@ type PairsData []struct {
 	IsSponsored        interface{} `json:"IsSponsored"`
 	LogoURL            string      `json:"LogoUrl"`
 } */
-
-type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
-}
 
 type Uuid struct {
 	Id string `json:"uuid"`
@@ -79,7 +100,7 @@ type PlaceOrder struct {
 	ConditionTarget            string
 }
 
-type CoinsData []struct {
+/* type CoinsData []struct {
 	Currency        string      `json:"Currency"`
 	CurrencyLong    string      `json:"CurrencyLong"`
 	MinConfirmation int         `json:"MinConfirmation"`
@@ -89,9 +110,4 @@ type CoinsData []struct {
 	CoinType        string      `json:"CoinType"`
 	BaseAddress     string      `json:"BaseAddress"`
 	Notice          interface{} `json:"Notice"`
-}
-
-type OrderBook struct {
-	Buy  []exchange.Order `json:"buy"`
-	Sell []exchange.Order `json:"sell"`
-}
+} */

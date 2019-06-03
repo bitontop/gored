@@ -20,7 +20,7 @@ import (
 func Test_Mxc(t *testing.T) {
 	e := InitMxc()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|BTT")
 
 	Test_Coins(e)
 	Test_Pairs(e)
