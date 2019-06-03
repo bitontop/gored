@@ -135,7 +135,8 @@ func (e *Dragonex) GetPairsData() error {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    fmt.Sprintf("%0.0f", list[0].(float64)),
+				ExID:        strconv.FormatFloat(list[0].(float64), 'f', 0, 64),
+				ExSymbol:    list[1].(string),
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     list[7].(float64),

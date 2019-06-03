@@ -291,9 +291,12 @@ func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	placeOrder := PlaceOrder{}
 	strRequest := "/viewer/orders"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["side"] = "ASK"
 	mapParams["market_id"] = e.GetSymbolByPair(pair)
 
@@ -329,9 +332,12 @@ func (e *Bigone) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := PlaceOrder{}
 	strRequest := "/viewer/orders"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["side"] = "BID"
 	mapParams["market_id"] = e.GetSymbolByPair(pair)
 

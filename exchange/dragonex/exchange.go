@@ -110,7 +110,7 @@ func (e *Dragonex) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Dragonex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://dragonex.io/en-us/trade/index/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://dragonex.io/en-us/trade/index/%s", e.GetPairConstraint(pair).ExSymbol)
 }
 
 /*************** Coins on the Exchanges ***************/
@@ -211,7 +211,7 @@ func (e *Dragonex) GetPairBySymbol(symbol string) *pair.Pair {
 func (e *Dragonex) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
-		return pairConstraint.ExSymbol
+		return pairConstraint.ExID
 	}
 	return ""
 }

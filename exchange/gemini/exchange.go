@@ -1,4 +1,4 @@
-package otcbtc
+package gemini
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -19,7 +19,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-type Otcbtc struct {
+type Gemini struct {
 	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
@@ -35,16 +35,16 @@ var pairConstraintMap cmap.ConcurrentMap
 var coinConstraintMap cmap.ConcurrentMap
 var balanceMap cmap.ConcurrentMap
 
-var instance *Otcbtc
+var instance *Gemini
 var once sync.Once
 
 /***************************************************/
-func CreateOtcbtc(config *exchange.Config) *Otcbtc {
+func CreateGemini(config *exchange.Config) *Gemini {
 	once.Do(func() {
-		instance = &Otcbtc{
+		instance = &Gemini{
 			ID:      DEFAULT_ID,
-			Name:    "Otcbtc",
-			Website: "https://www.otcbtc.com/",
+			Name:    "Gemini",
+			Website: "https://gemini.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -64,7 +64,7 @@ func CreateOtcbtc(config *exchange.Config) *Otcbtc {
 	return instance
 }
 
-func (e *Otcbtc) InitData() error {
+func (e *Gemini) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		if err := e.GetCoinsData(); err != nil {
@@ -93,15 +93,15 @@ func (e *Otcbtc) InitData() error {
 }
 
 /**************** Exchange Information ****************/
-func (e *Otcbtc) GetID() int {
+func (e *Gemini) GetID() int {
 	return e.ID
 }
 
-func (e *Otcbtc) GetName() exchange.ExchangeName {
-	return exchange.OTCBTC
+func (e *Gemini) GetName() exchange.ExchangeName {
+	return exchange.GEMINI
 }
 
-func (e *Otcbtc) GetBalance(coin *coin.Coin) float64 {
+func (e *Gemini) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
@@ -109,23 +109,23 @@ func (e *Otcbtc) GetBalance(coin *coin.Coin) float64 {
 	}
 }
 
-func (e *Otcbtc) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://bb.otcbtc.com/exchange/markets/%s", e.GetSymbolByPair(pair))
+func (e *Gemini) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://exchange.sandbox.gemini.com/trade/%s", e.GetSymbolByPair(pair))
 }
 
 /*************** Coins on the Exchanges ***************/
-func (e *Otcbtc) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
+func (e *Gemini) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
 	if tmp, ok := coinConstraintMap.Get(fmt.Sprintf("%d", coin.ID)); ok {
 		return tmp.(*exchange.CoinConstraint)
 	}
 	return nil
 }
 
-func (e *Otcbtc) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
+func (e *Gemini) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
 	coinConstraintMap.Set(fmt.Sprintf("%d", coinConstraint.CoinID), coinConstraint)
 }
 
-func (e *Otcbtc) GetCoins() []*coin.Coin {
+func (e *Gemini) GetCoins() []*coin.Coin {
 	coinList := []*coin.Coin{}
 	keySort := []int{}
 	for _, key := range coinConstraintMap.Keys() {
@@ -142,7 +142,7 @@ func (e *Otcbtc) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *Otcbtc) GetSymbolByCoin(coin *coin.Coin) string {
+func (e *Gemini) GetSymbolByCoin(coin *coin.Coin) string {
 	key := fmt.Sprintf("%d", coin.ID)
 	if tmp, ok := coinConstraintMap.Get(key); ok {
 		cc := tmp.(*exchange.CoinConstraint)
@@ -151,7 +151,7 @@ func (e *Otcbtc) GetSymbolByCoin(coin *coin.Coin) string {
 	return ""
 }
 
-func (e *Otcbtc) GetCoinBySymbol(symbol string) *coin.Coin {
+func (e *Gemini) GetCoinBySymbol(symbol string) *coin.Coin {
 	for _, id := range coinConstraintMap.Keys() {
 		if tmp, ok := coinConstraintMap.Get(id); ok {
 			cc := tmp.(*exchange.CoinConstraint)
@@ -163,23 +163,23 @@ func (e *Otcbtc) GetCoinBySymbol(symbol string) *coin.Coin {
 	return nil
 }
 
-func (e *Otcbtc) DeleteCoin(coin *coin.Coin) {
+func (e *Gemini) DeleteCoin(coin *coin.Coin) {
 	coinConstraintMap.Remove(fmt.Sprintf("%d", coin.ID))
 }
 
 /*************** Pairs on the Exchanges ***************/
-func (e *Otcbtc) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+func (e *Gemini) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
 	return nil
 }
 
-func (e *Otcbtc) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
+func (e *Gemini) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
 	pairConstraintMap.Set(fmt.Sprintf("%d", pairConstraint.PairID), pairConstraint)
 }
 
-func (e *Otcbtc) GetPairs() []*pair.Pair {
+func (e *Gemini) GetPairs() []*pair.Pair {
 	pairList := []*pair.Pair{}
 	keySort := []int{}
 	for _, key := range pairConstraintMap.Keys() {
@@ -196,7 +196,7 @@ func (e *Otcbtc) GetPairs() []*pair.Pair {
 	return pairList
 }
 
-func (e *Otcbtc) GetPairBySymbol(symbol string) *pair.Pair {
+func (e *Gemini) GetPairBySymbol(symbol string) *pair.Pair {
 	for _, id := range pairConstraintMap.Keys() {
 		if tmp, ok := pairConstraintMap.Get(id); ok {
 			pc := tmp.(*exchange.PairConstraint)
@@ -208,7 +208,7 @@ func (e *Otcbtc) GetPairBySymbol(symbol string) *pair.Pair {
 	return nil
 }
 
-func (e *Otcbtc) GetSymbolByPair(pair *pair.Pair) string {
+func (e *Gemini) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
@@ -216,16 +216,16 @@ func (e *Otcbtc) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
-func (e *Otcbtc) HasPair(pair *pair.Pair) bool {
+func (e *Gemini) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }
 
-func (e *Otcbtc) DeletePair(pair *pair.Pair) {
+func (e *Gemini) DeletePair(pair *pair.Pair) {
 	pairConstraintMap.Remove(fmt.Sprintf("%d", pair.ID))
 }
 
 /**************** Exchange Constraint ****************/
-func (e *Otcbtc) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
+func (e *Gemini) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
@@ -237,13 +237,13 @@ func (e *Otcbtc) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	return constrainFetchMethod
 }
 
-func (e *Otcbtc) UpdateConstraint() {
+func (e *Gemini) UpdateConstraint() {
 	e.GetCoinsData()
 	e.GetPairsData()
 }
 
 /**************** Coin Constraint ****************/
-func (e *Otcbtc) GetTxFee(coin *coin.Coin) float64 {
+func (e *Gemini) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0.0
@@ -251,7 +251,7 @@ func (e *Otcbtc) GetTxFee(coin *coin.Coin) float64 {
 	return coinConstraint.TxFee
 }
 
-func (e *Otcbtc) CanWithdraw(coin *coin.Coin) bool {
+func (e *Gemini) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -259,7 +259,7 @@ func (e *Otcbtc) CanWithdraw(coin *coin.Coin) bool {
 	return coinConstraint.Withdraw
 }
 
-func (e *Otcbtc) CanDeposit(coin *coin.Coin) bool {
+func (e *Gemini) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -267,7 +267,7 @@ func (e *Otcbtc) CanDeposit(coin *coin.Coin) bool {
 	return coinConstraint.Deposit
 }
 
-func (e *Otcbtc) GetConfirmation(coin *coin.Coin) int {
+func (e *Gemini) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0
@@ -276,7 +276,7 @@ func (e *Otcbtc) GetConfirmation(coin *coin.Coin) int {
 }
 
 /**************** Pair Constraint ****************/
-func (e *Otcbtc) GetFee(pair *pair.Pair) float64 {
+func (e *Gemini) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -284,7 +284,7 @@ func (e *Otcbtc) GetFee(pair *pair.Pair) float64 {
 	return pairConstraint.TakerFee
 }
 
-func (e *Otcbtc) GetLotSize(pair *pair.Pair) float64 {
+func (e *Gemini) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -292,7 +292,7 @@ func (e *Otcbtc) GetLotSize(pair *pair.Pair) float64 {
 	return pairConstraint.LotSize
 }
 
-func (e *Otcbtc) GetPriceFilter(pair *pair.Pair) float64 {
+func (e *Gemini) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0

@@ -213,7 +213,7 @@ func (e *Ibankdigital) GetAccounts() { //doesn't work well, always got err-msg o
 		log.Printf("%s GetAccounts Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	if len(accountId) > 1 {
+	if len(accountId) >= 1 {
 		e.Account_ID = fmt.Sprintf("%v", accountId[0].ID)
 	} else {
 		e.Account_ID = "error"
@@ -294,13 +294,16 @@ func (e *Ibankdigital) LimitSell(pair *pair.Pair, quantity, rate float64) (*exch
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "sell-limit"
 
@@ -316,7 +319,7 @@ func (e *Ibankdigital) LimitSell(pair *pair.Pair, quantity, rate float64) (*exch
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -333,13 +336,16 @@ func (e *Ibankdigital) LimitBuy(pair *pair.Pair, quantity, rate float64) (*excha
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/v1/order/orders/place"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'E', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'E', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "buy-limit"
 
@@ -355,7 +361,7 @@ func (e *Ibankdigital) LimitBuy(pair *pair.Pair, quantity, rate float64) (*excha
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -414,7 +420,7 @@ func (e *Ibankdigital) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
+	cancelOrder := ""
 	strRequest := fmt.Sprintf("/v1/order/orders/%s/submitcancel", order.OrderID)
 
 	mapParams := make(map[string]string)
