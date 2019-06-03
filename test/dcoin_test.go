@@ -10,7 +10,6 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-
 	"github.com/bitontop/gored/exchange/dcoin"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
@@ -30,8 +29,8 @@ func Test_Dcoin(t *testing.T) {
 	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	Test_Trading(e, pair, 0.00000001, 100)
-	Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
 func InitDcoin() exchange.Exchange {
