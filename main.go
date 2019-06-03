@@ -127,7 +127,6 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBitmart(config)
 	InitDcoin(config)
 	InitBiki(config)
-	InitCointiger(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -412,15 +411,6 @@ func InitBiki(config *exchange.Config) {
 func InitDcoin(config *exchange.Config) {
 	conf.Exchange(exchange.DCOIN, config)
 	ex := dcoin.CreateDcoin(config)
-	log.Printf("Initial [ %12v ] ", ex.GetName())
-
-	exMan := exchange.CreateExchangeManager()
-	exMan.Add(ex)
-}
-
-func InitCointiger(config *exchange.Config) {
-	conf.Exchange(exchange.COINTIGER, config)
-	ex := cointiger.CreateCointiger(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
