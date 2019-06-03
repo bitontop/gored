@@ -1,0 +1,122 @@
+[
+        {
+            "symbol": "btcusd",
+            "base": "USD",
+            "quote": "BTC",
+            "min_order_size": 0.00001,
+            "min_order_incre": 0.00000001,
+            "min_price_incre": 0.01
+        },
+        {
+            "symbol": "ethusd",
+            "base": "USD",
+            "quote": "ETH",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.01 
+        },
+        {
+            "symbol": "ethbtc",
+            "base": "BTC",
+            "quote": "ETH",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.00001 
+        },
+        {
+            "symbol": "zecusd",
+            "base": "USD",
+            "quote": "ZEC",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.01 
+        },
+        {
+            "symbol": "zecbtc",
+            "base": "BTC",
+            "quote": "ZEC",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.00001 
+        },
+        {
+            "symbol": "zeceth",
+            "base": "ETH",
+            "quote": "ZEC",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.0001 
+        },
+        {
+            "symbol": "zecbch",
+            "base": "BCH",
+            "quote": "ZEC",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.0001 
+        },
+        {
+            "symbol": "zecltc",
+            "base": "LTC",
+            "quote": "ZEC",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.001 
+        },
+        {
+            "symbol": "bchusd",
+            "base": "USD",
+            "quote": "BCH",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.01 
+        },
+        {
+            "symbol": "bchbtc",
+            "base": "BTC",
+            "quote": "BCH",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.00001 
+        },
+        {
+            "symbol": "bcheth",
+            "base": "ETH",
+            "quote": "BCH",
+            "min_order_size": 0.001 ,
+            "min_order_incre": 0.000001 ,
+            "min_price_incre": 0.0001 
+        },
+        {
+            "symbol": "ltcusd",
+            "base": "USD",
+            "quote": "LTC",
+            "min_order_size": 0.01 ,
+            "min_order_incre": 0.00001 ,
+            "min_price_incre": 0.01 
+        },
+        {
+            "symbol": "ltcbtc",
+            "base": "BTC",
+            "quote": "LTC",
+            "min_order_size": 0.01 ,
+            "min_order_incre": 0.00001 ,
+            "min_price_incre": 0.00001 
+        },
+        {
+            "symbol": "ltceth",
+            "base": "ETH",
+            "quote": "LTC",
+            "min_order_size": 0.01 ,
+            "min_order_incre": 0.00001 ,
+            "min_price_incre": 0.0001 
+        },
+        {
+            "symbol": "ltcbch",
+            "base": "BCH",
+            "quote": "LTC",
+            "min_order_size": 0.01 ,
+            "min_order_incre": 0.00001 ,
+            "min_price_incre": 0.0001 
+        }
+    ]
