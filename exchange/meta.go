@@ -133,4 +133,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, DCOIN) // ID = 39
 	// supportList = append(supportList, GEMINI)  // ID = 37
 	supportList = append(supportList, BIKI) // ID = 38
+	// supportList = append(supportList, COINTIGER) // ID = 39
 }
