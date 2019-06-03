@@ -95,6 +95,7 @@ func (e *Dcoin) GetCoinsData() error {
 				CoinID:       base.ID,
 				Coin:         base,
 				ExSymbol:     data.BaseCoin,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
