@@ -320,12 +320,6 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		}
 		return ex
 
-	case exchange.COINTIGER:
-		ex := cointiger.CreateCoinTiger(config)
-		if ex != nil {
-			e.exMan.Add(ex)
-		}
-		return ex
 	}
 	return nil
 }

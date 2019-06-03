@@ -95,6 +95,7 @@ func (e *Dcoin) GetCoinsData() error {
 				CoinID:       base.ID,
 				Coin:         base,
 				ExSymbol:     data.BaseCoin,
+				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
@@ -163,8 +164,8 @@ func (e *Dcoin) GetPairsData() error {
 				ExSymbol:    data.Symbol,
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * data.AmountPrecision),
-				PriceFilter: math.Pow10(-1 * data.PricePrecision),
+				LotSize:     math.Pow10(1 * data.AmountPrecision),
+				PriceFilter: math.Pow10(1 * data.PricePrecision),
 				Listed:      true,
 			}
 			e.SetPairConstraint(pairConstraint)
@@ -488,8 +489,6 @@ func (e *Dcoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[st
 	mapParams["sign"] = exchange.ComputeMD5(payload)
 
 	strParams := Map2UrlQueryUrl(mapParams)
-	log.Printf("mapParams: %+v", mapParams)
-	log.Printf("strParams: %v", strParams)
 
 	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(strParams))
 	if nil != err {
