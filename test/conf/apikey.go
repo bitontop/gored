@@ -186,11 +186,6 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.API_SECRET = ""
 		break
 
-	case exchange.BIKI:
-		config.API_KEY = ""
-		config.API_SECRET = ""
-		break
-
 	case exchange.BITATM:
 		config.API_KEY = ""
 		config.API_SECRET = ""
