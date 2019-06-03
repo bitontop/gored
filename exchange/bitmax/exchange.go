@@ -9,6 +9,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 
 	cmap "github.com/orcaman/concurrent-map"
@@ -114,7 +115,7 @@ func (e *Bitmax) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Bitmax) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://bitmax.io/#/trade/%s/%s", e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target))
+	return fmt.Sprintf("https://bitmax.io/#/trade/%s/%s", strings.ToLower(e.GetSymbolByCoin(pair.Base)), strings.ToLower(e.GetSymbolByCoin(pair.Target)))
 }
 
 /*************** Coins on the Exchanges ***************/
