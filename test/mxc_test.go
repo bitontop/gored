@@ -6,9 +6,8 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/pair"
-
 	"github.com/bitontop/gored/exchange/mxc"
+	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 )
 
@@ -21,7 +20,7 @@ import (
 func Test_Mxc(t *testing.T) {
 	e := InitMxc()
 
-	pair := pair.GetPairByKey("BTC|ETC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -30,16 +29,34 @@ func Test_Mxc(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
+	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+}
+
+// test url and signature
+func Test_MxcOrder(t *testing.T) {
+	e := InitMxc()
+
+	var order *exchange.Order
+	err := e.OrderStatus(order)
+	if err == nil {
+		log.Printf("%s Order Status: %v", e.GetName(), order)
+	} else {
+		log.Printf("%s Order Status Err: %s", e.GetName(), err)
+	}
 }
 
 func InitMxc() exchange.Exchange {
 	coin.Init()
 	pair.Init()
+
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	// utils.GetCommonDataFromJSON(config.SourceURI)
+
 	conf.Exchange(exchange.MXC, config)
 
 	ex := mxc.CreateMxc(config)
