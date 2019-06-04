@@ -380,7 +380,7 @@ func (e *Biki) OrderStatus(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != "0" {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
