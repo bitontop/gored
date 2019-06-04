@@ -56,6 +56,10 @@ type CoinConstraint struct {
 }
 
 type ConstrainFetchMethod struct {
+	PublicAPI  bool
+	PrivateAPI bool
+	HealthAPI  bool // get exchange health status from exchange's API directly
+
 	Fee          bool
 	LotSize      bool
 	PriceFilter  bool
