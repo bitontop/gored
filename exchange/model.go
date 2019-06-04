@@ -60,7 +60,7 @@ type ConstrainFetchMethod struct {
 	PrivateAPI bool
 	HealthAPI  bool // get exchange health status from exchange's API directly
 
-	Fee          bool
+	Fee          bool // true only when get Fee from API directly
 	LotSize      bool
 	PriceFilter  bool
 	TxFee        bool
