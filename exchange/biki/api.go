@@ -387,20 +387,12 @@ func (e *Biki) OrderStatus(order *exchange.Order) error {
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.OrderInfo.Status == 0 {
+	if orderStatus.OrderInfo.DealVolume == 0 {
 		order.Status = exchange.New
-	} else if orderStatus.OrderInfo.Status == 1 {
-		order.Status = exchange.New
-	} else if orderStatus.OrderInfo.Status == 2 {
+	} else if orderStatus.OrderInfo.DealVolume == orderStatus.OrderInfo.Volume {
 		order.Status = exchange.Filled
-	} else if orderStatus.OrderInfo.Status == 3 {
+	} else if orderStatus.OrderInfo.DealVolume < orderStatus.OrderInfo.Volume {
 		order.Status = exchange.Partial
-	} else if orderStatus.OrderInfo.Status == 4 {
-		order.Status = exchange.Canceled
-	} else if orderStatus.OrderInfo.Status == 5 {
-		order.Status = exchange.Canceling
-	} else if orderStatus.OrderInfo.Status == 6 {
-		order.Status = exchange.Expired
 	} else {
 		order.Status = exchange.Other
 	}
