@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -139,8 +140,8 @@ func (e *Dragonex) GetPairsData() error {
 				ExSymbol:    list[1].(string),
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     list[7].(float64),
-				PriceFilter: list[5].(float64),
+				LotSize:     math.Pow10(-1 * list[7].(int)),
+				PriceFilter: math.Pow10(-1 * list[5].(int)),
 				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
