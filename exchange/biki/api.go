@@ -292,19 +292,21 @@ func (e *Biki) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	placeOrder := PlaceOrder{}
 	strRequest := "/open/api/create_order"
 
-	mapParams := make(map[string]string)
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
+	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "1"
-	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "0" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
@@ -332,19 +334,21 @@ func (e *Biki) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	placeOrder := PlaceOrder{}
 	strRequest := "/open/api/create_order"
 
-	mapParams := make(map[string]string)
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
+	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "1"
-	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "0" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
