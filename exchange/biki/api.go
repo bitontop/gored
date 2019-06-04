@@ -443,10 +443,12 @@ func (e *Biki) ApiKeyGet(strRequestPath string, mapParams map[string]string) str
 	strURL := API_URL + strRequestPath
 	timeStamp := strconv.FormatInt(time.Now().Unix(), 10)
 
-	stringData := "api_key" + e.API_KEY + "time" + timeStamp + e.API_SECRET
-	sign := exchange.ComputeMD5(stringData)
 	mapParams["api_key"] = e.API_KEY
 	mapParams["time"] = timeStamp
+
+	stringData := MapSortByKey(mapParams) + e.API_SECRET
+	sign := exchange.ComputeMD5(stringData)
+
 	mapParams["sign"] = sign
 
 	return exchange.HttpGetRequest(strURL, mapParams)
