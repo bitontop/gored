@@ -8,6 +8,7 @@ import "encoding/json"
 
 type JsonResponse struct {
 	Result bool            `json:"result"`
+	Code   int             `json:"code"`
 	Data   json.RawMessage `json:"data"`
 }
 

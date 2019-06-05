@@ -12,6 +12,7 @@ import (
 	"math"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -94,6 +95,8 @@ func (e *Ibankdigital) GetCoinsData() error {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	e.updateCoinInfo()
+
 	return nil
 }
 
@@ -144,6 +147,45 @@ func (e *Ibankdigital) GetPairsData() error {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
+	return nil
+}
+
+func (e *Ibankdigital) updateCoinInfo() error {
+	jsonResponse := &HuobiJsonResponse{}
+	coinsData := HuobiCoins{}
+
+	strUrl := "https://www.huobi.com/-/x/pro/v1/settings/currencys?r=sqyeinryv8&language=en-US"
+
+	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+	} else if jsonResponse.Status != "ok" {
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	for _, data := range coinsData {
+		c := &coin.Coin{}
+		c = coin.GetCoin(strings.ToLower(data.DisplayName))
+
+		if c != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       c.ID,
+				Coin:         c,
+				ExSymbol:     data.Name,
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     data.WithdrawEnabled,
+				Deposit:      data.DepositEnabled,
+				Confirmation: data.SafeConfirms,
+				Listed:       true,
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+	}
+
 	return nil
 }
 
