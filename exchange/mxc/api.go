@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math"
 	"net/http"
 	"strconv"
@@ -20,7 +21,7 @@ import (
 )
 
 const (
-	API_URL string = "https://www.mxc.com/open"
+	API_URL string = "https://www.mxc.com"
 )
 
 /*API Base Knowledge
@@ -52,7 +53,7 @@ func (e *Mxc) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := make(map[string]*PairsData)
 
-	strRequestUrl := "/api/v1/data/markets_info"
+	strRequestUrl := "/open/api/v1/data/markets_info"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -129,7 +130,7 @@ func (e *Mxc) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := make(map[string]*PairsData)
 
-	strRequestUrl := "/api/v1/data/markets_info"
+	strRequestUrl := "/open/api/v1/data/markets_info"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -184,7 +185,7 @@ func (e *Mxc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	strRequestUrl := "/api/v1/data/depth"
+	strRequestUrl := "/open/api/v1/data/depth"
 	strUrl := API_URL + strRequestUrl
 
 	mapParams := make(map[string]string)
@@ -242,7 +243,39 @@ func (e *Mxc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Mxc) UpdateAllBalances() {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return
+	}
 
+	jsonResponse := &JsonResponse{}
+	accountBalance := make(map[string]*AccountBalances)
+	strRequest := "/open/api/v1/private/account/info"
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+		return
+	} else if jsonResponse.Code != 200 {
+		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse)
+		return
+	}
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
+		log.Printf("%s UpdateAllBalances Data Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
+		return
+	}
+
+	for key, v := range accountBalance {
+		c := e.GetCoinBySymbol(key)
+		if c != nil {
+			freeAmount, err := strconv.ParseFloat(v.Available, 64)
+			if err != nil {
+				log.Printf("%s balance parse Err: %v %v", e.GetName(), err, v.Available)
+				return
+			}
+			balanceMap.Set(c.Code, freeAmount)
+		}
+	}
 }
 
 func (e *Mxc) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
@@ -251,16 +284,123 @@ func (e *Mxc) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool
 }
 
 func (e *Mxc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
 
-	return nil, nil
+	jsonResponse := &JsonResponse{}
+	placeOrder := PlaceOrder{}
+	strRequest := "/open/api/v1/private/order"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = e.GetSymbolByPair(pair)
+	mapParams["trade_type"] = "2"
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if jsonResponse.Code != 200 {
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Msg)
+	}
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
+	}
+
+	order := &exchange.Order{
+		Pair:         pair,
+		OrderID:      fmt.Sprint(placeOrder.OrderID),
+		Rate:         rate,
+		Quantity:     quantity,
+		Side:         "Sell",
+		Status:       exchange.New,
+		JsonResponse: jsonPlaceReturn,
+	}
+
+	return order, nil
 }
 
 func (e *Mxc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+	jsonResponse := &JsonResponse{}
+	placeOrder := PlaceOrder{}
+	strRequest := "/open/api/v1/private/order"
 
-	return nil, nil
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = e.GetSymbolByPair(pair)
+	mapParams["trade_type"] = "1"
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if jsonResponse.Code != 200 {
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Msg)
+	}
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
+	}
+
+	order := &exchange.Order{
+		Pair:         pair,
+		OrderID:      fmt.Sprint(placeOrder.OrderID),
+		Rate:         rate,
+		Quantity:     quantity,
+		Side:         "Buy",
+		Status:       exchange.New,
+		JsonResponse: jsonPlaceReturn,
+	}
+
+	return order, nil
 }
 
 func (e *Mxc) OrderStatus(order *exchange.Order) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	orderStatus := OrderStatus{}
+	strRequest := "/open/api/v1/private/order"
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = e.GetSymbolByPair(order.Pair)
+	mapParams["trade_no"] = order.OrderID
+
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+	} else if jsonResponse.Code != 200 {
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Msg)
+	}
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Data Unmarshal Err: %v %s", e.GetName(), err, jsonOrderStatus)
+	}
+
+	order.StatusMessage = jsonOrderStatus
+	if orderStatus.ID == order.OrderID {
+		switch orderStatus.Status {
+		case "1":
+			order.Status = exchange.New
+		case "3":
+			order.Status = exchange.Partial
+		case "5":
+			order.Status = exchange.Canceling
+		case "4":
+			order.Status = exchange.Canceled
+		case "2":
+			order.Status = exchange.Filled
+		default:
+			order.Status = exchange.Other
+		}
+	}
 
 	return nil
 }
@@ -270,6 +410,26 @@ func (e *Mxc) ListOrders() ([]*exchange.Order, error) {
 }
 
 func (e *Mxc) CancelOrder(order *exchange.Order) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	strRequest := "/open/api/v1/private/order"
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = e.GetSymbolByPair(order.Pair)
+	mapParams["trade_no"] = order.OrderID
+
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
+		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
+	} else if jsonResponse.Code != 200 {
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Msg)
+	}
+
+	order.Status = exchange.Canceling
+	order.CancelStatus = jsonCancelOrder
 
 	return nil
 }
@@ -283,23 +443,36 @@ func (e *Mxc) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Mxc) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["apikey"] = e.API_KEY
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+func (e *Mxc) ApiKeyRequest(strMethod string, strRequestPath string, mapParams map[string]string) string {
+	strUrl := API_URL + strRequestPath // + "?" + exchange.Map2UrlQuery(mapParams)
 
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	mapParams["api_key"] = e.API_KEY
+	mapParams["req_time"] = fmt.Sprintf("%d", time.Now().UnixNano()) //"1234567890"
+	authParams := exchange.Map2UrlQuery(mapParams)
+	authParams += "&api_secret=" + e.API_SECRET
 
-	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
-	httpClient := &http.Client{}
+	signature := exchange.ComputeMD5(authParams)
+	mapParams["sign"] = signature
 
-	request, err := http.NewRequest("GET", strUrl, nil)
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	request, err := http.NewRequest("GET", strUrl, strings.NewReader(jsonParams))
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("Content-Type", "application/json;charset=utf-8")
-	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
 
+	log.Printf("to MD5: %v", authParams)
+	log.Printf("====mapParams: %+v", mapParams)
+
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("Accept", "application/json")
+
+	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
 	if nil != err {
 		return err.Error()
