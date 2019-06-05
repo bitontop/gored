@@ -41,6 +41,8 @@ type AccountBalances []struct {
 	AvailableForWithdrawal string `json:"availableForWithdrawal"`
 }
 
+// to do ↓
+
 /* type AccountBalances []struct {
 	Currency      string  `json:"Currency"`
 	Balance       float64 `json:"Balance"`
