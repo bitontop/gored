@@ -21,6 +21,7 @@ import (
 	"github.com/bitontop/gored/exchange/coinbene"
 	"github.com/bitontop/gored/exchange/coineal"
 	"github.com/bitontop/gored/exchange/coinex"
+	"github.com/bitontop/gored/exchange/cointiger"
 	"github.com/bitontop/gored/exchange/dcoin"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
@@ -315,6 +316,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.DCOIN:
 		ex := dcoin.CreateDcoin(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.COINTIGER:
+		ex := cointiger.CreateCointiger(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

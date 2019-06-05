@@ -5,13 +5,13 @@ package cointiger
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
+	"net/url"
 	"sort"
 	"strconv"
 	"time"
@@ -115,7 +115,7 @@ func (e *Cointiger) GetCoinsData() error {
 					Coin:         target,
 					ExSymbol:     details.BaseCurrency,
 					ChainType:    exchange.MAINNET,
-					TxFee:        DEFAULT_TXFEE,
+					TxFee:        details.WithdrawFeeMin,
 					Withdraw:     DEFAULT_WITHDRAW,
 					Deposit:      DEFAULT_DEPOSIT,
 					Confirmation: DEFAULT_CONFIRMATION,
@@ -289,6 +289,9 @@ func (e *Cointiger) Withdraw(coin *coin.Coin, quantity float64, addr, tag string
 	return false
 }
 
+/*
+btcusdt tradepair - price filter minimum integer(交易对价格精度最小为个位数)
+*/
 func (e *Cointiger) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
@@ -328,6 +331,9 @@ func (e *Cointiger) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchang
 	return order, nil
 }
 
+/*
+btcusdt tradepair - price filter minimum integer(交易对价格精度最小为个位数)
+*/
 func (e *Cointiger) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
@@ -449,21 +455,26 @@ func (e *Cointiger) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
+
+/*
+sign err sometimes due to timestamp lag
+*/
 func (e *Cointiger) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
 	mapParams["time"] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)[:13]
 	payload := createPayload(mapParams)
-	mapParams["sign"] = exchange.ComputeHmacSha512(payload+e.API_SECRET, e.API_SECRET)
+	mapParams["sign"] = exchange.ComputeHmac512NoDecode(payload+e.API_SECRET, e.API_SECRET)
 	mapParams["api_key"] = e.API_KEY
 
 	url := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + url
-	//log.Printf(strUrl)
 
 	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
+	request.Header.Add("Language", "en_US")
+	request.Header.Add("User-Agent", "Mozilla/5.0(Macintosh;U;IntelMacOSX10_6_8;en-us)AppleWebKit/534.50(KHTML,likeGecko)Version/5.1Safari/534.50")
+	request.Header.Add("Referer", "https://api.cointiger.com")
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
@@ -483,44 +494,37 @@ func (e *Cointiger) ApiKeyGet(strRequestPath string, mapParams map[string]string
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
-func (e *Cointiger) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
-	payload := createPayload(mapParams)
 
+/*
+sign err sometimes due to timestamp lag
+*/
+func (e *Cointiger) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+
+	payload := createPayload(mapParams)
 	Params := make(map[string]string)
-	Params["sign"] = exchange.ComputeHmacSha512(payload+e.API_SECRET, e.API_SECRET)
+	Params["sign"] = exchange.ComputeHmac512NoDecode(payload+e.API_SECRET, e.API_SECRET)
 	Params["api_key"] = e.API_KEY
 	Params["time"] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)[:13]
 
-	url := exchange.Map2UrlQuery(Params)
-	strUrl := API_URL_V2 + strRequestPath + "?" + url
+	urlParams := exchange.Map2UrlQuery(Params)
+	strUrl := API_URL_V2 + strRequestPath + "?" + urlParams
 
-	log.Printf(strUrl)
+	query := exchange.Map2UrlQuery(mapParams)
+	values, err := url.ParseQuery(query)
 
-	jsonParams := ""
-	if nil != mapParams {
-		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
-	}
-
-	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(jsonParams)))
-	log.Printf(jsonParams)
+	request, err := http.PostForm(strUrl, values)
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
+	request.Header.Add("Language", "en_US")
+	request.Header.Add("User-Agent", "Mozilla/5.0(Macintosh;U;IntelMacOSX10_6_8;en-us)AppleWebKit/534.50(KHTML,likeGecko)Version/5.1Safari/534.50")
+	request.Header.Add("Referer", "https://api.cointiger.com")
 
-	httpClient := &http.Client{}
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
+	defer request.Body.Close()
+	body, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return ""
 	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
 	return string(body)
 }
 
