@@ -44,7 +44,7 @@ type PlaceOrder struct {
 	OrderID int `json:"order_id"`
 }
 
-/* type OrderStatus struct {
+type OrderStatus struct {
 	TradeList []interface{} `json:"trade_list"`
 	OrderInfo struct {
 		Side         string        `json:"side"`
@@ -69,27 +69,4 @@ type PlaceOrder struct {
 		TradeList    []interface{} `json:"tradeList"`
 		Status       int           `json:"status"`
 	} `json:"order_info"`
-} */
-
-type OrderStatus struct {
-	OrderInfo struct {
-		ID         int     `json:"id"`
-		Side       string  `json:"side"`
-		SideMsg    string  `json:"side_msg"`
-		CreatedAt  string  `json:"created_at"`
-		Price      float64 `json:"price"`
-		Volume     float64 `json:"volume"`
-		DealVolume float64 `json:"deal_volume"`
-		TotalPrice float64 `json:"total_price"`
-		Fee        float64 `json:"fee"`
-		AvgPrice   float64 `json:"avg_price"`
-	} `json:"order_info"`
-	TradeList []struct {
-		ID        int     `json:"id"`
-		CreatedAt string  `json:"created_at"`
-		Price     float64 `json:"price"`
-		Volume    float64 `json:"volume"`
-		DealPrice float64 `json:"deal_price"`
-		DealFee   float64 `json:"deal_fee"`
-	} `json:"trade_list"`
 }
