@@ -232,7 +232,7 @@ func (e *Cointiger) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrai
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.Fee = true
+	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = true

@@ -99,7 +99,7 @@ func (e *Cointiger) GetCoinsData() error {
 					Coin:         base,
 					ExSymbol:     details.QuoteCurrency,
 					ChainType:    exchange.MAINNET,
-					TxFee:        DEFAULT_TXFEE,
+					TxFee:        details.WithdrawFeeMin,
 					Withdraw:     DEFAULT_WITHDRAW,
 					Deposit:      DEFAULT_DEPOSIT,
 					Confirmation: DEFAULT_CONFIRMATION,
