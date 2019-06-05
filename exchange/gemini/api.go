@@ -227,21 +227,23 @@ func (e *Gemini) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+// public done, balance done, signature half done
+
 /*************** Private API ***************/
 func (e *Gemini) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
 	}
-	//====================== todo
+
 	errResponse := ErrorResponse{}
 	accountBalance := AccountBalances{}
 	strRequest := "/balances"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["request"] = "/v1/balances"
 
-	jsonBalanceReturn := e.ApiKeyGET(strRequest, mapParams)
+	jsonBalanceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &errResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -267,6 +269,8 @@ func (e *Gemini) UpdateAllBalances() {
 		}
 	}
 }
+
+// todo ↓
 
 func (e *Gemini) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
@@ -450,6 +454,49 @@ func (e *Gemini) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
+func (e *Gemini) ApiKeyRequest(strMethod string, strRequestPath string, mapParams map[string]interface{}) string {
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano()) //time.Now().UnixNano() //fmt.Sprintf("%d", time.Now().UnixNano())
+
+	strUrl := API_URL + strRequestPath
+
+	//jsonParams := ""
+	var bytesParams []byte
+	if nil != mapParams {
+		bytesParams, _ = json.Marshal(mapParams)
+		//	jsonParams = string(bytesParams)
+	}
+
+	b64 := base64.StdEncoding.EncodeToString(bytesParams)
+	signature := ComputeHmac384NoDecode(b64, e.API_SECRET)
+
+	request, err := http.NewRequest("POST", strUrl, bytes.NewBuffer([]byte{})) //nil
+	if nil != err {
+		return err.Error()
+	}
+
+	request.Header.Add("Content-Length", "0")
+	request.Header.Add("Content-Type", "text/plain")
+	request.Header.Add("X-GEMINI-APIKEY", e.API_KEY)
+	request.Header.Add("X-GEMINI-PAYLOAD", b64)
+	request.Header.Add("X-GEMINI-SIGNATURE", signature)
+	request.Header.Add("Cache-Control", "no-cache")
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+// need to delete this
 func (e *Gemini) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
 
@@ -465,20 +512,21 @@ func (e *Gemini) ApiKeyGET(strRequestPath string, mapParams map[string]string) s
 	b64 := base64.StdEncoding.EncodeToString([]byte(bytesParams))
 	signature := ComputeHmac384NoDecode(b64, e.API_SECRET)
 
-	//signature hex(HMAC_SHA384(base64(payload), key=api_secret))
-	//signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET) //todo
+	//-----------
+
+	//=============
 
 	request, err := http.NewRequest("POST", strUrl, bytes.NewBuffer([]byte{}))
 	if nil != err {
 		return err.Error()
 	}
 
-	// request.Header.Add("Content-Length", "0")
-	// request.Header.Add("Content-Type", "text/plain")
+	request.Header.Add("Content-Length", "0")
+	request.Header.Add("Content-Type", "text/plain")
 	request.Header.Add("X-GEMINI-APIKEY", e.API_KEY)
 	request.Header.Add("X-GEMINI-PAYLOAD", b64)
 	request.Header.Add("X-GEMINI-SIGNATURE", signature)
-	// request.Header.Add("Cache-Control", "no-cache")
+	request.Header.Add("Cache-Control", "no-cache")
 	log.Printf("====b64: %v, signature: %v", b64, signature)
 
 	// request.Header.Add("Content-Type", "application/json;charset=utf-8")
