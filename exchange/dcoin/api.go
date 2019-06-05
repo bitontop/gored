@@ -285,7 +285,6 @@ func (e *Dcoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	//log.Printf(jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
@@ -435,8 +434,6 @@ func (e *Dcoin) ApiKeyGet(strRequestPath string, mapParams map[string]interface{
 
 	url := Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + url
-
-	//log.Printf(strUrl)
 
 	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {

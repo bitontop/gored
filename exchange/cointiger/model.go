@@ -44,27 +44,37 @@ type OrderBook struct {
 
 /********** Private API Structure**********/
 type AccountBalances []struct {
-	Asset     string  `json:"asset"`
-	Total     float64 `json:"total"`
-	Available float64 `json:"available"`
-	Locked    float64 `json:"locked"`
-}
-
-type WithdrawResponse struct {
-	Msg     string `json:"msg"`
-	Success bool   `json:"success"`
-	ID      string `json:"id"`
+	Normal string `json:"normal"`
+	Lock   string `json:"lock"`
+	Coin   string `json:"coin"`
 }
 
 type PlaceOrder struct {
-	Symbol       string `json:"symbol"`
-	OrderID      string `json:"orderId"`
-	Side         string `json:"side"`
-	Type         string `json:"type"`
-	Price        string `json:"price"`
-	AveragePrice string `json:"executedQty"`
-	OrigQty      string `json:"origQty"`
-	ExecutedQty  string `json:"executedQty"`
-	Status       string `json:"status"`
-	TimeInForce  string `json:"timeInForce"`
+	OrderID int `json:"order_id"`
+}
+
+type OrderStatus struct {
+	Symbol     string `json:"symbol"`
+	Fee        string `json:"fee"`
+	AvgPrice   string `json:"avg_price"`
+	Source     int    `json:"source"`
+	Type       string `json:"type"`
+	Mtime      int64  `json:"mtime"`
+	Volume     string `json:"volume"`
+	UserID     int    `json:"user_id"`
+	Price      string `json:"price"`
+	Ctime      int64  `json:"ctime"`
+	DealVolume string `json:"deal_volume"`
+	ID         int    `json:"id"`
+	DealMoney  string `json:"deal_money"`
+	Status     int    `json:"status"`
+}
+
+type CancelOrder struct {
+	Success []string `json:"success"`
+	Failed  []struct {
+		ErrMsg  string `json:"err-msg"`
+		OrderID string `json:"order-id"`
+		ErrCode string `json:"err-code"`
+	} `json:"failed"`
 }
