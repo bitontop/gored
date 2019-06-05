@@ -234,6 +234,10 @@ func (e *Liquid) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	}
+	if accountBalance[0].Currency == "" {
+		log.Printf("%s UpdateAllBalances fail: %v", e.GetName(), jsonBalanceReturn)
+		return
+	}
 
 	for _, v := range accountBalance {
 		c := e.GetCoinBySymbol(v.Currency)
@@ -270,6 +274,9 @@ func (e *Liquid) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	}
+	if placeOrder.ID == 0 {
+		return nil, fmt.Errorf("%s LimitBuy fail: %v", e.GetName(), jsonPlaceReturn)
+	}
 
 	order := &exchange.Order{
 		Pair:         pair,
@@ -303,6 +310,9 @@ func (e *Liquid) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	}
+	if placeOrder.ID == 0 {
+		return nil, fmt.Errorf("%s LimitBuy fail: %v", e.GetName(), jsonPlaceReturn)
+	}
 
 	order := &exchange.Order{
 		Pair:         pair,
@@ -328,6 +338,9 @@ func (e *Liquid) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyRequest("GET", nil, strRequest)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+	}
+	if orderStatus.ID == 0 {
+		return fmt.Errorf("%s OrderStatus fail: %v", e.GetName(), jsonOrderStatus)
 	}
 
 	order.StatusMessage = jsonOrderStatus
@@ -364,6 +377,9 @@ func (e *Liquid) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyRequest("PUT", nil, strRequest)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
+	}
+	if cancelOrder.ID == 0 {
+		return fmt.Errorf("%s CancelOrder fail: %v", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
