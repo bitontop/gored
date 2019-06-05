@@ -94,7 +94,7 @@ func (e *Biki) GetCoinsData() error {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       base.ID,
 				Coin:         base,
-				ExSymbol:     data.CountCoin,
+				ExSymbol:     strings.ToLower(data.CountCoin),
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
@@ -109,7 +109,7 @@ func (e *Biki) GetCoinsData() error {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       target.ID,
 				Coin:         target,
-				ExSymbol:     data.BaseCoin,
+				ExSymbol:     strings.ToLower(data.BaseCoin),
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
