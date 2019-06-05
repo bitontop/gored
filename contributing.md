@@ -40,6 +40,11 @@ Data Collection
             gored/initial/iniman.go
             gored/exchange/meta.go  ---→  find a new ID and set to DEFAULT_ID in file [gored/exchange/meta.go]
 
+    2.1.1 Deposit asset
+        login to account, go to asset
+        go into deposit, using the deposit address to deposit
+        wait until the conformation complete
+
 //-----------↓ todo ------------
 
 1.2 Get RealTime Data

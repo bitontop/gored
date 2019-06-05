@@ -227,6 +227,9 @@ func (e *Bitstamp) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bitstamp) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
+	constrainFetchMethod.PublicAPI = true
+	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

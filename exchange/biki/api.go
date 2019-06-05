@@ -94,7 +94,7 @@ func (e *Biki) GetCoinsData() error {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       base.ID,
 				Coin:         base,
-				ExSymbol:     data.CountCoin,
+				ExSymbol:     strings.ToLower(data.CountCoin),
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
@@ -109,7 +109,7 @@ func (e *Biki) GetCoinsData() error {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       target.ID,
 				Coin:         target,
-				ExSymbol:     data.BaseCoin,
+				ExSymbol:     strings.ToLower(data.BaseCoin),
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
@@ -391,12 +391,20 @@ func (e *Biki) OrderStatus(order *exchange.Order) error {
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.OrderInfo.DealVolume == 0 {
+	if orderStatus.OrderInfo.Status == 0 {
 		order.Status = exchange.New
-	} else if orderStatus.OrderInfo.DealVolume == orderStatus.OrderInfo.Volume {
+	} else if orderStatus.OrderInfo.Status == 1 {
+		order.Status = exchange.New
+	} else if orderStatus.OrderInfo.Status == 2 {
 		order.Status = exchange.Filled
-	} else if orderStatus.OrderInfo.DealVolume < orderStatus.OrderInfo.Volume {
+	} else if orderStatus.OrderInfo.Status == 3 {
 		order.Status = exchange.Partial
+	} else if orderStatus.OrderInfo.Status == 4 {
+		order.Status = exchange.Canceled
+	} else if orderStatus.OrderInfo.Status == 5 {
+		order.Status = exchange.Canceling
+	} else if orderStatus.OrderInfo.Status == 6 {
+		order.Status = exchange.Expired
 	} else {
 		order.Status = exchange.Other
 	}

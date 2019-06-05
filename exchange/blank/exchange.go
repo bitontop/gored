@@ -229,13 +229,16 @@ func (e *Blank) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Blank) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.Fee = true
-	constrainFetchMethod.LotSize = true
-	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
-	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.Fee = false
+	constrainFetchMethod.LotSize = false
+	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 
