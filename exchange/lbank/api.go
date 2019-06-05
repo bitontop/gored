@@ -214,7 +214,7 @@ func (e *Lbank) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if accountBalance.Result != "true" {
-		log.Printf("%s UpdateAllBalances Failed: %v, %v", e.GetName(), accountBalance.ErrorCode, accountBalance.Result)
+		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonBalanceReturn)
 		return
 	}
 
