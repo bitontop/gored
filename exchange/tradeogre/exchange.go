@@ -227,6 +227,9 @@ func (e *Tradeogre) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Tradeogre) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
+	constrainFetchMethod.PublicAPI = true
+	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

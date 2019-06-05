@@ -232,7 +232,10 @@ func (e *Bitmax) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bitmax) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.Fee = true
+	constrainFetchMethod.PublicAPI = true
+	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = true

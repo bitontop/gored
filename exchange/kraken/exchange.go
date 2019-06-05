@@ -227,6 +227,9 @@ func (e *Kraken) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Kraken) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
+	constrainFetchMethod.PublicAPI = true
+	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

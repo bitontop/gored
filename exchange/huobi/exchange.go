@@ -231,6 +231,9 @@ func (e *Huobi) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Huobi) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
+	constrainFetchMethod.PublicAPI = true
+	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
