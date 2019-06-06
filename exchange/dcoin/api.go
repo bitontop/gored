@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -296,7 +297,7 @@ func (e *Dcoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      string(placeOrder.OrderID),
+		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -334,7 +335,7 @@ func (e *Dcoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      string(placeOrder.OrderID),
+		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
