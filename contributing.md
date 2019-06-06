@@ -13,10 +13,12 @@ Data Collection
 1.0 New Exchange Platform
 
 1.1 Develop the Basic Functions
+
     1.1.0 prepare
         1.1.0.1 fork gored to your repo
         1.1.0.2 in VScode terminal, go get -u "github.com/bitontop/gored"
         1.1.0.3 using git pull to update gored code periodically
+        
     1.1.1 Duplicate Exchange Template
         1.1.1.1 Duplicate Folder [/gored/exchange/blank]
         1.1.1.2 Rename ["blank"] folder -> ["exchange name"] and Put the folder under [/gored/exchange/]
@@ -41,16 +43,20 @@ Data Collection
             wait until the conformation complete
 
 2.1 after finish
-    2.1.1 add new exchange information/function in file:
+            
+    2.1.1 add new exchange information/function in file:        
         2.1.1.1gored/test/conf/apikey.go:
             in function Exchange, add new case exchange.["EXCHANGE NAME"]
+            
         2.1.1.2gored/main.go:
             add import "github.com/bitontop/gored/exchange/["exchange name"]"
             in function Init, add: Init["Exchange Name"](config)
             add function: func Init["Exchange Name"]
+            
         2.1.1.3gored/initial/iniman.go
             add import "github.com/bitontop/gored/exchange/["exchange name"]"
             in function Init, add new case exchange.["EXCHANGE NAME"]
+            
         2.1.1.4gored/exchange/meta.go
             in function initExchangeNames, add supportList = append(supportList, ["EXCHANGE NAME"]), comment a new ID beside it
             set DEFAULT_ID in file [gored/exchange/meta.go] to this ID
