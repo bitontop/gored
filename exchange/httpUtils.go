@@ -52,7 +52,7 @@ func HttpGetRequest(strUrl string, mapParams map[string]string) string {
 	return string(body)
 }
 
-func HttpGetRequestInterface(strUrl string, mapParams map[string]string) string {
+func HttpGetRequestInterface(strUrl string, mapParams map[string]interface{}) string {
 	httpClient := &http.Client{}
 
 	var strRequestUrl string
