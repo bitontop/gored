@@ -12,8 +12,13 @@ Data Collection
 
 1.0 New Exchange Platform
 
-1.1 Develop the Basic Functions
+    1.0.1 preparation
+        1.1.0.1 fork gored to your repo
+        1.1.0.2 in VScode terminal, go get -u "github.com/bitontop/gored"
+        1.1.0.3 using git pull to update gored code periodically
 
+1.1 Develop the Basic Functions
+        
     1.1.1 Duplicate Exchange Template
         1.1.1.1 Duplicate Folder [/gored/exchange/blank]
         1.1.1.2 Rename ["blank"] folder -> ["exchange name"] and Put the folder under [/gored/exchange/]
@@ -32,37 +37,30 @@ Data Collection
         
     1.1.4 Test Basic Functions
         1.1.4.1 Run Each Test Case to Make Sure the function is working
+        1.1.4.2 Deposit asset for private function test:
+            login to account, go to asset
+            go into deposit, using the deposit address to deposit
+            wait until the conformation complete
 
-    1.1.5 Add Exchange Information
-        1.1.5.1 Add exchange information in file: 
-            gored/test/conf/apikey.go
-            gored/main.go
-            gored/initial/iniman.go
-            gored/exchange/meta.go  ---→  find a new ID and set to DEFAULT_ID in file [gored/exchange/meta.go]
-
-    2.1.1 Deposit asset
-        login to account, go to asset
-        go into deposit, using the deposit address to deposit
-        wait until the conformation complete
-
-//-----------↓ todo ------------
-
-1.2 Get RealTime Data
-
-    1.2.1 Init Exchange Config
-        1.2.1.1 Modify [main.go]
-            1.2.1.1.1 Add Function [init"ExchangeName"()]
-            1.2.1.1.2 Modify Config Content
-            1.2.1.1.3 Add [init"ExchangeName"()] in Init()
+2.1 after finish
             
-    1.2.2 Initial New Exchange Task
-        1.2.2.1 Modify [init_task.go]
-            1.2.2.1.1 Get Exchange Config [e"ExchangeName" := exMan.Get(exchange."EXCHANGENAME")]
-            1.2.2.1.2 Call InitTask Function [m.InitTask(e"ExchangeName".GetPairs(), exchange."EXCHANGENAME", [pairs_amount])]
+    2.1.1 add new exchange information/function in file:        
+        2.1.1.1gored/test/conf/apikey.go:
+            in function Exchange, add new case exchange.["EXCHANGE NAME"]
             
-    1.2.3 Implement Gaining RealTime Data
-        1.2.3.1 Modify [data.go]
-            1.2.3.1.1 Get Exchange Config [e"ExchangeName" := exMan.Get(exchange."EXCHANGENAME")]
-            1.2.3.1.2 Call InitTask Function [m.InitTask(e"ExchangeName".GetPairs(), exchange."EXCHANGENAME", [pairs_amount])]
+        2.1.1.2gored/main.go:
+            add import "github.com/bitontop/gored/exchange/["exchange name"]"
+            in function Init, add: Init["Exchange Name"](config)
+            add function: func Init["Exchange Name"]
             
-    1.2.4 Deploy the program on Server
+        2.1.1.3gored/initial/iniman.go
+            add import "github.com/bitontop/gored/exchange/["exchange name"]"
+            in function Init, add new case exchange.["EXCHANGE NAME"]
+            
+        2.1.1.4gored/exchange/meta.go
+            in function initExchangeNames, add supportList = append(supportList, ["EXCHANGE NAME"]), comment a new ID beside it
+            set DEFAULT_ID in file [gored/exchange/meta.go] to this ID
+
+
+3.1 make pull request to branch: pullRequest
+
