@@ -321,7 +321,7 @@ func (e *Cointiger) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchang
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      string(placeOrder.OrderID),
+		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -363,7 +363,7 @@ func (e *Cointiger) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      string(placeOrder.OrderID),
+		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
