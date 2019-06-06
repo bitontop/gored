@@ -24,29 +24,16 @@ func Test_Gemini(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
-	// Test_Pair(e, pair)
-	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_Coins(e)
+	Test_Pairs(e)
+	Test_Pair(e, pair)
+	Test_Orderbook(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
-	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-// test url and signature
-func Test_GeminiOrder(t *testing.T) {
-	e := InitGemini()
-
-	var order *exchange.Order
-	err := e.OrderStatus(order)
-	if err == nil {
-		log.Printf("%s Order Status: %v", e.GetName(), order)
-	} else {
-		log.Printf("%s Order Status Err: %s", e.GetName(), err)
-	}
+	Test_Trading(e, pair, 0.0001, 100)
+	//Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
 func InitGemini() exchange.Exchange {

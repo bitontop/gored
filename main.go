@@ -29,6 +29,7 @@ import (
 	"github.com/bitontop/gored/exchange/dcoin"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
+	"github.com/bitontop/gored/exchange/gemini"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/ibankdigital"
@@ -129,6 +130,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitDcoin(config)
 	InitBiki(config)
 	InitCointiger(config)
+	InitGemini(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -422,6 +424,15 @@ func InitDcoin(config *exchange.Config) {
 func InitCointiger(config *exchange.Config) {
 	conf.Exchange(exchange.COINTIGER, config)
 	ex := cointiger.CreateCointiger(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitGemini(config *exchange.Config) {
+	conf.Exchange(exchange.GEMINI, config)
+	ex := gemini.CreateGemini(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

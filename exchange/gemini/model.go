@@ -41,75 +41,31 @@ type AccountBalances []struct {
 	AvailableForWithdrawal string `json:"availableForWithdrawal"`
 }
 
-// to do ↓
-
-/* type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
-} */
-
-/* type OrderBook struct {
-	Buy  []exchange.Order `json:"buy"`
-	Sell []exchange.Order `json:"sell"`
-} */
-
-/* type PairsData []struct {
-	MarketCurrency     string      `json:"MarketCurrency"`
-	BaseCurrency       string      `json:"BaseCurrency"`
-	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
-	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
-	MinTradeSize       float64     `json:"MinTradeSize"`
-	MarketName         string      `json:"MarketName"`
-	IsActive           bool        `json:"IsActive"`
-	Created            string      `json:"Created"`
-	Notice             interface{} `json:"Notice"`
-	IsSponsored        interface{} `json:"IsSponsored"`
-	LogoURL            string      `json:"LogoUrl"`
-} */
-
-type Uuid struct {
-	Id string `json:"uuid"`
+type Withdrawal struct {
+	Address      string `json:"address"`
+	Amount       string `json:"amount"`
+	TxHash       string `json:"txHash"`
+	WithdrawalID string `json:"withdrawalId"`
+	Message      string `json:"message"`
 }
 
 type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            string
+	OrderID           string        `json:"order_id"`
+	ID                string        `json:"id"`
+	Symbol            string        `json:"symbol"`
+	Exchange          string        `json:"exchange"`
+	AvgExecutionPrice string        `json:"avg_execution_price"`
+	Side              string        `json:"side"`
+	Type              string        `json:"type"`
+	Timestamp         string        `json:"timestamp"`
+	Timestampms       int64         `json:"timestampms"`
+	IsLive            bool          `json:"is_live"`
+	IsCancelled       bool          `json:"is_cancelled"`
+	IsHidden          bool          `json:"is_hidden"`
+	WasForced         bool          `json:"was_forced"`
+	ExecutedAmount    string        `json:"executed_amount"`
+	RemainingAmount   string        `json:"remaining_amount"`
+	Options           []interface{} `json:"options"`
+	Price             string        `json:"price"`
+	OriginalAmount    string        `json:"original_amount"`
 }
-
-/* type CoinsData []struct {
-	Currency        string      `json:"Currency"`
-	CurrencyLong    string      `json:"CurrencyLong"`
-	MinConfirmation int         `json:"MinConfirmation"`
-	TxFee           float64     `json:"TxFee"`
-	IsActive        bool        `json:"IsActive"`
-	IsRestricted    bool        `json:"IsRestricted"`
-	CoinType        string      `json:"CoinType"`
-	BaseAddress     string      `json:"BaseAddress"`
-	Notice          interface{} `json:"Notice"`
-} */
