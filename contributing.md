@@ -12,12 +12,12 @@ Data Collection
 
 1.0 New Exchange Platform
 
-1.1 Develop the Basic Functions
-
-    1.1.0 prepare
+    1.0.1 preparation
         1.1.0.1 fork gored to your repo
         1.1.0.2 in VScode terminal, go get -u "github.com/bitontop/gored"
         1.1.0.3 using git pull to update gored code periodically
+
+1.1 Develop the Basic Functions
         
     1.1.1 Duplicate Exchange Template
         1.1.1.1 Duplicate Folder [/gored/exchange/blank]
