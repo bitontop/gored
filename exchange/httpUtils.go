@@ -12,6 +12,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -27,6 +28,38 @@ func HttpGetRequest(strUrl string, mapParams map[string]string) string {
 		strRequestUrl = strUrl
 	} else {
 		strParams := Map2UrlQuery(mapParams)
+		strRequestUrl = strUrl + "?" + strParams
+	}
+
+	request, err := http.NewRequest("GET", strRequestUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("Connection", "close")
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func HttpGetRequestInterface(strUrl string, mapParams map[string]string) string {
+	httpClient := &http.Client{}
+
+	var strRequestUrl string
+	if nil == mapParams {
+		strRequestUrl = strUrl
+	} else {
+		strParams := Map2UrlQueryInterface(mapParams)
 		strRequestUrl = strUrl + "?" + strParams
 	}
 
@@ -177,6 +210,25 @@ func Map2UrlQueryUrl(mapParams map[string]string) string {
 
 	for _, key := range mapSort {
 		strParams += (key + "=" + url.QueryEscape(mapParams[key]) + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
+}
+
+func Map2UrlQueryInterface(mapParams map[string]interface{}) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + "=" + fmt.Sprintf("%v", mapParams[key]) + "&")
 	}
 
 	if 0 < len(strParams) {

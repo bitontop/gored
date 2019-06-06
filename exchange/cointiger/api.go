@@ -204,7 +204,7 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := /* exchange. */ HttpGetRequest(strUrl, mapParams)
+	jsonOrderbook := exchange.HttpGetRequestInterface(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Code != "0" {
@@ -472,7 +472,7 @@ func (e *Cointiger) ApiKeyGet(strRequestPath string, mapParams map[string]interf
 	mapParams["sign"] = exchange.ComputeHmac512NoDecode(payload+e.API_SECRET, e.API_SECRET)
 	mapParams["api_key"] = e.API_KEY
 
-	url := /* exchange. */ Map2UrlQuery(mapParams)
+	url := exchange.Map2UrlQueryInterface(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + url
 
 	request, err := http.NewRequest("GET", strUrl, nil)
@@ -513,10 +513,10 @@ func (e *Cointiger) ApiKeyRequest(strMethod, strRequestPath string, mapParams ma
 	Params["api_key"] = e.API_KEY
 	Params["time"] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)[:13]
 
-	urlParams := /* exchange. */ Map2UrlQuery(Params)
+	urlParams := exchange.Map2UrlQueryInterface(Params)
 	strUrl := API_URL_V2 + strRequestPath + "?" + urlParams
 
-	query := /* exchange. */ Map2UrlQuery(mapParams)
+	query := exchange.Map2UrlQueryInterface(mapParams)
 	values, err := url.ParseQuery(query)
 
 	request, err := http.PostForm(strUrl, values)
@@ -545,57 +545,6 @@ func createPayload(mapParams map[string]interface{}) string {
 
 	for _, key := range mapSort {
 		strParams += key + fmt.Sprintf("%v", mapParams[key])
-	}
-
-	return strParams
-}
-
-func HttpGetRequest(strUrl string, mapParams map[string]interface{}) string {
-	httpClient := &http.Client{}
-
-	var strRequestUrl string
-	if nil == mapParams {
-		strRequestUrl = strUrl
-	} else {
-		strParams := Map2UrlQuery(mapParams)
-		strRequestUrl = strUrl + "?" + strParams
-	}
-
-	request, err := http.NewRequest("GET", strRequestUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
-	request.Header.Add("Connection", "close")
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-}
-
-func Map2UrlQuery(mapParams map[string]interface{}) string {
-	var strParams string
-	mapSort := []string{}
-	for key := range mapParams {
-		mapSort = append(mapSort, key)
-	}
-	sort.Strings(mapSort)
-
-	for _, key := range mapSort {
-		strParams += (key + "=" + fmt.Sprintf("%v", mapParams[key]) + "&")
-	}
-
-	if 0 < len(strParams) {
-		strParams = string([]rune(strParams)[:len(strParams)-1])
 	}
 
 	return strParams
