@@ -12,26 +12,27 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
 
-	"github.com/bitontop/gored/exchange/cointiger"
-	"github.com/bitontop/gored/test/conf"
+	"../exchange/cointiger"
+	"./conf"
 )
 
 /********************Public API********************/
 func Test_Cointiger(t *testing.T) {
 	e := InitCointiger()
 
-	pair := pair.GetPairByKey("USDT|BTC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
-	Test_Coins(e)
-	Test_Pairs(e)
-	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Coins(e)
+	// Test_Pairs(e)
+	// Test_Pair(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	Test_Trading(e, pair, 1, 100)
-	Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	//Test_Trading(e, pair, 0.02, 0.01)
+	Test_Trading_Sell(e, pair, 0.04, 0.01)
+	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
 func InitCointiger() exchange.Exchange {
