@@ -193,7 +193,7 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(p)
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = symbol
 	mapParams["type"] = "step0"
 
@@ -204,7 +204,7 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
+	jsonOrderbook := /* exchange. */ HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Code != "0" {
@@ -258,7 +258,7 @@ func (e *Cointiger) UpdateAllBalances() {
 
 	strRequestPath := "/api/user/balance"
 
-	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
+	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]interface{}))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -301,7 +301,7 @@ func (e *Cointiger) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchang
 	placeOrder := PlaceOrder{}
 	strRequestPath := "/order"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
@@ -343,7 +343,7 @@ func (e *Cointiger) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange
 	placeOrder := PlaceOrder{}
 	strRequestPath := "/order"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', -1, 64)
@@ -382,7 +382,7 @@ func (e *Cointiger) OrderStatus(order *exchange.Order) error {
 	orderStatus := OrderStatus{}
 	strRequestPath := "/api/v2/order/details"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 	mapParams["order_id"] = order.OrderID
 
@@ -427,8 +427,15 @@ func (e *Cointiger) CancelOrder(order *exchange.Order) error {
 	cancelOrder := CancelOrder{}
 	strRequestPath := "/order/batch_cancel"
 
-	mapParams := make(map[string]string)
-	mapParams["orderId"] = order.OrderID
+	symbol := e.GetSymbolByPair(order.Pair)
+	orderidlist := make(map[string][]string)
+	orderidlist[symbol] = []string{order.OrderID}
+
+	bytes, _ := json.Marshal(orderidlist)
+
+	mapParams := make(map[string]interface{})
+	mapParams["orderIdList"] = string(bytes)
+	mapParams["time"] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)[:13]
 
 	jsonCancelOrder := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
@@ -459,13 +466,13 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 /*
 sign err sometimes due to timestamp lag
 */
-func (e *Cointiger) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
+func (e *Cointiger) ApiKeyGet(strRequestPath string, mapParams map[string]interface{}) string {
 	mapParams["time"] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)[:13]
 	payload := createPayload(mapParams)
 	mapParams["sign"] = exchange.ComputeHmac512NoDecode(payload+e.API_SECRET, e.API_SECRET)
 	mapParams["api_key"] = e.API_KEY
 
-	url := exchange.Map2UrlQuery(mapParams)
+	url := /* exchange. */ Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath + "?" + url
 
 	request, err := http.NewRequest("GET", strUrl, nil)
@@ -498,18 +505,18 @@ Step 2: Create mapParams Depend on API Signature request*/
 /*
 sign err sometimes due to timestamp lag
 */
-func (e *Cointiger) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+func (e *Cointiger) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]interface{}) string {
 
 	payload := createPayload(mapParams)
-	Params := make(map[string]string)
+	Params := make(map[string]interface{})
 	Params["sign"] = exchange.ComputeHmac512NoDecode(payload+e.API_SECRET, e.API_SECRET)
 	Params["api_key"] = e.API_KEY
 	Params["time"] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)[:13]
 
-	urlParams := exchange.Map2UrlQuery(Params)
+	urlParams := /* exchange. */ Map2UrlQuery(Params)
 	strUrl := API_URL_V2 + strRequestPath + "?" + urlParams
 
-	query := exchange.Map2UrlQuery(mapParams)
+	query := /* exchange. */ Map2UrlQuery(mapParams)
 	values, err := url.ParseQuery(query)
 
 	request, err := http.PostForm(strUrl, values)
@@ -528,7 +535,7 @@ func (e *Cointiger) ApiKeyRequest(strMethod, strRequestPath string, mapParams ma
 	return string(body)
 }
 
-func createPayload(mapParams map[string]string) string {
+func createPayload(mapParams map[string]interface{}) string {
 	var strParams string
 	mapSort := []string{}
 	for key := range mapParams {
@@ -538,6 +545,57 @@ func createPayload(mapParams map[string]string) string {
 
 	for _, key := range mapSort {
 		strParams += key + fmt.Sprintf("%v", mapParams[key])
+	}
+
+	return strParams
+}
+
+func HttpGetRequest(strUrl string, mapParams map[string]interface{}) string {
+	httpClient := &http.Client{}
+
+	var strRequestUrl string
+	if nil == mapParams {
+		strRequestUrl = strUrl
+	} else {
+		strParams := Map2UrlQuery(mapParams)
+		strRequestUrl = strUrl + "?" + strParams
+	}
+
+	request, err := http.NewRequest("GET", strRequestUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("Connection", "close")
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func Map2UrlQuery(mapParams map[string]interface{}) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + "=" + fmt.Sprintf("%v", mapParams[key]) + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
 	}
 
 	return strParams

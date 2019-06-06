@@ -71,7 +71,7 @@ type OrderStatus struct {
 }
 
 type CancelOrder struct {
-	Success []string `json:"success"`
+	Success []int `json:"success"`
 	Failed  []struct {
 		ErrMsg  string `json:"err-msg"`
 		OrderID string `json:"order-id"`
