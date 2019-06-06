@@ -121,8 +121,8 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.TOKOK:
-		config.API_KEY = ""
-		config.API_SECRET = ""
+		config.API_KEY = "5ecac940-b495-48c6-9bd1-dd0e1c6b6b95"
+		config.API_SECRET = "14a9a62e-fcaf-49a8-a4a9-dbaf5921bbff"
 		break
 
 	case exchange.MXC:
@@ -192,8 +192,8 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.DCOIN:
-		config.API_KEY = ""
-		config.API_SECRET = ""
+		config.API_KEY = "1dbi4tegcy2oe3qfte6c84bcrywsm8f2"
+		config.API_SECRET = "1p3k53wtebqa129wht01sr6raq0q6ugb"
 		break
 
 	case exchange.GEMINI:
@@ -202,8 +202,8 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.COINTIGER:
-		config.API_KEY = ""
-		config.API_SECRET = ""
+		config.API_KEY = "fe6d48e4-cf08-4566-b217-3ca8e8c4014c"
+		config.API_SECRET = "NDRhYWViNmE3YzY2OGMzM2FhMjUyZjUxODdjNDBjNTE4NTczOTEyMzcxYmQ1MDg2OGUyZDI4ZGU2MGZhZWMzOA=="
 		break
 	}
 }
