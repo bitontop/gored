@@ -288,15 +288,12 @@ func (e *Coinex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 	}
 
 	jsonResponse := JsonResponse{}
-	timestamp := time.Now().UnixNano() / 1e6
 	withdraw := Withdraw{}
 
 	strRequestUrl := "/v1/balance/coin/withdraw"
-	url := API_URL + strRequestUrl
 
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
-	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 	mapParams["coin_type"] = e.GetSymbolByCoin(coin)
 	mapParams["transfer_method"] = "onchain"
 	mapParams["actual_amount"] = fmt.Sprintf("%.8f", quantity)
@@ -307,7 +304,7 @@ func (e *Coinex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 		mapParams["coin_address"] = addr
 	}
 
-	jsonWithdraw := e.ApiKeyPost(url, mapParams)
+	jsonWithdraw := e.ApiKeyPost(strRequestUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
 		return false
