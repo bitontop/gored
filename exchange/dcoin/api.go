@@ -403,14 +403,18 @@ func (e *Dcoin) CancelOrder(order *exchange.Order) error {
 	strRequestPath := "/cancel_order"
 
 	mapParams := make(map[string]interface{})
-	mapParams["orderId"] = order.OrderID
+	orderID, err := strconv.Atoi(order.OrderID)
+	if err != nil {
+		return fmt.Errorf("%s CancelOrder orderID parse fail: %v, %v", e.GetName(), err, order.OrderID)
+	}
+	mapParams["orderId"] = orderID
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 
 	jsonCancelOrder := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != 0 {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Msg)
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
