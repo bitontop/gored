@@ -232,6 +232,7 @@ func (e *Blank) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.PublicAPI = false
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

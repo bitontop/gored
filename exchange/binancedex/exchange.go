@@ -251,6 +251,7 @@ func (e *BinanceDex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constra
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.HasWithdraw = true
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
