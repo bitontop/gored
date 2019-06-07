@@ -309,14 +309,14 @@ func (e *Coinex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 
 	jsonWithdraw := e.ApiKeyPost(url, mapParams)
 	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
-		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
 		return false
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s UpdateAllBalances Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
+		log.Printf("%s Withdraw Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 		return false
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
-		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return false
 	}
 
