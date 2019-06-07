@@ -230,7 +230,7 @@ func (e *Tokok) UpdateAllBalances() {
 	accountBalance := AccountBalances{}
 	strRequest := "/accounts"
 
-	jsonBalanceReturn := e.ApiKeyRequest("POST", make(map[string]string), strRequest)
+	jsonBalanceReturn := e.ApiKeyRequest("POST", make(map[string]interface{}), strRequest)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -272,7 +272,7 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "2"
 	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
@@ -310,14 +310,15 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	placeOrder := PlaceOrder{}
 	strRequest := "/trade"
 
-	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
-	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+	// priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	// lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "1"
-	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
-	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["entrustPrice"] = rate     //strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["entrustCount"] = quantity //strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["openTok"] = 0
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -351,7 +352,7 @@ func (e *Tokok) OrderStatus(order *exchange.Order) error {
 	orderStatus := OrderStatus{}
 	strRequest := "/order/orderInfo"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["order_id"] = order.OrderID
 
 	jsonOrderStatus := e.ApiKeyRequest("POST", mapParams, strRequest)
@@ -390,7 +391,7 @@ func (e *Tokok) CancelOrder(order *exchange.Order) error {
 	cancelOrder := CancelOrder{}
 	strRequest := "/cancelEntrust"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["order_id"] = order.OrderID
 
 	jsonCancelOrder := e.ApiKeyRequest("POST", mapParams, strRequest)
@@ -415,7 +416,7 @@ func (e *Tokok) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
+func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]interface{}, strRequestPath string) string {
 	nonce := fmt.Sprintf("%v", time.Now().Unix())
 
 	request := &http.Request{}
@@ -423,17 +424,20 @@ func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]string, str
 	var err error
 
 	if strMethod == "GET" {
-		strParams := exchange.Map2UrlQuery(mapParams)
+		strParams := exchange.Map2UrlQueryInterface(mapParams)
 		strRequestUrl = strRequestPath + "?" + strParams
 		request, err = http.NewRequest(strMethod, strRequestUrl, nil)
 	} else {
-		jsonParams := ""
+		/* jsonParams := ""
 		if nil != mapParams {
 			bytesParams, _ := json.Marshal(mapParams)
 			jsonParams = string(bytesParams)
-		}
+		} */
+		payload := exchange.Map2UrlQueryInterface(mapParams)
 		strRequestUrl = API_URL + strRequestPath
-		request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
+		request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(payload))
+		// log.Printf("====jsonParams: %v", jsonParams)
+		// log.Printf("====payload: %v", payload)
 	}
 
 	if nil != err {
@@ -442,11 +446,13 @@ func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]string, str
 
 	mapParams["ACCESS-KEY"] = e.API_KEY
 	mapParams["ACCESS-TIMESTAMP"] = nonce
-	createSign := exchange.Map2UrlQuery(mapParams)
+	createSign := exchange.Map2UrlQueryInterface(mapParams)
 	request.Header.Add("ACCESS-SIGN", exchange.ComputeHmac256Base64(createSign, e.API_SECRET))
 	request.Header.Add("ACCESS-KEY", e.API_KEY)
 	request.Header.Add("ACCESS-TIMESTAMP", nonce)
 	request.Header.Add("Content-Type", "application/json")
+
+	// log.Printf("====createSign: %v", createSign)
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
