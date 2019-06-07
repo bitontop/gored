@@ -356,7 +356,7 @@ func (e *Coinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	} else if placeOrder.Status != "done" {
-		log.Printf("%s LimitBuy not complete, status: %v", e.GetName, placeOrder.Status)
+		log.Printf("%s LimitBuy not complete, status: %v", e.GetName(), placeOrder.Status)
 	}
 
 	order := &exchange.Order{
