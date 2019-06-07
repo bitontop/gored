@@ -35,3 +35,12 @@ type OrderBook struct {
 		Volume string `json:"volume"`
 	} `json:"sells"`
 }
+
+type PlaceOrder struct {
+	OrderID     string `json:"order_id"`
+	Price       string `json:"price"`
+	Status      int    `json:"status"`
+	Timestamp   string `json:"timestamp"`
+	TradeVolume string `json:"trade_volume"`
+	Volume      string `json:"volume"`
+}

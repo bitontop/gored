@@ -229,8 +229,44 @@ func (e *Dragonex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string)
 }
 
 func (e *Dragonex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
 
-	return nil, nil
+	jsonResponse := &JsonResponse{}
+	placeOrder := PlaceOrder{}
+	strRequest := "/api/v1/order/sell/"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
+	mapParams := make(map[string]interface{})
+	symbolID, _ := strconv.Atoi(e.GetSymbolByPair(pair))
+	mapParams["symbol_id"] = symbolID
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+
+	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if !jsonResponse.Ok {
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	order := &exchange.Order{
+		Pair:         pair,
+		OrderID:      placeOrder.OrderID,
+		Rate:         rate,
+		Quantity:     quantity,
+		Side:         "Sell",
+		Status:       exchange.New,
+		JsonResponse: jsonPlaceReturn,
+	}
+
+	return order, nil
 }
 
 func (e *Dragonex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
@@ -261,6 +297,51 @@ func (e *Dragonex) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
+func (e *Dragonex) ApiKeyRequest(strMethod string, mapParams map[string]interface{}, strRequestPath string) string {
+	timestamp := fmt.Sprintf("%v", time.Now().UTC().UnixNano()/1000000) //time.Now().UnixNano() / 1e6
+	//Date: Tue, 15 Nov 1994 08:12:31 GMT
+
+	strRequestUrl := API_URL + strRequestPath
+
+	/* var strRequestUrl string
+	if nil == mapParams {
+		strRequestUrl = API_URL + strRequestPath
+	} else {
+		strParams := exchange.Map2UrlQueryInterface(mapParams)
+		strRequestUrl = API_URL + strRequestPath + "?" + strParams
+	} */
+
+	//signature := fmt.Sprintf("%s&secret_key=%s", exchange.Map2UrlQueryInterface(mapParams), e.API_SECRET)
+
+	request, err := http.NewRequest(strMethod, strRequestUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/json")
+	// request.Header.Add("auth", )
+	// request.Header.Add("token", )
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("Date", timestamp)
+	request.Header.Add("CanonicalizedDragonExHeaders", "")
+
+	// 发出请求
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	// 解析响应内容
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+
+}
+
 func (e *Dragonex) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
 	mapParams["apikey"] = e.API_KEY
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
