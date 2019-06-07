@@ -403,7 +403,7 @@ func (e *Dcoin) CancelOrder(order *exchange.Order) error {
 	strRequestPath := "/cancel_order"
 
 	mapParams := make(map[string]interface{})
-	orderID, err := strconv.Atoi(order.OrderID)
+	orderID, err := strconv.ParseInt(order.OrderID, 10, 64)
 	if err != nil {
 		return fmt.Errorf("%s CancelOrder orderID parse fail: %v, %v", e.GetName(), err, order.OrderID)
 	}
