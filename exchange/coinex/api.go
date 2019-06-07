@@ -317,7 +317,7 @@ func (e *Coinex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 		return false
 	}
 
-	return false
+	return true
 }
 
 func (e *Coinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
