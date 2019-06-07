@@ -312,7 +312,7 @@ func (e *Coinex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
 		return false
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Withdraw Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
 		return false
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
