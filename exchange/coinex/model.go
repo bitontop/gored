@@ -51,3 +51,16 @@ type PairsData struct {
 	TradingName    string `json:"trading_name"`
 	TradingDecimal int    `json:"trading_decimal"`
 }
+
+type Withdraw struct {
+	ActualAmount   string `json:"actual_amount"`
+	Amount         string `json:"amount"`
+	CoinAddress    string `json:"coin_address"`
+	CoinType       string `json:"coin_type"`
+	CoinWithdrawID int    `json:"coin_withdraw_id"`
+	Confirmations  int    `json:"confirmations"`
+	CreateTime     int    `json:"create_time"`
+	Status         string `json:"status"`
+	TxFee          string `json:"tx_fee"`
+	TxID           string `json:"tx_id"`
+}

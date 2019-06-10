@@ -230,6 +230,7 @@ func (e *Poloniex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.HasWithdraw = true
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

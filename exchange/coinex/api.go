@@ -282,7 +282,42 @@ func (e *Coinex) UpdateAllBalances() {
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
 func (e *Coinex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-	return false
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("coinex API Key or Secret Key are nil.")
+		return false
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+
+	strRequestUrl := "/v1/balance/coin/withdraw"
+
+	mapParams := make(map[string]string)
+	mapParams["access_id"] = e.API_KEY
+	mapParams["coin_type"] = e.GetSymbolByCoin(coin)
+	mapParams["transfer_method"] = "onchain"
+	mapParams["actual_amount"] = fmt.Sprintf("%.8f", quantity)
+
+	if tag != "" {
+		mapParams["coin_address"] = fmt.Sprintf("%s:%s", addr, tag)
+	} else {
+		mapParams["coin_address"] = addr
+	}
+
+	jsonWithdraw := e.ApiKeyPost(strRequestUrl, mapParams)
+	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
+		return false
+	} else if jsonResponse.Code != 0 {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
+		return false
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return false
+	}
+
+	return true
 }
 
 func (e *Coinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
@@ -356,7 +391,7 @@ func (e *Coinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	} else if placeOrder.Status != "done" {
-		log.Printf("%s LimitBuy not complete, status: %v", e.GetName, placeOrder.Status)
+		log.Printf("%s LimitBuy not complete, status: %v", e.GetName(), placeOrder.Status)
 	}
 
 	order := &exchange.Order{

@@ -1,4 +1,4 @@
-package lbank
+package bitbay
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -19,7 +19,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-type Lbank struct {
+type Bitbay struct {
 	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
@@ -35,16 +35,16 @@ var pairConstraintMap cmap.ConcurrentMap
 var coinConstraintMap cmap.ConcurrentMap
 var balanceMap cmap.ConcurrentMap
 
-var instance *Lbank
+var instance *Bitbay
 var once sync.Once
 
 /***************************************************/
-func CreateLbank(config *exchange.Config) *Lbank {
+func CreateBitbay(config *exchange.Config) *Bitbay {
 	once.Do(func() {
-		instance = &Lbank{
+		instance = &Bitbay{
 			ID:      DEFAULT_ID,
-			Name:    "Lbank",
-			Website: "https://www.lbank.info/",
+			Name:    "Bitbay",
+			Website: "https://app.bitbay.net",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -64,7 +64,7 @@ func CreateLbank(config *exchange.Config) *Lbank {
 	return instance
 }
 
-func (e *Lbank) InitData() error {
+func (e *Bitbay) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		if err := e.GetCoinsData(); err != nil {
@@ -93,15 +93,15 @@ func (e *Lbank) InitData() error {
 }
 
 /**************** Exchange Information ****************/
-func (e *Lbank) GetID() int {
+func (e *Bitbay) GetID() int {
 	return e.ID
 }
 
-func (e *Lbank) GetName() exchange.ExchangeName {
-	return exchange.LBANK
+func (e *Bitbay) GetName() exchange.ExchangeName {
+	return exchange.BITBAY
 }
 
-func (e *Lbank) GetBalance(coin *coin.Coin) float64 {
+func (e *Bitbay) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
@@ -109,23 +109,23 @@ func (e *Lbank) GetBalance(coin *coin.Coin) float64 {
 	}
 }
 
-func (e *Lbank) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.lbank.info/exchange.html?asset=%s&post=%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+func (e *Bitbay) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://app.bitbay.net/market/%s-%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 /*************** Coins on the Exchanges ***************/
-func (e *Lbank) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
+func (e *Bitbay) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
 	if tmp, ok := coinConstraintMap.Get(fmt.Sprintf("%d", coin.ID)); ok {
 		return tmp.(*exchange.CoinConstraint)
 	}
 	return nil
 }
 
-func (e *Lbank) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
+func (e *Bitbay) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
 	coinConstraintMap.Set(fmt.Sprintf("%d", coinConstraint.CoinID), coinConstraint)
 }
 
-func (e *Lbank) GetCoins() []*coin.Coin {
+func (e *Bitbay) GetCoins() []*coin.Coin {
 	coinList := []*coin.Coin{}
 	keySort := []int{}
 	for _, key := range coinConstraintMap.Keys() {
@@ -142,7 +142,7 @@ func (e *Lbank) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *Lbank) GetSymbolByCoin(coin *coin.Coin) string {
+func (e *Bitbay) GetSymbolByCoin(coin *coin.Coin) string {
 	key := fmt.Sprintf("%d", coin.ID)
 	if tmp, ok := coinConstraintMap.Get(key); ok {
 		cc := tmp.(*exchange.CoinConstraint)
@@ -151,7 +151,7 @@ func (e *Lbank) GetSymbolByCoin(coin *coin.Coin) string {
 	return ""
 }
 
-func (e *Lbank) GetCoinBySymbol(symbol string) *coin.Coin {
+func (e *Bitbay) GetCoinBySymbol(symbol string) *coin.Coin {
 	for _, id := range coinConstraintMap.Keys() {
 		if tmp, ok := coinConstraintMap.Get(id); ok {
 			cc := tmp.(*exchange.CoinConstraint)
@@ -163,23 +163,23 @@ func (e *Lbank) GetCoinBySymbol(symbol string) *coin.Coin {
 	return nil
 }
 
-func (e *Lbank) DeleteCoin(coin *coin.Coin) {
+func (e *Bitbay) DeleteCoin(coin *coin.Coin) {
 	coinConstraintMap.Remove(fmt.Sprintf("%d", coin.ID))
 }
 
 /*************** Pairs on the Exchanges ***************/
-func (e *Lbank) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+func (e *Bitbay) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
 	return nil
 }
 
-func (e *Lbank) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
+func (e *Bitbay) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
 	pairConstraintMap.Set(fmt.Sprintf("%d", pairConstraint.PairID), pairConstraint)
 }
 
-func (e *Lbank) GetPairs() []*pair.Pair {
+func (e *Bitbay) GetPairs() []*pair.Pair {
 	pairList := []*pair.Pair{}
 	keySort := []int{}
 	for _, key := range pairConstraintMap.Keys() {
@@ -196,7 +196,7 @@ func (e *Lbank) GetPairs() []*pair.Pair {
 	return pairList
 }
 
-func (e *Lbank) GetPairBySymbol(symbol string) *pair.Pair {
+func (e *Bitbay) GetPairBySymbol(symbol string) *pair.Pair {
 	for _, id := range pairConstraintMap.Keys() {
 		if tmp, ok := pairConstraintMap.Get(id); ok {
 			pc := tmp.(*exchange.PairConstraint)
@@ -208,7 +208,7 @@ func (e *Lbank) GetPairBySymbol(symbol string) *pair.Pair {
 	return nil
 }
 
-func (e *Lbank) GetSymbolByPair(pair *pair.Pair) string {
+func (e *Bitbay) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
@@ -216,38 +216,38 @@ func (e *Lbank) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
-func (e *Lbank) HasPair(pair *pair.Pair) bool {
+func (e *Bitbay) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }
 
-func (e *Lbank) DeletePair(pair *pair.Pair) {
+func (e *Bitbay) DeletePair(pair *pair.Pair) {
 	pairConstraintMap.Remove(fmt.Sprintf("%d", pair.ID))
 }
 
 /**************** Exchange Constraint ****************/
-func (e *Lbank) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
+func (e *Bitbay) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = true
-	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = true
-	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.LotSize = false
+	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 
-func (e *Lbank) UpdateConstraint() {
+func (e *Bitbay) UpdateConstraint() {
 	e.GetCoinsData()
 	e.GetPairsData()
 }
 
 /**************** Coin Constraint ****************/
-func (e *Lbank) GetTxFee(coin *coin.Coin) float64 {
+func (e *Bitbay) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0.0
@@ -255,7 +255,7 @@ func (e *Lbank) GetTxFee(coin *coin.Coin) float64 {
 	return coinConstraint.TxFee
 }
 
-func (e *Lbank) CanWithdraw(coin *coin.Coin) bool {
+func (e *Bitbay) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -263,7 +263,7 @@ func (e *Lbank) CanWithdraw(coin *coin.Coin) bool {
 	return coinConstraint.Withdraw
 }
 
-func (e *Lbank) CanDeposit(coin *coin.Coin) bool {
+func (e *Bitbay) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -271,7 +271,7 @@ func (e *Lbank) CanDeposit(coin *coin.Coin) bool {
 	return coinConstraint.Deposit
 }
 
-func (e *Lbank) GetConfirmation(coin *coin.Coin) int {
+func (e *Bitbay) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0
@@ -280,7 +280,7 @@ func (e *Lbank) GetConfirmation(coin *coin.Coin) int {
 }
 
 /**************** Pair Constraint ****************/
-func (e *Lbank) GetFee(pair *pair.Pair) float64 {
+func (e *Bitbay) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -288,7 +288,7 @@ func (e *Lbank) GetFee(pair *pair.Pair) float64 {
 	return pairConstraint.TakerFee
 }
 
-func (e *Lbank) GetLotSize(pair *pair.Pair) float64 {
+func (e *Bitbay) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -296,7 +296,7 @@ func (e *Lbank) GetLotSize(pair *pair.Pair) float64 {
 	return pairConstraint.LotSize
 }
 
-func (e *Lbank) GetPriceFilter(pair *pair.Pair) float64 {
+func (e *Bitbay) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0

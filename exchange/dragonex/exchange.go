@@ -230,6 +230,7 @@ func (e *Dragonex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

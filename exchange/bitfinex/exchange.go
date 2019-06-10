@@ -231,6 +231,7 @@ func (e *Bitfinex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

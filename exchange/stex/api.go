@@ -407,7 +407,7 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 		}
 
 		if err := json.Unmarshal(jsonResponse.Data, &orderDetail); err != nil && i == 4 {
-			return fmt.Errorf("%s OrderStatus order does not exist: %v %s", e.GetName(), err, jsonResponse.Data)
+			return fmt.Errorf("%s OrderStatus order does not exist: %v %s", e.GetName(), err, jsonOrderStatus)
 		} else if err == nil {
 			order.Side = orderDetail[order.OrderID].Type
 			var orderAmount, dealAmount float64

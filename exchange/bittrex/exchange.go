@@ -230,6 +230,7 @@ func (e *Bittrex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.HasWithdraw = true
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
