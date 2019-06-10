@@ -67,6 +67,7 @@ const (
 	HITBTC       ExchangeName = "HITBTC"
 	HOTBIT       ExchangeName = "HOTBIT"
 	HUOBI        ExchangeName = "HUOBI"
+	HUOBIDM      ExchangeName = "HUOBIDM"
 	HUOBIOTC     ExchangeName = "HUOBIOTC"
 	IBANKDIGITAL ExchangeName = "IBANKDIGITAL"
 	IDAX         ExchangeName = "IDAX"
@@ -128,10 +129,11 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, IBANKDIGITAL) // ID = 33
 	supportList = append(supportList, LBANK)        // ID = 34
 	// supportList = append(supportList, BINANCEDEX)   // ID = 35
-	supportList = append(supportList, BITMART) // ID = 36
-	// supportList = append(supportList, GEMINI)  // ID = 37
+	supportList = append(supportList, BITMART)   // ID = 36
+	supportList = append(supportList, GEMINI)    // ID = 37
 	supportList = append(supportList, BIKI)      // ID = 38
 	supportList = append(supportList, DCOIN)     // ID = 39
 	supportList = append(supportList, COINTIGER) // ID = 40
 	//supportList = append(supportList, BITBAY)    // ID = 41
+	supportList = append(supportList, HUOBIDM) // ID = 99
 }

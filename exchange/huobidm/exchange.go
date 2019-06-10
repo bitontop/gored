@@ -1,4 +1,4 @@
-package gemini
+package huobidm
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -19,7 +19,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-type Gemini struct {
+type Huobidm struct {
 	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
@@ -35,16 +35,16 @@ var pairConstraintMap cmap.ConcurrentMap
 var coinConstraintMap cmap.ConcurrentMap
 var balanceMap cmap.ConcurrentMap
 
-var instance *Gemini
+var instance *Huobidm
 var once sync.Once
 
 /***************************************************/
-func CreateGemini(config *exchange.Config) *Gemini {
+func CreateHuobidm(config *exchange.Config) *Huobidm {
 	once.Do(func() {
-		instance = &Gemini{
+		instance = &Huobidm{
 			ID:      DEFAULT_ID,
-			Name:    "Gemini",
-			Website: "https://gemini.com/",
+			Name:    "Huobidm",
+			Website: "https://www.hbdm.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -64,7 +64,7 @@ func CreateGemini(config *exchange.Config) *Gemini {
 	return instance
 }
 
-func (e *Gemini) InitData() error {
+func (e *Huobidm) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		if err := e.GetCoinsData(); err != nil {
@@ -93,15 +93,19 @@ func (e *Gemini) InitData() error {
 }
 
 /**************** Exchange Information ****************/
-func (e *Gemini) GetID() int {
+func (e *Huobidm) GetID() int {
 	return e.ID
 }
 
-func (e *Gemini) GetName() exchange.ExchangeName {
-	return exchange.GEMINI
+func (e *Huobidm) GetName() exchange.ExchangeName {
+	return exchange.HUOBIDM
 }
 
-func (e *Gemini) GetBalance(coin *coin.Coin) float64 {
+func (e *Huobidm) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://www.hbdm.com/en-us/contract/exchange/#symbol=%s", e.GetSymbolByCoin(pair.Target))
+}
+
+func (e *Huobidm) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
@@ -109,23 +113,19 @@ func (e *Gemini) GetBalance(coin *coin.Coin) float64 {
 	}
 }
 
-func (e *Gemini) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://exchange.sandbox.gemini.com/trade/%s", e.GetSymbolByPair(pair))
-}
-
 /*************** Coins on the Exchanges ***************/
-func (e *Gemini) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
+func (e *Huobidm) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
 	if tmp, ok := coinConstraintMap.Get(fmt.Sprintf("%d", coin.ID)); ok {
 		return tmp.(*exchange.CoinConstraint)
 	}
 	return nil
 }
 
-func (e *Gemini) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
+func (e *Huobidm) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
 	coinConstraintMap.Set(fmt.Sprintf("%d", coinConstraint.CoinID), coinConstraint)
 }
 
-func (e *Gemini) GetCoins() []*coin.Coin {
+func (e *Huobidm) GetCoins() []*coin.Coin {
 	coinList := []*coin.Coin{}
 	keySort := []int{}
 	for _, key := range coinConstraintMap.Keys() {
@@ -142,7 +142,21 @@ func (e *Gemini) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *Gemini) GetSymbolByCoin(coin *coin.Coin) string {
+func (e *Huobidm) GetCoinBySymbol(symbol string) *coin.Coin {
+	for _, id := range coinConstraintMap.Keys() {
+		if tmp, ok := coinConstraintMap.Get(id); ok {
+			cc := tmp.(*exchange.CoinConstraint)
+			if cc.ExSymbol == symbol {
+				return cc.Coin
+			}
+		} else {
+			log.Printf("Get ID %s CoinConstraint Err", id)
+		}
+	}
+	return nil
+}
+
+func (e *Huobidm) GetSymbolByCoin(coin *coin.Coin) string {
 	key := fmt.Sprintf("%d", coin.ID)
 	if tmp, ok := coinConstraintMap.Get(key); ok {
 		cc := tmp.(*exchange.CoinConstraint)
@@ -151,35 +165,23 @@ func (e *Gemini) GetSymbolByCoin(coin *coin.Coin) string {
 	return ""
 }
 
-func (e *Gemini) GetCoinBySymbol(symbol string) *coin.Coin {
-	for _, id := range coinConstraintMap.Keys() {
-		if tmp, ok := coinConstraintMap.Get(id); ok {
-			cc := tmp.(*exchange.CoinConstraint)
-			if cc.ExSymbol == symbol {
-				return cc.Coin
-			}
-		}
-	}
-	return nil
-}
-
-func (e *Gemini) DeleteCoin(coin *coin.Coin) {
+func (e *Huobidm) DeleteCoin(coin *coin.Coin) {
 	coinConstraintMap.Remove(fmt.Sprintf("%d", coin.ID))
 }
 
 /*************** Pairs on the Exchanges ***************/
-func (e *Gemini) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+func (e *Huobidm) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
 	return nil
 }
 
-func (e *Gemini) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
+func (e *Huobidm) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
 	pairConstraintMap.Set(fmt.Sprintf("%d", pairConstraint.PairID), pairConstraint)
 }
 
-func (e *Gemini) GetPairs() []*pair.Pair {
+func (e *Huobidm) GetPairs() []*pair.Pair {
 	pairList := []*pair.Pair{}
 	keySort := []int{}
 	for _, key := range pairConstraintMap.Keys() {
@@ -196,7 +198,7 @@ func (e *Gemini) GetPairs() []*pair.Pair {
 	return pairList
 }
 
-func (e *Gemini) GetPairBySymbol(symbol string) *pair.Pair {
+func (e *Huobidm) GetPairBySymbol(symbol string) *pair.Pair {
 	for _, id := range pairConstraintMap.Keys() {
 		if tmp, ok := pairConstraintMap.Get(id); ok {
 			pc := tmp.(*exchange.PairConstraint)
@@ -208,7 +210,7 @@ func (e *Gemini) GetPairBySymbol(symbol string) *pair.Pair {
 	return nil
 }
 
-func (e *Gemini) GetSymbolByPair(pair *pair.Pair) string {
+func (e *Huobidm) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
@@ -216,21 +218,20 @@ func (e *Gemini) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
-func (e *Gemini) HasPair(pair *pair.Pair) bool {
+func (e *Huobidm) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }
 
-func (e *Gemini) DeletePair(pair *pair.Pair) {
+func (e *Huobidm) DeletePair(pair *pair.Pair) {
 	pairConstraintMap.Remove(fmt.Sprintf("%d", pair.ID))
 }
 
 /**************** Exchange Constraint ****************/
-func (e *Gemini) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
+func (e *Huobidm) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
@@ -241,13 +242,13 @@ func (e *Gemini) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	return constrainFetchMethod
 }
 
-func (e *Gemini) UpdateConstraint() {
+func (e *Huobidm) UpdateConstraint() {
 	e.GetCoinsData()
 	e.GetPairsData()
 }
 
 /**************** Coin Constraint ****************/
-func (e *Gemini) GetTxFee(coin *coin.Coin) float64 {
+func (e *Huobidm) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0.0
@@ -255,7 +256,7 @@ func (e *Gemini) GetTxFee(coin *coin.Coin) float64 {
 	return coinConstraint.TxFee
 }
 
-func (e *Gemini) CanWithdraw(coin *coin.Coin) bool {
+func (e *Huobidm) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -263,7 +264,7 @@ func (e *Gemini) CanWithdraw(coin *coin.Coin) bool {
 	return coinConstraint.Withdraw
 }
 
-func (e *Gemini) CanDeposit(coin *coin.Coin) bool {
+func (e *Huobidm) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -271,7 +272,7 @@ func (e *Gemini) CanDeposit(coin *coin.Coin) bool {
 	return coinConstraint.Deposit
 }
 
-func (e *Gemini) GetConfirmation(coin *coin.Coin) int {
+func (e *Huobidm) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0
@@ -280,7 +281,7 @@ func (e *Gemini) GetConfirmation(coin *coin.Coin) int {
 }
 
 /**************** Pair Constraint ****************/
-func (e *Gemini) GetFee(pair *pair.Pair) float64 {
+func (e *Huobidm) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -288,7 +289,7 @@ func (e *Gemini) GetFee(pair *pair.Pair) float64 {
 	return pairConstraint.TakerFee
 }
 
-func (e *Gemini) GetLotSize(pair *pair.Pair) float64 {
+func (e *Huobidm) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -296,7 +297,7 @@ func (e *Gemini) GetLotSize(pair *pair.Pair) float64 {
 	return pairConstraint.LotSize
 }
 
-func (e *Gemini) GetPriceFilter(pair *pair.Pair) float64 {
+func (e *Huobidm) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0

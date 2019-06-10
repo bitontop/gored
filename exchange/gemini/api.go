@@ -15,6 +15,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -25,7 +26,7 @@ import (
 )
 
 const (
-	API_URL string = "https://api.gemini.com/v1"
+	API_URL string = "https://api.sandbox.gemini.com"
 )
 
 /*API Base Knowledge
@@ -178,7 +179,7 @@ func (e *Gemini) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	strRequestUrl := fmt.Sprintf("/book/%s", symbol)
+	strRequestUrl := fmt.Sprintf("/v1/book/%s", symbol)
 	strUrl := API_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
@@ -227,31 +228,19 @@ func (e *Gemini) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-// public done, balance done, signature half done
-
 /*************** Private API ***************/
 func (e *Gemini) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
 	}
-
-	errResponse := ErrorResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/balances"
+	strRequest := "/v1/balances"
 
 	mapParams := make(map[string]interface{})
-	mapParams["request"] = "/v1/balances"
+	mapParams["request"] = strRequest
 
 	jsonBalanceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonBalanceReturn), &errResponse); err != nil {
-		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
-		return
-	} else if errResponse.Result == "error" {
-		log.Printf("%s UpdateAllBalances Failed: %+v", e.GetName(), errResponse)
-		return
-	}
-
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -270,32 +259,25 @@ func (e *Gemini) UpdateAllBalances() {
 	}
 }
 
-// todo ↓
-
+/*
+txHash is Only shown for ETH and GUSD withdrawals.
+withdrawalID and message are Only shown for BTC, ZEC, LTC and BCH withdrawals.
+*/
 func (e *Gemini) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())
 		return false
 	}
+	withdrawal := Withdrawal{}
+	strRequest := "/v1/withdraw" + "/" + strings.ToLower(coin.Code)
 
-	mapParams := make(map[string]string)
-	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams := make(map[string]interface{})
+	mapParams["request"] = strRequest
 	mapParams["address"] = addr
+	mapParams["ammount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
-	errResponse := &ErrorResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/account/withdraw"
-
-	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &errResponse); err != nil {
-		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
-		return false
-	} else if errResponse.Result == "error" {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), errResponse)
-		return false
-	}
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &uuid); err != nil {
+	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdrawal); err != nil {
 		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonSubmitWithdraw)
 		return false
 	}
@@ -306,29 +288,25 @@ func (e *Gemini) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
+	sellorder := PlaceOrder{}
+	strRequest := "/v1/order/new"
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams := make(map[string]interface{})
+	mapParams["request"] = strRequest
+	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["side"] = "sell"
+	mapParams["type"] = "exchange limit"
 
-	errResponse := &ErrorResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/selllimit"
-
-	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &errResponse); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if errResponse.Result == "error" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), errResponse)
-	}
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &uuid); err != nil {
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &sellorder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      sellorder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -343,29 +321,25 @@ func (e *Gemini) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
+	buyorder := PlaceOrder{}
+	strRequest := "/v1/order/new"
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams := make(map[string]interface{})
+	mapParams["request"] = strRequest
+	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["side"] = "buy"
+	mapParams["type"] = "exchange limit"
 
-	errResponse := &ErrorResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/buylimit"
-
-	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &errResponse); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if errResponse.Result == "error" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), errResponse)
-	}
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &uuid); err != nil {
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &buyorder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      buyorder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -379,32 +353,28 @@ func (e *Gemini) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
-
-	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
-
-	errResponse := &ErrorResponse{}
 	orderStatus := PlaceOrder{}
-	strRequest := "/v1.1/account/getorder"
+	strRequest := "/v1/order/status"
 
-	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderStatus), &errResponse); err != nil {
-		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if errResponse.Result == "error" {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), errResponse)
-	}
+	id, _ := strconv.ParseInt(order.OrderID, 0, 0)
+
+	mapParams := make(map[string]interface{})
+	mapParams["request"] = strRequest
+	mapParams["order_id"] = id
+
+	jsonOrderStatus := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonOrderStatus)
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.CancelInitiated {
-		order.Status = exchange.Canceling
-	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
+	if orderStatus.IsCancelled {
 		order.Status = exchange.Canceled
-	} else if orderStatus.QuantityRemaining == 0 {
+	} else if !orderStatus.IsLive && orderStatus.RemainingAmount != "0" {
+		order.Status = exchange.Canceling
+	} else if orderStatus.RemainingAmount == "0" {
 		order.Status = exchange.Filled
-	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {
+	} else if orderStatus.IsLive && orderStatus.ExecutedAmount != "0" {
 		order.Status = exchange.Partial
 	} else {
 		order.Status = exchange.New
@@ -421,20 +391,14 @@ func (e *Gemini) CancelOrder(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
-
-	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
-
-	errResponse := &ErrorResponse{}
 	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	strRequest := "/v1/order/cancel"
 
-	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonCancelOrder), &errResponse); err != nil {
-		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if errResponse.Result == "error" {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), errResponse)
-	}
+	mapParams := make(map[string]interface{})
+	mapParams["request"] = strRequest
+	mapParams["order_id"] = order.OrderID
+
+	jsonCancelOrder := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonCancelOrder)
 	}
@@ -455,21 +419,19 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Gemini) ApiKeyRequest(strMethod string, strRequestPath string, mapParams map[string]interface{}) string {
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano()) //time.Now().UnixNano() //fmt.Sprintf("%d", time.Now().UnixNano())
+	mapParams["nonce"] = /* fmt.Sprintf("%d",  */ time.Now().UnixNano() //)
 
 	strUrl := API_URL + strRequestPath
 
-	//jsonParams := ""
 	var bytesParams []byte
 	if nil != mapParams {
 		bytesParams, _ = json.Marshal(mapParams)
-		//	jsonParams = string(bytesParams)
 	}
 
 	b64 := base64.StdEncoding.EncodeToString(bytesParams)
 	signature := ComputeHmac384NoDecode(b64, e.API_SECRET)
 
-	request, err := http.NewRequest("POST", strUrl, bytes.NewBuffer([]byte{})) //nil
+	request, err := http.NewRequest("POST", strUrl, bytes.NewBuffer(bytesParams))
 	if nil != err {
 		return err.Error()
 	}
@@ -480,57 +442,6 @@ func (e *Gemini) ApiKeyRequest(strMethod string, strRequestPath string, mapParam
 	request.Header.Add("X-GEMINI-PAYLOAD", b64)
 	request.Header.Add("X-GEMINI-SIGNATURE", signature)
 	request.Header.Add("Cache-Control", "no-cache")
-
-	httpClient := &http.Client{}
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-}
-
-// need to delete this
-func (e *Gemini) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-
-	strUrl := API_URL + strRequestPath
-
-	//jsonParams := ""
-	var bytesParams []byte
-	if nil != mapParams {
-		bytesParams, _ = json.Marshal(mapParams)
-		//	jsonParams = string(bytesParams)
-	}
-
-	b64 := base64.StdEncoding.EncodeToString([]byte(bytesParams))
-	signature := ComputeHmac384NoDecode(b64, e.API_SECRET)
-
-	//-----------
-
-	//=============
-
-	request, err := http.NewRequest("POST", strUrl, bytes.NewBuffer([]byte{}))
-	if nil != err {
-		return err.Error()
-	}
-
-	request.Header.Add("Content-Length", "0")
-	request.Header.Add("Content-Type", "text/plain")
-	request.Header.Add("X-GEMINI-APIKEY", e.API_KEY)
-	request.Header.Add("X-GEMINI-PAYLOAD", b64)
-	request.Header.Add("X-GEMINI-SIGNATURE", signature)
-	request.Header.Add("Cache-Control", "no-cache")
-	log.Printf("====b64: %v, signature: %v", b64, signature)
-
-	// request.Header.Add("Content-Type", "application/json;charset=utf-8")
-	// request.Header.Add("Accept", "application/json")
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
