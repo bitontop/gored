@@ -228,7 +228,7 @@ func (e *Dragonex) DeletePair(pair *pair.Pair) {
 func (e *Dragonex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false

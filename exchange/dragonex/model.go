@@ -15,6 +15,7 @@ type JsonResponse struct {
 	Data json.RawMessage `json:"data"`
 }
 
+// public
 type CoinsData []struct {
 	CoinID int    `json:"coin_id"`
 	Code   string `json:"code"`
@@ -36,6 +37,19 @@ type OrderBook struct {
 	} `json:"sells"`
 }
 
+// private
+type Token struct {
+	ExpireTime int    `json:"expire_time"`
+	Token      string `json:"token"`
+}
+
+type AccountBalances []struct {
+	Code   string `json:"code"`
+	CoinID int    `json:"coin_id"`
+	Frozen string `json:"frozen"`
+	Volume string `json:"volume"`
+}
+
 type PlaceOrder struct {
 	OrderID     string `json:"order_id"`
 	Price       string `json:"price"`
@@ -43,4 +57,17 @@ type PlaceOrder struct {
 	Timestamp   string `json:"timestamp"`
 	TradeVolume string `json:"trade_volume"`
 	Volume      string `json:"volume"`
+}
+
+type OrderStatus struct {
+	OrderID      string `json:"order_id"`
+	OrderType    int    `json:"order_type"`
+	Price        string `json:"price"`
+	Status       int    `json:"status"`
+	SymbolID     string `json:"symbol_id"`
+	Timestamp    string `json:"timestamp"`
+	TradeVolume  string `json:"trade_volume"`
+	Volume       string `json:"volume"`
+	ActualAmount string `json:"actual_amount"`
+	ActualFee    string `json:"actual_fee"`
 }
