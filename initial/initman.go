@@ -28,6 +28,7 @@ import (
 	"github.com/bitontop/gored/exchange/gemini"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
+	"github.com/bitontop/gored/exchange/huobidm"
 	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/ibankdigital"
 	"github.com/bitontop/gored/exchange/idex"
@@ -331,6 +332,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.GEMINI:
 		ex := gemini.CreateGemini(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.HUOBIDM:
+		ex := huobidm.CreateHuobidm(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

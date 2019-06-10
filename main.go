@@ -32,6 +32,7 @@ import (
 	"github.com/bitontop/gored/exchange/gemini"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
+	"github.com/bitontop/gored/exchange/huobidm"
 	"github.com/bitontop/gored/exchange/ibankdigital"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
@@ -131,6 +132,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBiki(config)
 	InitCointiger(config)
 	InitGemini(config)
+	InitHuobidm(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -433,6 +435,15 @@ func InitCointiger(config *exchange.Config) {
 func InitGemini(config *exchange.Config) {
 	conf.Exchange(exchange.GEMINI, config)
 	ex := gemini.CreateGemini(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitHuobidm(config *exchange.Config) {
+	conf.Exchange(exchange.HUOBIDM, config)
+	ex := huobidm.CreateHuobidm(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
