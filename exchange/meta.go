@@ -46,6 +46,7 @@ const (
 	BITZ         ExchangeName = "BITZ"
 	BLANK        ExchangeName = "BLANK"
 	BLEUTRADE    ExchangeName = "BLEUTRADE"
+	COINALL      ExchangeName = "COINALL"
 	COINMEX      ExchangeName = "COINMEX"
 	COINBASE     ExchangeName = "COINBASE"
 	COINBENE     ExchangeName = "COINBENE"
@@ -129,8 +130,8 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, IBANKDIGITAL) // ID = 33
 	supportList = append(supportList, LBANK)        // ID = 34
 	// supportList = append(supportList, BINANCEDEX)   // ID = 35
-	supportList = append(supportList, BITMART)   // ID = 36
-	supportList = append(supportList, GEMINI)    // ID = 37
+	supportList = append(supportList, BITMART) // ID = 36
+	// supportList = append(supportList, GEMINI)    // ID = 37
 	supportList = append(supportList, BIKI)      // ID = 38
 	supportList = append(supportList, DCOIN)     // ID = 39
 	supportList = append(supportList, COINTIGER) // ID = 40

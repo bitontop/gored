@@ -24,16 +24,38 @@ func Test_BitATM(t *testing.T) {
 
 	pair := pair.GetPairByKey("BHD|BTC")
 
-	Test_Coins(e)
-	Test_Pairs(e)
-	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Coins(e)
+	// Test_Pairs(e)
+	// Test_Pair(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 
-	//Test_Balance(e, pair)
-	//Test_Trading(e, pair, 0.00000001, 100)
+	Test_Balance(e, pair)
+	Test_Trading(e, pair, 0.001, 100)
 	//Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+}
+
+func Test_BitatmOrder(t *testing.T) {
+	e := InitBitATM()
+
+	pair := pair.GetPairByKey("BHD|BTC")
+
+	order := &exchange.Order{
+		Pair:     pair,
+		OrderID:  "123456",
+		Rate:     0.001,
+		Quantity: 100,
+		Side:     "Buy",
+		Status:   exchange.New,
+	}
+
+	err := e.OrderStatus(order)
+	if err == nil {
+		log.Printf("%s Order Status: %v", e.GetName(), order)
+	} else {
+		log.Printf("%s Order Status Err: %s", e.GetName(), err)
+	}
 }
 
 func InitBitATM() exchange.Exchange {

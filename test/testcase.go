@@ -115,6 +115,25 @@ func Test_Trading_Sell(e exchange.Exchange, p *pair.Pair, rate, quantity float64
 	}
 }
 
+// check auth only
+func Test_OrderStatus(e exchange.Exchange, p *pair.Pair) {
+	order := &exchange.Order{
+		Pair:     p,
+		OrderID:  "123456",
+		Rate:     0.001,
+		Quantity: 100,
+		Side:     "Buy",
+		Status:   exchange.New,
+	}
+
+	err := e.OrderStatus(order)
+	if err == nil {
+		log.Printf("%s Order Status: %v", e.GetName(), order)
+	} else {
+		log.Printf("%s Order Status Err: %s", e.GetName(), err)
+	}
+}
+
 func Test_Withdraw(e exchange.Exchange, c *coin.Coin, amount float64, addr string) {
 	if e.Withdraw(c, amount, addr, "tag") {
 		log.Printf("%s %s Withdraw Successful!", e.GetName(), c.Code)
