@@ -228,14 +228,6 @@ func (e *Dragonex) UpdateAllBalances() {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
 	}
-	//---------------
-	//key := "ThisIsAccessKey"
-	/* secret := "ThisIsSecretKey"
-	strMessage := "POST" + "\n" + "123abc" + "\n" + "application/json" + "\n" + "Mon, 01 Jan 2018 08:08:08 GMT" + "\n" + "dragonex-atruth:DragonExIsTheBest" + "\n" + "dragonex-btruth:DragonExIsTheBest2" + "\n" + "/api/v1/token/new/"
-	signature := (ComputeHmac1(strMessage, secret))
-	//signature := ComputeHmac1(strMessage, secret)
-	log.Printf("=====strMessage: %v, signature: %v", strMessage, signature) */
-	//------------------
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
@@ -249,15 +241,13 @@ func (e *Dragonex) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if jsonResponse.Code != 1 {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonBalanceReturn)
+		log.Printf("%s UpdateAllBalances Failed: %v, %s", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 		return
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return
 	}
-
-	log.Printf("====jsonBalanceReturn: %v", jsonBalanceReturn)
 
 	for _, balance := range accountBalance {
 		c := e.GetCoinBySymbol(fmt.Sprintf("%v", balance.CoinID))
@@ -298,7 +288,7 @@ func (e *Dragonex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 1 {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v, %s", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -339,7 +329,7 @@ func (e *Dragonex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 1 {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v, %s", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -373,13 +363,13 @@ func (e *Dragonex) OrderStatus(order *exchange.Order) error {
 	symbolID, _ := strconv.Atoi(e.GetSymbolByPair(order.Pair))
 	orderID, _ := strconv.Atoi(order.OrderID)
 	mapParams["symbol_id"] = symbolID
-	mapParams["order_id"] = orderID // string or int?
+	mapParams["order_id"] = orderID
 
 	jsonOrderStatus := e.ApiKeyRequest("POST", mapParams, strRequest, false)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 1 {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
+		return fmt.Errorf("%s OrderStatus Failed: %v, %s", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -430,7 +420,7 @@ func (e *Dragonex) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != 1 {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
+		return fmt.Errorf("%s CancelOrder Failed: %v, %s", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -452,10 +442,10 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 // token limit 100 times/day, valid 24h
-func (e *Dragonex) GetToken() string {
+func (e *Dragonex) GetToken() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())
-		return ""
+		return
 	}
 
 	jsonResponse := &JsonResponse{}
@@ -465,35 +455,28 @@ func (e *Dragonex) GetToken() string {
 	jsonTokenReturn := e.ApiKeyRequest("POST", nil, strRequest, true)
 	if err := json.Unmarshal([]byte(jsonTokenReturn), &jsonResponse); err != nil {
 		log.Printf("%s GetToken Json Unmarshal Err: %v %v", e.GetName(), err, jsonTokenReturn)
-		return ""
+		return
 	} else if !jsonResponse.Ok {
-		log.Printf("%s GetToken Failed: %v", e.GetName(), jsonTokenReturn)
-		return ""
+		log.Printf("%s GetToken Failed: %v, %s", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &token); err != nil {
 		log.Printf("%s GetToken Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return ""
+		return
 	}
 
-	log.Printf("====Token: %v, Token expire time: %v", token.Token, token.ExpireTime) //=================
-
-	return token.Token
+	e.Token = token.Token
 }
 
 func (e *Dragonex) ApiKeyRequest(strMethod string, mapParams map[string]interface{}, strRequestPath string, getToken bool) string {
-	//timestamp := fmt.Sprintf("%v", time.Now().UTC().UnixNano()/1000000) //time.Now().UnixNano() / 1e6
-	timestamp := time.Now().UTC().Format("Mon, 02 Jan 2006 15:04:05 GMT")
-	//Date: Tue, 15 Nov 1994 08:12:31 GMT
 
+	timestamp := time.Now().UTC().Format("Mon, 02 Jan 2006 15:04:05 GMT")
 	strRequestUrl := API_URL + strRequestPath
 
-	/* var strRequestUrl string
-	if nil == mapParams {
-		strRequestUrl = API_URL + strRequestPath
-	} else {
-		strParams := exchange.Map2UrlQueryInterface(mapParams)
-		strRequestUrl = API_URL + strRequestPath + "?" + strParams
-	} */
+	updateToken := false
+	if time.Now().UTC().YearDay() != e.LastDay || time.Now().UTC().Hour() != e.LastHour {
+		updateToken = true
+	}
 
 	jsonParams := ""
 	if nil != mapParams {
@@ -501,10 +484,8 @@ func (e *Dragonex) ApiKeyRequest(strMethod string, mapParams map[string]interfac
 		jsonParams = string(bytesParams)
 	}
 
-	//signature := fmt.Sprintf("%s&secret_key=%s", exchange.Map2UrlQueryInterface(mapParams), e.API_SECRET)
 	strMessage := strMethod + "\n" + "\n" + "application/json" + "\n" + timestamp + "\n" + strRequestPath
 	signature := ComputeHmac1(strMessage, e.API_SECRET)
-	// log.Printf("=====strMessage: %v, signature: %v", strMessage, signature)
 
 	request, err := http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
 	if nil != err {
@@ -513,8 +494,12 @@ func (e *Dragonex) ApiKeyRequest(strMethod string, mapParams map[string]interfac
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("auth", e.API_KEY+":"+signature)
 	if !getToken {
-		token := e.GetToken()
-		request.Header.Add("token", token)
+		if updateToken {
+			e.GetToken()
+			e.LastDay = time.Now().UTC().YearDay()
+			e.LastHour = time.Now().UTC().Hour()
+		}
+		request.Header.Add("token", e.Token)
 	}
 
 	//// request.Header.Add("Content-Sha1", )
@@ -572,10 +557,6 @@ func (e *Dragonex) ApiKeyGET(strRequestPath string, mapParams map[string]string)
 }
 
 func ComputeHmac1(strMessage string, strSecret string) string {
-	/* h1 := sha1.New()
-	io.WriteString(h1, strMessage)
-	fmt.Printf("%x\n", h1.Sum(nil)) */
-
 	key := []byte(strSecret)
 	h := hmac.New(sha1.New, key)
 	h.Write([]byte(strMessage))

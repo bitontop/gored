@@ -54,7 +54,7 @@ type PlaceOrder struct {
 	OrderID     string `json:"order_id"`
 	Price       string `json:"price"`
 	Status      int    `json:"status"`
-	Timestamp   string `json:"timestamp"`
+	Timestamp   int    `json:"timestamp"`
 	TradeVolume string `json:"trade_volume"`
 	Volume      string `json:"volume"`
 }
@@ -64,8 +64,8 @@ type OrderStatus struct {
 	OrderType    int    `json:"order_type"`
 	Price        string `json:"price"`
 	Status       int    `json:"status"`
-	SymbolID     string `json:"symbol_id"`
-	Timestamp    string `json:"timestamp"`
+	SymbolID     int    `json:"symbol_id"`
+	Timestamp    int    `json:"timestamp"`
 	TradeVolume  string `json:"trade_volume"`
 	Volume       string `json:"volume"`
 	ActualAmount string `json:"actual_amount"`

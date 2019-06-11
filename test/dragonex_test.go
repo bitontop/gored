@@ -20,7 +20,7 @@ import (
 func Test_Dragonex(t *testing.T) {
 	e := InitDragonex()
 
-	pair := pair.GetPairByKey("BTC|ZEC")
+	pair := pair.GetPairByKey("ETH|WAN")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -29,8 +29,9 @@ func Test_Dragonex(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.0015, 1)
+	// Test_Trading_Sell(e, pair, 0.0022, 1)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 

@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"sync"
+	"time"
 
 	cmap "github.com/orcaman/concurrent-map"
 
@@ -26,6 +27,9 @@ type Dragonex struct {
 
 	API_KEY    string
 	API_SECRET string
+	LastDay    int
+	LastHour   int
+	Token      string
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -48,6 +52,9 @@ func CreateDragonex(config *exchange.Config) *Dragonex {
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
+			LastDay:    time.Now().UTC().YearDay() - 1,
+			LastHour:   time.Now().UTC().Hour(),
+			Token:      "",
 			Source:     config.Source,
 			SourceURI:  config.SourceURI,
 		}
