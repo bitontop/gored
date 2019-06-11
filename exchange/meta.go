@@ -46,6 +46,7 @@ const (
 	BITZ         ExchangeName = "BITZ"
 	BLANK        ExchangeName = "BLANK"
 	BLEUTRADE    ExchangeName = "BLEUTRADE"
+	COINALL      ExchangeName = "COINALL"
 	COINMEX      ExchangeName = "COINMEX"
 	COINBASE     ExchangeName = "COINBASE"
 	COINBENE     ExchangeName = "COINBENE"
