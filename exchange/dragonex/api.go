@@ -5,9 +5,6 @@ package dragonex
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"crypto/hmac"
-	"crypto/sha1"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -485,7 +482,7 @@ func (e *Dragonex) ApiKeyRequest(strMethod string, mapParams map[string]interfac
 	}
 
 	strMessage := strMethod + "\n" + "\n" + "application/json" + "\n" + timestamp + "\n" + strRequestPath
-	signature := ComputeHmac1(strMessage, e.API_SECRET)
+	signature := exchange.ComputeHmac1(strMessage, e.API_SECRET)
 
 	request, err := http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
 	if nil != err {
@@ -523,43 +520,4 @@ func (e *Dragonex) ApiKeyRequest(strMethod string, mapParams map[string]interfac
 
 	return string(body)
 
-}
-
-func (e *Dragonex) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["apikey"] = e.API_KEY
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
-
-	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
-	httpClient := &http.Client{}
-
-	request, err := http.NewRequest("GET", strUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("Content-Type", "application/json;charset=utf-8")
-	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-}
-
-func ComputeHmac1(strMessage string, strSecret string) string {
-	key := []byte(strSecret)
-	h := hmac.New(sha1.New, key)
-	h.Write([]byte(strMessage))
-
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
