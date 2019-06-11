@@ -17,9 +17,9 @@ type JsonResponse struct {
 }
 
 type AccountBalances []struct {
-	Currency string `json:"currency"`
-	Balance  int    `json:"balance"`
-	Frozen   int    `json:"frozen"`
+	Currency string  `json:"currency"`
+	Balance  float64 `json:"balance"`
+	Frozen   float64 `json:"frozen"`
 }
 
 type Withdrawal struct {
@@ -27,16 +27,16 @@ type Withdrawal struct {
 	Withdrawid int64 `json:"withdrawid"`
 }
 
-type PlaceOrder struct {
-	Orderid           int       `json:"orderid"`
-	Ordertype         int       `json:"ordertype"`
-	Direction         int       `json:"direction"`
-	Price             int       `json:"price"`
-	Amount            int       `json:"amount"`
-	Transactionamount int       `json:"transactionamount"`
-	Fee               int       `json:"fee"`
+type OrderStatus struct {
+	Orderid           int64     `json:"orderid"`
+	Ordertype         int32     `json:"ordertype"`
+	Direction         int32     `json:"direction"`
+	Price             float64   `json:"price"`
+	Amount            float64   `json:"amount"`
+	Transactionamount float64   `json:"transactionamount"`
+	Fee               float64   `json:"fee"`
 	Symbol            string    `json:"symbol"`
-	Orderstatus       int       `json:"orderstatus"`
+	Orderstatus       int32     `json:"orderstatus"`
 	Updatetime        time.Time `json:"updatetime"`
 	Createtime        time.Time `json:"createtime"`
 	Basecurrency      string    `json:"basecurrency"`
