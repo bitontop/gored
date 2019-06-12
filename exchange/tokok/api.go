@@ -269,20 +269,22 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := PlaceOrder{}
 	strRequest := "/trade"
 
-	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
-	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+	price := float64(int(rate/e.GetPriceFilter(pair)+e.GetPriceFilter(pair)/10)) * (e.GetPriceFilter(pair))
+	amount := float64(int(quantity/e.GetLotSize(pair)+e.GetLotSize(pair)/10)) * (e.GetLotSize(pair))
 
 	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "2"
-	mapParams["entrustPrice"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
-	mapParams["entrustCount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["entrustPrice"] = price
+	mapParams["entrustCount"] = amount
+	mapParams["openTok"] = 1
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	// log.Printf("====Sell return: %+v", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !jsonResponse.Result {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -310,21 +312,22 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	placeOrder := PlaceOrder{}
 	strRequest := "/trade"
 
-	// priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
-	// lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+	price := float64(int(rate/e.GetPriceFilter(pair)+e.GetPriceFilter(pair)/10)) * (e.GetPriceFilter(pair))
+	amount := float64(int(quantity/e.GetLotSize(pair)+e.GetLotSize(pair)/10)) * (e.GetLotSize(pair))
 
 	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["type"] = "1"
-	mapParams["entrustPrice"] = rate     //strconv.FormatFloat(rate, 'f', priceFilter, 64)
-	mapParams["entrustCount"] = quantity //strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["entrustPrice"] = price
+	mapParams["entrustCount"] = amount
 	mapParams["openTok"] = 0
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	// log.Printf("====Buy return: %+v", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !jsonResponse.Result {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -428,14 +431,14 @@ func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]interface{}
 		strRequestUrl = strRequestPath + "?" + strParams
 		request, err = http.NewRequest(strMethod, strRequestUrl, nil)
 	} else {
-		/* jsonParams := ""
+		jsonParams := ""
 		if nil != mapParams {
 			bytesParams, _ := json.Marshal(mapParams)
 			jsonParams = string(bytesParams)
-		} */
+		}
 		payload := exchange.Map2UrlQueryInterface(mapParams)
-		strRequestUrl = API_URL + strRequestPath
-		request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(payload))
+		strRequestUrl = API_URL + strRequestPath + "?" + payload
+		request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
 		// log.Printf("====jsonParams: %v", jsonParams)
 		// log.Printf("====payload: %v", payload)
 	}
@@ -452,6 +455,7 @@ func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]interface{}
 	request.Header.Add("ACCESS-TIMESTAMP", nonce)
 	request.Header.Add("Content-Type", "application/json")
 
+	// log.Printf("====mapParams: %+v", mapParams)
 	// log.Printf("====createSign: %v", createSign)
 
 	httpClient := &http.Client{}
@@ -468,6 +472,60 @@ func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]interface{}
 
 	return string(body)
 }
+
+/* func (e *Tokok) ApiKeyRequest(strMethod string, mapParams map[string]interface{}, strRequestPath string) string {
+	nonce := fmt.Sprintf("%v", time.Now().Unix())
+
+	request := &http.Request{}
+	var strRequestUrl string
+	var err error
+
+	if strMethod == "GET" {
+		strParams := exchange.Map2UrlQueryInterface(mapParams)
+		strRequestUrl = strRequestPath + "?" + strParams
+		request, err = http.NewRequest(strMethod, strRequestUrl, nil)
+	} else {
+		jsonParams := ""
+		if nil != mapParams {
+			bytesParams, _ := json.Marshal(mapParams)
+			jsonParams = string(bytesParams)
+		}
+		payload := exchange.Map2UrlQueryInterface(mapParams)
+		strRequestUrl = API_URL + strRequestPath + "?" + payload
+		request, err = http.NewRequest(strMethod, strRequestUrl, nil) //strings.NewReader(payload))
+		// log.Printf("====jsonParams: %v", jsonParams)
+		log.Printf("====payload: %v", payload)
+	}
+
+	if nil != err {
+		return err.Error()
+	}
+
+	mapParams["ACCESS-KEY"] = e.API_KEY
+	mapParams["ACCESS-TIMESTAMP"] = nonce
+	createSign := exchange.Map2UrlQueryInterface(mapParams)
+	request.Header.Add("ACCESS-SIGN", exchange.ComputeHmac256Base64(createSign, e.API_SECRET))
+	request.Header.Add("ACCESS-KEY", e.API_KEY)
+	request.Header.Add("ACCESS-TIMESTAMP", nonce)
+	request.Header.Add("Content-Type", "application/json")
+
+	log.Printf("====mapParams: %+v", mapParams)
+	log.Printf("====createSign: %v", createSign)
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+} */
 
 func (e *Tokok) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
 	mapParams["apikey"] = e.API_KEY
