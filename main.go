@@ -443,7 +443,6 @@ func InitHuobidm(config *exchange.Config) {
 	exMan.Add(ex)
 }
 
-<<<<<<< HEAD
 func InitBw(config *exchange.Config) {
 	conf.Exchange(exchange.BW, config)
 	ex := bw.CreateBw(config)
