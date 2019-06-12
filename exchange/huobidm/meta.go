@@ -5,7 +5,7 @@ package huobidm
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 const (
-	DEFAULT_ID           = 99
+	DEFAULT_ID           = 42
 	DEFAULT_TAKER_FEE    = 0.0003
 	DEFAULT_MAKER_FEE    = 0.0002
 	DEFAULT_LOT_SIZE     = 1
