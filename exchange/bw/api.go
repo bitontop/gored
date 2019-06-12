@@ -146,7 +146,7 @@ func (e *Bw) GetPairsData() error {
 					TakerFee:    DEFAULT_TAKER_FEE,
 					LotSize:     float64(data.AmountDecimal),
 					PriceFilter: float64(data.PriceDecimal),
-					Listed:      true,
+					Listed:      data.State == 1,
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
