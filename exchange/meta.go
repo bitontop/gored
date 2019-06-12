@@ -137,12 +137,9 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BIKI)      // ID = 38
 	supportList = append(supportList, DCOIN)     // ID = 39
 	supportList = append(supportList, COINTIGER) // ID = 40
-<<<<<<< HEAD
 	//supportList = append(supportList, BITBAY)    // ID = 41
 	supportList = append(supportList, HUOBIDM) // ID = 99
 	supportList = append(supportList, BW)      // ID = 42
-=======
 	supportList = append(supportList, BITBAY)    // ID = 41
 	supportList = append(supportList, HUOBIDM)   // ID = 99
->>>>>>> da4604d358775d44a77b19ec654fab9ccd92f352
 }
