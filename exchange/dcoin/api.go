@@ -407,7 +407,7 @@ func (e *Dcoin) CancelOrder(order *exchange.Order) error {
 	if err != nil {
 		return fmt.Errorf("%s CancelOrder orderID parse fail: %v, %v", e.GetName(), err, order.OrderID)
 	}
-	mapParams["orderId"] = orderID
+	mapParams["order_id"] = orderID
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 
 	jsonCancelOrder := e.ApiKeyRequest("POST", strRequestPath, mapParams)
