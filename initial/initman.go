@@ -18,6 +18,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/coinbene"
 	"github.com/bitontop/gored/exchange/coineal"
 	"github.com/bitontop/gored/exchange/coinex"
@@ -331,6 +332,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.HUOBIDM:
 		ex := huobidm.CreateHuobidm(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BW:
+		ex := bw.CreateBw(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
