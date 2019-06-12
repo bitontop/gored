@@ -121,8 +121,8 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.TOKOK:
-		config.API_KEY = "5ecac940-b495-48c6-9bd1-dd0e1c6b6b95"
-		config.API_SECRET = "14a9a62e-fcaf-49a8-a4a9-dbaf5921bbff"
+		config.API_KEY = ""
+		config.API_SECRET = ""
 		break
 
 	case exchange.MXC:
@@ -176,9 +176,9 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.BITMART:
-		config.API_KEY = "3e43d35bbeefeb881b4de213dc01042f"
-		config.API_SECRET = "fa65bc32e69c1b7f2f8965ca7cf5d4fa"
-		config.Passphrase = "key3" // key name
+		config.API_KEY = ""
+		config.API_SECRET = ""
+		config.Passphrase = "" // key name
 		break
 
 	case exchange.BIKI:
