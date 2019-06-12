@@ -15,6 +15,7 @@ import (
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/biki"
 	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/bitbay"
 	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
@@ -131,6 +132,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBiki(config)
 	InitCointiger(config)
 	InitHuobidm(config)
+	InitBitbay(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -433,6 +435,15 @@ func InitCointiger(config *exchange.Config) {
 func InitHuobidm(config *exchange.Config) {
 	conf.Exchange(exchange.HUOBIDM, config)
 	ex := huobidm.CreateHuobidm(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBitbay(config *exchange.Config) {
+	conf.Exchange(exchange.BITBAY, config)
+	ex := bitbay.CreateBitbay(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
