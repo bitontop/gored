@@ -5,10 +5,14 @@ package bitbay
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"crypto/hmac"
+	"crypto/sha512"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"time"
 
@@ -49,48 +53,66 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitbay) GetCoinsData() error {
-	jsonResponse := &JsonResponse{}
-	coinsData := CoinsData{}
+	pairsData := PairsData{}
 
-	strRequestUrl := "/v1.1/public/getcurrencies"
+	strRequestUrl := "/trading/ticker"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if pairsData.Status != "Ok" {
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonCurrencyReturn)
 	}
 
-	for _, data := range coinsData {
-		c := &coin.Coin{}
+	for _, data := range pairsData.Pairs {
+		base := &coin.Coin{}
+		target := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.Currency)
-			if c == nil {
-				c = &coin.Coin{}
-				c.Code = data.Currency
-				c.Name = data.CurrencyLong
-				coin.AddCoin(c)
+			base = coin.GetCoin(data.Market.Second.Currency)
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = data.Market.Second.Currency
+				coin.AddCoin(base)
+			}
+			target = coin.GetCoin(data.Market.First.Currency)
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = data.Market.First.Currency
+				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.Currency)
+			base = e.GetCoinBySymbol(data.Market.Second.Currency)
+			target = e.GetCoinBySymbol(data.Market.First.Currency)
 		}
 
-		if c != nil {
+		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
+				CoinID:       base.ID,
+				Coin:         base,
+				ExSymbol:     data.Market.Second.Currency,
 				ChainType:    exchange.MAINNET,
-				TxFee:        data.TxFee,
-				Withdraw:     data.IsActive,
-				Deposit:      data.IsActive,
-				Confirmation: data.MinConfirmation,
-				Listed:       true,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+
+		if target != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       target.ID,
+				Coin:         target,
+				ExSymbol:     data.Market.First.Currency,
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -103,46 +125,42 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitbay) GetPairsData() error {
-	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestUrl := "/v1.1/public/getmarkets"
+	strRequestUrl := "/trading/ticker"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
-		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if pairsData.Status != "Ok" {
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonSymbolsReturn)
 	}
 
-	for _, data := range pairsData {
+	for _, data := range pairsData.Pairs {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.BaseCurrency)
-			target := coin.GetCoin(data.MarketCurrency)
+			base := coin.GetCoin(data.Market.Second.Currency)
+			target := coin.GetCoin(data.Market.First.Currency)
 			if base != nil && target != nil {
 
 				p = pair.GetPair(base, target)
 
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data.MarketName)
+			p = e.GetPairBySymbol(data.Market.Code)
 		}
 		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    data.MarketName,
+				ExSymbol:    data.Market.Code,
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      true,
+				LotSize:     math.Pow10(-1 * data.Market.First.Scale),
+				PriceFilter: math.Pow10(-1 * data.Market.Second.Scale),
+				Listed:      DEFAULT_LISTED,
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -158,37 +176,50 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Bitbay) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
-	jsonResponse := &JsonResponse{}
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = symbol
-	mapParams["type"] = "both"
-
-	strRequestUrl := "/v1.1/public/getorderbook"
+	strRequestUrl := fmt.Sprintf("/trading/orderbook/%s", symbol)
 	strUrl := API_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &orderBook); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if orderBook.Status != "Ok" {
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonOrderbook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	var err error
 	for _, bid := range orderBook.Buy {
-		maker.Bids = append(maker.Bids, bid)
+		buydata := exchange.Order{}
+		buydata.Quantity, err = strconv.ParseFloat(bid.Ca, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		buydata.Rate, err = strconv.ParseFloat(bid.Ra, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+		maker.Bids = append(maker.Bids, buydata)
 	}
 	for _, ask := range orderBook.Sell {
-		maker.Asks = append(maker.Asks, ask)
+		selldata := exchange.Order{}
+		selldata.Quantity, err = strconv.ParseFloat(ask.Ca, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		selldata.Rate, err = strconv.ParseFloat(ask.Ra, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+		maker.Asks = append(maker.Asks, selldata)
 	}
 	return maker, nil
 }
@@ -200,59 +231,29 @@ func (e *Bitbay) UpdateAllBalances() {
 		return
 	}
 
-	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/v1.1/account/getbalances"
+	strRequest := "/balances/BITBAY/balance"
 
-	jsonBalanceReturn := e.ApiKeyGET(strRequest, make(map[string]string))
-	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+	jsonBalanceReturn := e.ApiKeyGET(strRequest, make(map[string]interface{}))
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} else if !jsonResponse.Success {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
-		return
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil {
-		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if accountBalance.Status != "Ok" {
+		log.Printf("%s UpdateAllBalances Failed: %v, %s", e.GetName(), jsonBalanceReturn, accountBalance.Errors)
 		return
 	}
 
-	for _, v := range accountBalance {
+	for _, v := range accountBalance.Balances {
 		c := e.GetCoinBySymbol(v.Currency)
 		if c != nil {
-			balanceMap.Set(c.Code, v.Available)
+			balanceMap.Set(c.Code, v.AvailableFunds)
 		}
 	}
 }
 
 func (e *Bitbay) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-	if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("%s API Key or Secret Key are nil", e.GetName())
-		return false
-	}
 
-	mapParams := make(map[string]string)
-	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["address"] = addr
-
-	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/account/withdraw"
-
-	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
-		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
-		return false
-	} else if !jsonResponse.Success {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Message)
-		return false
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
-		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
-		return false
-	}
-	return true
+	return false
 }
 
 func (e *Bitbay) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
@@ -260,28 +261,27 @@ func (e *Bitbay) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	placeOrder := PlaceOrder{}
+	strRequest := fmt.Sprintf("/trading/offer/", e.GetSymbolByPair(pair))
 
-	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/selllimit"
+	mapParams := make(map[string]interface{})
+	price := float64(int(rate/e.GetPriceFilter(pair)+e.GetPriceFilter(pair)/10)) * (e.GetPriceFilter(pair))
+	amount := float64(int(quantity/e.GetLotSize(pair)+e.GetLotSize(pair)/10)) * (e.GetLotSize(pair))
+	mapParams["rate"] = price
+	mapParams["amount"] = amount
+	mapParams["offerType"] = "sell"
+	mapParams["mode"] = "limit"
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if placeOrder.Status != "Ok" {
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      placeOrder.OfferID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -297,34 +297,34 @@ func (e *Bitbay) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	placeOrder := PlaceOrder{}
+	strRequest := fmt.Sprintf("/trading/offer/", e.GetSymbolByPair(pair))
 
-	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/buylimit"
+	mapParams := make(map[string]interface{})
+	price := float64(int(rate/e.GetPriceFilter(pair)+e.GetPriceFilter(pair)/10)) * (e.GetPriceFilter(pair))
+	amount := float64(int(quantity/e.GetLotSize(pair)+e.GetLotSize(pair)/10)) * (e.GetLotSize(pair))
+	mapParams["rate"] = price
+	mapParams["amount"] = amount
+	mapParams["offerType"] = "buy"
+	mapParams["mode"] = "limit"
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if placeOrder.Status != "Ok" {
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      placeOrder.OfferID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
+
 	return order, nil
 }
 
@@ -333,34 +333,28 @@ func (e *Bitbay) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
+	orderStatus := OrderStatus{}
+	strRequest := fmt.Sprintf("/trading/offer/", e.GetSymbolByPair(order.Pair))
 
-	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
-	strRequest := "/v1.1/account/getorder"
-
-	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
+	jsonOrderStatus := e.ApiKeyGET(strRequest, make(map[string]interface{}))
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &orderStatus); err != nil {
-		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if orderStatus.Status != "Ok" {
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.CancelInitiated {
-		order.Status = exchange.Canceling
-	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
-		order.Status = exchange.Canceled
-	} else if orderStatus.QuantityRemaining == 0 {
-		order.Status = exchange.Filled
-	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {
-		order.Status = exchange.Partial
-	} else {
+	currentAmount, err := strconv.ParseFloat(orderStatus.Items[0].CurrentAmount, 64)
+	startAmount, err := strconv.ParseFloat(orderStatus.Items[0].StartAmount, 64)
+	if err != nil {
+		return fmt.Errorf("%s OrderStatus amount parse Failed: %v, %v, %v", e.GetName(), err, orderStatus.Items[0].CurrentAmount, orderStatus.Items[0].StartAmount)
+	}
+	if currentAmount == startAmount {
 		order.Status = exchange.New
+	} else if currentAmount == 0.0 {
+		order.Status = exchange.Filled
+	} else if currentAmount < startAmount {
+		order.Status = exchange.Partial
 	}
 
 	return nil
@@ -375,21 +369,17 @@ func (e *Bitbay) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["uuid"] = order.OrderID
 
-	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	cancelOrder := CancelOrder{}
+	strRequest := fmt.Sprintf("/trading/offer/%s/%s/%s/%s", e.GetSymbolByPair(order.Pair), order.OrderID, order.Side, order.Rate)
 
 	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if cancelOrder.Status != "Ok" {
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
@@ -407,23 +397,45 @@ func (e *Bitbay) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Bitbay) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["apikey"] = e.API_KEY
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+// ------------------        TODO
+func (e *Bitbay) ApiKeyGET(strRequestPath string, mapParams map[string]interface{}) string {
+	timestamp := fmt.Sprintf("%d", time.Now().UnixNano())
 
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQueryInterface(mapParams)
 
-	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
-	httpClient := &http.Client{}
+	// signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
 
-	request, err := http.NewRequest("GET", strUrl, nil)
+	// mapParams["API-Key"] = e.API_KEY
+	// mapParams["Request-Timestamp"] = timestamp
+
+	/* jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	} */
+
+	key := []byte(e.API_SECRET)
+	h := hmac.New(sha512.New, key)
+	// h.Write([]byte(e.API_KEY))
+	// h.Write([]byte(timestamp))
+	h.Write([]byte(exchange.Map2UrlQueryInterface(mapParams)))
+	signature := hex.EncodeToString(h.Sum(nil))
+
+	request, err := http.NewRequest("GET", strUrl, nil) //strings.NewReader(jsonParams)
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("Content-Type", "application/json;charset=utf-8")
-	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
 
+	request.Header.Add("Content-Type", "application/json;charset=utf-8")
+	request.Header.Add("API-Key", e.API_KEY)
+	request.Header.Add("API-Hash", signature)
+	request.Header.Add("operation-id", timestamp)
+	request.Header.Add("Request-Timestamp", timestamp)
+
+	//request.Header.Add("Accept", "application/json")
+	//request.Header.Add("apisign", signature)
+
+	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
 	if nil != err {
 		return err.Error()
