@@ -205,5 +205,10 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.API_KEY = ""
 		config.API_SECRET = ""
 		break
+
+	case exchange.BITBAY:
+		config.API_KEY = "267b4e91-c4ca-49c8-ab8f-251c9959e865"
+		config.API_SECRET = "0764911e-da15-4ab2-b64b-df36a5769cc7"
+		break
 	}
 }
