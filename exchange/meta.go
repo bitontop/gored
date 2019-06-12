@@ -140,6 +140,4 @@ func (e *ExchangeManager) initExchangeNames() {
 	//supportList = append(supportList, BITBAY)    // ID = 41
 	supportList = append(supportList, HUOBIDM) // ID = 99
 	supportList = append(supportList, BW)      // ID = 42
-	supportList = append(supportList, BITBAY)    // ID = 41
-	supportList = append(supportList, HUOBIDM)   // ID = 99
 }
