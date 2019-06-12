@@ -342,7 +342,7 @@ func (e *Bitbay) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.Status != "Ok" {
 		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
 	}
-	
+
 	order.StatusMessage = jsonOrderStatus
 	currentAmount, err := strconv.ParseFloat(orderStatus.Items[0].CurrentAmount, 64)
 	startAmount, err := strconv.ParseFloat(orderStatus.Items[0].StartAmount, 64)
@@ -372,18 +372,14 @@ func (e *Bitbay) CancelOrder(order *exchange.Order) error {
 	mapParams := make(map[string]interface{})
 	mapParams["uuid"] = order.OrderID
 
-	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	cancelOrder := CancelOrder{}
+	strRequest := fmt.Sprintf("/trading/offer/%s/%s/%s/%s", e.GetSymbolByPair(order.Pair), order.OrderID, order.Side, order.Rate)
 
 	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	} else if cancelOrder.Status != "Ok" {
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
@@ -401,6 +397,7 @@ func (e *Bitbay) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
+// ------------------        TODO
 func (e *Bitbay) ApiKeyGET(strRequestPath string, mapParams map[string]interface{}) string {
 	timestamp := fmt.Sprintf("%d", time.Now().UnixNano())
 

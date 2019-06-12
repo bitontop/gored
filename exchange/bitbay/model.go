@@ -103,3 +103,8 @@ type OrderStatus struct {
 		SecondBalanceID string `json:"secondBalanceId"`
 	} `json:"items"`
 }
+
+type CancelOrder struct {
+	Status string        `json:"status"`
+	Errors []interface{} `json:"errors"`
+}

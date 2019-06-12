@@ -8,10 +8,10 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
 
-	// "github.com/bitontop/gored/exchange/bitbay"
-	// "github.com/bitontop/gored/test/conf"
-	"../exchange/bitbay"
-	"./conf"
+	"github.com/bitontop/gored/exchange/bitbay"
+	"github.com/bitontop/gored/test/conf"
+	// "../exchange/bitbay"
+	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
