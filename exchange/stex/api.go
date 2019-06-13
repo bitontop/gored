@@ -395,12 +395,12 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 		mapParams["method"] = "TradeHistory"
 		mapParams["pair"] = e.GetSymbolByPair(order.Pair)
 		mapParams["status"] = fmt.Sprintf("%v", i)
-		mapParams["from_id"] = strings.TrimSpace(order.OrderID)
-		mapParams["end_id"] = strings.TrimSpace(order.OrderID)
+		mapParams["from_id"] = order.OrderID
+		mapParams["end_id"] = order.OrderID
 		mapParams["owner"] = "ALL"
 
-		log.Printf("ORDER:%+v", order)
-		log.Printf("mapParams:%+v", mapParams)
+		// log.Printf("ORDER:%+v", order)
+		// log.Printf("mapParams:%+v", mapParams)
 
 		jsonOrderStatus := e.ApiKeyPost(mapParams)
 		if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
