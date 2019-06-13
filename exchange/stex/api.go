@@ -406,6 +406,11 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 			return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 		}
 
+		// skip if return empty array
+		if len(jsonResponse.Data) == 0 {
+			log.Printf("%s OrderStatus skip empty response", e.GetName())
+			continue
+		}
 		if err := json.Unmarshal(jsonResponse.Data, &orderDetail); err != nil && i == 4 {
 			return fmt.Errorf("%s OrderStatus order does not exist: %v %s", e.GetName(), err, jsonOrderStatus)
 		} else if err == nil {
