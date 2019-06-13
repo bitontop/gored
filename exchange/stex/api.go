@@ -399,6 +399,9 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 		mapParams["end_id"] = order.OrderID
 		mapParams["owner"] = "ALL"
 
+		log.Printf("ORDER:%+v", order)
+		log.Printf("mapParams:%+v", mapParams)
+
 		jsonOrderStatus := e.ApiKeyPost(mapParams)
 		if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 			return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
