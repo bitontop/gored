@@ -411,7 +411,7 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 
 		// skip if return empty array
 		if len(jsonResponse.Data) <= 2 {
-			log.Printf("%s OrderStatus skip empty response\n", e.GetName())
+			log.Printf("%s OrderStatus skip empty response, status_id: %v\n", e.GetName(), i)
 			continue
 		}
 		if err := json.Unmarshal(jsonResponse.Data, &orderDetail); err != nil && i == 4 {
