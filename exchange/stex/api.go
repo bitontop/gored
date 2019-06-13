@@ -410,8 +410,9 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 		}
 
 		// skip if return empty array
+		log.Printf("jsonResponse.Data length: %v\n", len(jsonResponse.Data))
 		if len(jsonResponse.Data) == 0 {
-			log.Printf("%s OrderStatus skip empty response", e.GetName())
+			log.Printf("%s OrderStatus skip empty response\n", e.GetName())
 			continue
 		}
 		if err := json.Unmarshal(jsonResponse.Data, &orderDetail); err != nil && i == 4 {
