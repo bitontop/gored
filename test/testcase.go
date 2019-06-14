@@ -119,7 +119,7 @@ func Test_Trading_Sell(e exchange.Exchange, p *pair.Pair, rate, quantity float64
 func Test_OrderStatus(e exchange.Exchange, p *pair.Pair) {
 	order := &exchange.Order{
 		Pair:     p,
-		OrderID:  "123456",
+		OrderID:  "123456789012",
 		Rate:     0.001,
 		Quantity: 100,
 		Side:     "Buy",
@@ -131,6 +131,24 @@ func Test_OrderStatus(e exchange.Exchange, p *pair.Pair) {
 		log.Printf("%s Order Status: %v", e.GetName(), order)
 	} else {
 		log.Printf("%s Order Status Err: %s", e.GetName(), err)
+	}
+}
+
+func Test_CancelOrder(e exchange.Exchange, p *pair.Pair) {
+	order := &exchange.Order{
+		Pair:     p,
+		OrderID:  "123456789012",
+		Rate:     0.001,
+		Quantity: 100,
+		Side:     "Buy",
+		Status:   exchange.New,
+	}
+
+	err := e.CancelOrder(order)
+	if err == nil {
+		log.Printf("%s Cancel Order: %v", e.GetName(), order)
+	} else {
+		log.Printf("%s Cancel Order Err: %s", e.GetName(), err)
 	}
 }
 
