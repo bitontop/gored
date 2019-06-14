@@ -44,3 +44,6 @@ type OrderBook struct {
 	Asks [][]interface{} `json:"asks"`
 	Bids [][]interface{} `json:"bids"`
 }
+
+type AccountBalances struct {
+}
