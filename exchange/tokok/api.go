@@ -277,7 +277,7 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["type"] = "2"
 	mapParams["entrustPrice"] = price
 	mapParams["entrustCount"] = amount
-	mapParams["openTok"] = 1
+	// mapParams["openTok"] = 0
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	// log.Printf("====Sell return: %+v", jsonPlaceReturn)
@@ -320,7 +320,7 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams["type"] = "1"
 	mapParams["entrustPrice"] = price
 	mapParams["entrustCount"] = amount
-	mapParams["openTok"] = 0
+	// mapParams["openTok"] = 0
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	// log.Printf("====Buy return: %+v", jsonPlaceReturn)
