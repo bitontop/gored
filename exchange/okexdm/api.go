@@ -1,4 +1,4 @@
-package bw
+package okexdm
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -21,7 +21,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://www.bw.com"
+	API_URL = "https://www.okex.com"
 )
 
 /*API Base Knowledge
@@ -49,52 +49,43 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestPath)*/
-func (e *Bw) GetCoinsData() error {
-	jsonResponse := &JsonResponse{}
-	coinsData := CoinsData{}
+func (e *Okexdm) GetCoinsData() error {
+	contractsData := ContractsData{}
 
-	strRequestPath := "/exchange/config/controller/website/currencycontroller/getCurrencyList"
+	strRequestPath := "/api/futures/v3/instruments/ticker"
 	strUrl := API_URL + strRequestPath
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if jsonResponse.ResMsg.Code != "1" {
-		return fmt.Errorf("%s Get Coins Failed: %s", e.GetName(), jsonResponse.ResMsg.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Datas, &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &contractsData); err != nil {
+		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonCurrencyReturn)
 	}
 
-	for _, data := range coinsData {
+	for _, data := range contractsData {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.Name)
+			c = coin.GetCoin(GetCodeByDate(data.InstrumentID))
 			if c == nil {
 				c = &coin.Coin{
-					Code:     data.Name,
-					Name:     data.Mark,
-					Explorer: data.BlockChainURL,
+					Code: GetCodeByDate(data.InstrumentID),
 				}
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.Name)
+			c = e.GetCoinBySymbol(GetCodeByDate(data.InstrumentID))
 		}
 
 		if c != nil {
-			fee, _ := strconv.ParseFloat(data.DrawFee, 64)
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     data.CurrencyID,
+				ExSymbol:     data.InstrumentID,
 				ChainType:    exchange.MAINNET,
-				TxFee:        fee,
-				Withdraw:     data.DrawFlag == 1,
-				Deposit:      data.RechargeFlag == 1,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
 				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       data.State == 1,
+				Listed:       DEFAULT_LISTED,
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -107,49 +98,41 @@ func (e *Bw) GetCoinsData() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Bw) GetPairsData() error {
-	jsonResponse := &JsonResponse{}
-	pairsData := PairsData{}
+func (e *Okexdm) GetPairsData() error {
+	contractsData := ContractsData{}
 
-	strRequestPath := "/exchange/config/controller/website/marketcontroller/getByWebId"
+	strRequestPath := "/api/futures/v3/instruments/ticker"
 	strUrl := API_URL + strRequestPath
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	} else if jsonResponse.ResMsg.Code != "1" {
-		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Datas, &pairsData); err != nil {
-		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &contractsData); err != nil {
+		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonSymbolsReturn)
 	}
 
-	for _, data := range pairsData {
-		if data.State == 1 {
-			p := &pair.Pair{}
-			switch e.Source {
-			case exchange.EXCHANGE_API:
-				base := e.GetCoinBySymbol(data.BuyerCurrencyID)
-				target := e.GetCoinBySymbol(data.SellerCurrencyID)
-				if base != nil && target != nil {
-					p = pair.GetPair(base, target)
-				}
-			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(data.Name)
+	for _, data := range contractsData {
+		p := &pair.Pair{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			base := &coin.Coin{000, "USD", "USD", "", "", "", 0, 0}
+			target := coin.GetCoin(GetCodeByDate(data.InstrumentID))
+			if base != nil && target != nil {
+				p = pair.GetPair(base, target)
 			}
-			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Name,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     float64(data.AmountDecimal),
-					PriceFilter: float64(data.PriceDecimal),
-					Listed:      data.State == 1,
-				}
-				e.SetPairConstraint(pairConstraint)
+		case exchange.JSON_FILE:
+			p = e.GetPairBySymbol(GetCodeByDate(data.InstrumentID))
+		}
+		if p != nil {
+			pairConstraint := &exchange.PairConstraint{
+				PairID:      p.ID,
+				Pair:        p,
+				ExSymbol:    data.InstrumentID,
+				MakerFee:    DEFAULT_MAKER_FEE,
+				TakerFee:    DEFAULT_TAKER_FEE,
+				LotSize:     DEFAULT_LOT_SIZE,
+				PriceFilter: DEFAULT_PRICE_FILTER,
+				Listed:      true,
 			}
+			e.SetPairConstraint(pairConstraint)
 		}
 	}
 	return nil
@@ -162,16 +145,15 @@ Step 3: Get Exchange Pair Code ex. symbol := e.GetSymbolByPair(p)
 Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
-func (e *Bw) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
-	jsonResponse := &JsonResponse{}
+func (e *Okexdm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(p)
 
 	mapParams := make(map[string]string)
-	mapParams["marketName"] = symbol
-	mapParams["dataSize"] = "50"
+	mapParams["instrument_id"] = symbol
+	mapParams["size"] = "200"
 
-	strRequestPath := "/api/data/v1/entrusts"
+	strRequestPath := "/api/futures/v3/instruments/" + symbol + "/book"
 	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{}
@@ -179,13 +161,8 @@ func (e *Bw) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if jsonResponse.ResMsg.Code != "1" {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Datas, &orderBook); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
+		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonOrderbook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
@@ -198,10 +175,10 @@ func (e *Bw) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		maker.Bids = append(maker.Bids, buydata)
 	}
 
-	for i := len(orderBook.Asks) - 1; i > 0; i-- {
-		var selldata exchange.Order
-		selldata.Quantity, _ = strconv.ParseFloat(orderBook.Asks[i][1], 64)
-		selldata.Rate, _ = strconv.ParseFloat(orderBook.Asks[i][0], 64)
+	for _, ask := range orderBook.Asks {
+		selldata := exchange.Order{}
+		selldata.Quantity, _ = strconv.ParseFloat(ask[1], 64)
+		selldata.Rate, _ = strconv.ParseFloat(ask[0], 64)
 		maker.Asks = append(maker.Asks, selldata)
 	}
 
@@ -209,7 +186,7 @@ func (e *Bw) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bw) UpdateAllBalances() {
+func (e *Okexdm) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
@@ -224,12 +201,12 @@ func (e *Bw) UpdateAllBalances() {
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} else if jsonResponse.ResMsg.Code != "1" {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
+	} else if !jsonResponse.Success {
+		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
 		return
 	}
-	if err := json.Unmarshal(jsonResponse.Datas, &accountBalance); err != nil {
-		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return
 	}
 
@@ -242,7 +219,7 @@ func (e *Bw) UpdateAllBalances() {
 }
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
-func (e *Bw) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+func (e *Okexdm) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return false
@@ -262,19 +239,19 @@ func (e *Bw) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
-	} else if jsonResponse.ResMsg.Code != "1" {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
+	} else if !jsonResponse.Success {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Message)
 		return false
 	}
-	if err := json.Unmarshal(jsonResponse.Datas, &withdraw); err != nil {
-		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return false
 	}
 
 	return true
 }
 
-func (e *Bw) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Okexdm) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -293,11 +270,11 @@ func (e *Bw) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if jsonResponse.ResMsg.Code != "1" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
+	} else if !jsonResponse.Success {
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Datas, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
@@ -312,7 +289,7 @@ func (e *Bw) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 	return order, nil
 }
 
-func (e *Bw) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Okexdm) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -331,11 +308,11 @@ func (e *Bw) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order,
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if jsonResponse.ResMsg.Code != "1" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
+	} else if !jsonResponse.Success {
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Datas, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
@@ -350,7 +327,7 @@ func (e *Bw) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order,
 	return order, nil
 }
 
-func (e *Bw) OrderStatus(order *exchange.Order) error {
+func (e *Okexdm) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -366,11 +343,11 @@ func (e *Bw) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if jsonResponse.ResMsg.Code != "1" {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
+	} else if !jsonResponse.Success {
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Datas, &orderStatus); err != nil {
-		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	if orderStatus.Status == "CANCELED" {
@@ -395,11 +372,11 @@ func (e *Bw) OrderStatus(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Bw) ListOrders() ([]*exchange.Order, error) {
+func (e *Okexdm) ListOrders() ([]*exchange.Order, error) {
 	return nil, nil
 }
 
-func (e *Bw) CancelOrder(order *exchange.Order) error {
+func (e *Okexdm) CancelOrder(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -415,11 +392,11 @@ func (e *Bw) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if jsonResponse.ResMsg.Code != "1" {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.ResMsg.Message)
+	} else if !jsonResponse.Success {
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Datas, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Datas)
+	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
+		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order.Status = exchange.Canceling
@@ -428,7 +405,7 @@ func (e *Bw) CancelOrder(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Bw) CancelAllOrder() error {
+func (e *Okexdm) CancelAllOrder() error {
 	return nil
 }
 
@@ -437,7 +414,7 @@ func (e *Bw) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Bw) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
+func (e *Okexdm) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
@@ -468,7 +445,7 @@ func (e *Bw) ApiKeyGet(strRequestPath string, mapParams map[string]string) strin
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
-func (e *Bw) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+func (e *Okexdm) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
 	strUrl := API_URL + strRequestPath
 
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
@@ -499,3 +476,106 @@ func (e *Bw) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[strin
 
 	return string(body)
 }
+
+func GetContractByCode(code string) string {
+	if code[0:2] == "CW" {
+		thisweek := time.Now().UTC().Add(time.Duration(16) * time.Hour)
+		for i := 0; i < 7; i++ {
+			if thisweek.Add(time.Duration(24*i)*time.Hour).Weekday() != time.Friday {
+				continue
+			}
+			thisweek = thisweek.Add(time.Duration(24*i) * time.Hour)
+		}
+		return code[2:5] + "-USD-" + thisweek.Format("060102")
+	}
+	if code[0:2] == "NW" {
+		nextweek := time.Now().UTC().Add(time.Duration(16) * time.Hour)
+		for i := 7; i < 14; i++ {
+			if nextweek.Add(time.Duration(24*i)*time.Hour).Weekday() != time.Friday {
+				continue
+			}
+			nextweek = nextweek.Add(time.Duration(24*i) * time.Hour)
+		}
+		return code[2:5] + "-USD-" + nextweek.Format("060102")
+	}
+	if code[0:2] == "CQ" {
+		return code[2:5] + "-USD-" + "190927"
+	}
+	return "CONTRACT DNE"
+}
+
+func GetCodeByDate(code string) string {
+	thisweek := time.Now().UTC().Add(time.Duration(16) * time.Hour)
+	// UTC 8AM OK RESETTLES, + 16 HOURS TO GET TO THE NEXT DAY TO MAKE IT EASY
+	for i := 0; i < 7; i++ {
+		// SEARCH FOR A FRIDAY FROM THE NEXT 7 DAYS
+		if thisweek.Add(time.Duration(24*i)*time.Hour).Weekday() != time.Friday {
+			continue
+		}
+		thisweek = thisweek.Add(time.Duration(24*i) * time.Hour)
+	}
+	nextweek := time.Now().UTC().Add(time.Duration(16) * time.Hour)
+	for i := 7; i < 14; i++ {
+		// SEARCH FOR A FRIDAY FROM ONE WEEK LATER FOR A WEEK
+		if nextweek.Add(time.Duration(24*i)*time.Hour).Weekday() != time.Friday {
+			continue
+		}
+		nextweek = nextweek.Add(time.Duration(24*i) * time.Hour)
+	}
+	cw := thisweek.Format("060102")
+	nw := nextweek.Format("060102")
+	if code[8:14] == cw {
+		return "CW" + code[0:3]
+	}
+	if code[8:14] == nw {
+		return "NW" + code[0:3]
+	}
+	if code[8:14] == "190927" {
+		return "CQ" + code[0:3]
+	}
+	return "CONTRACT DNE"
+}
+
+/* thisweek := time.Now().UTC().Add(time.Duration(16) * time.Hour)
+for i := 0; i < 7; i++ {
+	if thisweek.Add(time.Duration(24*i)*time.Hour).Weekday() != time.Friday {
+		continue
+	}
+	fmt.Println("looped for " + strconv.Itoa(i) + " days")
+	thisweek = thisweek.Add(time.Duration(24*i) * time.Hour)
+}
+fmt.Println("CW IS " + thisweek.Format("060102")) */
+
+/* nextweek := time.Now().UTC().Add(time.Duration(16) * time.Hour)
+for i := 7; i < 14; i++ {
+	if nextweek.Add(time.Duration(24*i)*time.Hour).Weekday() != time.Friday {
+		continue
+	}
+	fmt.Println("looped for " + strconv.Itoa(i) + " days")
+	nextweek = nextweek.Add(time.Duration(24*i) * time.Hour)
+}
+fmt.Println("NW IS " + nextweek.Format("060102")) */
+
+/* monthcount := time.Now().UTC().Add(time.Duration(16) * time.Hour)
+fmt.Println("initial day is " + monthcount.Format("060102"))
+for i := 1; i < 15; i++ {
+	mm := monthcount.Add(time.Duration(168) * time.Hour).Month()
+	if mm == time.April || mm == time.July || mm == time.October || mm == time.January {
+		fmt.Println("looped for " + strconv.Itoa(i) + " weeks")
+		fmt.Println("exit day is " + monthcount.Format("060102"))
+		fmt.Println("exit is the " + strconv.Itoa(int(mm)) + "th month")
+		break
+	}
+	monthcount = monthcount.Add(time.Duration(168) * time.Hour)
+	fmt.Println(monthcount.Format("060102"))
+}
+fmt.Println("==" + monthcount.Format("060102"))
+
+quarterday := monthcount.Add(time.Duration(168) * time.Hour)
+for i := -7; i < 0; i++ {
+	if quarterday.Add(time.Duration(24*i)*time.Hour).Weekday() != time.Friday {
+		continue
+	}
+	quarterday = quarterday.Add(time.Duration(24*i) * time.Hour)
+}
+fmt.Println("CQ IS " + quarterday.Format("060102")) */

@@ -25,6 +25,7 @@ import (
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/cointiger"
 	"github.com/bitontop/gored/exchange/dcoin"
+	"github.com/bitontop/gored/exchange/deribit"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/hitbtc"
@@ -39,6 +40,7 @@ import (
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
+	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/stex"
@@ -347,6 +349,20 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITBAY:
 		ex := bitbay.CreateBitbay(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.DERIBIT:
+		ex := deribit.CreateDeribit(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.OKEXDM:
+		ex := okexdm.CreateOkexdm(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
