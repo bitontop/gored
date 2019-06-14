@@ -359,7 +359,7 @@ func (e *Bitmart) CancelOrder(order *exchange.Order) error {
 	mapParams := make(map[string]string)
 	mapParams["entrust_id"] = order.OrderID
 
-	jsonCancelOrder := e.ApiKeyRequest("POST", strRequest, mapParams)
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, mapParams)
 	if jsonCancelOrder != "{}" {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
@@ -386,7 +386,7 @@ func (e *Bitmart) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	request := &http.Request{}
 	var err error
 
-	if strMethod == "POST" {
+	if strMethod == "POST" || strMethod == "DELETE" {
 		jsonParams := ""
 		if nil != mapParams {
 			bytesParams, _ := json.Marshal(mapParams)
