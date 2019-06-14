@@ -317,7 +317,7 @@ func (e *Bitmart) OrderStatus(order *exchange.Order) error {
 	}
 
 	orderStatus := OrderStatus{}
-	strRequest := fmt.Sprintf("v2/orders/%s", order.OrderID)
+	strRequest := fmt.Sprintf("/v2/orders/%s", order.OrderID)
 
 	mapParams := make(map[string]string)
 	mapParams["entrust_id"] = order.OrderID
