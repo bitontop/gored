@@ -266,7 +266,7 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	}
 
 	jsonResponse := JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/trade"
 
 	price := float64(int(rate/e.GetPriceFilter(pair)+e.GetPriceFilter(pair)/10)) * (e.GetPriceFilter(pair))
@@ -292,7 +292,7 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -309,7 +309,7 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	}
 
 	jsonResponse := JsonResponse{}
-	placeOrder := PlaceOrder{}
+	placeOrder := ""
 	strRequest := "/trade"
 
 	price := float64(int(rate/e.GetPriceFilter(pair)+e.GetPriceFilter(pair)/10)) * (e.GetPriceFilter(pair))
@@ -335,7 +335,7 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Data,
+		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
