@@ -317,7 +317,7 @@ func (e *Bitmart) OrderStatus(order *exchange.Order) error {
 	}
 
 	orderStatus := OrderStatus{}
-	strRequest := fmt.Sprintf("v2/orders/%s", order.OrderID)
+	strRequest := fmt.Sprintf("/v2/orders/%s", order.OrderID)
 
 	mapParams := make(map[string]string)
 	mapParams["entrust_id"] = order.OrderID
@@ -354,12 +354,12 @@ func (e *Bitmart) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	strRequest := fmt.Sprintf("v2/orders/%s", order.OrderID)
+	strRequest := fmt.Sprintf("/v2/orders/%s", order.OrderID)
 
 	mapParams := make(map[string]string)
 	mapParams["entrust_id"] = order.OrderID
 
-	jsonCancelOrder := e.ApiKeyRequest("POST", strRequest, mapParams)
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, mapParams)
 	if jsonCancelOrder != "{}" {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
@@ -386,7 +386,7 @@ func (e *Bitmart) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	request := &http.Request{}
 	var err error
 
-	if strMethod == "POST" {
+	if strMethod == "POST" || strMethod == "DELETE" {
 		jsonParams := ""
 		if nil != mapParams {
 			bytesParams, _ := json.Marshal(mapParams)

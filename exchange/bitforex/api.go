@@ -234,7 +234,7 @@ func (e *Bitforex) UpdateAllBalances() {
 	accountBalance := AccountBalances{}
 	strRequest := "/v1/fund/allAccount"
 
-	jsonBalanceReturn := e.ApiKeyPost(strRequest, make(map[string]string))
+	jsonBalanceReturn := e.ApiKeyPost(strRequest, make(map[string]interface{}))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -275,7 +275,7 @@ func (e *Bitforex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	placeOrder := PlaceOrder{}
 	strRequest := "/v1/trade/placeOrder"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
@@ -313,7 +313,7 @@ func (e *Bitforex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	placeOrder := PlaceOrder{}
 	strRequest := "/v1/trade/placeOrder"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
@@ -347,8 +347,14 @@ func (e *Bitforex) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
+	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
+	// uuid, err := strconv.ParseInt(order.OrderID, 10, 32)
+	// if err != nil {
+	// 	return fmt.Errorf("%s OrderStatus parse uuid Err: %v, %v", e.GetName(), err, order.OrderID)
+	// }
 	mapParams["uuid"] = order.OrderID
+	// log.Printf("====uuid: %v, %t", uuid, uuid)
 
 	jsonResponse := &JsonResponse{}
 	orderStatus := OrderStatus{}
@@ -358,7 +364,7 @@ func (e *Bitforex) OrderStatus(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s OrderStatus Failed: %v, %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -391,10 +397,10 @@ func (e *Bitforex) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := CancelOrder{}
+	var cancelOrder bool
 	strRequest := "/v1/trade/cancelOrder"
 
-	mapParams := make(map[string]string)
+	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 	mapParams["orderId"] = order.OrderID
 
@@ -402,12 +408,12 @@ func (e *Bitforex) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s CancelOrder Failed: %v, %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
-	if !cancelOrder.Cancel {
+	if !cancelOrder {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), cancelOrder)
 	}
 
@@ -426,17 +432,18 @@ func (e *Bitforex) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Bitforex) ApiKeyPost(strRequestPath string, mapParams map[string]string) string {
+func (e *Bitforex) ApiKeyPost(strRequestPath string, mapParams map[string]interface{}) string {
 
 	//Signature Request Params
 	mapParams["nonce"] = fmt.Sprintf("%v", time.Now().UnixNano()/int64(time.Millisecond)-2030)
 	mapParams["accessKey"] = e.API_KEY
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
-	signDataUrl := "/api" + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQueryInterface(mapParams)
+	signDataUrl := "/api" + strRequestPath + "?" + exchange.Map2UrlQueryInterface(mapParams)
+	// log.Printf("====signDataUrl: %v", signDataUrl)
 	mapParams["signData"] = exchange.ComputeHmac256NoDecode(signDataUrl, e.API_SECRET)
-	strUrl += "&signData=" + mapParams["signData"]
+	strUrl += "&signData=" + mapParams["signData"].(string)
 
-	return exchange.HttpPostRequest(strUrl, mapParams)
+	return exchange.HttpPostRequestInterface(strUrl, mapParams)
 }
 
 func (e *Bitforex) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {

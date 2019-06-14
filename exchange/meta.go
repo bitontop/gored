@@ -25,27 +25,26 @@ const (
 	OMNI    ChainType = "OMNI"
 	TRC20   ChainType = "TRC20"
 
-	BCEX       ExchangeName = "BCEX"
-	BGOGO      ExchangeName = "BGOGO"
-	BIBOX      ExchangeName = "BIBOX"
-	BIGONE     ExchangeName = "BIGONE"
-	BIKI       ExchangeName = "BIKI"
-	BINANCE    ExchangeName = "BINANCE"
-	BINANCEDEX ExchangeName = "BINANCEDEX"
-	BITATM     ExchangeName = "BITATM"
-	BITBAY     ExchangeName = "BITBAY"
-	BITFINEX   ExchangeName = "BITFINEX"
-	BITFOREX   ExchangeName = "BITFOREX"
-	BITMART    ExchangeName = "BITMART"
-	BITMAX     ExchangeName = "BITMAX"
-	BITMEX     ExchangeName = "BITMEX"
-	BITSTAMP   ExchangeName = "BITSTAMP"
-	BITTREX    ExchangeName = "BITTREX"
-	BITLISH    ExchangeName = "BITLISH"
-	BITRUE     ExchangeName = "BITRUE"
-	BITZ       ExchangeName = "BITZ"
-	BW         ExchangeName = "BW"
-
+	BCEX         ExchangeName = "BCEX"
+	BGOGO        ExchangeName = "BGOGO"
+	BIBOX        ExchangeName = "BIBOX"
+	BIGONE       ExchangeName = "BIGONE"
+	BIKI         ExchangeName = "BIKI"
+	BINANCE      ExchangeName = "BINANCE"
+	BINANCEDEX   ExchangeName = "BINANCEDEX"
+	BITATM       ExchangeName = "BITATM"
+	BITBAY       ExchangeName = "BITBAY"
+	BITFINEX     ExchangeName = "BITFINEX"
+	BITFOREX     ExchangeName = "BITFOREX"
+	BITMART      ExchangeName = "BITMART"
+	BITMAX       ExchangeName = "BITMAX"
+	BITMEX       ExchangeName = "BITMEX"
+	BITSTAMP     ExchangeName = "BITSTAMP"
+	BITTREX      ExchangeName = "BITTREX"
+	BITLISH      ExchangeName = "BITLISH"
+	BITRUE       ExchangeName = "BITRUE"
+	BITZ         ExchangeName = "BITZ"
+	BW           ExchangeName = "BW"
 	BLANK        ExchangeName = "BLANK"
 	BLEUTRADE    ExchangeName = "BLEUTRADE"
 	COINALL      ExchangeName = "COINALL"
@@ -139,9 +138,9 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BIKI)      // ID = 38
 	supportList = append(supportList, DCOIN)     // ID = 39
 	supportList = append(supportList, COINTIGER) // ID = 40
-	//supportList = append(supportList, BITBAY)    // ID = 41
-	supportList = append(supportList, HUOBIDM) // ID = 42
-	supportList = append(supportList, BW)      // ID = 43
-	supportList = append(supportList, DERIBIT) // ID = 44
-	supportList = append(supportList, OKEXDM)  // ID = 45
+	supportList = append(supportList, BITBAY)    // ID = 41
+	supportList = append(supportList, HUOBIDM)   // ID = 42
+	supportList = append(supportList, BW)        // ID = 43
+	supportList = append(supportList, DERIBIT)   // ID = 44
+	supportList = append(supportList, OKEXDM)    // ID = 45
 }

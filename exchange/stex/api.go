@@ -399,12 +399,27 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 		mapParams["end_id"] = order.OrderID
 		mapParams["owner"] = "ALL"
 
+		// log.Printf("ORDER:%+v", order)
+		// log.Printf("mapParams:%+v", mapParams)
+
 		jsonOrderStatus := e.ApiKeyPost(mapParams)
 		if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 			return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 		} else if jsonResponse.Success != 1 {
 			return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), jsonResponse.Error, jsonResponse.Message)
 		}
+
+		//----------------------------------------------------
+		// skip if return empty array
+		statusID := 0
+		if len(jsonResponse.Data) <= 2 {
+			// log.Printf("%s OrderStatus skip empty response, status_id: %v\n", e.GetName(), i)
+			continue
+		} else {
+			statusID = i
+		}
+		log.Printf("%s OrderStatus, status_id: %v\n", e.GetName(), statusID)
+		//----------------------------------------------------
 
 		if err := json.Unmarshal(jsonResponse.Data, &orderDetail); err != nil && i == 4 {
 			return fmt.Errorf("%s OrderStatus order does not exist: %v %s", e.GetName(), err, jsonOrderStatus)

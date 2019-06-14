@@ -99,7 +99,6 @@ func (e *Bw) GetID() int {
 
 func (e *Bw) GetName() exchange.ExchangeName {
 	return exchange.BW
-
 }
 
 func (e *Bw) GetTradingWebURL(pair *pair.Pair) string {
