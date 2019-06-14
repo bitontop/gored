@@ -26,6 +26,7 @@ type Kraken struct {
 
 	API_KEY    string
 	API_SECRET string
+	Two_Factor string
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -48,6 +49,7 @@ func CreateKraken(config *exchange.Config) *Kraken {
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
+			Two_Factor: config.Two_Factor,
 			Source:     config.Source,
 			SourceURI:  config.SourceURI,
 		}

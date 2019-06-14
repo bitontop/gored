@@ -5,9 +5,14 @@ package kraken
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"crypto/sha512"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math"
 	"net/http"
 	"strconv"
@@ -224,7 +229,38 @@ func (e *Kraken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Kraken) UpdateAllBalances() {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return
+	}
 
+	jsonResponse := &JsonResponse{}
+	accountBalance := AccountBalances{}
+	strRequest := "/private/TradeBalance"
+
+	mapParams := make(map[string]string)
+	// mapParams["asset"] = "BTC"
+
+	jsonBalanceReturn := e.ApiKeyPost(strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+		return
+	} else if len(jsonResponse.Error) != 0 {
+		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Error)
+		return
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil {
+		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return
+	}
+
+	//---------------------- TODO
+	/* for _, v := range accountBalance {
+		c := e.GetCoinBySymbol(v.Currency)
+		if c != nil {
+			balanceMap.Set(c.Code, v.Available)
+		}
+	} */
 }
 
 func (e *Kraken) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
@@ -265,7 +301,113 @@ func (e *Kraken) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Kraken) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
+func (e *Kraken) ApiKeyPost(strRequestPath string, mapParams map[string]string) string {
+	strMethod := "POST"
+
+	//Signature Request Params
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+	if e.Two_Factor != "" {
+		mapParams["otp"] = e.Two_Factor
+	}
+	Signature := ComputeHmac512(strRequestPath, mapParams, e.API_SECRET)
+
+	strUrl := API_URL + strRequestPath
+
+	httpClient := &http.Client{}
+
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("API-Key", e.API_KEY)
+	request.Header.Add("API-Sign", Signature)
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func (e *Kraken) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
+	//strMethod := "POST"
+	strMethod := "GET"
+
+	//Signature Request Params
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+	if e.Two_Factor != "" {
+		mapParams["otp"] = e.Two_Factor
+	}
+	Signature := ComputeHmac512(strRequestPath, mapParams, e.API_SECRET)
+
+	strUrl := API_URL + strRequestPath
+
+	httpClient := &http.Client{}
+
+	/* jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams)) */
+	strParams := exchange.Map2UrlQuery(mapParams)
+	strRequestUrl := strUrl + "?" + strParams
+	request, err := http.NewRequest(strMethod, strRequestUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("API-Key", e.API_KEY)
+	request.Header.Add("API-Sign", Signature)
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+//Signature加密
+func ComputeHmac512(strPath string, mapParams map[string]string, strSecret string) string {
+	bytesParams, _ := json.Marshal(mapParams)
+	sha := sha256.New()
+	sha.Write(bytesParams)
+	shaSum := sha.Sum(nil)
+
+	strMessage := fmt.Sprintf("%s%s", strPath, string(shaSum))
+	decodeSecret, _ := base64.StdEncoding.DecodeString(strSecret)
+
+	h := hmac.New(sha512.New, decodeSecret)
+	h.Write([]byte(strMessage))
+
+	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+}
+
+/* func (e *Kraken) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
 	mapParams["apikey"] = e.API_KEY
 	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
 
@@ -294,4 +436,4 @@ func (e *Kraken) ApiKeyGET(strRequestPath string, mapParams map[string]string) s
 	}
 
 	return string(body)
-}
+} */
