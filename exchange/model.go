@@ -24,6 +24,7 @@ type Config struct {
 	Account_ID    string
 	API_KEY       string
 	API_SECRET    string
+	Two_Factor    string
 	Passphrase    string //Memo for bitmart
 	TradePassword string
 	UserID        string
