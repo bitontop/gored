@@ -29,6 +29,7 @@ import (
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/exchange/cointiger"
 	"github.com/bitontop/gored/exchange/dcoin"
+	"github.com/bitontop/gored/exchange/deribit"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/hitbtc"
@@ -41,6 +42,7 @@ import (
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/okex"
+	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/stex"
@@ -135,6 +137,8 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitHuobidm(config)
 	InitBw(config)
 	InitBitbay(config)
+	InitDeribit(config)
+	InitOkexdm(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -455,6 +459,24 @@ func InitBw(config *exchange.Config) {
 func InitBitbay(config *exchange.Config) {
 	conf.Exchange(exchange.BITBAY, config)
 	ex := bitbay.CreateBitbay(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitDeribit(config *exchange.Config) {
+	conf.Exchange(exchange.DERIBIT, config)
+	ex := deribit.CreateDeribit(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitOkexdm(config *exchange.Config) {
+	conf.Exchange(exchange.OKEXDM, config)
+	ex := okexdm.CreateOkexdm(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

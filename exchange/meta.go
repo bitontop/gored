@@ -58,6 +58,7 @@ const (
 	COINTIGER    ExchangeName = "COINTIGER"
 	CRYPTOPIA    ExchangeName = "CRYPTOPIA"
 	DCOIN        ExchangeName = "DCOIN"
+	DERIBIT      ExchangeName = "DERIBIT"
 	DIGIFINEX    ExchangeName = "DIGIFINEX"
 	DRAGONEX     ExchangeName = "DRAGONEX"
 	EXMO         ExchangeName = "EXMO"
@@ -82,6 +83,7 @@ const (
 	LIVECOIN     ExchangeName = "LIVECOIN"
 	MXC          ExchangeName = "MXC"
 	OKEX         ExchangeName = "OKEX"
+	OKEXDM       ExchangeName = "OKEXDM"
 	OTCBTC       ExchangeName = "OTCBTC"
 	P2PB2B       ExchangeName = "P2PB2B"
 	POLONIEX     ExchangeName = "POLONIEX"
@@ -140,4 +142,6 @@ func (e *ExchangeManager) initExchangeNames() {
 	//supportList = append(supportList, BITBAY)    // ID = 41
 	supportList = append(supportList, HUOBIDM) // ID = 42
 	supportList = append(supportList, BW)      // ID = 43
+	supportList = append(supportList, DERIBIT) // ID = 44
+	supportList = append(supportList, OKEXDM)  // ID = 45
 }
