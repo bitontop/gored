@@ -557,3 +557,34 @@ func (e *Tokok) ApiKeyGET(strRequestPath string, mapParams map[string]string) st
 
 	return string(body)
 }
+
+/*
+Error code Description
+80101 Request frequency too high
+80102 This IP is not allowed to access
+82101 No account information
+82102 Fail to get pair info
+83001 Please enable SMS or GOOGLE authentication
+83002 Please enable Real-name authentication
+83103 Account blocked
+83104 Account is prohibited from trading
+83005 Trading pair can not be null
+83006 Trading pair format error
+83007 Incorrect order type
+83008 Incorrect order price
+83009 Incorrect order amount
+83110 Place order failed
+83011 Incorrect order ID
+83112 Cancel order failed
+83013 Order ID can not be null
+83114 No order
+83015 Required parameters of batch trade can not be null
+83016 Exceed maximum order number
+84001 Lack of timestamp
+84002 Lack of signature
+84003 Lack of parameters
+84004 Signature error
+84005 Invalid signature
+84006 Lack of api_key
+84007 Invalid API key
+*/

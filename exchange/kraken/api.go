@@ -239,7 +239,7 @@ func (e *Kraken) UpdateAllBalances() {
 	strRequest := "/private/TradeBalance"
 
 	mapParams := make(map[string]string)
-	// mapParams["asset"] = "BTC"
+	mapParams["asset"] = "xxbt"
 
 	jsonBalanceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
@@ -302,14 +302,12 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Kraken) ApiKeyPost(strRequestPath string, mapParams map[string]string) string {
-	strMethod := "POST"
 
 	//Signature Request Params
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-	if e.Two_Factor != "" {
+
+	/* if e.Two_Factor != "" {
 		mapParams["otp"] = e.Two_Factor
-	}
-	Signature := ComputeHmac512(strRequestPath, mapParams, e.API_SECRET)
+	} */
 
 	strUrl := API_URL + strRequestPath
 
@@ -320,59 +318,17 @@ func (e *Kraken) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 		bytesParams, _ := json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
+	jsonParams = exchange.Map2UrlQuery(mapParams)
 
-	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("API-Key", e.API_KEY)
-	request.Header.Add("API-Sign", Signature)
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
 	if nil != err {
 		return err.Error()
 	}
 
-	return string(body)
-}
-
-func (e *Kraken) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	//strMethod := "POST"
-	strMethod := "GET"
-
-	//Signature Request Params
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-	if e.Two_Factor != "" {
-		mapParams["otp"] = e.Two_Factor
-	}
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano()/1000000) //time.Now().Unix())
 	Signature := ComputeHmac512(strRequestPath, mapParams, e.API_SECRET)
 
-	strUrl := API_URL + strRequestPath
-
-	httpClient := &http.Client{}
-
-	/* jsonParams := ""
-	if nil != mapParams {
-		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
-	}
-
-	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams)) */
-	strParams := exchange.Map2UrlQuery(mapParams)
-	strRequestUrl := strUrl + "?" + strParams
-	request, err := http.NewRequest(strMethod, strRequestUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("User-Agent", "Kraken GO API Agent (https://github.com/beldur/kraken-go-api-client)")
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("API-Key", e.API_KEY)
 	request.Header.Add("API-Sign", Signature)
@@ -393,12 +349,16 @@ func (e *Kraken) ApiKeyGet(strRequestPath string, mapParams map[string]string) s
 
 //Signature加密
 func ComputeHmac512(strPath string, mapParams map[string]string, strSecret string) string {
-	bytesParams, _ := json.Marshal(mapParams)
+	// bytesParams, _ := json.Marshal(mapParams)
+	postData := mapParams["nonce"] + exchange.Map2UrlQuery(mapParams)
+	b, _ := json.Marshal(postData)
+	log.Printf("postData: %v,\n byte : %v,\n jsonB: %v", postData, []byte(postData), b)
 	sha := sha256.New()
-	sha.Write(bytesParams)
+	sha.Write([]byte(postData))
 	shaSum := sha.Sum(nil)
 
 	strMessage := fmt.Sprintf("%s%s", strPath, string(shaSum))
+	log.Printf("strMessage: %v", strMessage)
 	decodeSecret, _ := base64.StdEncoding.DecodeString(strSecret)
 
 	h := hmac.New(sha512.New, decodeSecret)
@@ -406,6 +366,54 @@ func ComputeHmac512(strPath string, mapParams map[string]string, strSecret strin
 
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
+
+/* func (e *Kraken) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
+	//strMethod := "POST"
+	strMethod := "GET"
+
+	strUrl := API_URL + strRequestPath
+
+	httpClient := &http.Client{}
+
+	// jsonParams := ""
+	// if nil != mapParams {
+	// 	bytesParams, _ := json.Marshal(mapParams)
+	// 	jsonParams = string(bytesParams)
+	// }
+
+	// request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
+	strParams := exchange.Map2UrlQuery(mapParams)
+	strRequestUrl := strUrl + "?" + strParams
+	request, err := http.NewRequest(strMethod, strRequestUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+
+	//Signature Request Params
+	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+	if e.Two_Factor != "" {
+		mapParams["otp"] = e.Two_Factor
+	}
+	Signature := ComputeHmac512(strRequestPath, mapParams, e.API_SECRET)
+
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("API-Key", e.API_KEY)
+	request.Header.Add("API-Sign", Signature)
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+} */
 
 /* func (e *Kraken) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
 	mapParams["apikey"] = e.API_KEY
