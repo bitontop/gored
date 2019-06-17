@@ -9,6 +9,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -144,6 +145,7 @@ func (e *ExchangeManager) GetById(i int) Exchange {
 }
 
 func (e *ExchangeManager) GetStr(name string) Exchange {
+	name = strings.TrimSpace(name)
 	for _, v := range e.GetSupportExchanges() {
 		if string(v) == name {
 			return e.Get(v)
