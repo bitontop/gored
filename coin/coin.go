@@ -54,7 +54,8 @@ func GetCoinID(code string) int {
 }
 
 func GetCoin(code string) *Coin {
-	code = strings.ToUpper(code)
+	code = strings.TrimSpace(strings.ToUpper(code)) //trim for psql space
+
 	for _, id := range coinMap.Keys() {
 		if tmp, ok := coinMap.Get(id); ok {
 			c := tmp.(*Coin)
