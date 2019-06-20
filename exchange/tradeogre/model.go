@@ -42,6 +42,7 @@ type OrderStatus struct {
 	Price     string `json:"price"`
 	Quantity  string `json:"quantity"`
 	Fulfilled string `json:"fulfilled"`
+	Error     string `json:"error"`
 }
 
 type CancelOrder struct {
