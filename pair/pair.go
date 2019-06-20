@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"strings"
 
 	coin "github.com/bitontop/gored/coin"
 	cmap "github.com/orcaman/concurrent-map"
@@ -86,6 +87,7 @@ func GetKey(base, target *coin.Coin) string {
 }
 
 func GetPairByKey(key string) *Pair {
+	key = strings.ToUpper(key)
 	for _, id := range pairMap.Keys() {
 		if tmp, ok := pairMap.Get(id); ok {
 			p := tmp.(*Pair)
