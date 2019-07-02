@@ -32,6 +32,7 @@ import (
 	"github.com/bitontop/gored/exchange/deribit"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
+	"github.com/bitontop/gored/exchange/goko"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobidm"
@@ -139,6 +140,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBitbay(config)
 	InitDeribit(config)
 	InitOkexdm(config)
+	InitGoko(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -476,6 +478,15 @@ func InitDeribit(config *exchange.Config) {
 func InitOkexdm(config *exchange.Config) {
 	conf.Exchange(exchange.OKEXDM, config)
 	ex := okexdm.CreateOkexdm(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitGoko(config *exchange.Config) {
+	conf.Exchange(exchange.GOKO, config)
+	ex := goko.CreateGoko(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

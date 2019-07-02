@@ -28,6 +28,7 @@ import (
 	"github.com/bitontop/gored/exchange/deribit"
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
+	"github.com/bitontop/gored/exchange/goko"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobidm"
@@ -363,6 +364,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.OKEXDM:
 		ex := okexdm.CreateOkexdm(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.GOKO:
+		ex := goko.CreateGoko(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
