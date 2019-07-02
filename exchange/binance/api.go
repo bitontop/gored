@@ -489,6 +489,7 @@ func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, s
 		return err.Error()
 	}
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
 
 	httpClient := &http.Client{}
