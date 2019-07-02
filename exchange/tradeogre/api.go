@@ -352,7 +352,13 @@ func (e *Tradeogre) OrderStatus(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if !orderStatus.Success {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
+		log.Printf("orderStatus.Error:%+v", orderStatus.Error)
+		if orderStatus.Error == "Order not found" { //temperory solution , tradeogre's bug: when filled, the order uuid can't be traced. this solution will cause all not found orders shown as filled.
+			order.Status = exchange.Filled			
+			return nil
+		} else {
+			return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
+		}
 	}
 
 	order.StatusMessage = jsonOrderStatus
@@ -375,6 +381,19 @@ func (e *Tradeogre) OrderStatus(order *exchange.Order) error {
 }
 
 func (e *Tradeogre) ListOrders() ([]*exchange.Order, error) {
+	//!- only Testing for orders
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
+
+	strRequest := "/account/orders"
+
+	mapParams := make(map[string]string)
+	// mapParams["market"] = "BTC-RVN"
+
+	json := e.ApiKeyRequest("POST", strRequest, mapParams)
+	log.Printf("json:%+v", json)
+
 	return nil, nil
 }
 
