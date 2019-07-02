@@ -56,6 +56,18 @@ type AccountBalance []struct {
 	Type      string `json:"type"`
 }
 
+// v1 api
+/* type InnerTransIDs struct {
+	clientOid    string
+	payAccountId string
+	recAccountId string
+	freeAmount   float64
+} */
+
+type InnerTrans struct {
+	OrderID string `json:"orderId"`
+}
+
 type Withdraw struct {
 	WithdrawalID string `json:"withdrawalId"`
 }
