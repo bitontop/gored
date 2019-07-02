@@ -52,6 +52,7 @@ type Exchange interface {
 
 	/***** Private API *****/
 	UpdateAllBalances()
+	InnerTrans(quantity float64, coin *coin.Coin, fromType, toType, clientOid string) bool
 	Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool
 
 	LimitSell(pair *pair.Pair, quantity, rate float64) (*Order, error)
