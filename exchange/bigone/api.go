@@ -277,7 +277,36 @@ func (e *Bigone) UpdateAllBalances() {
 	}
 }
 
+// read only withdrawal
 func (e *Bigone) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+	/* if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("coinex API Key or Secret Key are nil.")
+		return false
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+
+	strRequest := "/viewer/withdrawals"
+
+	mapParams := make(map[string]string)
+	mapParams["first"] = "20"
+	// mapParams["after"] =
+
+
+	jsonWithdraw := e.ApiKeyRequest(strRequest, mapParams, "GET")
+	// log.Printf("withdraw return: %v", jsonWithdraw)
+	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
+		return false
+	} else if len(jsonResponse.Errors) != 0 {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
+		return false
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return false
+	} */
 
 	return false
 }
