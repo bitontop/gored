@@ -6,6 +6,7 @@ package bigone
 
 import (
 	"encoding/json"
+	"time"
 )
 
 type JsonResponse struct {
@@ -64,4 +65,29 @@ type PlaceOrder struct {
 	AvgDealPrice string `json:"avg_deal_price"`
 	Side         string `json:"side"`
 	State        string `json:"state"`
+}
+
+type Withdraw struct {
+	Edges []struct {
+		Node struct {
+			ID            int       `json:"id"`
+			CustomerID    string    `json:"customer_id"`
+			AssetID       string    `json:"asset_id"`
+			Amount        string    `json:"amount"`
+			State         string    `json:"state"`
+			Note          time.Time `json:"note"`
+			Txid          string    `json:"txid"`
+			CompletedAt   time.Time `json:"completed_at"`
+			InsertedAt    time.Time `json:"inserted_at"`
+			IsInternal    bool      `json:"is_internal"`
+			TargetAddress string    `json:"target_address"`
+		} `json:"node"`
+		Cursor string `json:"cursor"`
+	} `json:"edges"`
+	PageInfo struct {
+		EndCursor       string `json:"end_cursor"`
+		StartCursor     string `json:"start_cursor"`
+		HasNextPage     bool   `json:"has_next_page"`
+		HasPreviousPage bool   `json:"has_previous_page"`
+	} `json:"page_info"`
 }
