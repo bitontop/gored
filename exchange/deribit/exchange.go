@@ -102,7 +102,8 @@ func (e *Deribit) GetName() exchange.ExchangeName {
 }
 
 func (e *Deribit) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.deribit.com/main#/futures?tab=%s", e.GetSymbolByCoin(pair.Target))
+	return fmt.Sprintf("https://www.deribit.com/main#/futures?tab=BTC-27SEP19"/* , e.GetSymbolByCoin(pair.Target) */)
+// SINCE ONLY CQBTC PAIR IS IN USE
 }
 
 func (e *Deribit) GetBalance(coin *coin.Coin) float64 {
