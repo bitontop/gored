@@ -349,12 +349,7 @@ func (e *Bitforex) OrderStatus(order *exchange.Order) error {
 
 	mapParams := make(map[string]interface{})
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	// uuid, err := strconv.ParseInt(order.OrderID, 10, 32)
-	// if err != nil {
-	// 	return fmt.Errorf("%s OrderStatus parse uuid Err: %v, %v", e.GetName(), err, order.OrderID)
-	// }
-	mapParams["uuid"] = order.OrderID
-	// log.Printf("====uuid: %v, %t", uuid, uuid)
+	mapParams["orderId"] = order.OrderID
 
 	jsonResponse := &JsonResponse{}
 	orderStatus := OrderStatus{}
