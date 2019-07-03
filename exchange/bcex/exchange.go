@@ -46,7 +46,7 @@ func CreateBcex(config *exchange.Config) *Bcex {
 			Name:    "Bcex",
 			Website: "https://www.bcex.ca/",
 
-			API_KEY:    "baf857298a8b06c66dea5213de37c076", //config.API_KEY,
+			API_KEY:    config.API_KEY, //"baf857298a8b06c66dea5213de37c076",
 			API_SECRET: config.API_SECRET,
 			Source:     config.Source,
 			SourceURI:  config.SourceURI,
