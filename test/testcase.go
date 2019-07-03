@@ -139,7 +139,7 @@ func Test_CancelOrder(e exchange.Exchange, p *pair.Pair, orderID string) {
 		Pair:     p,
 		OrderID:  orderID,
 		Rate:     0.001,
-		Quantity: 100,
+		Quantity: 10,
 		Side:     "Buy",
 		Status:   exchange.New,
 	}
