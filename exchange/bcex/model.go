@@ -58,47 +58,37 @@ type OrderBook struct {
 	Asks [][]string `json:"asks"`
 }
 
+// this exchange often return different type for the same field
 type AccountBalances struct {
 	Count int `json:"count"`
 	Data  []struct {
-		UserID  int    `json:"user_id"`
-		OrgID   int    `json:"org_id"`
-		Token   string `json:"token"`
-		TokenAs string `json:"token_as"`
-		Usable  string `json:"usable"`
-		Locked  string `json:"locked"`
-		Total   string `json:"total"`
+		// UserID  interface{} `json:"user_id"`
+		// OrgID   int         `json:"org_id"`
+		Token string `json:"token"`
+		// TokenAs string      `json:"token_as"`
+		Usable string `json:"usable"`
+		Locked string `json:"locked"`
+		Total  string `json:"total"`
 	} `json:"data"`
 }
 
-//---
-
-type Uuid struct {
-	Id string `json:"uuid"`
-}
-
 type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            string
+	ID            int    `json:"id"`
+	Status        int    `json:"status"`
+	OrderNo       string `json:"order_no"`
+	Type          string `json:"type"`
+	MarketType    string `json:"market_type"`
+	AccountID     int    `json:"account_id"`
+	OrgID         int    `json:"org_id"`
+	UserID        int    `json:"user_id"`
+	Market        string `json:"market"`
+	Token         string `json:"token"`
+	Price         string `json:"price"`
+	Amount        string `json:"amount"`
+	Volume        string `json:"volume"`
+	MatchedAmount string `json:"matched_amount"`
+	MatchedVolume string `json:"matched_volume"`
+	AvgPrice      string `json:"avg_price"`
+	CreatedAt     string `json:"created_at"`
+	UpdatedAt     string `json:"updated_at"`
 }

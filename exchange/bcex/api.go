@@ -325,33 +325,8 @@ func (e *Bcex) UpdateAllBalances() {
 }
 
 func (e *Bcex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-	if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("%s API Key or Secret Key are nil", e.GetName())
-		return false
-	}
 
-	mapParams := make(map[string]interface{})
-	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["address"] = addr
-
-	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/account/withdraw"
-
-	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
-		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
-		return false
-	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Message)
-		return false
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &uuid); err != nil {
-		log.Printf("%s Withdraw Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return false
-	}
-	return true
+	return false
 }
 
 func (e *Bcex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
@@ -359,14 +334,17 @@ func (e *Bcex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]interface{})
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
-
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/selllimit"
+	placeOrder := PlaceOrder{}
+	strRequest := "/api_market/placeOrder"
+
+	mapParams := make(map[string]interface{})
+	mapParams["market_type"] = "1" //e.GetSymbolByPair(pair)
+	mapParams["market"] = e.GetSymbolByCoin(pair.Base)
+	mapParams["token"] = e.GetSymbolByCoin(pair.Target)
+	mapParams["type"] = "2"
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -374,13 +352,13 @@ func (e *Bcex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &uuid); err != nil {
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -396,14 +374,17 @@ func (e *Bcex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]interface{})
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
-
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/buylimit"
+	placeOrder := PlaceOrder{}
+	strRequest := "/api_market/placeOrder"
+
+	mapParams := make(map[string]interface{})
+	mapParams["market_type"] = "1" //e.GetSymbolByPair(pair)
+	mapParams["market"] = e.GetSymbolByCoin(pair.Base)
+	mapParams["token"] = e.GetSymbolByCoin(pair.Target)
+	mapParams["type"] = "1"
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -411,19 +392,20 @@ func (e *Bcex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &uuid); err != nil {
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
+
 	return order, nil
 }
 
@@ -432,12 +414,12 @@ func (e *Bcex) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]interface{})
-	mapParams["uuid"] = order.OrderID
-
 	jsonResponse := &JsonResponse{}
 	orderStatus := PlaceOrder{}
-	strRequest := "/v1.1/account/getorder"
+	strRequest := "/api_market/getOrderByOrderNo"
+
+	mapParams := make(map[string]interface{})
+	mapParams["order_no"] = order.OrderID
 
 	jsonOrderStatus := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
@@ -450,16 +432,16 @@ func (e *Bcex) OrderStatus(order *exchange.Order) error {
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.CancelInitiated {
-		order.Status = exchange.Canceling
-	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
+	if orderStatus.Status == 0 {
 		order.Status = exchange.Canceled
-	} else if orderStatus.QuantityRemaining == 0 {
-		order.Status = exchange.Filled
-	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {
-		order.Status = exchange.Partial
-	} else {
+	} else if orderStatus.Status == 1 {
 		order.Status = exchange.New
+	} else if orderStatus.Status == 2 {
+		order.Status = exchange.Partial
+	} else if orderStatus.Status == 3 {
+		order.Status = exchange.Filled
+	} else {
+		order.Status = exchange.Other
 	}
 
 	return nil
@@ -474,21 +456,17 @@ func (e *Bcex) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]interface{})
-	mapParams["uuid"] = order.OrderID
-
 	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	strRequest := "/api_market/cancelOrder"
+
+	mapParams := make(map[string]interface{})
+	mapParams["order_nos"] = fmt.Sprintf("[\"%v\"]", order.OrderID)
 
 	jsonCancelOrder := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != 0 {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order.Status = exchange.Canceling
