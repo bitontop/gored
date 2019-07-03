@@ -134,10 +134,10 @@ func Test_OrderStatus(e exchange.Exchange, p *pair.Pair, orderID string) {
 	}
 }
 
-func Test_CancelOrder(e exchange.Exchange, p *pair.Pair) {
+func Test_CancelOrder(e exchange.Exchange, p *pair.Pair, orderID string) {
 	order := &exchange.Order{
 		Pair:     p,
-		OrderID:  "123456789012",
+		OrderID:  orderID,
 		Rate:     0.001,
 		Quantity: 100,
 		Side:     "Buy",
