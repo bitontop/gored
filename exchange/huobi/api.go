@@ -205,6 +205,11 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Huobi) GetAccounts() string {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil", e.GetName())
+		return ""
+	}
+
 	jsonResponse := &JsonResponse{}
 	accountsReturn := AccountsReturn{}
 
@@ -273,8 +278,37 @@ func (e *Huobi) UpdateAllBalances() {
 }
 
 func (e *Huobi) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return false
+	}
 
-	return false
+	jsonResponse := &JsonResponse{}
+	withdrawID := ""
+	strRequest := "/v1/dw/withdraw/api/create"
+
+	mapParams := make(map[string]string)
+	mapParams["address"] = addr
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["currency"] = e.GetSymbolByCoin(coin)
+	if tag != "" {
+		mapParams["tag"] = tag
+	}
+
+	jsonBalanceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+		return false
+	} else if jsonResponse.Status != "ok" {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse)
+		return false
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdrawID); err != nil {
+		log.Printf("%s Withdraw Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return false
+	}
+
+	return true
 }
 
 func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
@@ -477,7 +511,7 @@ func (e *Huobi) ApiKeyRequest(strMethod string, mapParams map[string]string, str
 
 	hostName := "api.huobi.pro"
 	mapParams["Signature"] = CreateSign(mapParams, strMethod, hostName, strRequestPath, e.API_SECRET)
-
+	// log.Printf("====mapParams: %+v", mapParams)
 	var strRequestUrl string
 	strParams := MapSortByKey(mapParams)
 	strRequestUrl = strUrl + "?" + strParams
