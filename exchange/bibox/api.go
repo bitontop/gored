@@ -255,8 +255,9 @@ func (e *Bibox) UpdateAllBalances() {
 		return
 	}
 
-	// test Inner Transfer
+	// test Inner Transfer, withdraw
 	// e.InnerTrans(e.GetCoinBySymbol("ETH"), 0.01, 0)
+	//e.Withdraw(e.GetCoinBySymbol("ETH"), 100, "addr", "tag") //, 123456, "tradePWD", "")
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
@@ -300,7 +301,7 @@ func (e *Bibox) UpdateAllBalances() {
 }
 
 // direction: 0钱包转币币; 1币币转钱包
-// need API2, different structure
+// need API2 AUTH, different structure
 func (e *Bibox) InnerTrans(coin *coin.Coin, quantity float64, direction int) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())
@@ -346,8 +347,49 @@ func (e *Bibox) InnerTrans(coin *coin.Coin, quantity float64, direction int) boo
 	return false
 }
 
-func (e *Bibox) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-	return false
+// googleAuth: google验证码
+// tag： 提现地址备注
+// memo： 提现标签(can be "", not required)
+// need to update interface to use more params
+func (e *Bibox) Withdraw(coin *coin.Coin, quantity float64, addr, tag string /* , googleAuth int, tradePWD, memo string */) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("coinex API Key or Secret Key are nil.")
+		return false
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+
+	strRequestUrl := "/v1/transfer"
+
+	mapParams := make(map[string]interface{})
+	mapParams["cmd"] = "transfer/transferOut"
+
+	body := make(map[string]interface{})
+	body["coin_symbol"] = e.GetSymbolByCoin(coin)
+	body["amount"] = quantity
+	body["totp_code"] = 123456     //googleAuth
+	body["trade_pwd"] = "tradePWD" //tradePWD
+	body["addr"] = addr
+	body["addr_remark"] = tag
+	body["memo"] = "" //memo
+
+	mapParams["body"] = body
+
+	jsonWithdraw := e.ApiKeyPOST(strRequestUrl, mapParams)
+	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
+		return false
+	} else if jsonResponse.Error.Code != "" {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
+		return false
+	}
+	if err := json.Unmarshal([]byte(jsonWithdraw), &withdraw); err != nil {
+		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonWithdraw)
+		return false
+	}
+
+	return true
 }
 
 func (e *Bibox) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {

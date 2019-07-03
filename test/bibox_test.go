@@ -6,9 +6,9 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/pair"
 
 	"github.com/bitontop/gored/exchange/bibox"
-	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 	// "../exchange/bibox"
 	// "./conf"
@@ -32,7 +32,7 @@ func Test_Bibox(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.0001, 100)
 	// Test_OrderStatus(e, pair, "123456789012")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")

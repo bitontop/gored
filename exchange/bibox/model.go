@@ -111,3 +111,8 @@ type InnerTrans struct {
 		State int    `json:"state"`
 	} `json:"result"`
 }
+
+type Withdraw struct {
+	Result int    `json:"result"`
+	Cmd    string `json:"cmd"`
+}
