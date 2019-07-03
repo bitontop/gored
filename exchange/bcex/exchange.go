@@ -44,7 +44,7 @@ func CreateBcex(config *exchange.Config) *Bcex {
 		instance = &Bcex{
 			ID:      DEFAULT_ID,
 			Name:    "Bcex",
-			Website: "https://www.bittrex.com/",
+			Website: "https://www.bcex.ca/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -110,7 +110,7 @@ func (e *Bcex) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Bcex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://bittrex.com/Market/Index?MarketName=%s", e.GetSymbolByPair(pair))
+	return fmt.Sprintf("https://www.bcex.ca/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 /*************** Coins on the Exchanges ***************/
@@ -228,16 +228,16 @@ func (e *Bcex) DeletePair(pair *pair.Pair) {
 func (e *Bcex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
-	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 

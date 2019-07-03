@@ -6,25 +6,72 @@ package bcex
 
 import (
 	"encoding/json"
-
-	"github.com/bitontop/gored/exchange"
 )
 
 type JsonResponse struct {
-	Success bool            `json:"success"`
-	Message string          `json:"message"`
-	Result  json.RawMessage `json:"result"`
+	Code    int             `json:"code"`
+	Message string          `json:"msg"`
+	Data    json.RawMessage `json:"data"`
 }
 
-type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
+type CoinsData struct {
+	CalcPrecision  int    `json:"calc_precision"`
+	BizPrecision   int    `json:"biz_precision"`
+	PhyPrecision   int    `json:"phy_precision"`
+	OrderAmountMin string `json:"order_amount_min"`
+	OrderAmountMax string `json:"order_amount_max"`
 }
+
+type PairsData struct {
+	Main      map[string][]*PairDetail `json:"main"`
+	Hot       []*PairDetail            `json:"hot"`
+	ByPercent []*PairDetail            `json:"by_percent"`
+	ByTime    []*PairDetail            `json:"by_time"`
+}
+
+type PairDetail struct {
+	ID            int         `json:"id"`
+	Vol           interface{} `json:"vol"`
+	Market        string      `json:"market"`
+	MarketAs      string      `json:"market_as"`
+	Token         string      `json:"token"`
+	TokenAs       string      `json:"token_as"`
+	Amount        interface{} `json:"amount"`
+	MaxPrice      string      `json:"max_price"`
+	MinPrice      string      `json:"min_price"`
+	OpenPrice     string      `json:"open_price"`
+	IsUp          string      `json:"is_up"`
+	Last          string      `json:"last"`
+	PrevPrice     string      `json:"prev_price"`
+	PPrecision    string      `json:"p_precision"`
+	NPrecision    string      `json:"n_precision"`
+	LatestPrice   string      `json:"latest_price"`
+	PercentChange string      `json:"percent_change"`
+	Currency      struct {
+		CNY string `json:"CNY"`
+		KRW string `json:"KRW"`
+	} `json:"currency"`
+}
+
+type OrderBook struct {
+	Bids [][]string `json:"bids"`
+	Asks [][]string `json:"asks"`
+}
+
+type AccountBalances struct {
+	Count int `json:"count"`
+	Data  []struct {
+		UserID  int    `json:"user_id"`
+		OrgID   int    `json:"org_id"`
+		Token   string `json:"token"`
+		TokenAs string `json:"token_as"`
+		Usable  string `json:"usable"`
+		Locked  string `json:"locked"`
+		Total   string `json:"total"`
+	} `json:"data"`
+}
+
+//---
 
 type Uuid struct {
 	Id string `json:"uuid"`
@@ -54,35 +101,4 @@ type PlaceOrder struct {
 	IsConditional              bool
 	Condition                  string
 	ConditionTarget            string
-}
-
-type PairsData []struct {
-	MarketCurrency     string      `json:"MarketCurrency"`
-	BaseCurrency       string      `json:"BaseCurrency"`
-	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
-	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
-	MinTradeSize       float64     `json:"MinTradeSize"`
-	MarketName         string      `json:"MarketName"`
-	IsActive           bool        `json:"IsActive"`
-	Created            string      `json:"Created"`
-	Notice             interface{} `json:"Notice"`
-	IsSponsored        interface{} `json:"IsSponsored"`
-	LogoURL            string      `json:"LogoUrl"`
-}
-
-type CoinsData []struct {
-	Currency        string      `json:"Currency"`
-	CurrencyLong    string      `json:"CurrencyLong"`
-	MinConfirmation int         `json:"MinConfirmation"`
-	TxFee           float64     `json:"TxFee"`
-	IsActive        bool        `json:"IsActive"`
-	IsRestricted    bool        `json:"IsRestricted"`
-	CoinType        string      `json:"CoinType"`
-	BaseAddress     string      `json:"BaseAddress"`
-	Notice          interface{} `json:"Notice"`
-}
-
-type OrderBook struct {
-	Buy  []exchange.Order `json:"buy"`
-	Sell []exchange.Order `json:"sell"`
 }
