@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	API_URL string = "https://api.bibox.com/v1"
+	API_URL string = "https://api.bibox.com"
 )
 
 /*API Base Knowledge
@@ -55,7 +55,7 @@ func (e *Bibox) GetCoinsData() error {
 
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
-	strRequestUrl := "/transfer"
+	strRequestUrl := "/v1/transfer"
 
 	mapParams := make(map[string]interface{})
 	mapParams["cmd"] = "transfer/coinConfig"
@@ -130,7 +130,7 @@ func (e *Bibox) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestUrl := "/mdata"
+	strRequestUrl := "/v1/mdata"
 	strUrl := API_URL + strRequestUrl
 
 	mapParams := make(map[string]string)
@@ -193,7 +193,7 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonResponse := &JsonResponse{}
 	orderBook := OrderBook{}
 
-	strRequestUrl := "/mdata"
+	strRequestUrl := "/v1/mdata"
 	strUrl := API_URL + strRequestUrl
 
 	mapParams := make(map[string]string)
@@ -255,9 +255,12 @@ func (e *Bibox) UpdateAllBalances() {
 		return
 	}
 
+	// test Inner Transfer
+	// e.InnerTrans(e.GetCoinBySymbol("ETH"), 0.01, 0)
+
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/transfer"
+	strRequest := "/v1/transfer"
 
 	mapParams := make(map[string]interface{})
 	mapParams["cmd"] = "transfer/assets"
@@ -296,6 +299,53 @@ func (e *Bibox) UpdateAllBalances() {
 
 }
 
+// direction: 0钱包转币币; 1币币转钱包
+// need API2, different structure
+func (e *Bibox) InnerTrans(coin *coin.Coin, quantity float64, direction int) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil", e.GetName())
+		return false
+	}
+
+	jsonResponse := &JsonResponse{}
+	innerTrans := InnerTrans{}
+	strRequest := "/v2/assets/transfer/spot"
+
+	mapParams := make(map[string]interface{})
+
+	//-----
+	/* mapParams["cmd"] = "assets/transfer/spot"
+
+	body := make(map[string]interface{})
+	body["symbol"] = e.GetSymbolByCoin(coin)
+	body["amount"] = quantity
+	body["type"] = direction
+
+	mapParams["body"] = body */
+	//-------
+
+	mapParams["symbol"] = e.GetSymbolByCoin(coin)
+	mapParams["amount"] = quantity
+	mapParams["type"] = direction
+
+	// log.Printf("====Inner mapParams: %+v", mapParams)
+
+	jsonInnerReturn := e.ApiKeyPOSTInner(strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonInnerReturn), &jsonResponse); err != nil {
+		log.Printf("%s Inner Transfer Json Unmarshal Err: %v %v", e.GetName(), err, jsonInnerReturn)
+		return false
+	} else if jsonResponse.Error.Code != "" {
+		log.Printf("%s Inner Transfer Failed: %v", e.GetName(), jsonResponse.Error)
+		return false
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &innerTrans); err != nil {
+		log.Printf("%s Inner Transfer Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return false
+	}
+
+	return false
+}
+
 func (e *Bibox) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	return false
 }
@@ -307,7 +357,7 @@ func (e *Bibox) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequest := "/orderpending"
+	strRequest := "/v1/orderpending"
 
 	mapParams := make(map[string]interface{})
 	mapParams["cmd"] = "orderpending/trade"
@@ -352,7 +402,7 @@ func (e *Bibox) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequest := "/orderpending"
+	strRequest := "/v1/orderpending"
 
 	mapParams := make(map[string]interface{})
 	mapParams["cmd"] = "orderpending/trade"
@@ -397,7 +447,7 @@ func (e *Bibox) OrderStatus(order *exchange.Order) error {
 
 	jsonResponse := &JsonResponse{}
 	orderStatus := OrderStatus{}
-	strRequest := "/orderpending"
+	strRequest := "/v1/orderpending"
 
 	mapParams := make(map[string]interface{})
 	mapParams["cmd"] = "orderpending/order"
@@ -453,7 +503,7 @@ func (e *Bibox) CancelOrder(order *exchange.Order) error {
 
 	jsonResponse := &JsonResponse{}
 	cancelOrder := CancelOrder{}
-	strRequest := "/orderpending"
+	strRequest := "/v1/orderpending"
 
 	mapParams := make(map[string]interface{})
 	mapParams["cmd"] = "orderpending/cancelTrade"
@@ -508,6 +558,44 @@ func (e *Bibox) ApiKeyPOST(strRequestPath string, mapParams map[string]interface
 	Params["cmds"] = jsonParams
 	Params["apikey"] = e.API_KEY
 	Params["sign"] = exchange.ComputeHmacMd5(jsonParams, e.API_SECRET)
+
+	request, err := http.NewRequest("POST", strRequestUrl, strings.NewReader(exchange.Map2UrlQuery(Params)))
+	if err != nil {
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Add("Accept", "application/json")
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func (e *Bibox) ApiKeyPOSTInner(strRequestPath string, mapParams map[string]interface{}) string {
+	strRequestUrl := API_URL + strRequestPath
+
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = "[" + string(bytesParams) + "]"
+	}
+
+	Params := make(map[string]string)
+	Params["body"] = jsonParams
+	Params["apikey"] = e.API_KEY
+	Params["sign"] = exchange.ComputeHmacMd5(jsonParams, e.API_SECRET)
+
+	//log.Printf("====Post mapParams: %+v", Params)
 
 	request, err := http.NewRequest("POST", strRequestUrl, strings.NewReader(exchange.Map2UrlQuery(Params)))
 	if err != nil {

@@ -104,3 +104,10 @@ type CancelOrder []struct {
 	Result string `json:"result"`
 	Cmd    string `json:"cmd"`
 }
+
+type InnerTrans struct {
+	Result struct {
+		ID    string `json:"id"`
+		State int    `json:"state"`
+	} `json:"result"`
+}
