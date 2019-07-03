@@ -31,7 +31,7 @@ func Test_Coinex(t *testing.T) {
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
-	// Test_OrderStatus(e, pair)
+	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 

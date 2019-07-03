@@ -116,10 +116,10 @@ func Test_Trading_Sell(e exchange.Exchange, p *pair.Pair, rate, quantity float64
 }
 
 // check auth only
-func Test_OrderStatus(e exchange.Exchange, p *pair.Pair) {
+func Test_OrderStatus(e exchange.Exchange, p *pair.Pair, orderID string) {
 	order := &exchange.Order{
 		Pair:     p,
-		OrderID:  "123456789012",
+		OrderID:  orderID,
 		Rate:     0.001,
 		Quantity: 100,
 		Side:     "Buy",
