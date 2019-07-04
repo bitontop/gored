@@ -65,3 +65,9 @@ type CancelOrders struct {
 	Error     string `json:"error"`
 	ErrorCode int    `json:"error_code"`
 }
+
+type Withdraw struct {
+	Result     string  `json:"result"`
+	WithdrawID int     `json:"withdrawId"`
+	Fee        float64 `json:"fee"`
+}
