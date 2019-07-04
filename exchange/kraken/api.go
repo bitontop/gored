@@ -14,7 +14,9 @@ import (
 	"io/ioutil"
 	"log"
 	"math"
+	"mime"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -25,7 +27,7 @@ import (
 )
 
 const (
-	API_URL string = "https://api.kraken.com/0"
+	API_URL string = "https://api.kraken.com"
 )
 
 /*API Base Knowledge
@@ -57,7 +59,7 @@ func (e *Kraken) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := make(map[string]*CoinsData)
 
-	strRequestUrl := "/public/Assets"
+	strRequestUrl := "/0/public/Assets"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -110,7 +112,7 @@ func (e *Kraken) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := make(map[string]*PairsData)
 
-	strRequestUrl := "/public/AssetPairs"
+	strRequestUrl := "/0/public/AssetPairs"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -175,7 +177,7 @@ func (e *Kraken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	mapParams["pair"] = symbol
 	mapParams["count"] = "100"
 
-	strRequestUrl := "/public/Depth"
+	strRequestUrl := "/0/public/Depth"
 	strUrl := API_URL + strRequestUrl
 
 	maker := &exchange.Maker{}
@@ -235,13 +237,10 @@ func (e *Kraken) UpdateAllBalances() {
 	}
 
 	jsonResponse := &JsonResponse{}
-	accountBalance := AccountBalances{}
-	strRequest := "/private/TradeBalance"
+	accountBalance := make(map[string]string)
+	strRequest := "/0/private/Balance"
 
-	mapParams := make(map[string]string)
-	mapParams["asset"] = "xxbt"
-
-	jsonBalanceReturn := e.ApiKeyPost(strRequest, mapParams)
+	jsonBalanceReturn := e.ApiKeyPost(strRequest, url.Values{}, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -249,37 +248,167 @@ func (e *Kraken) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Error)
 		return
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil {
-		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil && jsonResponse.Result != nil {
+		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse)
 		return
 	}
 
-	//---------------------- TODO
-	/* for _, v := range accountBalance {
-		c := e.GetCoinBySymbol(v.Currency)
+	for symb, balance := range accountBalance {
+		c := e.GetCoinBySymbol(symb)
+		bal, _ := strconv.ParseFloat(balance, 64)
 		if c != nil {
-			balanceMap.Set(c.Code, v.Available)
+			balanceMap.Set(c.Code, bal)
 		}
-	} */
+	}
 }
 
 func (e *Kraken) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return false
+	}
 
-	return false
+	jsonResponse := &JsonResponse{}
+	withdraw := WithdrawResponse{}
+	strRequestPath := "/0/private/Withdraw"
+
+	values := url.Values{
+		"asset":  {e.GetSymbolByCoin(coin)},
+		"key":    {addr},
+		"amount": {strconv.FormatFloat(quantity, 'f', -1, 64)},
+	}
+
+	jsonSubmitWithdraw := e.ApiKeyPost(strRequestPath, values, &WithdrawResponse{})
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
+		return false
+	} else if len(jsonResponse.Error) != 0 {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Error)
+		return false
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &withdraw); err != nil {
+		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return false
+	}
+
+	return true
 }
 
 func (e *Kraken) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
 
-	return nil, nil
+	jsonResponse := &JsonResponse{}
+	placeOrder := PlaceOrder{}
+	strRequestPath := "/0/private/AddOrder"
+
+	params := url.Values{
+		"pair":      {e.GetSymbolByPair(pair)},
+		"type":      {"sell"},
+		"ordertype": {"limit"},
+		"price":     {strconv.FormatFloat(rate, 'f', -1, 64)},
+		"volume":    {strconv.FormatFloat(quantity, 'f', -1, 64)},
+	}
+
+	jsonPlaceReturn := e.ApiKeyPost(strRequestPath, params, &PlaceOrder{})
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if len(jsonResponse.Error) != 0 {
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Error)
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	}
+
+	order := &exchange.Order{
+		Pair:         pair,
+		OrderID:      strings.Join(placeOrder.TransactionIds, ""),
+		Rate:         rate,
+		Quantity:     quantity,
+		Side:         "Sell",
+		Status:       exchange.New,
+		JsonResponse: jsonPlaceReturn,
+	}
+	return order, nil
 }
 
 func (e *Kraken) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
 
-	return nil, nil
+	jsonResponse := &JsonResponse{}
+	placeOrder := PlaceOrder{}
+	strRequestPath := "/0/private/AddOrder"
+
+	params := url.Values{
+		"pair":      {e.GetSymbolByPair(pair)},
+		"type":      {"buy"},
+		"ordertype": {"limit"},
+		"price":     {strconv.FormatFloat(rate, 'f', -1, 64)},
+		"volume":    {strconv.FormatFloat(quantity, 'f', -1, 64)},
+	}
+
+	jsonPlaceReturn := e.ApiKeyPost(strRequestPath, params, &PlaceOrder{})
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if len(jsonResponse.Error) != 0 {
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Error)
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	}
+
+	order := &exchange.Order{
+		Pair:         pair,
+		OrderID:      strings.Join(placeOrder.TransactionIds, ""),
+		Rate:         rate,
+		Quantity:     quantity,
+		Side:         "Buy",
+		Status:       exchange.New,
+		JsonResponse: jsonPlaceReturn,
+	}
+	return order, nil
 }
 
 func (e *Kraken) OrderStatus(order *exchange.Order) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
 
+	jsonResponse := &JsonResponse{}
+	orderStatus := OrderStatus{}
+	strRequestPath := "/0/private/QueryOrders"
+
+	params := url.Values{"txid": {order.OrderID}}
+
+	jsonOrderStatus := e.ApiKeyPost(strRequestPath, params, &OrderStatus{})
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+	} else if len(jsonResponse.Error) != 0 {
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Error)
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	}
+	for _, orders := range orderStatus {
+		vol, _ := strconv.ParseFloat(orders.Volume, 64)
+		if orders.Status == "canceled" {
+			order.Status = exchange.Canceled
+		} else if vol == orders.VolumeExecuted {
+			order.Status = exchange.Filled
+		} else if orders.VolumeExecuted != 0 && orders.Status == "open" {
+			order.Status = exchange.Partial
+		} else if orders.Status == "open" && orders.VolumeExecuted == 0 {
+			order.Status = exchange.New
+		} else {
+			order.Status = exchange.Other
+		}
+
+		order.DealRate = orders.Cost / orders.VolumeExecuted
+		order.DealQuantity = orders.VolumeExecuted
+	}
 	return nil
 }
 
@@ -288,6 +417,28 @@ func (e *Kraken) ListOrders() ([]*exchange.Order, error) {
 }
 
 func (e *Kraken) CancelOrder(order *exchange.Order) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	cancelOrder := CancelOrder{}
+	strRequestPath := "/0/private/CancelOrder"
+
+	params := url.Values{"txid": {order.OrderID}}
+
+	jsonCancelOrder := e.ApiKeyPost(strRequestPath, params, &CancelOrder{})
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
+		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
+	} else if len(jsonResponse.Error) != 0 {
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Error)
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &cancelOrder); err != nil {
+		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	}
+
+	order.Status = exchange.Canceling
+	order.CancelStatus = jsonCancelOrder
 
 	return nil
 }
@@ -301,37 +452,38 @@ func (e *Kraken) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Kraken) ApiKeyPost(strRequestPath string, mapParams map[string]string) string {
-
-	//Signature Request Params
-
+func (e *Kraken) ApiKeyPost(strRequestPath string, values url.Values, typ interface{}) string {
 	/* if e.Two_Factor != "" {
 		mapParams["otp"] = e.Two_Factor
 	} */
-
 	strUrl := API_URL + strRequestPath
-
 	httpClient := &http.Client{}
+	non := fmt.Sprintf("%d", time.Now().UnixNano())
+	values.Set("nonce", non)
+	secret, _ := base64.StdEncoding.DecodeString(e.API_SECRET)
+	signature := createSignature(strRequestPath, values, secret)
 
-	jsonParams := ""
+	/* jsonParams := ""
 	if nil != mapParams {
 		bytesParams, _ := json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
-	jsonParams = exchange.Map2UrlQuery(mapParams)
+	jsonParams = exchange.Map2UrlQuery(mapParams) */
 
-	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
+	headers := map[string]string{
+		"API-Key":  e.API_KEY,
+		"API-Sign": signature,
+	}
+
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(values.Encode()))
 	if nil != err {
 		return err.Error()
 	}
 
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano()/1000000) //time.Now().Unix())
-	Signature := ComputeHmac512(strRequestPath, mapParams, e.API_SECRET)
-
 	request.Header.Add("User-Agent", "Kraken GO API Agent (https://github.com/beldur/kraken-go-api-client)")
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("API-Key", e.API_KEY)
-	request.Header.Add("API-Sign", Signature)
+	for key, value := range headers {
+		request.Header.Add(key, value)
+	}
 
 	response, err := httpClient.Do(request)
 	if nil != err {
@@ -341,6 +493,15 @@ func (e *Kraken) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 
 	body, err := ioutil.ReadAll(response.Body)
 	if nil != err {
+		return err.Error()
+	}
+
+	// Check mime type of response
+	mimeType, _, err := mime.ParseMediaType(response.Header.Get("Content-Type"))
+	if err != nil {
+		return err.Error()
+	}
+	if mimeType != "application/json" {
 		return err.Error()
 	}
 
@@ -348,100 +509,22 @@ func (e *Kraken) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 }
 
 //Signature加密
-func ComputeHmac512(strPath string, mapParams map[string]string, strSecret string) string {
-	// bytesParams, _ := json.Marshal(mapParams)
-	postData := mapParams["nonce"] + exchange.Map2UrlQuery(mapParams)
-	b, _ := json.Marshal(postData)
-	log.Printf("postData: %v,\n byte : %v,\n jsonB: %v", postData, []byte(postData), b)
+func getSha256(input []byte) []byte {
 	sha := sha256.New()
-	sha.Write([]byte(postData))
-	shaSum := sha.Sum(nil)
-
-	strMessage := fmt.Sprintf("%s%s", strPath, string(shaSum))
-	log.Printf("strMessage: %v", strMessage)
-	decodeSecret, _ := base64.StdEncoding.DecodeString(strSecret)
-
-	h := hmac.New(sha512.New, decodeSecret)
-	h.Write([]byte(strMessage))
-
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+	sha.Write(input)
+	return sha.Sum(nil)
 }
 
-/* func (e *Kraken) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	//strMethod := "POST"
-	strMethod := "GET"
+// getHMacSha512 creates a hmac hash with sha512
+func getHMacSha512(message, secret []byte) []byte {
+	mac := hmac.New(sha512.New, secret)
+	mac.Write(message)
+	return mac.Sum(nil)
+}
 
-	strUrl := API_URL + strRequestPath
-
-	httpClient := &http.Client{}
-
-	// jsonParams := ""
-	// if nil != mapParams {
-	// 	bytesParams, _ := json.Marshal(mapParams)
-	// 	jsonParams = string(bytesParams)
-	// }
-
-	// request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
-	strParams := exchange.Map2UrlQuery(mapParams)
-	strRequestUrl := strUrl + "?" + strParams
-	request, err := http.NewRequest(strMethod, strRequestUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-
-	//Signature Request Params
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-	if e.Two_Factor != "" {
-		mapParams["otp"] = e.Two_Factor
-	}
-	Signature := ComputeHmac512(strRequestPath, mapParams, e.API_SECRET)
-
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("API-Key", e.API_KEY)
-	request.Header.Add("API-Sign", Signature)
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-} */
-
-/* func (e *Kraken) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["apikey"] = e.API_KEY
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
-
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
-
-	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
-	httpClient := &http.Client{}
-
-	request, err := http.NewRequest("GET", strUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("Content-Type", "application/json;charset=utf-8")
-	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-} */
+func createSignature(urlPath string, values url.Values, secret []byte) string {
+	// See https://www.kraken.com/help/api#general-usage for more information
+	shaSum := getSha256([]byte(values.Get("nonce") + values.Encode()))
+	macSum := getHMacSha512(append([]byte(urlPath), shaSum...), secret)
+	return base64.StdEncoding.EncodeToString(macSum)
+}
