@@ -30,9 +30,9 @@ func Test_Kraken(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
-	Test_Trading(e, pair, 0.0001, 100)
-	Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	// Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.0001, 100)
+	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
 func InitKraken() exchange.Exchange {
