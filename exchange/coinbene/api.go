@@ -264,8 +264,30 @@ func (e *Coinbene) UpdateAllBalances() {
 }
 
 func (e *Coinbene) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return false
+	}
 
-	return false
+	withdraw := Withdraw{}
+	strRequest := "/v1/withdraw/apply"
+
+	mapParams := make(map[string]string)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["asset"] = e.GetSymbolByCoin(coin)
+	mapParams["address"] = addr
+	mapParams["tag"] = tag
+
+	jsonWithdrawReturn := e.ApiKeyPost(strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawReturn)
+		return false
+	} else if withdraw.Status != "ok" {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdrawReturn)
+		return false
+	}
+
+	return true
 }
 
 func (e *Coinbene) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {

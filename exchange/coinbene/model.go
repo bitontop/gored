@@ -72,3 +72,9 @@ type OrderStatus struct {
 	Status      string `json:"status"`
 	Timestamp   int64  `json:"timestamp"`
 }
+
+type Withdraw struct {
+	Status     string `json:"status"`
+	Timestamp  int64  `json:"timestamp"`
+	WithdrawID int    `json:"withdrawId"`
+}
