@@ -45,5 +45,86 @@ type OrderBook struct {
 	Bids [][]interface{} `json:"bids"`
 }
 
-type AccountBalances struct {
+type WithdrawResponse struct {
+	RefID int `json:"refid"`
 }
+
+type PlaceOrder struct {
+	Description    OrderDescription `json:"descr"`
+	TransactionIds []string         `json:"txid"`
+}
+
+type OrderDescription struct {
+	AssetPair      string `json:"pair"`
+	Close          string `json:"close"`
+	Leverage       string `json:"leverage"`
+	Order          string `json:"order"`
+	OrderType      string `json:"ordertype"`
+	PrimaryPrice   string `json:"price"`
+	SecondaryPrice string `json:"price2"`
+	Type           string `json:"type"`
+}
+
+type OrderStatus map[string]Order
+
+type Order struct {
+	TransactionID  string           `json:"-"`
+	ReferenceID    string           `json:"refid"`
+	UserRef        int              `json:"userref"`
+	Status         string           `json:"status"`
+	OpenTime       float64          `json:"opentm"`
+	StartTime      float64          `json:"starttm"`
+	ExpireTime     float64          `json:"expiretm"`
+	Description    OrderDescription `json:"descr"`
+	Volume         string           `json:"vol"`
+	VolumeExecuted float64          `json:"vol_exec,string"`
+	Cost           float64          `json:"cost,string"`
+	Fee            float64          `json:"fee,string"`
+	Price          float64          `json:"price,string"`
+	StopPrice      float64          `json:"stopprice.string"`
+	LimitPrice     float64          `json:"limitprice,string"`
+	Misc           string           `json:"misc"`
+	OrderFlags     string           `json:"oflags"`
+	CloseTime      float64          `json:"closetm"`
+	Reason         string           `json:"reason"`
+}
+
+type CancelOrder struct {
+	Count   int  `json:"count"`
+	Pending bool `json:"pending"`
+}
+
+/* type AccountBalances struct {
+	ADA  float64 `json:"ADA,string"`
+	ATOM float64 `json:"ATOM,string"`
+	BCH  float64 `json:"BCH,string"`
+	BSV  float64 `json:"BSV,string"`
+	DASH float64 `json:"DASH,string"`
+	EOS  float64 `json:"EOS,string"`
+	GNO  float64 `json:"GNO,string"`
+	KFEE float64 `json:"ADA,string"`
+	QTUM float64 `json:"QTUM,string"`
+	USDT float64 `json:"USDT,string"`
+	XDAO float64 `json:"XDAO,string"`
+	XETC float64 `json:"XETC,string"`
+	XETH float64 `json:"XETH,string"`
+	XICN float64 `json:"XICN,string"`
+	XLTC float64 `json:"XLTC,string"`
+	XMLN float64 `json:"XMLN,string"`
+	XNMC float64 `json:"XNMC,string"`
+	XREP float64 `json:"XREP,string"`
+	XTZ  float64 `json:"XTZ,string"`
+	XXBT float64 `json:"XXBT,string"`
+	XXDG float64 `json:"XXDG,string"`
+	XXLM float64 `json:"XXLM,string"`
+	XXMR float64 `json:"XXMR,string"`
+	XXRP float64 `json:"XXRP,string"`
+	XXVN float64 `json:"XXVN,string"`
+	XZEC float64 `json:"XZEC,string"`
+	ZCAD float64 `json:"ZCAD,string"`
+	ZEUR float64 `json:"ZEUR,string"`
+	ZGBP float64 `json:"ZGBP,string"`
+	ZJPY float64 `json:"ZJPY,string"`
+	ZKRW float64 `json:"ZKRW,string"`
+	ZUSD float64 `json:"ZUSD,string"`
+} */
