@@ -112,7 +112,7 @@ func (e *Bitforex) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Bitforex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bitforex.com/cn/trade/spotTrading?commodityCode=%s&currencyCode=%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.bitforex.com/cn/spot/%v_%v", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 /*************** Coins on the Exchanges ***************/
