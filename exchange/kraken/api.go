@@ -303,12 +303,15 @@ func (e *Kraken) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	placeOrder := PlaceOrder{}
 	strRequestPath := "/0/private/AddOrder"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	params := url.Values{
 		"pair":      {e.GetSymbolByPair(pair)},
 		"type":      {"sell"},
 		"ordertype": {"limit"},
-		"price":     {strconv.FormatFloat(rate, 'f', -1, 64)},
-		"volume":    {strconv.FormatFloat(quantity, 'f', -1, 64)},
+		"price":     {strconv.FormatFloat(rate, 'f', priceFilter, 64)},
+		"volume":    {strconv.FormatFloat(quantity, 'f', lotSize, 64)},
 	}
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequestPath, params, &PlaceOrder{})
@@ -342,12 +345,15 @@ func (e *Kraken) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	placeOrder := PlaceOrder{}
 	strRequestPath := "/0/private/AddOrder"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	params := url.Values{
 		"pair":      {e.GetSymbolByPair(pair)},
 		"type":      {"buy"},
 		"ordertype": {"limit"},
-		"price":     {strconv.FormatFloat(rate, 'f', -1, 64)},
-		"volume":    {strconv.FormatFloat(quantity, 'f', -1, 64)},
+		"price":     {strconv.FormatFloat(rate, 'f', priceFilter, 64)},
+		"volume":    {strconv.FormatFloat(quantity, 'f', lotSize, 64)},
 	}
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequestPath, params, &PlaceOrder{})
