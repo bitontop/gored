@@ -46,7 +46,7 @@ type OrderBook struct {
 }
 
 type WithdrawResponse struct {
-	RefID int `json:"refid"`
+	RefID string `json:"refid"`
 }
 
 type PlaceOrder struct {
