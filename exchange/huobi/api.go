@@ -284,7 +284,7 @@ func (e *Huobi) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bo
 	}
 
 	jsonResponse := &JsonResponse{}
-	withdrawID := ""
+	var withdrawID int64
 	strRequest := "/v1/dw/withdraw/api/create"
 
 	mapParams := make(map[string]string)
