@@ -9,6 +9,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 
 	cmap "github.com/orcaman/concurrent-map"
@@ -110,7 +111,7 @@ func (e *Biki) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Biki) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.biki.com/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.biki.com/trade/%s_%s", strings.ToUpper(e.GetSymbolByCoin(pair.Target)), strings.ToUpper(e.GetSymbolByCoin(pair.Base)))
 }
 
 /*************** Coins on the Exchanges ***************/
