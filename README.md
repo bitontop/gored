@@ -105,7 +105,6 @@ go build
 
 ```
 
-+ Make any neccessary changes to the `config.json` file.
 + Run the `gored` binary file inside your GOPATH bin folder.
 
 ## Donations
