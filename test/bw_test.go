@@ -4,14 +4,14 @@ import (
 	"log"
 	"testing"
 
-	//"../exchange/bw"
-	//"./conf"
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/pair"
 
 	"github.com/bitontop/gored/exchange/bw"
-	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/bw"
+	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -23,7 +23,7 @@ import (
 func Test_Bw(t *testing.T) {
 	e := InitBw()
 
-	pair := pair.GetPairByKey("USDT|BTC")
+	pair := pair.GetPairByKey("USDT|QTUM")
 
 	Test_Coins(e)
 	Test_Pairs(e)
