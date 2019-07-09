@@ -4,6 +4,25 @@ package liquid
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+type CoinsData []struct {
+	CurrencyType         string      `json:"currency_type"`
+	Currency             string      `json:"currency"`
+	Symbol               string      `json:"symbol"`
+	AssetsPrecision      int         `json:"assets_precision"`
+	QuotingPrecision     int         `json:"quoting_precision"`
+	MinimumWithdrawal    float64     `json:"minimum_withdrawal"`
+	WithdrawalFee        float64     `json:"withdrawal_fee"`
+	MinimumFee           interface{} `json:"minimum_fee"`
+	MinimumOrderQuantity interface{} `json:"minimum_order_quantity"`
+	DisplayPrecision     int         `json:"display_precision"`
+	Depositable          bool        `json:"depositable"`
+	Withdrawable         bool        `json:"withdrawable"`
+	DiscountFee          float64     `json:"discount_fee"`
+	CreditCardFundable   bool        `json:"credit_card_fundable,omitempty"`
+	Lendable             bool        `json:"lendable"`
+	PositionFundable     bool        `json:"position_fundable"`
+}
+
 type PairsData []struct {
 	ID                  string      `json:"id"`
 	ProductType         string      `json:"product_type"`

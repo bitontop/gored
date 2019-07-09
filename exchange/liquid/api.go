@@ -51,62 +51,39 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Liquid) GetCoinsData() error {
-	pairsData := PairsData{}
 
-	strRequestUrl := "/products"
+	coinsdata := CoinsData{}
+	strRequestUrl := "/currencies"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &pairsData); err != nil {
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsdata); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
-	for _, data := range pairsData {
-		base := &coin.Coin{}
-		target := &coin.Coin{}
+	for _, data := range coinsdata {
+		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base = coin.GetCoin(data.QuotedCurrency)
-			if base == nil {
-				base = &coin.Coin{}
-				base.Code = data.QuotedCurrency
-				coin.AddCoin(base)
-			}
-			target = coin.GetCoin(data.BaseCurrency)
-			if target == nil {
-				target = &coin.Coin{}
-				target.Code = data.BaseCurrency
-				coin.AddCoin(target)
+			c = coin.GetCoin(data.Currency)
+			if c == nil {
+				c = &coin.Coin{}
+				c.Code = data.Currency
+				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			base = e.GetCoinBySymbol(data.QuotedCurrency)
-			target = e.GetCoinBySymbol(data.BaseCurrency)
+			c = e.GetCoinBySymbol(data.Currency)
 		}
 
-		if base != nil {
+		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.QuotedCurrency,
+				CoinID:       c.ID,
+				Coin:         c,
+				ExSymbol:     data.Currency,
 				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
-			}
-			e.SetCoinConstraint(coinConstraint)
-		}
-
-		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.BaseCurrency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
+				TxFee:        data.WithdrawalFee,
+				Withdraw:     data.Depositable,
+				Deposit:      data.Withdrawable,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       DEFAULT_LISTED,
 			}
