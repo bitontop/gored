@@ -145,8 +145,8 @@ func (e *Bw) GetPairsData() error {
 					ExSymbol:    data.Name,
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     float64(data.AmountDecimal),
-					PriceFilter: float64(data.PriceDecimal),
+					LotSize:     math.Pow10(-1 * data.AmountDecimal),
+					PriceFilter: math.Pow10(-1 * data.PriceDecimal),
 					Listed:      data.State == 1,
 				}
 				e.SetPairConstraint(pairConstraint)
