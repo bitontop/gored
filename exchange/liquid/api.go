@@ -355,6 +355,10 @@ func (e *Liquid) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	if order == nil {
+		return fmt.Errorf("%s empty order", e.GetName())
+	}
+
 	cancelOrder := CancelOrder{}
 	strRequest := fmt.Sprintf("/orders/%s/cancel", order.OrderID)
 
