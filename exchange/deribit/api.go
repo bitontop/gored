@@ -68,7 +68,7 @@ func (e *Deribit) GetCoinsData() error {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.InstrumentName)
+			c = coin.GetCoin("CQBTC")
 			if c == nil && data.InstrumentName == "BTC-27SEP19" {
 				c = &coin.Coin{
 					Code:     "CQBTC",
