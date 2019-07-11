@@ -146,4 +146,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, OKEXDM)    // ID = 45
 	supportList = append(supportList, GOKO)      // ID = 46
 	supportList = append(supportList, BCEX)      // ID = 47
+	supportList = append(supportList, DIGIFINEX) // ID = 48
 }
