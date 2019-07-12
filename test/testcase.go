@@ -153,7 +153,7 @@ func Test_CancelOrder(e exchange.Exchange, p *pair.Pair, orderID string) {
 }
 
 func Test_Withdraw(e exchange.Exchange, c *coin.Coin, amount float64, addr string) {
-	if e.Withdraw(c, amount, addr, "tag") {
+	if e.Withdraw(c, amount, addr, "") {
 		log.Printf("%s %s Withdraw Successful!", e.GetName(), c.Code)
 	} else {
 		log.Printf("%s %s Withdraw Failed!", e.GetName(), c.Code)
