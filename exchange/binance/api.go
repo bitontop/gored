@@ -273,7 +273,7 @@ func (e *Binance) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
-	jsonSubmitWithdraw := e.ApiKeyRequest("POST", mapParams, strRequest)
+	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Error: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
@@ -482,6 +482,40 @@ func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, s
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
+	strUrl := API_URL + strRequestPath
+
+	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/json; charset=utf-8")
+	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+/*Method: API Request and Signature is required
+Step 1: Change Instance Name    (e *<exchange Instance Name>)
+Step 2: Create mapParams Depend on API Signature request
+Step 3: Add HttpGetRequest below strUrl if API has different requests*/
+func (e *Binance) WApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
+	mapParams["recvWindow"] = "50000000"
+	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
+	signature := exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+
+	payload := fmt.Sprintf("%s&signature=%s", exchange.Map2UrlQuery(mapParams), signature)
 	strUrl := API_URL + strRequestPath
 
 	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
