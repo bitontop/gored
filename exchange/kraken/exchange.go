@@ -112,7 +112,7 @@ func (e *Kraken) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Kraken) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://trade.kraken.com/markets/kraken/%s/%s", e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target))
+	return fmt.Sprintf("https://trade.kraken.com/markets/kraken/%s/%s", pair.Target.Code, pair.Base.Code)
 }
 
 /*************** Coins on the Exchanges ***************/
