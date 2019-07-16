@@ -165,10 +165,10 @@ func (e *Cointiger) GetPairsData() error {
 			}
 			if p != nil {
 				// ↓ orderbook precision, not trading precision.
-				priceFilter, err := strconv.ParseFloat(data.DepthSelect.Step0, 64)
+				/* priceFilter, err := strconv.ParseFloat(data.DepthSelect.Step0, 64)
 				if err != nil {
 					log.Printf("%s priceFilter parse error: %v, %v", e.GetBalance, err, data.DepthSelect.Step0)
-				}
+				} */
 				pairConstraint := &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
@@ -176,7 +176,7 @@ func (e *Cointiger) GetPairsData() error {
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
 					LotSize:     math.Pow10(-1 * data.AmountPrecision),
-					PriceFilter: priceFilter, //math.Pow10(-1 * data.PricePrecision), // this is trading precision
+					PriceFilter: math.Pow10(-1 * data.PricePrecision), //priceFilter, // orderbook precision
 					Listed:      DEFAULT_LISTED,
 				}
 				e.SetPairConstraint(pairConstraint)
