@@ -39,6 +39,7 @@ import (
 	"github.com/bitontop/gored/exchange/idex"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/latoken"
 	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
@@ -387,6 +388,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.DIGIFINEX:
 		ex := digifinex.CreateDigifinex(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.LATOKEN:
+		ex := latoken.CreateLatoken(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

@@ -41,6 +41,7 @@ import (
 	"github.com/bitontop/gored/exchange/ibankdigital"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
+	"github.com/bitontop/gored/exchange/latoken"
 	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
@@ -145,6 +146,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitGoko(config)
 	InitBcex(config)
 	InitDigifinex(config)
+	InitLatoken(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -509,6 +511,15 @@ func InitBcex(config *exchange.Config) {
 func InitDigifinex(config *exchange.Config) {
 	conf.Exchange(exchange.DIGIFINEX, config)
 	ex := digifinex.CreateDigifinex(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitLatoken(config *exchange.Config) {
+	conf.Exchange(exchange.LATOKEN, config)
+	ex := latoken.CreateLatoken(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
