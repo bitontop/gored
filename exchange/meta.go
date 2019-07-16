@@ -78,6 +78,7 @@ const (
 	IDEX         ExchangeName = "IDEX"
 	KRAKEN       ExchangeName = "KRAKEN"
 	KUCOIN       ExchangeName = "KUCOIN"
+	LATOKEN      ExchangeName = "LATOKEN"
 	LBANK        ExchangeName = "LBANK"
 	LIQUID       ExchangeName = "LIQUID"
 	LIVECOIN     ExchangeName = "LIVECOIN"
