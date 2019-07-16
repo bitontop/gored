@@ -280,7 +280,7 @@ func (e *Bigone) UpdateAllBalances() {
 // read only withdrawal
 func (e *Bigone) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	/* if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("coinex API Key or Secret Key are nil.")
+		log.Printf("bigone API Key or Secret Key are nil.")
 		return false
 	}
 

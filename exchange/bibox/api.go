@@ -353,7 +353,7 @@ func (e *Bibox) InnerTrans(coin *coin.Coin, quantity float64, direction int) boo
 // need to update interface to use more params
 func (e *Bibox) Withdraw(coin *coin.Coin, quantity float64, addr, tag string /* , googleAuth int, tradePWD, memo string */) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("coinex API Key or Secret Key are nil.")
+		log.Printf("bibox API Key or Secret Key are nil.")
 		return false
 	}
 
