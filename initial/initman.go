@@ -51,6 +51,7 @@ import (
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
+	"github.com/bitontop/gored/exchange/virgocx"
 )
 
 var instance *InitManager
@@ -395,6 +396,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.LATOKEN:
 		ex := latoken.CreateLatoken(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.VIRGOCX:
+		ex := virgocx.CreateVirgocx(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

@@ -150,4 +150,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BCEX)      // ID = 47
 	supportList = append(supportList, DIGIFINEX) // ID = 48
 	supportList = append(supportList, LATOKEN)   // ID = 49
+	supportList = append(supportList, VIRGOCX)   // ID = 50
 }
