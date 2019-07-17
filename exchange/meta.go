@@ -25,6 +25,7 @@ const (
 	OMNI    ChainType = "OMNI"
 	TRC20   ChainType = "TRC20"
 
+	ABCC         ExchangeName = "ABCC"
 	BCEX         ExchangeName = "BCEX"
 	BGOGO        ExchangeName = "BGOGO"
 	BIBOX        ExchangeName = "BIBOX"
@@ -151,4 +152,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, DIGIFINEX) // ID = 48
 	supportList = append(supportList, LATOKEN)   // ID = 49
 	supportList = append(supportList, VIRGOCX)   // ID = 50
+	// supportList = append(supportList, ABCC)   // ID = 51
 }
