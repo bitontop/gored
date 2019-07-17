@@ -53,7 +53,7 @@ type PlaceOrder struct {
 	ImmediateOrCancel          bool
 	IsConditional              bool
 	Condition                  string
-	ConditionTarget            string
+	ConditionTarget            float64
 }
 
 type PairsData []struct {
