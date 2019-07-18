@@ -10,9 +10,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/bitfinex"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/bitfinex"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/bitfinex"
+	// "./conf"
 )
 
 /********************Public API********************/
@@ -29,8 +32,10 @@ func Test_Bitfinex(t *testing.T) {
 	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Trading(e, pair, 0.0001000123, 100)
+	// Test_Trading_Sell(e, pair, 0.04123456789, 0.02010123456789)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	// log.Printf("Url: %v", e.GetTradingWebURL(pair))
 }
 
 func InitBitfinex() exchange.Exchange {

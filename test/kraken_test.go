@@ -6,10 +6,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/pair"
 
 	"github.com/bitontop/gored/exchange/kraken"
-	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/kraken"
+	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -40,6 +42,11 @@ func InitKraken() exchange.Exchange {
 	pair.Init()
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
+
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	// utils.GetCommonDataFromJSON(config.SourceURI)
+
 	conf.Exchange(exchange.KRAKEN, config)
 
 	ex := kraken.CreateKraken(config)
