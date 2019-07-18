@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/exchange/abcc"
 	"github.com/bitontop/gored/exchange/bcex"
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
@@ -403,6 +404,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.VIRGOCX:
 		ex := virgocx.CreateVirgocx(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.ABCC:
+		ex := abcc.CreateAbcc(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
