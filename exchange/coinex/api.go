@@ -213,29 +213,31 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	var err error
 	for _, bid := range orderBook.Bids {
 		buydata := exchange.Order{}
-		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
-		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-		}
 
 		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
 		if err != nil {
 			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
+		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
 		maker.Bids = append(maker.Bids, buydata)
 	}
 
 	for _, ask := range orderBook.Asks {
 		selldata := exchange.Order{}
-		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
-		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-		}
 
 		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
 		if err != nil {
 			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
+		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
 		maker.Asks = append(maker.Asks, selldata)
 	}
 
