@@ -33,8 +33,8 @@ func Test_Tokok(t *testing.T) {
 	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.01, 0.1)
-	// Test_Trading_Sell(e, pair, 0.04, 0.1)
+	// Test_Trading(e, pair, 0.01, 0.01)
+	// Test_Trading_Sell(e, pair, 0.04, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
