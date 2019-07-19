@@ -95,3 +95,15 @@ type OrderStatus struct {
 	Code           int       `json:"code"`
 	Message        string    `json:"message"`
 }
+
+type WSOrderBook struct {
+	Table  string `json:"table"`
+	Action string `json:"action"`
+	Data   []struct {
+		InstrumentID string     `json:"instrument_id"`
+		Asks         [][]string `json:"asks"`
+		Bids         [][]string `json:"bids"`
+		Timestamp    time.Time  `json:"timestamp"`
+		Checksum     int        `json:"checksum"`
+	} `json:"data"`
+}
