@@ -102,7 +102,7 @@ func (e *Bw) GetName() exchange.ExchangeName {
 }
 
 func (e *Bw) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bw.com/newTrade/spotTradding/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.bw.com/newTrade/spotTradding/%s_%s", pair.Target.Code, pair.Base.Code)
 }
 
 func (e *Bw) GetBalance(coin *coin.Coin) float64 {
