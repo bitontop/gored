@@ -23,9 +23,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL_V2  = "https://api.cointiger.com/exchange/trading/api/v2"
-	API_URL     = "https://api.cointiger.com/exchange/trading"
-	API_URL_MKT = "https://api.cointiger.com/exchange/trading/api/market"
+	API_URL = "https://api.cointiger.com/exchange/trading"
 )
 
 /*API Base Knowledge
@@ -57,8 +55,8 @@ func (e *Cointiger) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestPath := "/currencys"
-	strUrl := API_URL_V2 + strRequestPath
+	strRequestPath := "/api/v2/currencys"
+	strUrl := API_URL + strRequestPath
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
@@ -137,8 +135,8 @@ func (e *Cointiger) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestPath := "/currencys"
-	strUrl := API_URL_V2 + strRequestPath
+	strRequestPath := "/api/v2/currencys"
+	strUrl := API_URL + strRequestPath
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
@@ -198,18 +196,18 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(p)
 
-	mapParams := make(map[string]interface{})
+	mapParams := make(map[string]string)
 	mapParams["symbol"] = symbol
 	mapParams["type"] = "step0"
 
-	strRequestPath := "/depth"
-	strUrl := API_URL_MKT + strRequestPath
+	strRequestPath := "/api/market/depth"
+	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{}
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := exchange.HttpGetRequestInterface(strUrl, mapParams)
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Code != "0" {
@@ -519,7 +517,7 @@ func (e *Cointiger) ApiKeyRequest(strMethod, strRequestPath string, mapParams ma
 	Params["time"] = strconv.FormatInt(time.Now().UTC().UnixNano(), 10)[:13]
 
 	urlParams := exchange.Map2UrlQueryInterface(Params)
-	strUrl := API_URL_V2 + strRequestPath + "?" + urlParams
+	strUrl := API_URL + "/api/v2" + strRequestPath + "?" + urlParams
 
 	query := exchange.Map2UrlQueryInterface(mapParams)
 	values, err := url.ParseQuery(query)

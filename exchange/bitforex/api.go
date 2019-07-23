@@ -438,7 +438,33 @@ func (e *Bitforex) ApiKeyPost(strRequestPath string, mapParams map[string]interf
 	mapParams["signData"] = exchange.ComputeHmac256NoDecode(signDataUrl, e.API_SECRET)
 	strUrl += "&signData=" + mapParams["signData"].(string)
 
-	return exchange.HttpPostRequestInterface(strUrl, mapParams)
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("Accept-Language", "zh-cn")
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
 }
 
 func (e *Bitforex) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {

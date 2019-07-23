@@ -53,70 +53,7 @@ func HttpGetRequest(strUrl string, mapParams map[string]string) string {
 	return string(body)
 }
 
-func HttpGetRequestInterface(strUrl string, mapParams map[string]interface{}) string {
-	httpClient := &http.Client{}
-
-	var strRequestUrl string
-	if nil == mapParams {
-		strRequestUrl = strUrl
-	} else {
-		strParams := Map2UrlQueryInterface(mapParams)
-		strRequestUrl = strUrl + "?" + strParams
-	}
-
-	request, err := http.NewRequest("GET", strRequestUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
-	request.Header.Add("Connection", "close")
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-}
-
 func HttpPostRequest(strUrl string, mapParams map[string]string) string {
-	httpClient := &http.Client{}
-
-	jsonParams := ""
-	if nil != mapParams {
-		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
-	}
-
-	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("Accept-Language", "zh-cn")
-
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
-}
-
-func HttpPostRequestInterface(strUrl string, mapParams map[string]interface{}) string {
 	httpClient := &http.Client{}
 
 	jsonParams := ""
