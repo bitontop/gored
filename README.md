@@ -1,5 +1,3 @@
-<img src="" width="350px" height="350px" hspace="70">
-
 [![Build Status](https://travis-ci.com/bitontop/gored.svg?branch=master)](https://travis-ci.com/bitontop/gored)
 [![Software License](https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square)](https://github.com/bitontop/gored/blob/master/LICENSE)
 [![GoDoc](https://godoc.org/github.com/bitontop/gored?status.svg)](https://godoc.org/github.com/bitontop/gored)
