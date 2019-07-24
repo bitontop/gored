@@ -14,6 +14,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/cointiger"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/cointiger"
+	// "./conf"
 )
 
 /********************Public API********************/
@@ -29,7 +31,7 @@ func Test_Cointiger(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	//Test_Trading(e, pair, 0.02, 0.01)
 	// Test_Trading_Sell(e, pair, 0.04, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
