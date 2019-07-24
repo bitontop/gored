@@ -130,8 +130,8 @@ func (e *Latoken) GetPairsData() error {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.BaseCurrency)
-			target := coin.GetCoin(data.QuotedCurrency)
+			base := coin.GetCoin(data.QuotedCurrency)
+			target := coin.GetCoin(data.BaseCurrency)
 			if base != nil && target != nil {
 
 				p = pair.GetPair(base, target)
@@ -147,8 +147,8 @@ func (e *Latoken) GetPairsData() error {
 				ExSymbol:    data.Symbol,
 				MakerFee:    data.MakerFee,
 				TakerFee:    data.TakerFee,
-				LotSize:     math.Pow10(-1 * data.PricePrecision),
-				PriceFilter: math.Pow10(-1 * data.AmountPrecision),
+				LotSize:     math.Pow10(-1 * data.AmountPrecision),
+				PriceFilter: math.Pow10(-1 * data.PricePrecision),
 				Listed:      true,
 			}
 			e.SetPairConstraint(pairConstraint)
