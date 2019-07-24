@@ -6,9 +6,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/gateio"
+	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
