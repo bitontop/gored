@@ -57,42 +57,45 @@ type OrderBook struct {
 	} `json:"bids"`
 }
 
-type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
-}
-
-type Uuid struct {
-	Id string `json:"uuid"`
+type AccountBalances [][]struct {
+	CurrencyID int     `json:"currencyId"`
+	Symbol     string  `json:"symbol"`
+	Name       string  `json:"name"`
+	Amount     float64 `json:"amount"`
+	Available  float64 `json:"available"`
+	Frozen     int     `json:"frozen"`
+	Pending    int     `json:"pending"`
 }
 
 type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            string
+	OrderID   string  `json:"orderId"`
+	CliOrdID  string  `json:"cliOrdId"`
+	PairID    int     `json:"pairId"`
+	Symbol    string  `json:"symbol"`
+	Side      string  `json:"side"`
+	OrderType string  `json:"orderType"`
+	Price     float64 `json:"price"`
+	Amount    float64 `json:"amount"`
+}
+
+type OrderStatus struct {
+	OrderID         string  `json:"orderId"`
+	CliOrdID        string  `json:"cliOrdId"`
+	PairID          int     `json:"pairId"`
+	Symbol          string  `json:"symbol"`
+	Side            string  `json:"side"`
+	OrderType       string  `json:"orderType"`
+	Price           float64 `json:"price"`
+	Amount          float64 `json:"amount"`
+	OrderStatus     string  `json:"orderStatus"`
+	ExecutedAmount  float64 `json:"executedAmount"`
+	ReaminingAmount float64 `json:"reaminingAmount"`
+	TimeCreated     int64   `json:"timeCreated"`
+	TimeFilled      int     `json:"timeFilled"`
+}
+
+type TestBuy struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+	OrderID string `json:"orderId"`
 }
