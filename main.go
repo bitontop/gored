@@ -99,11 +99,18 @@ func main() {
 			exMan.UpdateExData(updateConfig)
 			break
 		case "test":
-			// okex.InitOkex()
+			base := coin.Coin{
+				Code: "BTC",
+			}
+			target := coin.Coin{
+				Code: "ETH",
+			}
+			pair := pair.Pair{
+				Base:   &base,
+				Target: &target,
+			}
 
-			// pair := pair.GetPairByKey("BTC|ETH")
-			// log.Println("pair:", pair)
-			// okex.Socket()
+			okex.Socket(&pair)
 			// stex.Socket()
 			// bitfinex.Socket()
 		}
