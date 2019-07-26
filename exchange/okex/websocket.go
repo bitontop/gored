@@ -10,31 +10,13 @@ import (
 	"time"
 
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bradfitz/slice"
 	"github.com/gorilla/websocket"
-	"github.com/tony0408/Coinbene_json/coin"
-	"github.com/tony0408/Coinbene_json/test/conf"
 
 	"log"
 	"net/url"
 )
-
-func InitOkex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.OKEX, config)
-
-	ex := okex.CreateOkex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
-}
 
 // Socket get orderbook from websocket
 func Socket(pair *pair.Pair) {
