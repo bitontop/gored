@@ -46,11 +46,16 @@ import (
 	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
+
 	"github.com/bitontop/gored/exchange/okex"
+	// "./exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
+
 	"github.com/bitontop/gored/exchange/stex"
+	// "./exchange/stex"
+
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
@@ -93,6 +98,14 @@ func main() {
 			}
 			exMan.UpdateExData(updateConfig)
 			break
+		case "test":
+			// okex.InitOkex()
+
+			// pair := pair.GetPairByKey("BTC|ETH")
+			// log.Println("pair:", pair)
+			// okex.Socket()
+			// stex.Socket()
+			// bitfinex.Socket()
 		}
 	}
 }
