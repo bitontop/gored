@@ -47,14 +47,14 @@ import (
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 
-	"github.com/bitontop/gored/exchange/okex"
-	// "./exchange/okex"
+	// "github.com/bitontop/gored/exchange/okex"
+	"./exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
 
-	// "github.com/bitontop/gored/exchange/stex"
-	"./exchange/stex"
+	"github.com/bitontop/gored/exchange/stex"
+	// "./exchange/stex"
 
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
