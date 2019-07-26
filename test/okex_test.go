@@ -6,9 +6,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/okex"
+	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -20,7 +23,7 @@ import (
 func Test_Okex(t *testing.T) {
 	e := InitOkex()
 
-	pair := pair.GetPairByKey("USDT|BSV")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
