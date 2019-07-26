@@ -47,8 +47,8 @@ import (
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 
-	// "github.com/bitontop/gored/exchange/okex"
-	"./exchange/okex"
+	"github.com/bitontop/gored/exchange/okex"
+	// "./exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
