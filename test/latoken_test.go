@@ -32,8 +32,8 @@ func Test_Latoken(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.00001, 100)
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))

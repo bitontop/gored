@@ -57,14 +57,14 @@ type OrderBook struct {
 	} `json:"bids"`
 }
 
-type AccountBalances [][]struct {
+type AccountBalances []struct {
 	CurrencyID int     `json:"currencyId"`
 	Symbol     string  `json:"symbol"`
 	Name       string  `json:"name"`
 	Amount     float64 `json:"amount"`
 	Available  float64 `json:"available"`
-	Frozen     int     `json:"frozen"`
-	Pending    int     `json:"pending"`
+	Frozen     float64 `json:"frozen"`
+	Pending    float64 `json:"pending"`
 }
 
 type PlaceOrder struct {

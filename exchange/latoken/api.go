@@ -108,7 +108,7 @@ func (e *Latoken) GetCoinsData() error {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
-	// time.Sleep(time.Second)
+	// time.Sleep(time.Second * 2)
 	return nil
 }
 
@@ -155,7 +155,7 @@ func (e *Latoken) GetPairsData() error {
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
-	// time.Sleep(time.Second)
+	// time.Sleep(time.Second * 2)
 	return nil
 }
 
@@ -213,20 +213,12 @@ func (e *Latoken) UpdateAllBalances() {
 	strRequest := "/api/v1/Account/balances"
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
-	log.Printf("=====Balance Return: %v", jsonBalanceReturn) //==================
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} /* else if !jsonResponse.Success {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
-		return
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil {
-		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
-		return
-	} */
 
-	for _, v := range accountBalance[0] {
+	for _, v := range accountBalance {
 		c := e.GetCoinBySymbol(v.Symbol)
 		if c != nil {
 			balanceMap.Set(c.Code, v.Available)
@@ -279,9 +271,9 @@ func (e *Latoken) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	placeOrder := TestBuy{} //PlaceOrder{} //
-	// strRequest := "/api/v1/Order/new"
-	strRequest := "/api/v1/Order/test-order" // test buy api
+	placeOrder := PlaceOrder{} // TestBuy{} //
+	strRequest := "/api/v1/Order/new"
+	// strRequest := "/api/v1/Order/test-order" // test buy api
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
@@ -416,7 +408,7 @@ func (e *Latoken) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	signURL := strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + signURL
 
-	signature := exchange.ComputeHmac256(signURL, e.API_SECRET)
+	signature := exchange.ComputeHmac256NoDecode(signURL, e.API_SECRET)
 
 	request, err := http.NewRequest(strMethod, strUrl, nil)
 	if nil != err {
