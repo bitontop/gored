@@ -56,8 +56,8 @@ func Socket(pair *pair.Pair) {
 				log.Printf("Orderbook: %v", writeOrderBook(message, okexMaker))
 				maker := writeOrderBook(message, okexMaker)
 				if maker != nil {
-					log.Printf("Orderbook Bids: %v", maker.Bids[:min(len(maker.Bids), 5)])
-					log.Printf("Orderbook Asks: %v", maker.Asks[:min(len(maker.Asks), 5)])
+					log.Printf("Orderbook Bids: %v\n", maker.Bids[:min(len(maker.Bids), 5)])
+					log.Printf("Orderbook Asks: %v\n", maker.Asks[:min(len(maker.Asks), 5)])
 				}
 			case websocket.BinaryMessage:
 				// uncompressed
