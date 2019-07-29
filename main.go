@@ -18,6 +18,7 @@ import (
 	"github.com/bitontop/gored/exchange/biki"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitbay"
+
 	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
@@ -46,9 +47,7 @@ import (
 	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
-
 	"github.com/bitontop/gored/exchange/okex"
-	// "./exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
@@ -109,8 +108,9 @@ func main() {
 				Base:   &base,
 				Target: &target,
 			}
+			log.Println(pair)
 
-			okex.Socket(&pair)
+			// okex.Socket(&pair)
 			// stex.Socket()
 			// bitfinex.Socket()
 		}
