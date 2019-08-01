@@ -142,7 +142,7 @@ func (e *Ibankdigital) GetPairsData() error {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.AmountPrecision),
 				PriceFilter: math.Pow10(-1 * data.PricePrecision),
-				Listed:      DEFAULT_LISTED,
+				Listed:      data.State == "online",
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -180,7 +180,7 @@ func (e *Ibankdigital) updateCoinInfo() error {
 				Withdraw:     data.WithdrawEnabled,
 				Deposit:      data.DepositEnabled,
 				Confirmation: data.SafeConfirms,
-				Listed:       true,
+				Listed:       data.State == "online",
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}

@@ -22,6 +22,7 @@ type PairsData []struct {
 	AmountPrecision int    `json:"amount-precision"`
 	SymbolPartition string `json:"symbol-partition"`
 	Symbol          string `json:"symbol"`
+	State           string `json:"state"`
 }
 
 type HuobiJsonResponse struct {
