@@ -185,8 +185,8 @@ func (e *Tradeogre) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
-	jsonOrderbook = strings.ReplaceAll(jsonOrderbook, `"buy":[]`, `"buy":{}`)
-	jsonOrderbook = strings.ReplaceAll(jsonOrderbook, `"sell":[]`, `"sell":{}`)
+	jsonOrderbook = strings.Replace(jsonOrderbook, `"buy":[]`, `"buy":{}`, -1)
+	jsonOrderbook = strings.Replace(jsonOrderbook, `"sell":[]`, `"sell":{}`, -1)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if orderBook.Success != "true" {
