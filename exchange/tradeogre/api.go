@@ -185,6 +185,8 @@ func (e *Tradeogre) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	jsonOrderbook = strings.ReplaceAll(jsonOrderbook, `"buy":[]`, `"buy":{}`)
+	jsonOrderbook = strings.ReplaceAll(jsonOrderbook, `"sell":[]`, `"sell":{}`)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if orderBook.Success != "true" {
@@ -354,7 +356,7 @@ func (e *Tradeogre) OrderStatus(order *exchange.Order) error {
 	} else if !orderStatus.Success {
 		log.Printf("orderStatus.Error:%+v", orderStatus.Error)
 		if orderStatus.Error == "Order not found" { //temperory solution , tradeogre's bug: when filled, the order uuid can't be traced. this solution will cause all not found orders shown as filled.
-			order.Status = exchange.Filled			
+			order.Status = exchange.Filled
 			return nil
 		} else {
 			return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
