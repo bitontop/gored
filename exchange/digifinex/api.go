@@ -162,7 +162,7 @@ func (e *Digifinex) GetPairsData() error {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    symbols[1] + "_" + symbols[0],
+				ExSymbol:    symbols[0] + "_" + symbols[1],
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.VolumePrecision),
