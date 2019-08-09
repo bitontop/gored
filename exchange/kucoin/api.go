@@ -186,9 +186,13 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
+	sequence, err := strconv.Atoi(orderBook.Sequence)
+	if err != nil {
+		return nil, fmt.Errorf("Kucoin orderbook sequence Atoi err: %v", err)
+	}
+	maker.LastUpdateID = sequence
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	var err error
 	for _, bid := range orderBook.Bids {
 		buydata := exchange.Order{}
 
