@@ -11,11 +11,10 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 
+	"github.com/bitontop/gored/exchange/bitatm"
 	"github.com/bitontop/gored/pair"
-	//"github.com/bitontop/gored/exchange/bitatm"
-	//"github.com/bitontop/gored/test/conf"
-	"../exchange/bitatm"
-	"./conf"
+	"github.com/bitontop/gored/test/conf"
+	// "../exchange/bitatm"
 )
 
 /********************Public API********************/

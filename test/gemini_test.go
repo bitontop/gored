@@ -4,13 +4,13 @@ import (
 	"log"
 	"testing"
 
-	"../exchange/gemini"
-	"./conf"
+	// "../exchange/gemini"
+	// "./conf"
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/exchange/gemini"
 	"github.com/bitontop/gored/pair"
-	// "github.com/bitontop/gored/exchange/gemini"
-	// "github.com/bitontop/gored/test/conf"
+	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
