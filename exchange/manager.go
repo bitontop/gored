@@ -89,17 +89,21 @@ var supportList = make([]ExchangeName, 0)
 
 func CreateExchangeManager() *ExchangeManager {
 	once.Do(func() {
-		instance = &ExchangeManager{}
-		instance.init()
+		if instance == nil {
+			instance = &ExchangeManager{}
 
-		if exMap == nil {
-			exMap = cmap.New()
-		}
+			if exMap == nil {
+				exMap = cmap.New()
+			}
 
-		if exIDMap == nil {
-			exIDMap = cmap.New()
+			if exIDMap == nil {
+				exIDMap = cmap.New()
+			}
+
+			instance.init()
 		}
 	})
+
 	return instance
 }
 
