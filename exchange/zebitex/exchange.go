@@ -44,7 +44,7 @@ func CreateZebitex(config *exchange.Config) *Zebitex {
 		instance = &Zebitex{
 			ID:      DEFAULT_ID,
 			Name:    "Zebitex",
-			Website: "https://www.blank.com/",
+			Website: "https://zebitex.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -98,7 +98,7 @@ func (e *Zebitex) GetID() int {
 }
 
 func (e *Zebitex) GetName() exchange.ExchangeName {
-	return exchange.BLANK
+	return exchange.ZEBITEX
 }
 
 func (e *Zebitex) GetTradingWebURL(pair *pair.Pair) string {

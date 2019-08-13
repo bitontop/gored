@@ -99,6 +99,7 @@ const (
 	UEX          ExchangeName = "UEX"
 	VIRGOCX      ExchangeName = "VIRGOCX"
 	ZBEX         ExchangeName = "ZBEX"
+	ZEBITEX      ExchangeName = "ZEBITEX"
 )
 
 func (e *ExchangeManager) initExchangeNames() {

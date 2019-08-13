@@ -23,7 +23,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://zebitex.com/"
+	API_URL = "https://zebitex.com"
 )
 
 /*API Base Knowledge
@@ -55,14 +55,13 @@ func (e *Zebitex) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestPath := "/API Path"
-	strUrl := API_URL + strRequestPath
-
-	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	strRequestPath := "/api/v1/orders/tickers"
+	jsonCurrencyReturn := e.ApiKeyGet(strRequestPath, nil)
+	fmt.Printf("%s\n", jsonCurrencyReturn)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("111 %s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("222 %s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -451,7 +450,6 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	strUrl := API_URL + strRequestPath
 
 	millTime := time.Now().UnixNano() / int64(time.Millisecond)
-
 	var paramStr []byte
 	var fields string
 	if len(mapParams) > 0 {
@@ -471,14 +469,16 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 		paramStr, _ = json.Marshal(newParams)
 	} else {
 		fields = ""
-		paramStr = []byte("")
+		paramStr = []byte("{}")
 	}
 
-	payloadStr := fmt.Sprintf("%s|%s|%s|%s", strMethod, strRequestPath, millTime, paramStr)
+	payloadStr := fmt.Sprintf("%s|%s|%d|%s", strMethod, strRequestPath, millTime, paramStr)
+	println("payloadStr:", payloadStr)
+	println("fields:", fields)
 
 	//make sign
 	sign := exchange.ComputeHmac256NoDecode(payloadStr, e.API_SECRET)
-	authStr := fmt.Sprintf("ZEBITEX-HMAC-SHA256 access_key=%s, signature=%s, tonce=%s, signed_params=%s", e.API_KEY, sign, millTime, fields)
+	authStr := fmt.Sprintf("ZEBITEX-HMAC-SHA256 access_key=%s, signature=%s, tonce=%d, signed_params=%s", e.API_KEY, sign, millTime, fields)
 
 	jsonParams := ""
 	if nil != mapParams {
