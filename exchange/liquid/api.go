@@ -120,7 +120,7 @@ func (e *Liquid) GetPairsData() error {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.CurrencyPairCode)
 		}
-		if p != nil {
+		if p != nil && !data.Disabled {
 			makerfee, _ := strconv.ParseFloat(data.MakerFee, 64)
 			takerfee, _ := strconv.ParseFloat(data.TakerFee, 64)
 			pairConstraint := &exchange.PairConstraint{
