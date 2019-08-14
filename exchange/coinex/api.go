@@ -240,6 +240,7 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 		maker.Asks = append(maker.Asks, selldata)
 	}
+	maker.LastUpdateID = int(orderBook.Time)
 
 	return maker, err
 }
