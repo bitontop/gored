@@ -55,7 +55,8 @@ func (e *Zebitex) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestPath := "/api/v1/orders/tickers"
+	//strRequestPath := "/api/v1/orders/tickers"
+	strRequestPath := "/api/v1/orders/orderbook"
 	jsonCurrencyReturn := e.ApiKeyGet(strRequestPath, nil)
 	fmt.Printf("%s\n", jsonCurrencyReturn)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
@@ -439,7 +440,28 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Zebitex) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	return e.ApiKeyRequest("GET", strRequestPath, mapParams)
+	strUrl := API_URL + strRequestPath
+	println(strUrl)
+
+	request, err := http.NewRequest("GET", strUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/json; charset=utf-8")
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
 }
 
 /*Method: API Request and Signature is required

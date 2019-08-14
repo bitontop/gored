@@ -261,5 +261,11 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.API_KEY = ""
 		config.API_SECRET = ""
 		break
+
+	case exchange.ZEBITEX:
+		config.API_KEY = "3EvTF5QAbpWIqVxOAY6BLI7ZOmnxzAaZHNl6YDcp"
+		config.API_SECRET = "EeHvJJNlPIPdnYwhzQhDjfX8l9snLWS6XV1xoed9"
+		break
 	}
+
 }
