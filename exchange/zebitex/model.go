@@ -13,42 +13,56 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type Tick struct {
+	Name         string      `json:"name"`
+	BaseUnit     string      `json:"base_unit"`
+	QuoteUnit    string      `json:"quote_unit"`
+	AskFee       float64     `json:"ask_fee"`
+	BidFee       float64     `json:"bid_fee"`
+	Low          string      `json:"low"`
+	High         string      `json:"high"`
+	Last         string      `json:"last"`
+	VisualLow    string      `json:"visualLow"`
+	VisualHigh   string      `json:"visualHigh"`
+	VisualLast   string      `json:"visualLast"`
+	At           int         `json:"at"`
+	Open         string      `json:"open"`
+	Volume       interface{} `json:"volume"` //接口返回有时是浮点,有时是字符串
+	Market       string      `json:"market"`
+	Buy          string      `json:"buy"`
+	IsUpTend     bool        `json:"isUpTend"`
+	Sell         string      `json:"sell"`
+	Percent      string      `json:"percent"`
+	Change       string      `json:"change"`
+	VisualOpen   string      `json:"visualOpen"`
+	VisualVolume string      `json:"visualVolume"`
+	VisualBuy    string      `json:"visualBuy"`
+	VisualSell   string      `json:"visualSell"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
-}
+type CoinsData map[string]Tick
+
+type PairsData map[string]Tick
 
 type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+	Bids [][]interface{} `json:"bids"`
+	Asks [][]interface{} `json:"asks"`
 }
 
 /********** Private API Structure**********/
-type AccountBalances []struct {
-	Asset     string  `json:"asset"`
-	Total     float64 `json:"total"`
-	Available float64 `json:"available"`
-	Locked    float64 `json:"locked"`
+type Balance struct {
+	IsFiat               bool        `json:"isFiat"`
+	Code                 string      `json:"code"`
+	Title                string      `json:"title"`
+	PaymentAddress       string      `json:"paymentAddress"`
+	Balance              string      `json:"balance"`
+	LockedBalance        string      `json:"lockedBalance"`
+	PaymentAddressQrCode string      `json:"paymentAddressQrCode"`
+	BankAccounts         interface{} `json:"bankAccounts"`
+	IsDisabled           bool        `json:"isDisabled"`
 }
+
+type AccountBalances map[string]Balance
 
 type WithdrawResponse struct {
 	Msg     string `json:"msg"`
