@@ -10,7 +10,7 @@ A Realtime-Exchange-Data SDK is supporting multiple exchanges written in Golang.
 
 ## Community
 
-Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https://t.me/bitontop)
+Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https://t.me/goredtalk)
 
 ## Exchange Support Table
 
@@ -47,19 +47,8 @@ We are aiming to support the top 100 highest volume exchanges based off the [Coi
 
 ## Current Features
 
-+ Unify all symbols / pairs into Bitontop standard.
++ Unified all symbols / pairs into Bitontop standard.
 + Support for all Exchange fiat and digital currencies, with the ability to individually toggle them on/off.
-+ AES256 encrypted config file.
-+ REST API support for all exchanges.
-+ Ability to turn off/on certain exchanges.
-+ Ability to adjust manual polling timer for exchanges.
-+ Communication packages (Slack, SMS via SMSGlobal, Telegram and SMTP)
-+ HTTP rate limiter package.
-+ Forex currency converter packages (CurrencyConverterAPI, CurrencyLayer, Fixer.io, OpenExchangeRates)
-+ Packages for handling currency pairs, tickers and orderbooks.
-+ Portfolio management tool; fetches balances from supported exchanges and allows for custom address tracking.
-+ Basic event trigger system.
-+ WebGUI.
 
 ## Planned Features
 
@@ -112,6 +101,11 @@ go build
 If this framework helped you in any way, or you would like to support the developers working on it, please donate Bitcoin to:
 
 ***Bitcoin Address***
+3BMEXqK2hMJx2N2j6B4b5MsJMXQ9kAC3t8
+
+***AIB Address***
+ALVNJC94McFjN7enZsY2XaR6fY3GWDY3Wh
+
 
 ## Binaries
 
@@ -123,11 +117,12 @@ Binaries will be published once the codebase reaches a stable condition.
 
 |User|Github|Contribution Amount|
 |--|--|--|
-| chunlee1991 | https://github.com/chunlee1991 | 133 |
-| tony0408 | https://github.com/tony0408 | 44 |
-| 9cat | https://github.com/9cat | 7 |
-| botemple | https://github.com/botemple | 6 |
-| iobond | https://github.com/iobond | 1 |
+| chunlee1991 | https://github.com/chunlee1991 
+| tony0408 | https://github.com/tony0408 
+| 9cat | https://github.com/9cat 
+| botemple | https://github.com/botemple 
+| iobond | https://github.com/iobond 
 
 
-
+## Who used GoRED
+[CoinDataPage](https://www.coindatapage.com)

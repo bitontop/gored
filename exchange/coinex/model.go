@@ -39,6 +39,7 @@ type OrderBook struct {
 	Asks [][]string `json:"asks"`
 	Bids [][]string `json:"bids"`
 	Last string     `json:"last"`
+	Time int64      `json:"time"`
 }
 
 type PairsData struct {
