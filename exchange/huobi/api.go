@@ -451,6 +451,22 @@ func (e *Huobi) OrderStatus(order *exchange.Order) error {
 		order.Status = exchange.Other
 	}
 
+	if orderStatus.FilledAmount != "" && orderStatus.FilledCashAmount != "" {
+		dealQ, _ := strconv.ParseFloat(orderStatus.FilledAmount, 64)
+		totalP, _ := strconv.ParseFloat(orderStatus.FilledCashAmount, 64)
+		order.DealQuantity = dealQ
+		if dealQ > 0 {
+			order.DealRate = totalP / dealQ
+		}
+	} else {
+		dealQ, _ := strconv.ParseFloat(orderStatus.FieldAmount, 64)
+		totalP, _ := strconv.ParseFloat(orderStatus.FieldCashAmount, 64)
+		order.DealQuantity = dealQ
+		if dealQ > 0 {
+			order.DealRate = totalP / dealQ
+		}
+	}
+
 	return nil
 }
 
