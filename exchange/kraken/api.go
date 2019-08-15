@@ -144,6 +144,7 @@ func (e *Kraken) GetPairsData() error {
 					PairID:      p.ID,
 					Pair:        p,
 					ExSymbol:    key,
+					ExID:        data.Altname,
 					LotSize:     math.Pow10(-1 * data.LotDecimals),
 					PriceFilter: math.Pow10(-1 * data.PairDecimals),
 					Listed:      DEFAULT_LISTED,
