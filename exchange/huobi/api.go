@@ -335,9 +335,11 @@ func (e *Huobi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 	if rate != 0 {
 		mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+		mapParams["type"] = "sell-limit"
+	} else {
+		mapParams["type"] = "sell-market"
 	}
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["type"] = "sell-limit"
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -386,9 +388,11 @@ func (e *Huobi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 	if rate != 0 {
 		mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+		mapParams["type"] = "buy-limit"
+	} else {
+		mapParams["type"] = "buy-market"
 	}
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["type"] = "buy-limit"
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
