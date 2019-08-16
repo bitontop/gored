@@ -88,21 +88,24 @@ type AccountBalances struct {
 }
 
 type OrderStatus struct {
-	ID              int    `json:"id"`
-	Symbol          string `json:"symbol"`
-	AccountID       int    `json:"account-id"`
-	Amount          string `json:"amount"`
-	Price           string `json:"price"`
-	CreatedAt       int64  `json:"created-at"`
-	Type            string `json:"type"`
-	FieldAmount     string `json:"field-amount"`
-	FieldCashAmount string `json:"field-cash-amount"`
-	FieldFees       string `json:"field-fees"`
-	FinishedAt      int64  `json:"finished-at"`
-	UserID          int    `json:"user-id"`
-	Source          string `json:"source"`
-	State           string `json:"state"`
-	CanceledAt      int    `json:"canceled-at"`
-	Exchange        string `json:"exchange"`
-	Batch           string `json:"batch"`
+	ID               int    `json:"id"`
+	Symbol           string `json:"symbol"`
+	AccountID        int    `json:"account-id"`
+	Amount           string `json:"amount"`
+	Price            string `json:"price"`
+	CreatedAt        int64  `json:"created-at"`
+	Type             string `json:"type"`
+	FieldAmount      string `json:"field-amount"`
+	FieldCashAmount  string `json:"field-cash-amount"`
+	FieldFees        string `json:"field-fees"`
+	FilledAmount     string `json:"filled-amount"`
+	FilledCashAmount string `json:"filled-cash-amount"`
+	FilledFees       string `json:"filled-fees"`
+	FinishedAt       int64  `json:"finished-at"`
+	UserID           int    `json:"user-id"`
+	Source           string `json:"source"`
+	State            string `json:"state"`
+	CanceledAt       int    `json:"canceled-at"`
+	Exchange         string `json:"exchange"`
+	Batch            string `json:"batch"`
 }
