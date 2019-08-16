@@ -9,6 +9,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 
 	cmap "github.com/orcaman/concurrent-map"
@@ -102,7 +103,7 @@ func (e *Zebitex) GetName() exchange.ExchangeName {
 }
 
 func (e *Zebitex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.blank.com/marker/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://zebitex.com/market/%s%s", strings.ToLower(e.GetSymbolByCoin(pair.Target)), strings.ToLower(e.GetSymbolByCoin(pair.Base)))
 }
 
 func (e *Zebitex) GetBalance(coin *coin.Coin) float64 {

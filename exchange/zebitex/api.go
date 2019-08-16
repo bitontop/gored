@@ -61,42 +61,57 @@ func (e *Zebitex) GetCoinsData() error {
 	}
 
 	for _, data := range coinsData {
-		c := &coin.Coin{}
+		coinStrs := strings.Split(data.Name, "/")
+		base := &coin.Coin{}
+		target := &coin.Coin{}
+
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.BaseUnit)
-			if c == nil {
-				c = &coin.Coin{
-					Code:     data.BaseUnit,
-					Name:     data.BaseUnit,
-					Website:  e.Website,
-				}
-				coin.AddCoin(c)
+			base = coin.GetCoin(coinStrs[1])
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = coinStrs[1]
+				coin.AddCoin(base)
 			}
-
-			c2 := &coin.Coin{}
-			c2 = coin.GetCoin(data.QuoteUnit)
-			if c2 == nil {
-				c2 = &coin.Coin{
-					Code:     data.QuoteUnit,
-					Name:     data.QuoteUnit,
-					Website:  e.Website,
-				}
-				coin.AddCoin(c2)
+			target = coin.GetCoin(coinStrs[0])
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = coinStrs[0]
+				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(strings.ToUpper(data.QuoteUnit))
+			base = e.GetCoinBySymbol(coinStrs[1])
+			target = e.GetCoinBySymbol(coinStrs[0])
 		}
 
-		if c != nil {
+		trading := true
+		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.QuoteUnit,
+				CoinID:       base.ID,
+				Coin:         base,
+				ExSymbol:     coinStrs[1],
 				ChainType:    exchange.MAINNET,
-				TxFee:        data.BidFee,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     trading,
+				Deposit:      trading,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
 			}
+			e.SetCoinConstraint(coinConstraint)
+		}
 
+		if target != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       target.ID,
+				Coin:         target,
+				ExSymbol:     coinStrs[0],
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     trading,
+				Deposit:      trading,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
@@ -117,33 +132,29 @@ func (e *Zebitex) GetPairsData() error {
 	}
 
 	for _, data := range pairsData {
+		pairStrs := strings.Split(data.Name, "/")
+		println("Market", data.Market)
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.QuoteUnit)
-			target := coin.GetCoin(data.BaseUnit)
+			base := coin.GetCoin(pairStrs[1])
+			target := coin.GetCoin(pairStrs[0])
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.Market)
 		}
-		if p != nil {
-			var err error
-			lotsize := 0.0
-			lotsize, err = strconv.ParseFloat(data.VisualVolume, 64)
-			if err != nil {
-				log.Printf("%s Lot Size Err: %v", e.GetName(), err)
-				lotsize = DEFAULT_LOT_SIZE
-			}
 
+		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.Market,
 				MakerFee:    data.AskFee,
 				TakerFee:    data.BidFee,
-				LotSize:     lotsize,
+				LotSize:     DEFAULT_LOT_SIZE,
+				PriceFilter: DEFAULT_PRICE_FILTER,
 				Listed:      true,
 			}
 			e.SetPairConstraint(pairConstraint)
@@ -167,12 +178,13 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	mapParams["market"] = symbol
 
 	strRequestPath := "/api/v1/orders/orderbook"
+	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{}
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := e.ApiKeyRequest("GET", strRequestPath, mapParams)
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	}
@@ -224,7 +236,7 @@ func (e *Zebitex) UpdateAllBalances() {
 
 	accountBalance := AccountBalances{}
 	strRequestPath := "/api/v1/funds"
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequestPath, nil)
+	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, nil)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -233,7 +245,8 @@ func (e *Zebitex) UpdateAllBalances() {
 	for _, balance := range accountBalance {
 		c := e.GetCoinBySymbol(balance.Code)
 		if c != nil {
-			balanceMap.Set(c.Code, !balance.IsDisabled)
+			balanceNum,_ := strconv.ParseFloat(balance.Balance, 64)
+			balanceMap.Set(c.Code, balanceNum)
 		}
 	}
 }
@@ -435,27 +448,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Zebitex) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	strUrl := API_URL + strRequestPath
-
-	request, err := http.NewRequest("GET", strUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-
-	httpClient := &http.Client{}
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
+	return e.ApiKeyRequest("GET", strRequestPath, mapParams)
 }
 
 /*Method: API Request and Signature is required
