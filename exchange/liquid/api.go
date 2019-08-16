@@ -127,6 +127,7 @@ func (e *Liquid) GetPairsData() error {
 				PairID:      p.ID,
 				Pair:        p,
 				ExSymbol:    data.ID,
+				ExID:        strings.ToLower(data.CurrencyPairCode),
 				MakerFee:    makerfee,
 				TakerFee:    takerfee,
 				LotSize:     DEFAULT_LOT_SIZE,
