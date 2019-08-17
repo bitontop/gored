@@ -61,39 +61,37 @@ func (e *Zebitex) GetCoinsData() error {
 	}
 
 	for _, data := range coinsData {
-		coinStrs := strings.Split(data.Name, "/")
 		base := &coin.Coin{}
 		target := &coin.Coin{}
 
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base = coin.GetCoin(coinStrs[1])
+			base = coin.GetCoin(data.QuoteUnit)
 			if base == nil {
 				base = &coin.Coin{}
-				base.Code = coinStrs[1]
+				base.Code = data.QuoteUnit
 				coin.AddCoin(base)
 			}
-			target = coin.GetCoin(coinStrs[0])
+			target = coin.GetCoin(data.BaseUnit)
 			if target == nil {
 				target = &coin.Coin{}
-				target.Code = coinStrs[0]
+				target.Code = data.BaseUnit
 				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			base = e.GetCoinBySymbol(coinStrs[1])
-			target = e.GetCoinBySymbol(coinStrs[0])
+			base = e.GetCoinBySymbol(data.QuoteUnit)
+			target = e.GetCoinBySymbol(data.BaseUnit)
 		}
 
-		trading := true
 		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       base.ID,
 				Coin:         base,
-				ExSymbol:     coinStrs[1],
+				ExSymbol:     data.QuoteUnit,
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     trading,
-				Deposit:      trading,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       DEFAULT_LISTED,
 			}
@@ -104,11 +102,11 @@ func (e *Zebitex) GetCoinsData() error {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       target.ID,
 				Coin:         target,
-				ExSymbol:     coinStrs[0],
+				ExSymbol:     data.BaseUnit,
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     trading,
-				Deposit:      trading,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       DEFAULT_LISTED,
 			}
@@ -132,13 +130,11 @@ func (e *Zebitex) GetPairsData() error {
 	}
 
 	for _, data := range pairsData {
-		pairStrs := strings.Split(data.Name, "/")
-		println("Market", data.Market)
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(pairStrs[1])
-			target := coin.GetCoin(pairStrs[0])
+			base := coin.GetCoin(data.QuoteUnit)
+			target := coin.GetCoin(data.BaseUnit)
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
