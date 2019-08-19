@@ -40,10 +40,11 @@ type PairsData []struct {
 }
 
 type OrderBook struct {
-	M    string     `json:"m"`
-	S    string     `json:"s"`
-	Asks [][]string `json:"asks"`
-	Bids [][]string `json:"bids"`
+	M      string     `json:"m"`
+	S      string     `json:"s"`
+	Seqnum int        `json:"seqnum"`
+	Asks   [][]string `json:"asks"`
+	Bids   [][]string `json:"bids"`
 }
 
 type AccountGroup struct {
