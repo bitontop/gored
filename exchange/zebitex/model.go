@@ -65,20 +65,43 @@ type Balance struct {
 type AccountBalances map[string]Balance
 
 type WithdrawResponse struct {
-	Msg     string `json:"msg"`
-	Success bool   `json:"success"`
-	ID      string `json:"id"`
+	Error     string `json:"error"`
 }
 
 type PlaceOrder struct {
-	Symbol       string `json:"symbol"`
-	OrderID      string `json:"orderId"`
-	Side         string `json:"side"`
-	Type         string `json:"type"`
-	Price        string `json:"price"`
-	AveragePrice string `json:"executedQty"`
-	OrigQty      string `json:"origQty"`
-	ExecutedQty  string `json:"executedQty"`
-	Status       string `json:"status"`
-	TimeInForce  string `json:"timeInForce"`
+	Id          int64  `json:"id"`
+	Bid         string `json:"bid"`
+	Ask         string `json:"ask"`
+	Price       string `json:"price"`
+	Volume      string `json:"volume"`
+	ExecutedQty string `json:"executedQty"`
+	OrdType     string `json:"ord_type"`
 }
+
+type OrderDetail struct {
+	Id        int64  `json:"id"`
+	Side      string `json:"side"`
+	State     string `json:"state"`
+	OrdType   string `json:"ordType"`
+	Currency  string `json:"currency"`
+	Price     string `json:"price"`
+	Filled    string `json:"filled"`
+	Amount    string `json:"amount"`
+	Avg       string `json:"avg"`
+	Total     string `json:"total"`
+	UpdatedAt string `json:"updatedAt"`
+	Pair      string `json:"pair"`
+	BaseUnit  string `json:"baseUnit"`
+	QuoteUnit string `json:"quoteUnit"`
+}
+
+type OrdersPage struct {
+	Per        int64         `json:"per"`
+	Items      []OrderDetail `json:"items"`
+	NextCursor interface{}   `json:"nextCursor"`
+}
+
+
+
+
+

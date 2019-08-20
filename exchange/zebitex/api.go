@@ -55,9 +55,9 @@ func (e *Zebitex) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	strRequestPath := "/api/v1/orders/tickers"
-	jsonCurrencyReturn := e.ApiKeyRequest("GET", strRequestPath, nil)
+	jsonCurrencyReturn := e.ApiKeyGet(strRequestPath, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range coinsData {
@@ -124,9 +124,9 @@ func (e *Zebitex) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestPath := "/api/v1/orders/tickers"
-	jsonSymbolsReturn := e.ApiKeyRequest("GET", strRequestPath, nil)
+	jsonSymbolsReturn := e.ApiKeyGet( strRequestPath, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData {
@@ -182,7 +182,7 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
+		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonOrderbook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
@@ -193,12 +193,12 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		buydata := exchange.Order{}
 		buydata.Quantity, err = strconv.ParseFloat(bid[1].(string), 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
 
 		buydata.Rate, err = strconv.ParseFloat(bid[0].(string), 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
 
 		maker.Bids = append(maker.Bids, buydata)
@@ -209,12 +209,12 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 		selldata := exchange.Order{}
 		selldata.Quantity, err = strconv.ParseFloat(ask[1].(string), 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
 
 		selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)
@@ -254,64 +254,50 @@ func (e *Zebitex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 		return false
 	}
 
-	jsonResponse := &JsonResponse{}
 	withdraw := WithdrawResponse{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/v1/withdrawals"
 
 	mapParams := make(map[string]string)
-	mapParams["asset"] = e.GetSymbolByCoin(coin)
-	mapParams["address"] = addr
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
+	mapParams["code"] = addr
 
-	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
-		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
-		return false
-	} else if !jsonResponse.Success {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Message)
-		return false
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
-		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return false
+	jsonSubmitWithdraw,code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	if code==204{
+		return true;
 	}
 
-	return true
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSubmitWithdraw)
+	}
+
+	return false
 }
 
 func (e *Zebitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
 	}
 
-	jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/v1/orders"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["side"] = "SELL"
-	mapParams["type"] = "LIMIT"
+	mapParams["side"] = "ask"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["market"] = e.GetSymbolByPair(pair)
+	mapParams["ordType"] = "limit"
 
-	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	jsonPlaceReturn,_ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.OrderID,
+		OrderID:      string(placeOrder.Id),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:         "ask",
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -320,36 +306,30 @@ func (e *Zebitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 func (e *Zebitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
 	}
 
-	jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/v1/orders"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["side"] = "BUY"
-	mapParams["type"] = "LIMIT"
+	mapParams["side"] = "bid"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["market"] = e.GetSymbolByPair(pair)
+	mapParams["ordType"] = "limit"
 
-	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	jsonPlaceReturn,_ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.OrderID,
+		OrderID:      string(placeOrder.Id),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:         "bid",
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -358,83 +338,116 @@ func (e *Zebitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 func (e *Zebitex) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+		return fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
 	}
 
-	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
-	strRequestPath := "/API Path"
+	orders := OrdersPage{}
+	strRequestPath := "/api/v1/orders/current"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
+	mapParams["page"] = "1"
+	mapParams["per"] = "100"
 
 	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
-		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
-		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &orders); err != nil {
+		return fmt.Errorf("%s OrdersPage Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonOrderStatus)
 	}
 
-	if orderStatus.Status == "CANCELED" {
-		order.Status = exchange.Canceled
-	} else if orderStatus.Status == "FILLED" {
-		order.Status = exchange.Filled
-	} else if orderStatus.Status == "PARTIALLY_FILLED" {
-		order.Status = exchange.Partial
-	} else if orderStatus.Status == "REJECTED" {
-		order.Status = exchange.Rejected
-	} else if orderStatus.Status == "Expired" {
-		order.Status = exchange.Expired
-	} else if orderStatus.Status == "NEW" {
-		order.Status = exchange.New
-	} else {
-		order.Status = exchange.Other
-	}
+	for _, orderItem := range orders.Items {
+		if string(orderItem.Id) == order.OrderID {
+			state := strings.ToUpper(orderItem.State)
+			switch state {
+			case "CANCELED":
+				order.Status = exchange.Canceled
+			case "FILLED":
+				order.Status = exchange.Filled
+			case "PARTIALLY_FILLED":
+				order.Status = exchange.Partial
+			case "REJECTED":
+				order.Status = exchange.Rejected
+			case "Expired":
+				order.Status = exchange.Expired
+			case "NEW":
+				order.Status = exchange.New
+			default:
+				order.Status = exchange.Other
+			}
+			break
 
-	order.DealRate, _ = strconv.ParseFloat(orderStatus.AveragePrice, 64)
-	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.ExecutedQty, 64)
+			order.DealRate, _ = strconv.ParseFloat(orderItem.Price, 64)
+			order.DealQuantity, _ = strconv.ParseFloat(orderItem.Amount, 64)
+		}
+	}
 
 	return nil
 }
 
 func (e *Zebitex) ListOrders() ([]*exchange.Order, error) {
-	return nil, nil
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
+	}
+
+	orders := OrdersPage{}
+	strRequestPath := "/api/v1/orders/day_history"
+
+	mapParams := make(map[string]string)
+	mapParams["page"] = "1"
+	mapParams["per"] = "100"
+
+	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &orders); err != nil {
+		return nil, fmt.Errorf("%s OrdersPage Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonOrderStatus)
+	}
+
+	var res []*exchange.Order
+	for _, orderItem := range orders.Items {
+		pair := e.GetPairBySymbol(orderItem.Pair)
+		rate,_ := strconv.ParseFloat(orderItem.Price, 64)
+		quantity,_ := strconv.ParseFloat(orderItem.Amount, 64)
+
+		order := &exchange.Order{
+			Pair:         pair,
+			OrderID:      string(orderItem.Id),
+			Rate:         rate,
+			Quantity:     quantity,
+			Side:         orderItem.Side,
+			Status:       exchange.New,
+			JsonResponse: jsonOrderStatus,
+		}
+		res = append(res, order)
+	}
+
+	return res, nil
 }
 
 func (e *Zebitex) CancelOrder(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+		return fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
 	}
 
-	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
-
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
-
-	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequestPath, mapParams)
-	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
-		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	strRequestPath := fmt.Sprintf("/api/v1/orders/%d/cancel", order.OrderID)
+	cont,code := e.ApiKeyRequest("DELETE", strRequestPath, nil)
+	if code!=204{
+		return fmt.Errorf("%s CancelOrder Failed: %v\n", e.GetName(), code)
 	}
 
 	order.Status = exchange.Canceling
-	order.CancelStatus = jsonCancelOrder
+	order.CancelStatus = cont
 
 	return nil
 }
 
 func (e *Zebitex) CancelAllOrder() error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
+	}
+
+	strRequestPath := "/api/v1/orders/cancel_all"
+	_,code := e.ApiKeyRequest("DELETE", strRequestPath, nil)
+	if code!=204{
+		return fmt.Errorf("CancelAllOrder Failed: %v\n", code)
+	}
+
 	return nil
 }
 
@@ -444,13 +457,14 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Zebitex) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	return e.ApiKeyRequest("GET", strRequestPath, mapParams)
+	res,_ := e.ApiKeyRequest("GET", strRequestPath, mapParams)
+	return res
 }
 
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
-func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) (string,int) {
 	strMethod = strings.ToUpper(strMethod)
 	strUrl := API_URL + strRequestPath
 
@@ -491,7 +505,7 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 
 	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(jsonParams)))
 	if nil != err {
-		return err.Error()
+		return err.Error(),0
 	}
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("Authorization", authStr)
@@ -499,14 +513,14 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
 	if nil != err {
-		return err.Error()
+		return err.Error(),0
 	}
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if nil != err {
-		return err.Error()
+		return err.Error(),0
 	}
 
-	return string(body)
+	return string(body),response.StatusCode
 }
