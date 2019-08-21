@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"sort"
 	"strconv"
@@ -124,7 +125,7 @@ func (e *Zebitex) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestPath := "/api/v1/orders/tickers"
-	jsonSymbolsReturn := e.ApiKeyGet( strRequestPath, nil)
+	jsonSymbolsReturn := e.ApiKeyGet(strRequestPath, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSymbolsReturn)
 	}
@@ -241,10 +242,84 @@ func (e *Zebitex) UpdateAllBalances() {
 	for _, balance := range accountBalance {
 		c := e.GetCoinBySymbol(balance.Code)
 		if c != nil {
-			balanceNum,_ := strconv.ParseFloat(balance.Balance, 64)
+			balanceNum, _ := strconv.ParseFloat(balance.Balance, 64)
 			balanceMap.Set(c.Code, balanceNum)
 		}
 	}
+}
+
+/* FundSources(currency string) */
+func (e *Zebitex) getFundSource(currency string) []FundSource {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return nil
+	}
+
+	sources := FundSources{}
+	strRequestPath := "/api/v1/fund_sources"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = currency
+	jsonSources := e.ApiKeyGet(strRequestPath, mapParams)
+	if err := json.Unmarshal([]byte(jsonSources), &sources); err != nil {
+		log.Printf("getFundSource %s fundSources Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSources)
+	}
+
+	return sources
+}
+
+/* delFundSource(sources []FundSource) */
+func (e *Zebitex) delFundSource(sources []FundSource) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return false
+	}
+
+	strRequestPath := "/api/v1/fund_sources/selected"
+	mapParams := make(map[string]string)
+
+	ids := []int64{}
+	for _, source := range sources {
+		ids = append(ids, source.Id)
+	}
+
+	idsStr, _ := json.Marshal(ids)
+	mapParams["ids"] = string(idsStr)
+	_, code := e.ApiKeyRequest("DELETE", strRequestPath, mapParams)
+	if code == 204 {
+		return true
+	}
+
+	return false
+}
+
+/* CreateFundSource(currency, label, addr string) */
+func (e *Zebitex) CreateFundSource(currency, label, addr string) (bool, FundSource) {
+	source := FundSource{}
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
+		return false, source
+	}
+
+	if label == "" {
+		label = currency + fmt.Sprintf("%d", rand.Int())
+	}
+
+	strRequestPath := "/api/v1/fund_sources"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = strings.ToUpper(currency)
+	mapParams["extra"] = label
+	mapParams["uid"] = addr
+
+	jsonSource, code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	if err := json.Unmarshal([]byte(jsonSource), &source); err != nil {
+		log.Printf("CreateFundSource %s fundSources Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSource)
+	} else if code == 200 {
+		return true, source
+	}
+
+	return false, source
 }
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
@@ -254,19 +329,27 @@ func (e *Zebitex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 		return false
 	}
 
+	currency := e.GetSymbolByCoin(coin)
+
+	//create one fund source
+	_, source := e.CreateFundSource(currency, "", addr)
+
 	withdraw := WithdrawResponse{}
 	strRequestPath := "/api/v1/withdrawals"
 
 	mapParams := make(map[string]string)
-	mapParams["code"] = addr
-
-	jsonSubmitWithdraw,code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	if code==204{
-		return true;
+	mapParams["code"] = currency
+	mapParams["fund_source_id"] = fmt.Sprintf("%d", source.Id)
+	mapParams["sum"] = strconv.FormatFloat(quantity, 'f', 6, 64)
+	jsonSubmitWithdraw, code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	if code == 204 {
+		return true
 	}
 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSubmitWithdraw)
+	} else {
+		log.Printf("%s Withdraw fail: %s\n", e.GetName(), withdraw.Error)
 	}
 
 	return false
@@ -287,7 +370,7 @@ func (e *Zebitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams["market"] = e.GetSymbolByPair(pair)
 	mapParams["ordType"] = "limit"
 
-	jsonPlaceReturn,_ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	jsonPlaceReturn, _ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonPlaceReturn)
 	}
@@ -319,7 +402,7 @@ func (e *Zebitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["market"] = e.GetSymbolByPair(pair)
 	mapParams["ordType"] = "limit"
 
-	jsonPlaceReturn,_ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	jsonPlaceReturn, _ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonPlaceReturn)
 	}
@@ -402,8 +485,8 @@ func (e *Zebitex) ListOrders() ([]*exchange.Order, error) {
 	var res []*exchange.Order
 	for _, orderItem := range orders.Items {
 		pair := e.GetPairBySymbol(orderItem.Pair)
-		rate,_ := strconv.ParseFloat(orderItem.Price, 64)
-		quantity,_ := strconv.ParseFloat(orderItem.Amount, 64)
+		rate, _ := strconv.ParseFloat(orderItem.Price, 64)
+		quantity, _ := strconv.ParseFloat(orderItem.Amount, 64)
 
 		order := &exchange.Order{
 			Pair:         pair,
@@ -426,8 +509,8 @@ func (e *Zebitex) CancelOrder(order *exchange.Order) error {
 	}
 
 	strRequestPath := fmt.Sprintf("/api/v1/orders/%d/cancel", order.OrderID)
-	cont,code := e.ApiKeyRequest("DELETE", strRequestPath, nil)
-	if code!=204{
+	cont, code := e.ApiKeyRequest("DELETE", strRequestPath, nil)
+	if code != 204 {
 		return fmt.Errorf("%s CancelOrder Failed: %v\n", e.GetName(), code)
 	}
 
@@ -443,8 +526,8 @@ func (e *Zebitex) CancelAllOrder() error {
 	}
 
 	strRequestPath := "/api/v1/orders/cancel_all"
-	_,code := e.ApiKeyRequest("DELETE", strRequestPath, nil)
-	if code!=204{
+	_, code := e.ApiKeyRequest("DELETE", strRequestPath, nil)
+	if code != 204 {
 		return fmt.Errorf("CancelAllOrder Failed: %v\n", code)
 	}
 
@@ -457,14 +540,14 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Zebitex) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	res,_ := e.ApiKeyRequest("GET", strRequestPath, mapParams)
+	res, _ := e.ApiKeyRequest("GET", strRequestPath, mapParams)
 	return res
 }
 
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
-func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) (string,int) {
+func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) (string, int) {
 	strMethod = strings.ToUpper(strMethod)
 	strUrl := API_URL + strRequestPath
 
@@ -480,9 +563,16 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 		sort.Strings(paramKeys)
 		fields = strings.Join(paramKeys, ";")
 
-		newParams := make(map[string]string)
+		newParams := make(map[string]interface{})
 		for _, k := range paramKeys {
-			newParams[k] = mapParams[k]
+			//数组参数
+			var arr []interface{}
+			err := json.Unmarshal([]byte(mapParams[k]), &arr)
+			if err != nil {
+				newParams[k] = mapParams[k]
+			} else {
+				newParams[k] = arr
+			}
 		}
 
 		paramStr, _ = json.Marshal(newParams)
@@ -497,15 +587,9 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	sign := exchange.ComputeHmac256NoDecode(payloadStr, e.API_SECRET)
 	authStr := fmt.Sprintf("ZEBITEX-HMAC-SHA256 access_key=%s, signature=%s, tonce=%d, signed_params=%s", e.API_KEY, sign, millTime, fields)
 
-	jsonParams := ""
-	if nil != mapParams {
-		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
-	}
-
-	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(jsonParams)))
+	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer(paramStr))
 	if nil != err {
-		return err.Error(),0
+		return err.Error(), 0
 	}
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("Authorization", authStr)
@@ -513,14 +597,14 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
 	if nil != err {
-		return err.Error(),0
+		return err.Error(), 0
 	}
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if nil != err {
-		return err.Error(),0
+		return err.Error(), 0
 	}
 
-	return string(body),response.StatusCode
+	return string(body), response.StatusCode
 }

@@ -101,7 +101,14 @@ type OrdersPage struct {
 	NextCursor interface{}   `json:"nextCursor"`
 }
 
+type FundSource struct{
+	Id          int64       `json:"id"`
+	Iban        interface{} `json:"iban"`
+	Label       string      `json:"label"`
+	Address     string      `json:"address"`
+	Currency    string      `json:"currency"`
+	AccountName string      `json:"accountName"`
+	Confirmed   bool        `json:"confirmed"`
+}
 
-
-
-
+type FundSources []FundSource
