@@ -45,6 +45,7 @@ const (
 	BITLISH      ExchangeName = "BITLISH"
 	BITRUE       ExchangeName = "BITRUE"
 	BITZ         ExchangeName = "BITZ"
+	BYBIT        ExchangeName = "BYBIT"
 	BW           ExchangeName = "BW"
 	BLANK        ExchangeName = "BLANK"
 	BLEUTRADE    ExchangeName = "BLEUTRADE"
@@ -154,4 +155,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, LATOKEN)   // ID = 49
 	supportList = append(supportList, VIRGOCX)   // ID = 50
 	supportList = append(supportList, ABCC)      // ID = 51
+	supportList = append(supportList, BYBIT)     // ID = 52
 }
