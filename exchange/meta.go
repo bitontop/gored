@@ -155,5 +155,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, LATOKEN)   // ID = 49
 	supportList = append(supportList, VIRGOCX)   // ID = 50
 	supportList = append(supportList, ABCC)      // ID = 51
-	supportList = append(supportList, BYBIT)     // ID = 52
+	// supportList = append(supportList, BYBIT)     // ID = 52 no orderbook API
 }
