@@ -4,6 +4,7 @@ test/*.cache
 *.lock
 *.log
 .vscode/*
+.idea
 .ishell_history
 test/logs/*
 .vscode/ftp-sync.json
