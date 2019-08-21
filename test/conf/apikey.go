@@ -162,8 +162,8 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.COINBENE:
-		config.API_KEY = ""
-		config.API_SECRET = ""
+		config.API_KEY = "1"
+		config.API_SECRET = "2"
 		break
 
 	case exchange.IBANKDIGITAL:
@@ -258,6 +258,11 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.ABCC:
+		config.API_KEY = ""
+		config.API_SECRET = ""
+		break
+
+	case exchange.BYBIT:
 		config.API_KEY = ""
 		config.API_SECRET = ""
 		break
