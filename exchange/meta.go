@@ -156,4 +156,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, VIRGOCX)   // ID = 50
 	supportList = append(supportList, ABCC)      // ID = 51
 	// supportList = append(supportList, BYBIT)     // ID = 52 no orderbook API
+	// supportList = append(supportList, ZEBITEX)      // ID = 53
 }
