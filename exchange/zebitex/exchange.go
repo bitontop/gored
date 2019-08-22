@@ -230,11 +230,11 @@ func (e *Zebitex) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Zebitex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = false
-	constrainFetchMethod.PrivateAPI = false
-	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.PublicAPI = true
+	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
-	constrainFetchMethod.Fee = false
+	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false
 	constrainFetchMethod.TxFee = false
