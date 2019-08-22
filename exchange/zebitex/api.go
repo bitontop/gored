@@ -56,7 +56,9 @@ func (e *Zebitex) GetCoinsData() error {
 	coinsData := CoinsData{}
 
 	strRequestPath := "/api/v1/orders/tickers"
-	jsonCurrencyReturn := e.ApiKeyGet(strRequestPath, nil)
+	strUrl := API_URL + strRequestPath
+
+	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonCurrencyReturn)
 	}
@@ -125,7 +127,9 @@ func (e *Zebitex) GetPairsData() error {
 	pairsData := PairsData{}
 
 	strRequestPath := "/api/v1/orders/tickers"
-	jsonSymbolsReturn := e.ApiKeyGet(strRequestPath, nil)
+	strUrl := API_URL + strRequestPath
+
+	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSymbolsReturn)
 	}

@@ -11,9 +11,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/zebitex"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/zebitex"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/zebitex"
+	// "./conf"
 )
 
 /********************Public API********************/
@@ -29,10 +32,10 @@ func Test_Zebitex(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
-	Test_Trading(e, pair, 0.00000001, 100)
-	Test_Trading_Sell(e, pair, 0.00000001, 667)
-	Test_Withdraw(e, pair.Base, 1.5, "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v")
+	// Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Trading_Sell(e, pair, 0.00000001, 667)
+	// Test_Withdraw(e, pair.Base, 1.5, "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v")
 }
 
 func InitZebitex() exchange.Exchange {

@@ -56,6 +56,7 @@ import (
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
 	"github.com/bitontop/gored/exchange/virgocx"
+	"github.com/bitontop/gored/exchange/zebitex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 	"github.com/bitontop/gored/utils"
@@ -169,6 +170,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitVirgocx(config)
 	InitAbcc(config)
 	InitBybit(config)
+	InitZebitex(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -569,6 +571,15 @@ func InitAbcc(config *exchange.Config) {
 func InitBybit(config *exchange.Config) {
 	conf.Exchange(exchange.BYBIT, config)
 	ex := bybit.CreateBybit(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitZebitex(config *exchange.Config) {
+	conf.Exchange(exchange.ZEBITEX, config)
+	ex := zebitex.CreateZebitex(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

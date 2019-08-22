@@ -54,6 +54,7 @@ import (
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
 	"github.com/bitontop/gored/exchange/virgocx"
+	"github.com/bitontop/gored/exchange/zebitex"
 )
 
 var instance *InitManager
@@ -419,6 +420,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BYBIT:
 		ex := bybit.CreateBybit(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.ZEBITEX:
+		ex := zebitex.CreateZebitex(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
