@@ -241,12 +241,19 @@ func (e *Zebitex) UpdateAllBalances() {
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
+	} else if strings.Contains(jsonBalanceReturn, "error") {
+		log.Printf("%s UpdateAllBalances failed: %v\n", e.GetName(), jsonBalanceReturn)
+		return
 	}
 
 	for _, balance := range accountBalance {
 		c := e.GetCoinBySymbol(balance.Code)
 		if c != nil {
-			balanceNum, _ := strconv.ParseFloat(balance.Balance, 64)
+			balanceNum, err := strconv.ParseFloat(balance.Balance, 64)
+			if err != nil {
+				log.Printf("%s balance parse Err: %v, %v", e.GetName(), err, balance.Balance)
+				return
+			}
 			balanceMap.Set(c.Code, balanceNum)
 		}
 	}
@@ -377,6 +384,8 @@ func (e *Zebitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	jsonPlaceReturn, _ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonPlaceReturn)
+	} else if strings.Contains(jsonPlaceReturn, "error") {
+		return nil, fmt.Errorf("%s LimitSell failed: %v\n", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -409,6 +418,8 @@ func (e *Zebitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	jsonPlaceReturn, _ := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonPlaceReturn)
+	} else if strings.Contains(jsonPlaceReturn, "error") {
+		return nil, fmt.Errorf("%s LimitBuy failed: %v\n", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -438,6 +449,8 @@ func (e *Zebitex) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orders); err != nil {
 		return fmt.Errorf("%s OrdersPage Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonOrderStatus)
+	} else if strings.Contains(jsonOrderStatus, "error") {
+		return fmt.Errorf("%s OrderStatus failed: %v\n", e.GetName(), jsonOrderStatus)
 	}
 
 	for _, orderItem := range orders.Items {
@@ -567,19 +580,7 @@ func (e *Zebitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 		sort.Strings(paramKeys)
 		fields = strings.Join(paramKeys, ";")
 
-		newParams := make(map[string]interface{})
-		for _, k := range paramKeys {
-			//数组参数
-			var arr []interface{}
-			err := json.Unmarshal([]byte(mapParams[k]), &arr)
-			if err != nil {
-				newParams[k] = mapParams[k]
-			} else {
-				newParams[k] = arr
-			}
-		}
-
-		paramStr, _ = json.Marshal(newParams)
+		paramStr, _ = json.Marshal(mapParams)
 	} else {
 		fields = ""
 		paramStr = []byte("{}")
