@@ -153,7 +153,7 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	symbol := e.GetSymbolByPair(p)
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = symbol
+	mapParams["pair"] = symbol
 
 	strRequestPath := "/v2/offers/book"
 	strUrl := API_URL + strRequestPath

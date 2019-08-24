@@ -20,7 +20,7 @@ import (
 func Test_Switcheo(t *testing.T) {
 	e := InitSwitcheo()
 
-	pair := pair.GetPairByKey("ETH|BAT")
+	pair := pair.GetPairByKey("NEO|SWTH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
