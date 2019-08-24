@@ -13,29 +13,23 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type Token struct {
+	Symbol           string      `json:"symbol"`
+	Name             string      `json:"name"`
+	Type             string      `json:"type"`
+	Hash             string      `json:"hash"`
+	Decimals         int64       `json:"decimals"`
+	TransferDecimals int64       `json:"transfer_decimals"`
+	Precision        int64       `json:"precision"`
+	MinimumQuantity  string      `json:"minimum_quantity"`
+	TradingActive    bool        `json:"trading_active"`
+	IsStablecoin     bool        `json:"is_stablecoin"`
+	StablecoinType   interface{} `json:"stablecoin_type"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
-}
+type CoinsData map[string]Token
+
+type PairsData []string
 
 type OrderBook struct {
 	Bids [][]float64 `json:"bids"`

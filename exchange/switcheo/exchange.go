@@ -44,7 +44,7 @@ func CreateSwitcheo(config *exchange.Config) *Switcheo {
 		instance = &Switcheo{
 			ID:      DEFAULT_ID,
 			Name:    "Switcheo",
-			Website: "https://www.blank.com/",
+			Website: "https://switcheo.network/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -102,7 +102,7 @@ func (e *Switcheo) GetName() exchange.ExchangeName {
 }
 
 func (e *Switcheo) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.blank.com/marker/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://switcheo.exchange/markets/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 func (e *Switcheo) GetBalance(coin *coin.Coin) float64 {
