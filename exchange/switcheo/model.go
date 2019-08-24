@@ -32,8 +32,13 @@ type CoinsData map[string]Token
 type PairsData []string
 
 type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+	Price    string `json:"price"`
+	Quantity string `json:"quantity"`
+}
+
+type OrderBooks struct {
+	Asks []OrderBook `json:"asks"`
+	Bids []OrderBook `json:"bids"`
 }
 
 /********** Private API Structure**********/
