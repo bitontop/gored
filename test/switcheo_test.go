@@ -6,7 +6,7 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/blank"
+	"github.com/bitontop/gored/exchange/switcheo"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
 )
@@ -20,7 +20,7 @@ import (
 func Test_Switcheo(t *testing.T) {
 	e := InitSwitcheo()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("ETH|BAT")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -41,7 +41,7 @@ func InitSwitcheo() exchange.Exchange {
 	config.Source = exchange.EXCHANGE_API
 	conf.Exchange(exchange.BLANK, config)
 
-	ex := Switcheo.CreateSwitcheo(config)
+	ex := switcheo.CreateSwitcheo(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())
 
 	config = nil
