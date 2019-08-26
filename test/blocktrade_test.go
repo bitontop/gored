@@ -23,7 +23,7 @@ import (
 func Test_Blocktrade(t *testing.T) {
 	e := InitBlocktrade()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("EUR|BTC")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -35,7 +35,7 @@ func Test_Blocktrade(t *testing.T) {
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.00000001, 667)
-	// Test_Withdraw(e, pair.Base, 1.5, "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v")
+	// Test_Withdraw(e, pair.Base, 1, "address")
 }
 
 func InitBlocktrade() exchange.Exchange {

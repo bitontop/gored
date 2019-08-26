@@ -50,51 +50,44 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestPath)*/
 func (e *Blocktrade) GetCoinsData() error {
-	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/v1/trading_assets"
 	strUrl := API_URL + strRequestPath
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range coinsData {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.AssetCode)
+			c = coin.GetCoin(data.IsoCode)
 			if c == nil {
 				c = &coin.Coin{
-					Code:     data.AssetCode,
-					Name:     data.AssetName,
-					Website:  data.Website,
-					Explorer: data.BlockURL,
+					ID:   data.ID,
+					Code: data.IsoCode,
+					Name: data.FullName,
 				}
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.AssetCode)
+			c = e.GetCoinBySymbol(data.IsoCode)
 		}
 
 		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     data.AssetCode,
+				ExSymbol:     data.IsoCode,
 				ChainType:    exchange.MAINNET,
-				TxFee:        data.TransactionFee,
-				Withdraw:     data.EnableWithdraw,
-				Deposit:      data.EnableCharge,
-				Confirmation: data.Confirmations,
-				Listed:       !data.Delisted,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -108,48 +101,42 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Blocktrade) GetPairsData() error {
-	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/v1/trading_pairs"
 	strUrl := API_URL + strRequestPath
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
-		if data.Status == "TRADING" {
-			p := &pair.Pair{}
-			switch e.Source {
-			case exchange.EXCHANGE_API:
-				base := coin.GetCoin(data.QuoteAsset)
-				target := coin.GetCoin(data.BaseAsset)
-				if base != nil && target != nil {
-					p = pair.GetPair(base, target)
-				}
-			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(data.Symbol)
+		p := &pair.Pair{}
+		base := coin.GetCoinByID(data.QuoteAssetId)
+		target := coin.GetCoinByID(data.BaseAssetId)
+		symbol := fmt.Sprintf("%d", data.BaseAssetId) + "|" + fmt.Sprintf("%d", data.QuoteAssetId)
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			if base != nil && target != nil {
+				p = pair.GetPair(base, target)
 			}
-			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    data.MakerFee,
-					TakerFee:    data.TakerFee,
-					LotSize:     data.LotSize,
-					PriceFilter: data.PriceFilter,
-					Listed:      true,
-				}
-				e.SetPairConstraint(pairConstraint)
+		case exchange.JSON_FILE:
+			p = e.GetPairBySymbol(symbol)
+		}
+
+		if p != nil {
+			pairConstraint := &exchange.PairConstraint{
+				PairID:      p.ID,
+				Pair:        p,
+				ExSymbol:    symbol,
+				MakerFee:    DEFAULT_MAKER_FEE,
+				TakerFee:    DEFAULT_TAKER_FEE,
+				LotSize:     DEFAULT_LOT_SIZE,
+				PriceFilter: DEFAULT_PRICE_FILTER,
+				Listed:      true,
 			}
+			e.SetPairConstraint(pairConstraint)
 		}
 	}
 	return nil
