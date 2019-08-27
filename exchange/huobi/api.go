@@ -142,7 +142,7 @@ func (e *Huobi) GetPairsData() error {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.AmountPrecision * -1),
 				PriceFilter: math.Pow10(data.PricePrecision * -1),
-				Listed:      true,
+				Listed:      data.State == "online",
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -171,7 +171,7 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
