@@ -443,7 +443,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyGet(mapParams map[string]string, strRequestPath string) string {
-	mapParams["recvWindow"] = "50000000"
+	mapParams["recvWindow"] = "50000" //"50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
@@ -477,7 +477,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
-	mapParams["recvWindow"] = "50000000"
+	mapParams["recvWindow"] = "50000" //"50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
@@ -511,7 +511,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Binance) WApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
-	mapParams["recvWindow"] = "50000000"
+	mapParams["recvWindow"] = "50000" //"50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	signature := exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 

@@ -213,6 +213,7 @@ func (e *Latoken) UpdateAllBalances() {
 	strRequest := "/api/v1/Account/balances"
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	log.Printf("balance: %v", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
