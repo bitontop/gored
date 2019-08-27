@@ -14,6 +14,7 @@ const (
 	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
 
 	EXCHANGE_API     DataSource = "EXCHANGE_API"
+	WEBSOCKET        DataSource = "WEBSOCKET"
 	MICROSERVICE_API DataSource = "MICROSERVICE_API"
 	JSON_FILE        DataSource = "JSON_FILE"
 	PSQL             DataSource = "PSQL"

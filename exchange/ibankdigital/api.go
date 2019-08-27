@@ -207,9 +207,11 @@ func (e *Ibankdigital) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	mapParams["symbol"] = symbol
 	mapParams["type"] = "step0"
 
-	maker := &exchange.Maker{}
-	maker.WorkerIP = exchange.GetExternalIP()
-	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:         exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
