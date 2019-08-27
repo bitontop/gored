@@ -103,6 +103,7 @@ type Order struct {
 
 type Maker struct {
 	WorkerIP        string     `bson:"workerip"`
+	WorkerDeadTS    float64    `bson:"workerdeadts"`
 	Source          DataSource `bson:"source"`
 	BeforeTimestamp float64    `bson:"beforetimestamp"`
 	AfterTimestamp  float64    `bson:"aftertimestamp"`
