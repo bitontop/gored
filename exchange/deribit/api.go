@@ -132,7 +132,7 @@ func (e *Deribit) GetPairsData() error {
 			case exchange.JSON_FILE:
 				p = e.GetPairBySymbol(data.InstrumentName)
 			}
-			if p != nil {
+			if p != nil && data.IsActive {
 				pairConstraint := &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
@@ -170,7 +170,7 @@ func (e *Deribit) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 

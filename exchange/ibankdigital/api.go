@@ -133,7 +133,7 @@ func (e *Ibankdigital) GetPairsData() error {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.Symbol)
 		}
-		if p != nil {
+		if p != nil && data.State == "online" {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
@@ -209,7 +209,7 @@ func (e *Ibankdigital) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 

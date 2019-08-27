@@ -133,7 +133,7 @@ func (e *Huobi) GetPairsData() error {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.Symbol)
 		}
-		if p != nil {
+		if p != nil && data.State == "online" {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,

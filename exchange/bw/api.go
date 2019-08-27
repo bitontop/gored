@@ -138,7 +138,7 @@ func (e *Bw) GetPairsData() error {
 			case exchange.JSON_FILE:
 				p = e.GetPairBySymbol(data.Name)
 			}
-			if p != nil {
+			if p != nil && data.State == 1 {
 				pairConstraint := &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
