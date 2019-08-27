@@ -204,7 +204,7 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		}
 		maker.Asks = append(maker.Asks, selldata)
 	}
-	maker.LastUpdateID = orderBook.Seqnum
+	maker.LastUpdateID = int64(orderBook.Seqnum)
 
 	return maker, nil
 }

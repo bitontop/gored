@@ -190,7 +190,7 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Kucoin orderbook sequence Atoi err: %v", err)
 	}
-	maker.LastUpdateID = sequence
+	maker.LastUpdateID = int64(sequence)
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	for _, bid := range orderBook.Bids {

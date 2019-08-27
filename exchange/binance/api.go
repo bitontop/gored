@@ -190,7 +190,7 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
-	maker.LastUpdateID = orderBook.LastUpdateID
+	maker.LastUpdateID = int64(orderBook.LastUpdateID)
 
 	var err error
 	for _, bid := range orderBook.Bids {

@@ -107,7 +107,7 @@ type Maker struct {
 	AfterTimestamp  float64 `bson:"aftertimestamp"`
 	Timestamp       float64 `bson:"timestamp"`
 	Nounce          int     `bson:"Nounce"`
-	LastUpdateID    int     `json:"lastUpdateId"`
+	LastUpdateID    int64   `json:"lastUpdateId"`
 	Bids            []Order `json:"bids"`
 	Asks            []Order `json:"asks"`
 }
