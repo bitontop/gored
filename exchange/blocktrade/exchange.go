@@ -98,7 +98,7 @@ func (e *Blocktrade) GetID() int {
 }
 
 func (e *Blocktrade) GetName() exchange.ExchangeName {
-	return exchange.BLANK
+	return exchange.BLOCKTRADE
 }
 
 func (e *Blocktrade) GetTradingWebURL(pair *pair.Pair) string {

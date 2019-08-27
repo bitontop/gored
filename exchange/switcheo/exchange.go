@@ -98,7 +98,7 @@ func (e *Switcheo) GetID() int {
 }
 
 func (e *Switcheo) GetName() exchange.ExchangeName {
-	return exchange.BLANK
+	return exchange.SWITCHEO
 }
 
 func (e *Switcheo) GetTradingWebURL(pair *pair.Pair) string {

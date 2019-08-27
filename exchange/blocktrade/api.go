@@ -115,7 +115,7 @@ func (e *Blocktrade) GetPairsData() error {
 		p := &pair.Pair{}
 		base := coin.GetCoinByID(data.QuoteAssetId)
 		target := coin.GetCoinByID(data.BaseAssetId)
-		symbol := fmt.Sprintf("%d", data.BaseAssetId) + "|" + fmt.Sprintf("%d", data.QuoteAssetId)
+		symbol := fmt.Sprintf("%d", data.ID)
 		switch e.Source {
 		case exchange.EXCHANGE_API:
 			if base != nil && target != nil {
@@ -150,45 +150,53 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Blocktrade) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
-	jsonResponse := &JsonResponse{}
-	orderBook := OrderBook{}
+	orderBooks := OrderBooks{}
 	symbol := e.GetSymbolByPair(p)
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = symbol
-	mapParams["limit"] = "100"
-
-	strRequestPath := "/API Path"
+	strRequestPath := fmt.Sprintf("/api/v1/order_book/%s", symbol)
 	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{}
 	maker.WorkerIP = exchange.GetExternalIP()
 	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBooks); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
-	for _, bid := range orderBook.Bids {
+	//买入
+	for _, bid := range orderBooks.Bids {
 		buydata := exchange.Order{}
-		buydata.Quantity = bid[1]
-		buydata.Rate = bid[0]
+		buydata.Quantity, err = strconv.ParseFloat(bid.Amount, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+		}
+
+		buydata.Rate, err = strconv.ParseFloat(bid.Price, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+		}
+
 		maker.Bids = append(maker.Bids, buydata)
 	}
 
-	for _, ask := range orderBook.Asks {
+	//卖出
+	for _, ask := range orderBooks.Asks {
 		selldata := exchange.Order{}
-		selldata.Quantity = ask[1]
-		selldata.Rate = ask[0]
+		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+		}
+
+		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+		}
+
 		maker.Asks = append(maker.Asks, selldata)
 	}
 
