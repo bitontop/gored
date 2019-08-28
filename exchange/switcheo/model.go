@@ -18,18 +18,30 @@ type Token struct {
 	Name             string      `json:"name"`
 	Type             string      `json:"type"`
 	Hash             string      `json:"hash"`
-	Decimals         int64       `json:"decimals"`
-	TransferDecimals int64       `json:"transfer_decimals"`
-	Precision        int64       `json:"precision"`
+	Decimals         int         `json:"decimals"`
+	TransferDecimals int         `json:"transfer_decimals"`
+	Precision        int         `json:"precision"`
 	MinimumQuantity  string      `json:"minimum_quantity"`
 	TradingActive    bool        `json:"trading_active"`
 	IsStablecoin     bool        `json:"is_stablecoin"`
 	StablecoinType   interface{} `json:"stablecoin_type"`
+	Active           bool        `json:"active"`
 }
 
 type CoinsData map[string]Token
 
-type PairsData []string
+type Pair struct {
+	Name             string `json:"name"`
+	Precision        int    `json:"precision"`
+	BaseAssetName    string `json:"baseAssetName"`
+	BaseAssetSymbol  string `json:"baseAssetSymbol"`
+	BaseContract     string `json:"baseContract"`
+	QuoteAssetName   string `json:"quoteAssetName"`
+	QuoteAssetSymbol string `json:"quoteAssetSymbol"`
+	QuoteContract    string `json:"quoteContract"`
+}
+
+type PairsData []Pair
 
 type OrderBook struct {
 	Price    string `json:"price"`

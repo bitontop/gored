@@ -10,9 +10,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -22,7 +22,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://api.switcheo.network/"
+	API_URL = "https://api.switcheo.network"
 )
 
 /*API Base Knowledge
@@ -56,41 +56,46 @@ func (e *Switcheo) GetCoinsData() error {
 	strRequestPath := "/v2/exchange/tokens"
 	strUrl := API_URL + strRequestPath
 
-	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	mapParams := make(map[string]string)
+	mapParams["show_details"] = "1"
+	mapParams["show_inactive"] = "1"
+
+	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
 	for _, data := range coinsData {
-		c := &coin.Coin{}
-		switch e.Source {
-		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.Symbol)
-			if c == nil {
-				c = &coin.Coin{
-					Code: data.Symbol,
-					Name: data.Name,
+		if data.Active {
+			c := &coin.Coin{}
+			switch e.Source {
+			case exchange.EXCHANGE_API:
+				c = coin.GetCoin(data.Symbol)
+				if c == nil {
+					c = &coin.Coin{
+						Code: data.Symbol,
+						Name: data.Name,
+					}
+					coin.AddCoin(c)
 				}
-				coin.AddCoin(c)
-			}
-		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.Symbol)
-		}
-
-		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Symbol,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			case exchange.JSON_FILE:
+				c = e.GetCoinBySymbol(data.Symbol)
 			}
 
-			e.SetCoinConstraint(coinConstraint)
+			if c != nil {
+				coinConstraint := &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Symbol,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+				e.SetCoinConstraint(coinConstraint)
+			}
 		}
 	}
 	return nil
@@ -106,33 +111,36 @@ func (e *Switcheo) GetPairsData() error {
 	strRequestPath := "/v2/exchange/pairs"
 	strUrl := API_URL + strRequestPath
 
-	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
+	mapParams := make(map[string]string)
+	mapParams["show_details"] = "1"
+
+	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
 	for _, data := range pairsData {
-		pairStrs := strings.Split(data, "_")
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(pairStrs[1])
-			target := coin.GetCoin(pairStrs[0])
+			base := coin.GetCoin(data.QuoteAssetSymbol)
+			target := coin.GetCoin(data.BaseAssetSymbol)
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data)
+			p = e.GetPairBySymbol(data.Name)
 		}
 		if p != nil {
+			priceFilter := math.Pow10(-1 * data.Precision)
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    data,
+				ExSymbol:    data.Name,
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
+				PriceFilter: priceFilter,
 				Listed:      true,
 			}
 			e.SetPairConstraint(pairConstraint)
