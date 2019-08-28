@@ -133,7 +133,7 @@ func (e *Huobi) GetPairsData() error {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.Symbol)
 		}
-		if p != nil {
+		if p != nil && data.State == "online" {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
@@ -142,7 +142,7 @@ func (e *Huobi) GetPairsData() error {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.AmountPrecision * -1),
 				PriceFilter: math.Pow10(data.PricePrecision * -1),
-				Listed:      true,
+				Listed:      data.State == "online",
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -169,9 +169,11 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	mapParams["symbol"] = symbol
 	mapParams["type"] = "step0"
 
-	maker := &exchange.Maker{}
-	maker.WorkerIP = exchange.GetExternalIP()
-	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
@@ -200,6 +202,8 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 		maker.Asks = append(maker.Asks, selldata)
 	}
+	maker.LastUpdateID = orderBook.Version
+
 	return maker, nil
 }
 

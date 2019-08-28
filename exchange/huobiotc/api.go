@@ -148,9 +148,11 @@ func (e *HuobiOTC) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	mapParams["blockType"] = "general"
 	mapParams["online"] = "1"
 
-	maker := &exchange.Maker{}
-	maker.WorkerIP = exchange.GetExternalIP()
-	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
 
 	for side := 0; side < 2; side++ {
 		currPage := 1

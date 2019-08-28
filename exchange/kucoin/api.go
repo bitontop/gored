@@ -172,9 +172,11 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = symbol
 
-	maker := &exchange.Maker{}
-	maker.WorkerIP = exchange.GetExternalIP()
-	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
@@ -190,7 +192,7 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Kucoin orderbook sequence Atoi err: %v", err)
 	}
-	maker.LastUpdateID = sequence
+	maker.LastUpdateID = int64(sequence)
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	for _, bid := range orderBook.Bids {

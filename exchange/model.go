@@ -102,12 +102,14 @@ type Order struct {
 }
 
 type Maker struct {
-	WorkerIP        string  `bson:"workerip"`
-	BeforeTimestamp float64 `bson:"beforetimestamp"`
-	AfterTimestamp  float64 `bson:"aftertimestamp"`
-	Timestamp       float64 `bson:"timestamp"`
-	Nounce          int     `bson:"Nounce"`
-	LastUpdateID    int     `json:"lastUpdateId"`
-	Bids            []Order `json:"bids"`
-	Asks            []Order `json:"asks"`
+	WorkerIP        string     `bson:"workerip"`
+	WorkerDeadTS    float64    `bson:"workerdeadts"`
+	Source          DataSource `bson:"source"`
+	BeforeTimestamp float64    `bson:"beforetimestamp"`
+	AfterTimestamp  float64    `bson:"aftertimestamp"`
+	Timestamp       float64    `bson:"timestamp"`
+	Nounce          int        `bson:"nounce"`
+	LastUpdateID    int64      `json:"lastUpdateId"`
+	Bids            []Order    `json:"bids"`
+	Asks            []Order    `json:"asks"`
 }

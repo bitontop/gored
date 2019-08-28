@@ -138,7 +138,7 @@ func (e *Bw) GetPairsData() error {
 			case exchange.JSON_FILE:
 				p = e.GetPairBySymbol(data.Name)
 			}
-			if p != nil {
+			if p != nil && data.State == 1 {
 				pairConstraint := &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
@@ -175,9 +175,11 @@ func (e *Bw) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	strRequestPath := "/api/data/v1/entrusts"
 	strUrl := API_URL + strRequestPath
 
-	maker := &exchange.Maker{}
-	maker.WorkerIP = exchange.GetExternalIP()
-	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
