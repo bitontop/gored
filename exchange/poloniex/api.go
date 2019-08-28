@@ -199,6 +199,7 @@ func (e *Poloniex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 		maker.Asks = append(maker.Asks, selldata)
 	}
+	maker.LastUpdateID = orderBook.Seq
 	return maker, nil
 }
 
