@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -62,26 +63,26 @@ func (e *Blocktrade) GetCoinsData() error {
 
 	for _, data := range coinsData {
 		c := &coin.Coin{}
+		symbol := fmt.Sprintf("%d", data.ID)
 		switch e.Source {
 		case exchange.EXCHANGE_API:
 			c = coin.GetCoin(data.IsoCode)
 			if c == nil {
 				c = &coin.Coin{
-					ID:   data.ID,
 					Code: data.IsoCode,
 					Name: data.FullName,
 				}
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.IsoCode)
+			c = e.GetCoinBySymbol(symbol)
 		}
 
 		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     data.IsoCode,
+				ExSymbol:     symbol,
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
@@ -112,31 +113,38 @@ func (e *Blocktrade) GetPairsData() error {
 	}
 
 	for _, data := range pairsData {
-		p := &pair.Pair{}
-		base := coin.GetCoinByID(data.QuoteAssetId)
-		target := coin.GetCoinByID(data.BaseAssetId)
-		symbol := fmt.Sprintf("%d", data.ID)
-		switch e.Source {
-		case exchange.EXCHANGE_API:
-			if base != nil && target != nil {
-				p = pair.GetPair(base, target)
+		if data.Active {
+			p := &pair.Pair{}
+			base := e.GetCoinBySymbol(fmt.Sprintf("%d", data.QuoteAssetId))
+			target := e.GetCoinBySymbol(fmt.Sprintf("%d", data.BaseAssetId))
+			symbol := fmt.Sprintf("%d", data.ID)
+			switch e.Source {
+			case exchange.EXCHANGE_API:
+				if base != nil && target != nil {
+					p = pair.GetPair(base, target)
+				}
+			case exchange.JSON_FILE:
+				p = e.GetPairBySymbol(symbol)
 			}
-		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(symbol)
-		}
 
-		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      true,
+			if p != nil {
+				lotSize, err := strconv.ParseFloat(data.LotSize, 64)
+				if err != nil {
+					lotSize = DEFAULT_LOT_SIZE
+				}
+				priceFilter := math.Pow10(-1 * data.DecimalPrecision)
+				pairConstraint := &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     lotSize,
+					PriceFilter: priceFilter,
+					Listed:      true,
+				}
+				e.SetPairConstraint(pairConstraint)
 			}
-			e.SetPairConstraint(pairConstraint)
 		}
 	}
 	return nil
