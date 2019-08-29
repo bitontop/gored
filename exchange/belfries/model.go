@@ -7,39 +7,83 @@ import "encoding/json"
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 type JsonResponse struct {
-	Success bool            `json:"success"`
-	Message string          `json:"message"`
-	Data    json.RawMessage `json:"data"`
+	Data      json.RawMessage `json:"data"`
+	Message   string          `json:"message"`
+	Timestamp int             `json:"timestamp"`
+	Status    int             `json:"status"`
+	IsSuccess bool            `json:"isSuccess"`
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type Country struct {
+	NickName   string `json:"nickName"`
+	Icon       string `json:"icon"`
+	Iso        string `json:"iso"`
+	PrivacyUrl string `json:"privacyUrl"`
+	TermsUrl   string `json:"termsUrl"`
+	PhoneCode  int    `json:"phoneCode"`
+	ID         int    `json:"id"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
+type CountryData struct {
+	ExchangeCountries []Country
+	Message           string `json:"message"`
+	IsSuccess         bool   `json:"isSuccess"`
+}
+
+type Currency struct {
+	Id                           int         `json:"id"`
+	Name                         string      `json:"name"`
+	Symbol                       string      `json:"symbol"`
+	Type                         string      `json:"type"`
+	NetworkFees                  float64     `json:"networkFees"`
+	NoConfirmations              int         `json:"noConfirmations"`
+	NoConfirmationsMerchant      int         `json:"noConfirmationsMerchant"`
+	TxnFeePerKB                  float64     `json:"txnFeePerKB"`
+	MinThreshold                 int         `json:"minThreshold"`
+	MinTolerance                 int         `json:"minTolerance"`
+	MaxThreshold                 int         `json:"maxThreshold"`
+	MaxTolerance                 int         `json:"maxTolerance"`
+	DeepFreezeTransferFeeAccount int         `json:"deepFreezeTransferFeeAccount"`
+	MinWithdrawLimit             float64     `json:"minWithdrawLimit"`
+	MaxWithdrawLimit             int         `json:"maxWithdrawLimit"`
+	MaxWithdrawLimitPer24Hrs     int         `json:"maxWithdrawLimitPer24Hrs"`
+	MaxDepositAmountLimitPerday  interface{} `json:"maxDepositAmountLimitPerday"`
+	Image                        string      `json:"image"`
+	Scale                        int         `json:"scale"`
+	IsActive                     bool        `json:"isActive"`
+	Priority                     interface{} `json:"priority"`
+	ExchangeCode                 string      `json:"exchangeCode"`
+	IsBaseCurrency               bool        `json:"isBaseCurrency"`
+	UpdatedDate                  int         `json:"updatedDate"`
+	CanCreateWallet              bool        `json:"canCreateWallet"`
+	IsDeposit                    bool        `json:"isDeposit"`
+	IsWithdrawal                 bool        `json:"isWithdrawal"`
+	ErcToken                     bool        `json:"ercToken"`
+}
+
+type CoinsData []Currency
+
+type Market struct {
+	ViewScale1      string  `json:"viewScale1"`
+	ViewScale2      string  `json:"viewScale2"`
+	Instrument   string  `json:"instrument"`
+	Id  string  `json:"id"`
+}
+
+type PairsData []Market
+
+type Order struct {
+	OrderType  string  `json:"orderType"`
+	Instrument string  `json:"instrument"`
+	MarketId   int     `json:"marketId"`
+	Quantity   float64 `json:"quantity"`
+	Price      float64 `json:"price"`
 }
 
 type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+	SELL []Order `json:"SELL"`
+	BUY  []Order `json:"BUY"`
 }
 
 /********** Private API Structure**********/

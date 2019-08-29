@@ -45,6 +45,26 @@ Get - Method
 /api/v1/depth - Path*/
 
 /*************** Public API ***************/
+/* Get exchange Countries */
+func (e *Belfries)GetCountries() ([]Country,err) {
+	jsonResponse := &JsonResponse{}
+	countryData := CountryData{}
+
+	strRequestPath := "/api/v1/get/exchangeCountries"
+	strUrl := API_URL + strRequestPath
+	jsonReturn := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonReturn), &jsonResponse); err != nil {
+		return nil, fmt.Errorf("%s Get exchange Countries Unmarshal Err: %v %v", e.GetName(), err, jsonReturn)
+	} else if !jsonResponse.IsSuccess {
+		return nil, fmt.Errorf("%s Get exchange Countries Failed: %v", e.GetName(), jsonResponse.Message)
+	}
+	if err := json.Unmarshal(jsonReturn.Data, &countryData); err != nil {
+		return nil, fmt.Errorf("%s Get exchange Countries Result Unmarshal Err: %v %s", e.GetName(), err, jsonReturn.Data)
+	}
+
+	return countryData.ExchangeCountries, nil
+}
+
 /*Get Coins Information (If API provide)
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
@@ -53,53 +73,67 @@ func (e *Belfries) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestPath := "/API Path"
+	countries,_ := e.GetCountries()
+	if len(countries)==0 {
+		return fmt.Errorf("%s can not get exchange Countries", e.GetName())
+	}
+
+	strRequestPath := "/api/v1/get/currenciesbyexchange/belfrics"
 	strUrl := API_URL + strRequestPath
 
-	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-	}
+	mapParams := make(map[string]string)
+	mapParams["dir"] = "ASC"
+	mapParams["size"] = "100"
+	mapParams["start"] = "1"
 
-	for _, data := range coinsData {
-		c := &coin.Coin{}
-		switch e.Source {
-		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.AssetCode)
-			if c == nil {
-				c = &coin.Coin{
-					Code:     data.AssetCode,
-					Name:     data.AssetName,
-					Website:  data.Website,
-					Explorer: data.BlockURL,
+	var jsonReturn string
+	for _,country := range countries {
+		mapParams["exchangeId"] = fmt.Sprintf("%d", country.ID)
+		jsonReturn := exchange.HttpGetRequest(strUrl, mapParams)
+
+		if err := json.Unmarshal([]byte(jsonReturn), &jsonResponse); err != nil {
+			return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonReturn)
+		} else if !jsonResponse.IsSuccess {
+			return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+		}
+		if err := json.Unmarshal(jsonReturn.Data, &coinsData); err != nil {
+			return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonReturn.Data)
+		}
+
+		for _, data := range coinsData {
+			c := &coin.Coin{}
+			switch e.Source {
+			case exchange.EXCHANGE_API:
+				c = coin.GetCoin(data.AssetCode)
+				if c == nil {
+					c = &coin.Coin{
+						Code:     data.Symbol,
+						Name:     data.Name,
+					}
+					coin.AddCoin(c)
 				}
-				coin.AddCoin(c)
-			}
-		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.AssetCode)
-		}
-
-		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.TransactionFee,
-				Withdraw:     data.EnableWithdraw,
-				Deposit:      data.EnableCharge,
-				Confirmation: data.Confirmations,
-				Listed:       !data.Delisted,
+			case exchange.JSON_FILE:
+				c = e.GetCoinBySymbol(data.Symbol)
 			}
 
-			e.SetCoinConstraint(coinConstraint)
+			if c != nil {
+				coinConstraint := &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Symbol,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.TransactionFee,
+					Withdraw:     data.EnableWithdraw,
+					Deposit:      data.EnableCharge,
+					Confirmation: data.Confirmations,
+					Listed:       !data.Delisted,
+				}
+
+				e.SetCoinConstraint(coinConstraint)
+			}
 		}
 	}
+
 	return nil
 }
 
