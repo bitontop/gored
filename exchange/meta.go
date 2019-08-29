@@ -28,6 +28,7 @@ const (
 
 	ABCC         ExchangeName = "ABCC"
 	BCEX         ExchangeName = "BCEX"
+	BELFRIES     ExchangeName = "BELFRIES"
 	BGOGO        ExchangeName = "BGOGO"
 	BIBOX        ExchangeName = "BIBOX"
 	BIGONE       ExchangeName = "BIGONE"
