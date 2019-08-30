@@ -1,7 +1,6 @@
 package test
 
 import (
-	"github.com/bitontop/gored/exchange/blank"
 	"log"
 	"testing"
 
@@ -42,7 +41,7 @@ func InitHibitex() exchange.Exchange {
 	config.Source = exchange.EXCHANGE_API
 	conf.Exchange(exchange.HIBITEX, config)
 
-	ex := blank.CreateHibitex(config)
+	ex := hibitex.CreateHibitex(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())
 
 	config = nil

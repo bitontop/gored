@@ -7,35 +7,24 @@ import "encoding/json"
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 type JsonResponse struct {
-	Success bool            `json:"success"`
-	Message string          `json:"message"`
+	Code    string          `json:"code"`
+	Msg     string          `json:"msg"`
+	Message interface{}     `json:"message"`
 	Data    json.RawMessage `json:"data"`
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type Ticker struct {
+	Symbol          string `json:"symbol"`
+	CountCoin       string `json:"count_coin"`
+	AmountPrecision int    `json:"amount_precision"`
+	BaseCoin        string `json:"base_coin"`
+	PricePrecision  int    `json:"price_precision"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
-}
+type CoinsData []Ticker
+
+type PairsData []Ticker
 
 type OrderBook struct {
 	Bids [][]float64 `json:"bids"`

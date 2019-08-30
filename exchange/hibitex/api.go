@@ -53,50 +53,69 @@ func (e *Hibitex) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/open/api/common/symbols"
 	strUrl := API_URL + strRequestPath
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+	} else if jsonResponse.Code!="0" {
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range coinsData {
-		c := &coin.Coin{}
+		base := &coin.Coin{}
+		target := &coin.Coin{}
+
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.AssetCode)
-			if c == nil {
-				c = &coin.Coin{
-					Code:     data.AssetCode,
-					Name:     data.AssetName,
-					Website:  data.Website,
-					Explorer: data.BlockURL,
-				}
-				coin.AddCoin(c)
+			base = coin.GetCoin(data.CountCoin)
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = data.CountCoin
+				coin.AddCoin(base)
+			}
+			target = coin.GetCoin(data.BaseCoin)
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = data.BaseCoin
+				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.AssetCode)
+			base = e.GetCoinBySymbol(data.CountCoin)
+			target = e.GetCoinBySymbol(data.BaseCoin)
 		}
 
-		if c != nil {
+		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
+				CoinID:       base.ID,
+				Coin:         base,
+				ExSymbol:     data.CountCoin,
 				ChainType:    exchange.MAINNET,
-				TxFee:        data.TransactionFee,
-				Withdraw:     data.EnableWithdraw,
-				Deposit:      data.EnableCharge,
-				Confirmation: data.Confirmations,
-				Listed:       !data.Delisted,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
 			}
+			e.SetCoinConstraint(coinConstraint)
+		}
 
+		if target != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       target.ID,
+				Coin:         target,
+				ExSymbol:     data.BaseCoin,
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
