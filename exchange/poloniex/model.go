@@ -35,7 +35,7 @@ type OrderBook struct {
 	Asks     [][]interface{} `json:"asks"`
 	Bids     [][]interface{} `json:"bids"`
 	IsFrozen string          `json:"isFrozen"`
-	Seq      int             `json:"seq"`
+	Seq      int64           `json:"seq"`
 }
 
 type Withdraw struct {
