@@ -13,6 +13,14 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
+type ListItem struct {
+	Start  int  `json:"start"`
+	End    int  `json:"end"`
+	Paused bool `json:"paused"`
+}
+
+type ListData map[string]ListItem
+
 type Token struct {
 	Symbol           string      `json:"symbol"`
 	Name             string      `json:"name"`
@@ -26,6 +34,7 @@ type Token struct {
 	IsStablecoin     bool        `json:"is_stablecoin"`
 	StablecoinType   interface{} `json:"stablecoin_type"`
 	Active           bool        `json:"active"`
+	ListingInfo      ListData    `json:"listing_info"`
 }
 
 type CoinsData map[string]Token

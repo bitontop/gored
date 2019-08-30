@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -132,7 +131,11 @@ func (e *Blocktrade) GetPairsData() error {
 				if err != nil {
 					lotSize = DEFAULT_LOT_SIZE
 				}
-				priceFilter := math.Pow10(-1 * data.DecimalPrecision)
+				priceFilter, err := strconv.ParseFloat(data.TickSize, 64)
+				if err != nil {
+					priceFilter = DEFAULT_LOT_SIZE
+				}
+
 				pairConstraint := &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,

@@ -57,7 +57,7 @@ func (e *Switcheo) GetCoinsData() error {
 	strUrl := API_URL + strRequestPath
 
 	mapParams := make(map[string]string)
-	mapParams["show_details"] = "1"
+	mapParams["show_listing_details"] = "1"
 	mapParams["show_inactive"] = "1"
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, mapParams)
@@ -66,7 +66,7 @@ func (e *Switcheo) GetCoinsData() error {
 	}
 
 	for _, data := range coinsData {
-		if data.Active {
+		if data.TradingActive {
 			c := &coin.Coin{}
 			switch e.Source {
 			case exchange.EXCHANGE_API:
@@ -83,14 +83,24 @@ func (e *Switcheo) GetCoinsData() error {
 			}
 
 			if c != nil {
+				withdraw := DEFAULT_WITHDRAW
+				deposit := DEFAULT_DEPOSIT
+				for k, item := range data.ListingInfo {
+					if k == "deposits" {
+						deposit = !item.Paused
+					} else if k == "withdrawals" {
+						deposit = !item.Paused
+					}
+				}
+
 				coinConstraint := &exchange.CoinConstraint{
 					CoinID:       c.ID,
 					Coin:         c,
 					ExSymbol:     data.Symbol,
 					ChainType:    exchange.MAINNET,
 					TxFee:        DEFAULT_TXFEE,
-					Withdraw:     DEFAULT_WITHDRAW,
-					Deposit:      DEFAULT_DEPOSIT,
+					Withdraw:     withdraw,
+					Deposit:      deposit,
 					Confirmation: DEFAULT_CONFIRMATION,
 					Listed:       DEFAULT_LISTED,
 				}
