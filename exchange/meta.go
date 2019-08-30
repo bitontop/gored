@@ -74,6 +74,7 @@ const (
 	GOKO         ExchangeName = "GOKO"
 	GRAVIEX      ExchangeName = "GRAVIEX"
 	HITBTC       ExchangeName = "HITBTC"
+	HIBITEX      ExchangeName = "HIBITEX"
 	HOTBIT       ExchangeName = "HOTBIT"
 	HUOBI        ExchangeName = "HUOBI"
 	HUOBIDM      ExchangeName = "HUOBIDM"
