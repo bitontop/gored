@@ -19,6 +19,7 @@ import (
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitbay"
 	"github.com/bitontop/gored/exchange/bitforex"
+	"github.com/bitontop/gored/exchange/bithumb"
 	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitrue"
@@ -171,6 +172,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitAbcc(config)
 	InitBybit(config)
 	InitZebitex(config)
+	InitBithumb(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -580,6 +582,15 @@ func InitBybit(config *exchange.Config) {
 func InitZebitex(config *exchange.Config) {
 	conf.Exchange(exchange.ZEBITEX, config)
 	ex := zebitex.CreateZebitex(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBithumb(config *exchange.Config) {
+	conf.Exchange(exchange.BITHUMB, config)
+	ex := bithumb.CreateBithumb(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

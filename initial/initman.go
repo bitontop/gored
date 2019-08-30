@@ -14,6 +14,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitbay"
 	"github.com/bitontop/gored/exchange/bitfinex"
 	"github.com/bitontop/gored/exchange/bitforex"
+	"github.com/bitontop/gored/exchange/bithumb"
 	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
@@ -427,6 +428,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.ZEBITEX:
 		ex := zebitex.CreateZebitex(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BITHUMB:
+		ex := bithumb.CreateBithumb(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
