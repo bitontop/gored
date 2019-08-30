@@ -135,7 +135,7 @@ func (e *Stex) GetPairsData() error {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.Symbol)
 		}
-		if p != nil {
+		if p != nil && !data.Delisted {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
@@ -145,7 +145,7 @@ func (e *Stex) GetPairsData() error {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(data.CurrencyPrecision * -1),
 				PriceFilter: math.Pow10(data.MarketPrecision * -1),
-				Listed:      true,
+				Listed:      !data.Delisted,
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
