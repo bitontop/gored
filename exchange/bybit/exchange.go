@@ -98,7 +98,7 @@ func (e *Bybit) GetID() int {
 }
 
 func (e *Bybit) GetName() exchange.ExchangeName {
-	return exchange.BITTREX
+	return exchange.BYBIT
 }
 
 func (e *Bybit) GetBalance(coin *coin.Coin) float64 {
