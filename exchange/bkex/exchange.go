@@ -102,7 +102,7 @@ func (e *Bkex) GetName() exchange.ExchangeName {
 }
 
 func (e *Bkex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.blank.com/marker/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.bkex.com/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 func (e *Bkex) GetBalance(coin *coin.Coin) float64 {
