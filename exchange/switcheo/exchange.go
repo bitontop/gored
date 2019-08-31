@@ -237,8 +237,8 @@ func (e *Switcheo) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = false
-	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }

@@ -89,7 +89,7 @@ func (e *Switcheo) GetCoinsData() error {
 					if k == "deposits" {
 						deposit = !item.Paused
 					} else if k == "withdrawals" {
-						deposit = !item.Paused
+						withdraw = !item.Paused
 					}
 				}
 
