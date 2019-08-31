@@ -26,10 +26,16 @@ type CoinsData []Ticker
 
 type PairsData []Ticker
 
-type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+type Order struct {
+	Amount float64 `json:"amount"`
+	Price  float64 `json:"price"`
+	Id     int     `json:"id"`
+	Type   string  `json:"type"`
+	Ts     int     `json:"ts"`
+	Ds     string  `json:"ds"`
 }
+
+type OrderBook []Order
 
 /********** Private API Structure**********/
 type AccountBalances []struct {

@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -59,8 +60,8 @@ func (e *Hibitex) GetCoinsData() error {
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if jsonResponse.Code!="0" {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Msg)
+	} else if jsonResponse.Code != "0" {
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -130,13 +131,13 @@ func (e *Hibitex) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/open/api/common/symbols"
 	strUrl := API_URL + strRequestPath
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
@@ -144,31 +145,32 @@ func (e *Hibitex) GetPairsData() error {
 	}
 
 	for _, data := range pairsData {
-		if data.Status == "TRADING" {
-			p := &pair.Pair{}
-			switch e.Source {
-			case exchange.EXCHANGE_API:
-				base := coin.GetCoin(data.QuoteAsset)
-				target := coin.GetCoin(data.BaseAsset)
-				if base != nil && target != nil {
-					p = pair.GetPair(base, target)
-				}
-			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(data.Symbol)
+		p := &pair.Pair{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			base := coin.GetCoin(data.CountCoin)
+			target := coin.GetCoin(data.BaseCoin)
+			if base != nil && target != nil {
+				p = pair.GetPair(base, target)
 			}
-			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    data.MakerFee,
-					TakerFee:    data.TakerFee,
-					LotSize:     data.LotSize,
-					PriceFilter: data.PriceFilter,
-					Listed:      true,
-				}
-				e.SetPairConstraint(pairConstraint)
+		case exchange.JSON_FILE:
+			p = e.GetPairBySymbol(data.Symbol)
+		}
+
+		if p != nil {
+			lotSize := math.Pow10(-1 * data.AmountPrecision)
+			priceFilter := math.Pow10(-1 * data.PricePrecision)
+			pairConstraint := &exchange.PairConstraint{
+				PairID:      p.ID,
+				Pair:        p,
+				ExSymbol:    data.Symbol,
+				MakerFee:    DEFAULT_MAKER_FEE,
+				TakerFee:    DEFAULT_TAKER_FEE,
+				LotSize:     lotSize,
+				PriceFilter: priceFilter,
+				Listed:      true,
 			}
+			e.SetPairConstraint(pairConstraint)
 		}
 	}
 	return nil
@@ -188,21 +190,20 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = symbol
-	mapParams["limit"] = "100"
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/open/api/get_trades"
 	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
@@ -212,18 +213,18 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
-	for _, bid := range orderBook.Bids {
-		buydata := exchange.Order{}
-		buydata.Quantity = bid[1]
-		buydata.Rate = bid[0]
-		maker.Bids = append(maker.Bids, buydata)
-	}
-
-	for _, ask := range orderBook.Asks {
-		selldata := exchange.Order{}
-		selldata.Quantity = ask[1]
-		selldata.Rate = ask[0]
-		maker.Asks = append(maker.Asks, selldata)
+	for _, data := range orderBook {
+		if data.Type == "buy" {
+			buydata := exchange.Order{}
+			buydata.Quantity = data.Amount
+			buydata.Rate = data.Price
+			maker.Bids = append(maker.Bids, buydata)
+		} else if data.Type == "sell" {
+			selldata := exchange.Order{}
+			selldata.Quantity = data.Amount
+			selldata.Rate = data.Price
+			maker.Asks = append(maker.Asks, selldata)
+		}
 	}
 
 	return maker, err
@@ -245,7 +246,7 @@ func (e *Hibitex) UpdateAllBalances() {
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
 		return
 	}
@@ -283,7 +284,7 @@ func (e *Hibitex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Message)
 		return false
 	}
@@ -314,7 +315,7 @@ func (e *Hibitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
@@ -352,7 +353,7 @@ func (e *Hibitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
@@ -387,7 +388,7 @@ func (e *Hibitex) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
@@ -436,7 +437,7 @@ func (e *Hibitex) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if !jsonResponse.Success {
+	} else if jsonResponse.Code != "0" {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
