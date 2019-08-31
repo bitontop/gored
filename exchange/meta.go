@@ -47,6 +47,7 @@ const (
 	BITLISH      ExchangeName = "BITLISH"
 	BITRUE       ExchangeName = "BITRUE"
 	BITZ         ExchangeName = "BITZ"
+	BKEX         ExchangeName = "BKEX"
 	BYBIT        ExchangeName = "BYBIT"
 	BW           ExchangeName = "BW"
 	BLANK        ExchangeName = "BLANK"
