@@ -98,7 +98,7 @@ func (e *Bkex) GetID() int {
 }
 
 func (e *Bkex) GetName() exchange.ExchangeName {
-	return exchange.BLANK
+	return exchange.BKEX
 }
 
 func (e *Bkex) GetTradingWebURL(pair *pair.Pair) string {
@@ -236,7 +236,7 @@ func (e *Bkex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.TxFee = true
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false

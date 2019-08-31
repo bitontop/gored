@@ -53,12 +53,14 @@ type OrderBook struct {
 }
 
 /********** Private API Structure**********/
-type AccountBalances []struct {
-	Asset     string  `json:"asset"`
-	Total     float64 `json:"total"`
+type Balance struct {
 	Available float64 `json:"available"`
-	Locked    float64 `json:"locked"`
+	CoinType  string  `json:"coinType"`
+	Frozen    float64 `json:"frozen"`
+	Total     float64 `json:"total"`
 }
+
+type AccountBalances []Balance
 
 type WithdrawResponse struct {
 	Msg     string `json:"msg"`
@@ -66,15 +68,23 @@ type WithdrawResponse struct {
 	ID      string `json:"id"`
 }
 
-type PlaceOrder struct {
-	Symbol       string `json:"symbol"`
-	OrderID      string `json:"orderId"`
-	Side         string `json:"side"`
-	Type         string `json:"type"`
-	Price        string `json:"price"`
-	AveragePrice string `json:"executedQty"`
-	OrigQty      string `json:"origQty"`
-	ExecutedQty  string `json:"executedQty"`
-	Status       string `json:"status"`
-	TimeInForce  string `json:"timeInForce"`
+type OrderDetail struct {
+	CreatedTime         int         `json:"createdTime"`
+	DealAmount          float64     `json:"dealAmount"`
+	DealAvgPrice        float64     `json:"dealAvgPrice"`
+	Direction           string      `json:"direction"`
+	FrozenAmountByOrder float64     `json:"frozenAmountByOrder"`
+	Id                  int         `json:"id"`
+	OrderType           string      `json:"orderType"`
+	Pair                string      `json:"pair"`
+	Price               float64     `json:"price"`
+	Status              int         `json:"status"`
+	TotalAmount         float64     `json:"totalAmount"`
+	UpdateTime          interface{} `json:"updateTime"`
+}
+
+type OrdersPage struct {
+	Data        []OrderDetail `json:"data"`
+	PageRequest interface{}   `json:"pageRequest"`
+	Total       int           `json:"total"`
 }

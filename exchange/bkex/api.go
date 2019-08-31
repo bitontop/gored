@@ -5,7 +5,6 @@ package bkex
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -89,7 +88,7 @@ func (e *Bkex) GetCoinsData() error {
 				Coin:         c,
 				ExSymbol:     data.CoinType,
 				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
+				TxFee:        data.WithdrawFee,
 				Withdraw:     data.SupportWithdraw,
 				Deposit:      data.SupportDeposit,
 				Confirmation: DEFAULT_CONFIRMATION,
@@ -219,7 +218,7 @@ func (e *Bkex) UpdateAllBalances() {
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/v1/u/wallet/balance"
 
 	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
@@ -235,7 +234,7 @@ func (e *Bkex) UpdateAllBalances() {
 	}
 
 	for _, balance := range accountBalance {
-		c := e.GetCoinBySymbol(balance.Asset)
+		c := e.GetCoinBySymbol(balance.CoinType)
 		if c != nil {
 			balanceMap.Set(c.Code, balance.Available)
 		}
@@ -251,15 +250,16 @@ func (e *Bkex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 
 	jsonResponse := &JsonResponse{}
 	withdraw := WithdrawResponse{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/v1/u/wallet/withdraw"
 
 	mapParams := make(map[string]string)
-	mapParams["asset"] = e.GetSymbolByCoin(coin)
-	mapParams["address"] = addr
+	mapParams["coinType"] = e.GetSymbolByCoin(coin)
+	mapParams["txAddress"] = addr
+	mapParams["password"] = ""
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
-	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	jsonSubmitWithdraw := e.ApiKeyGet(strRequestPath, mapParams)
+	println("=============\n Withdraw json:", jsonSubmitWithdraw)
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
@@ -281,29 +281,26 @@ func (e *Bkex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/v1/u/trade/order/create"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["side"] = "SELL"
-	mapParams["type"] = "LIMIT"
+	mapParams["pair"] = e.GetSymbolByPair(pair)
+	mapParams["direction"] = "ASK"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	println("=============\n LimitSell json:", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-	}
+	orderId := fmt.Sprint("%s", jsonResponse.Data)
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.OrderID,
+		OrderID:      orderId,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -319,29 +316,26 @@ func (e *Bkex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	}
 
 	jsonResponse := &JsonResponse{}
-	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/v1/u/trade/order/create"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["side"] = "BUY"
-	mapParams["type"] = "LIMIT"
+	mapParams["pair"] = e.GetSymbolByPair(pair)
+	mapParams["direction"] = "ASK"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	println("=============\n LimitBuy json:", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-	}
+	orderId := fmt.Sprint("%s", jsonResponse.Data)
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.OrderID,
+		OrderID:      orderId,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -357,14 +351,15 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
-	strRequestPath := "/API Path"
+	orderStatus := OrderItem{}
+	strRequestPath := "/v1/u/trade/order/unfinished/detail"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
+	mapParams["pair"] = e.GetSymbolByPair(order.Pair)
+	mapParams["orderNo"] = order.OrderID
 
 	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
+	println("order statrus:", jsonOrderStatus)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 0 {
@@ -374,30 +369,57 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	if orderStatus.Status == "CANCELED" {
-		order.Status = exchange.Canceled
-	} else if orderStatus.Status == "FILLED" {
-		order.Status = exchange.Filled
-	} else if orderStatus.Status == "PARTIALLY_FILLED" {
-		order.Status = exchange.Partial
-	} else if orderStatus.Status == "REJECTED" {
-		order.Status = exchange.Rejected
-	} else if orderStatus.Status == "Expired" {
-		order.Status = exchange.Expired
-	} else if orderStatus.Status == "NEW" {
-		order.Status = exchange.New
-	} else {
-		order.Status = exchange.Other
-	}
-
-	order.DealRate, _ = strconv.ParseFloat(orderStatus.AveragePrice, 64)
-	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.ExecutedQty, 64)
+	order.DealRate = orderStatus.Price
+	order.DealQuantity = orderStatus.DealAmount
 
 	return nil
 }
 
 func (e *Bkex) ListOrders() ([]*exchange.Order, error) {
-	return nil, nil
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return nil, fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
+	}
+
+	strRequestPath := "/v1/u/trade/order/listUnfinished"
+	mapParams := make(map[string]string)
+	var res []*exchange.Order
+
+	jsonResponse := &JsonResponse{}
+	orders := OrdersPage{}
+
+	pairs := e.GetPairs()
+	if len(pairs) > 0 {
+		for _, pairIt := range pairs {
+			mapParams["pair"] = e.GetSymbolByPair(pairIt)
+
+			jsonOrders := e.ApiKeyGet(strRequestPath, mapParams)
+			if err := json.Unmarshal([]byte(jsonOrders), &jsonResponse); err != nil {
+				return nil, fmt.Errorf("%s ListOrders Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrders)
+			} else if jsonResponse.Code != 0 {
+				return nil, fmt.Errorf("%s ListOrders Failed: %v", e.GetName(), jsonResponse.Msg)
+			}
+			if err := json.Unmarshal(jsonResponse.Data, &orders); err != nil {
+				return nil, fmt.Errorf("%s ListOrders Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+			}
+
+			for _, orderItem := range orders.Data {
+				tmpPair := e.GetPairBySymbol(orderItem.Pair)
+
+				order := &exchange.Order{
+					Pair:         tmpPair,
+					OrderID:      fmt.Sprintf("%d", orderItem.Id),
+					Rate:         orderItem.Price,
+					Quantity:     orderItem.DealAmount,
+					Side:         orderItem.Direction,
+					Status:       exchange.New,
+					JsonResponse: jsonOrders,
+				}
+				res = append(res, order)
+			}
+		}
+	}
+
+	return res, nil
 }
 
 func (e *Bkex) CancelOrder(order *exchange.Order) error {
@@ -406,21 +428,17 @@ func (e *Bkex) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/v1/u/trade/order/cancel"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
+	mapParams["pair"] = e.GetSymbolByPair(order.Pair)
+	mapParams["orderNo"] = order.OrderID
 
-	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequestPath, mapParams)
+	jsonCancelOrder := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != 0 {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Msg)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order.Status = exchange.Canceling
@@ -439,52 +457,26 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Bkex) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
-
-	payload := exchange.Map2UrlQuery(mapParams)
-	strUrl := API_URL + strRequestPath + "?" + payload
-
-	request, err := http.NewRequest("GET", strUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
-
-	httpClient := &http.Client{}
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
-	}
-
-	return string(body)
+	res := e.ApiKeyRequest("GET", strRequestPath, mapParams)
+	return res
 }
 
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
 func (e *Bkex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
-	strUrl := API_URL + strRequestPath
+	strMethod = strings.ToUpper(strMethod)
+	queryStr := exchange.Map2UrlQuery(mapParams)
+	signature := exchange.ComputeHmac256NoDecode(queryStr, e.API_SECRET)
+	strUrl := API_URL + strRequestPath + "?" + queryStr
 
-	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
-	jsonParams := ""
-	if nil != mapParams {
-		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
-	}
-
-	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(jsonParams)))
+	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(queryStr))
 	if nil != err {
 		return err.Error()
 	}
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+	request.Header.Add("X_ACCESS_KEY", e.API_KEY)
+	request.Header.Add("X_SIGNATURE", signature)
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
