@@ -44,7 +44,7 @@ func CreateHibitex(config *exchange.Config) *Hibitex {
 		instance = &Hibitex{
 			ID:      DEFAULT_ID,
 			Name:    "Hibitex",
-			Website: "https://www.blank.com/",
+			Website: "https://www.hibitex.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,

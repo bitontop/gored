@@ -44,7 +44,7 @@ func CreateBkex(config *exchange.Config) *Bkex {
 		instance = &Bkex{
 			ID:      DEFAULT_ID,
 			Name:    "Bkex",
-			Website: "https://www.blank.com/",
+			Website: "https://www.bkex.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -229,16 +229,16 @@ func (e *Bkex) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bkex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = false
-	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
