@@ -259,7 +259,6 @@ func (e *Bkex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonSubmitWithdraw := e.ApiKeyGet(strRequestPath, mapParams)
-	println("=============\n Withdraw json:", jsonSubmitWithdraw)
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
@@ -290,7 +289,6 @@ func (e *Bkex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	println("=============\n LimitSell json:", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
@@ -325,7 +323,6 @@ func (e *Bkex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	println("=============\n LimitBuy json:", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
@@ -359,7 +356,6 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 	mapParams["orderNo"] = order.OrderID
 
 	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
-	println("order statrus:", jsonOrderStatus)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 0 {
@@ -370,7 +366,7 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 	}
 
 	order.DealRate = orderStatus.Price
-	order.DealQuantity = orderStatus.DealAmount
+	order.DealQuantity = orderStatus.Amt
 
 	return nil
 }
