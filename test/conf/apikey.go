@@ -223,8 +223,8 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.BKEX:
-		config.API_KEY = "71a3ef9855d5060ca1d7fc024b14a718c25514a857c9deb5a5c918b65bcac5a0"
-		config.API_SECRET = "be77a80e998a6eaafbb9f8f033dc1169f92905626e698b29addddcbb6d6ccf33"
+		config.API_KEY = ""
+		config.API_SECRET = ""
 		break
 
 	case exchange.DERIBIT:
@@ -273,6 +273,10 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.ZEBITEX:
+		config.API_KEY = ""
+		config.API_SECRET = ""
+
+	case exchange.BITHUMB:
 		config.API_KEY = ""
 		config.API_SECRET = ""
 	}
