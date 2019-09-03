@@ -15,7 +15,7 @@ import (
 
 	"github.com/bitontop/gored/exchange/blocktrade"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/zebitex"
+	// "../exchange/blocktrade"
 	// "./conf"
 )
 
