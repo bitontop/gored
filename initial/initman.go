@@ -22,6 +22,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/blocktrade"
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/bybit"
 	"github.com/bitontop/gored/exchange/coinbene"
@@ -51,6 +52,7 @@ import (
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/stex"
+	"github.com/bitontop/gored/exchange/switcheo"
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
@@ -435,6 +437,20 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITHUMB:
 		ex := bithumb.CreateBithumb(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.SWITCHEO:
+		ex := switcheo.CreateSwitcheo(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BLOCKTRADE:
+		ex := blocktrade.CreateBlocktrade(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

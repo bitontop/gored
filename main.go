@@ -26,6 +26,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/blocktrade"
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/bybit"
 	"github.com/bitontop/gored/exchange/coinbene"
@@ -53,6 +54,7 @@ import (
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/stex"
+	"github.com/bitontop/gored/exchange/switcheo"
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
@@ -173,6 +175,8 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBybit(config)
 	InitZebitex(config)
 	InitBithumb(config)
+	InitSwitcheo(config)
+	InitBlocktrade(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -591,6 +595,24 @@ func InitZebitex(config *exchange.Config) {
 func InitBithumb(config *exchange.Config) {
 	conf.Exchange(exchange.BITHUMB, config)
 	ex := bithumb.CreateBithumb(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitSwitcheo(config *exchange.Config) {
+	conf.Exchange(exchange.SWITCHEO, config)
+	ex := switcheo.CreateSwitcheo(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBlocktrade(config *exchange.Config) {
+	conf.Exchange(exchange.BLOCKTRADE, config)
+	ex := blocktrade.CreateBlocktrade(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
