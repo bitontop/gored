@@ -102,7 +102,7 @@ func (e *Blocktrade) GetName() exchange.ExchangeName {
 }
 
 func (e *Blocktrade) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.blank.com/marker/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://trade.blocktrade.com/marketplace/%s", e.GetSymbolByPair(pair))
 }
 
 func (e *Blocktrade) GetBalance(coin *coin.Coin) float64 {
