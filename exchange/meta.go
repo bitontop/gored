@@ -91,6 +91,7 @@ const (
 	LIQUID       ExchangeName = "LIQUID"
 	LIVECOIN     ExchangeName = "LIVECOIN"
 	MXC          ExchangeName = "MXC"
+	NEWCAPITAL   ExchangeName = "NEWCAPITAL"
 	OKEX         ExchangeName = "OKEX"
 	OKEXDM       ExchangeName = "OKEXDM"
 	OTCBTC       ExchangeName = "OTCBTC"
