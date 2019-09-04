@@ -68,34 +68,36 @@ func (e *Bkex) GetCoinsData() error {
 	}
 
 	for _, data := range exchangeData.CoinTypes {
-		c := &coin.Coin{}
-		switch e.Source {
-		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.CoinType)
-			if c == nil {
-				c = &coin.Coin{
-					Code: data.CoinType,
+		if data.SupportTrade {
+			c := &coin.Coin{}
+			switch e.Source {
+			case exchange.EXCHANGE_API:
+				c = coin.GetCoin(data.CoinType)
+				if c == nil {
+					c = &coin.Coin{
+						Code: data.CoinType,
+					}
+					coin.AddCoin(c)
 				}
-				coin.AddCoin(c)
-			}
-		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.CoinType)
-		}
-
-		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.CoinType,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.WithdrawFee,
-				Withdraw:     data.SupportWithdraw,
-				Deposit:      data.SupportDeposit,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			case exchange.JSON_FILE:
+				c = e.GetCoinBySymbol(data.CoinType)
 			}
 
-			e.SetCoinConstraint(coinConstraint)
+			if c != nil {
+				coinConstraint := &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.CoinType,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.WithdrawFee,
+					Withdraw:     data.SupportWithdraw,
+					Deposit:      data.SupportDeposit,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+
+				e.SetCoinConstraint(coinConstraint)
+			}
 		}
 	}
 	return nil

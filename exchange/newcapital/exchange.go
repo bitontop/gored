@@ -1,4 +1,4 @@
-package blocktrade
+package newcapital
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -19,7 +19,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-type Blocktrade struct {
+type Newcapital struct {
 	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
@@ -35,16 +35,16 @@ var pairConstraintMap cmap.ConcurrentMap
 var coinConstraintMap cmap.ConcurrentMap
 var balanceMap cmap.ConcurrentMap
 
-var instance *Blocktrade
+var instance *Newcapital
 var once sync.Once
 
 /***************************************************/
-func CreateBlocktrade(config *exchange.Config) *Blocktrade {
+func CreateNewcapital(config *exchange.Config) *Newcapital {
 	once.Do(func() {
-		instance = &Blocktrade{
+		instance = &Newcapital{
 			ID:      DEFAULT_ID,
-			Name:    "Blocktrade",
-			Website: "https://blocktrade.com/",
+			Name:    "Newcapital",
+			Website: "https://new.capital/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -64,7 +64,7 @@ func CreateBlocktrade(config *exchange.Config) *Blocktrade {
 	return instance
 }
 
-func (e *Blocktrade) InitData() error {
+func (e *Newcapital) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		if err := e.GetCoinsData(); err != nil {
@@ -93,19 +93,19 @@ func (e *Blocktrade) InitData() error {
 }
 
 /**************** Exchange Information ****************/
-func (e *Blocktrade) GetID() int {
+func (e *Newcapital) GetID() int {
 	return e.ID
 }
 
-func (e *Blocktrade) GetName() exchange.ExchangeName {
-	return exchange.BLOCKTRADE
+func (e *Newcapital) GetName() exchange.ExchangeName {
+	return exchange.NEWCAPITAL
 }
 
-func (e *Blocktrade) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://trade.blocktrade.com/marketplace/%s", e.GetSymbolByPair(pair))
+func (e *Newcapital) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://new.capital/exchange/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
-func (e *Blocktrade) GetBalance(coin *coin.Coin) float64 {
+func (e *Newcapital) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
@@ -114,18 +114,18 @@ func (e *Blocktrade) GetBalance(coin *coin.Coin) float64 {
 }
 
 /*************** Coins on the Exchanges ***************/
-func (e *Blocktrade) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
+func (e *Newcapital) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
 	if tmp, ok := coinConstraintMap.Get(fmt.Sprintf("%d", coin.ID)); ok {
 		return tmp.(*exchange.CoinConstraint)
 	}
 	return nil
 }
 
-func (e *Blocktrade) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
+func (e *Newcapital) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
 	coinConstraintMap.Set(fmt.Sprintf("%d", coinConstraint.CoinID), coinConstraint)
 }
 
-func (e *Blocktrade) GetCoins() []*coin.Coin {
+func (e *Newcapital) GetCoins() []*coin.Coin {
 	coinList := []*coin.Coin{}
 	keySort := []int{}
 	for _, key := range coinConstraintMap.Keys() {
@@ -142,7 +142,7 @@ func (e *Blocktrade) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *Blocktrade) GetCoinBySymbol(symbol string) *coin.Coin {
+func (e *Newcapital) GetCoinBySymbol(symbol string) *coin.Coin {
 	for _, id := range coinConstraintMap.Keys() {
 		if tmp, ok := coinConstraintMap.Get(id); ok {
 			cc := tmp.(*exchange.CoinConstraint)
@@ -156,7 +156,7 @@ func (e *Blocktrade) GetCoinBySymbol(symbol string) *coin.Coin {
 	return nil
 }
 
-func (e *Blocktrade) GetSymbolByCoin(coin *coin.Coin) string {
+func (e *Newcapital) GetSymbolByCoin(coin *coin.Coin) string {
 	key := fmt.Sprintf("%d", coin.ID)
 	if tmp, ok := coinConstraintMap.Get(key); ok {
 		cc := tmp.(*exchange.CoinConstraint)
@@ -165,23 +165,23 @@ func (e *Blocktrade) GetSymbolByCoin(coin *coin.Coin) string {
 	return ""
 }
 
-func (e *Blocktrade) DeleteCoin(coin *coin.Coin) {
+func (e *Newcapital) DeleteCoin(coin *coin.Coin) {
 	coinConstraintMap.Remove(fmt.Sprintf("%d", coin.ID))
 }
 
 /*************** Pairs on the Exchanges ***************/
-func (e *Blocktrade) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+func (e *Newcapital) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
 	return nil
 }
 
-func (e *Blocktrade) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
+func (e *Newcapital) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
 	pairConstraintMap.Set(fmt.Sprintf("%d", pairConstraint.PairID), pairConstraint)
 }
 
-func (e *Blocktrade) GetPairs() []*pair.Pair {
+func (e *Newcapital) GetPairs() []*pair.Pair {
 	pairList := []*pair.Pair{}
 	keySort := []int{}
 	for _, key := range pairConstraintMap.Keys() {
@@ -198,7 +198,7 @@ func (e *Blocktrade) GetPairs() []*pair.Pair {
 	return pairList
 }
 
-func (e *Blocktrade) GetPairBySymbol(symbol string) *pair.Pair {
+func (e *Newcapital) GetPairBySymbol(symbol string) *pair.Pair {
 	for _, id := range pairConstraintMap.Keys() {
 		if tmp, ok := pairConstraintMap.Get(id); ok {
 			pc := tmp.(*exchange.PairConstraint)
@@ -210,7 +210,7 @@ func (e *Blocktrade) GetPairBySymbol(symbol string) *pair.Pair {
 	return nil
 }
 
-func (e *Blocktrade) GetSymbolByPair(pair *pair.Pair) string {
+func (e *Newcapital) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
@@ -218,16 +218,16 @@ func (e *Blocktrade) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
-func (e *Blocktrade) HasPair(pair *pair.Pair) bool {
+func (e *Newcapital) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }
 
-func (e *Blocktrade) DeletePair(pair *pair.Pair) {
+func (e *Newcapital) DeletePair(pair *pair.Pair) {
 	pairConstraintMap.Remove(fmt.Sprintf("%d", pair.ID))
 }
 
 /**************** Exchange Constraint ****************/
-func (e *Blocktrade) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
+func (e *Newcapital) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
@@ -243,13 +243,13 @@ func (e *Blocktrade) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constra
 	return constrainFetchMethod
 }
 
-func (e *Blocktrade) UpdateConstraint() {
+func (e *Newcapital) UpdateConstraint() {
 	e.GetCoinsData()
 	e.GetPairsData()
 }
 
 /**************** Coin Constraint ****************/
-func (e *Blocktrade) GetTxFee(coin *coin.Coin) float64 {
+func (e *Newcapital) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0.0
@@ -257,7 +257,7 @@ func (e *Blocktrade) GetTxFee(coin *coin.Coin) float64 {
 	return coinConstraint.TxFee
 }
 
-func (e *Blocktrade) CanWithdraw(coin *coin.Coin) bool {
+func (e *Newcapital) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -265,7 +265,7 @@ func (e *Blocktrade) CanWithdraw(coin *coin.Coin) bool {
 	return coinConstraint.Withdraw
 }
 
-func (e *Blocktrade) CanDeposit(coin *coin.Coin) bool {
+func (e *Newcapital) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -273,7 +273,7 @@ func (e *Blocktrade) CanDeposit(coin *coin.Coin) bool {
 	return coinConstraint.Deposit
 }
 
-func (e *Blocktrade) GetConfirmation(coin *coin.Coin) int {
+func (e *Newcapital) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0
@@ -282,7 +282,7 @@ func (e *Blocktrade) GetConfirmation(coin *coin.Coin) int {
 }
 
 /**************** Pair Constraint ****************/
-func (e *Blocktrade) GetFee(pair *pair.Pair) float64 {
+func (e *Newcapital) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -290,7 +290,7 @@ func (e *Blocktrade) GetFee(pair *pair.Pair) float64 {
 	return pairConstraint.TakerFee
 }
 
-func (e *Blocktrade) GetLotSize(pair *pair.Pair) float64 {
+func (e *Newcapital) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -298,7 +298,7 @@ func (e *Blocktrade) GetLotSize(pair *pair.Pair) float64 {
 	return pairConstraint.LotSize
 }
 
-func (e *Blocktrade) GetPriceFilter(pair *pair.Pair) float64 {
+func (e *Newcapital) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
