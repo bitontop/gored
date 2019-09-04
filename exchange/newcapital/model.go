@@ -13,33 +13,49 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type Coin struct {
+	Symbol             string      `json:"symbol"`
+	BaseAsset          string      `json:"baseAsset"`
+	BaseAssetPrecision int         `json:"baseAssetPrecision"`
+	BaseAssetName      string      `json:"baseAssetName"`
+	QuoteAsset         string      `json:"quoteAsset"`
+	QuotePrecision     int         `json:"quotePrecision"`
+	QuoteAssetName     string      `json:"quoteAssetName"`
+	OrderTypes         interface{} `json:"orderTypes"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
+type CoinsData struct {
+	Timezone   string            `json:"timezone"`
+	ServerTime int               `json:"serverTime"`
+	Symbols    []Coin            `json:"symbols"`
+	Volumes    map[string]string `json:"24h_volume"`
+	UsdPrice   map[string]string `json:"usd_price"`
 }
+
+type Pair struct {
+	Symbol             string      `json:"symbol"`
+	PriceChange        string      `json:"priceChange"`
+	PriceChangePercent string      `json:"priceChangePercent"`
+	LastPrice          string      `json:"lastPrice"`
+	BidPrice           interface{} `json:"bidPrice"`
+	AskPrice           interface{} `json:"askPrice"`
+	OpenPrice          string      `json:"openPrice"`
+	HighPrice          string      `json:"highPrice"`
+	LowPrice           string      `json:"lowPrice"`
+	Volume             string      `json:"volume"`
+	QuoteVolume        string      `json:"quoteVolume"`
+	OpenTime           int         `json:"openTime"`
+	CloseTime          int         `json:"closeTime"`
+	FirstId            int         `json:"firstId"`
+	LastId             int         `json:"lastId"`
+	Count              int         `json:"count"`
+}
+
+type PairsData []Pair
 
 type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+	Bids [][]string `json:"bids"`
+	Asks [][]string `json:"asks"`
 }
 
 /********** Private API Structure**********/

@@ -23,7 +23,8 @@ import (
 func Test_Newcapital(t *testing.T) {
 	e := InitNewcapital()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	//"TWINS|BTC"即BTC_TWINS
+	pair := pair.GetPairByKey("TWINS|BTC")
 
 	Test_Coins(e)
 	Test_Pairs(e)
