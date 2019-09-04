@@ -26,6 +26,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/bkex"
 	"github.com/bitontop/gored/exchange/blocktrade"
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/bybit"
@@ -49,6 +50,7 @@ import (
 	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
+	"github.com/bitontop/gored/exchange/newcapital"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
@@ -177,6 +179,8 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBithumb(config)
 	InitSwitcheo(config)
 	InitBlocktrade(config)
+	InitBkex(config)
+	InitNewcapital(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -613,6 +617,24 @@ func InitSwitcheo(config *exchange.Config) {
 func InitBlocktrade(config *exchange.Config) {
 	conf.Exchange(exchange.BLOCKTRADE, config)
 	ex := blocktrade.CreateBlocktrade(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBkex(config *exchange.Config) {
+	conf.Exchange(exchange.BKEX, config)
+	ex := bkex.CreateBkex(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitNewcapital(config *exchange.Config) {
+	conf.Exchange(exchange.NEWCAPITAL, config)
+	ex := newcapital.CreateNewcapital(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

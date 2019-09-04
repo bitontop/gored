@@ -168,4 +168,6 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BITHUMB)    // ID = 54
 	supportList = append(supportList, SWITCHEO)   // ID = 55
 	supportList = append(supportList, BLOCKTRADE) // ID = 56
+	supportList = append(supportList, BKEX)       // ID = 57
+	supportList = append(supportList, NEWCAPITAL) // ID = 58
 }

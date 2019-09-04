@@ -22,6 +22,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
 	"github.com/bitontop/gored/exchange/bitz"
+	"github.com/bitontop/gored/exchange/bkex"
 	"github.com/bitontop/gored/exchange/blocktrade"
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/bybit"
@@ -47,6 +48,7 @@ import (
 	"github.com/bitontop/gored/exchange/lbank"
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
+	"github.com/bitontop/gored/exchange/newcapital"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
@@ -451,6 +453,20 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BLOCKTRADE:
 		ex := blocktrade.CreateBlocktrade(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BKEX:
+		ex := bkex.CreateBkex(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.NEWCAPITAL:
+		ex := newcapital.CreateNewcapital(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
