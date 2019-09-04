@@ -12,6 +12,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -226,6 +227,14 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 			maker.Asks = append(maker.Asks, selldata)
 		}
 	}
+
+	//排序:bid买入,高到低;ask卖出,低到高
+	sort.Slice(maker.Bids, func(i, j int) bool {
+		return maker.Bids[i].Rate > maker.Bids[j].Rate
+	})
+	sort.Slice(maker.Asks, func(i, j int) bool {
+		return maker.Asks[i].Rate < maker.Asks[j].Rate
+	})
 
 	return maker, err
 }
