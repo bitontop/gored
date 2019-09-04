@@ -231,7 +231,7 @@ func (e *Newcapital) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constra
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
-	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
