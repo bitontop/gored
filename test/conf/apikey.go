@@ -290,5 +290,9 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 	case exchange.NEWCAPITAL:
 		config.API_KEY = ""
 		config.API_SECRET = ""
+
+	case exchange.COINDEAL:
+		config.API_KEY = ""
+		config.API_SECRET = ""
 	}
 }

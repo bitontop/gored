@@ -62,7 +62,7 @@ const (
 	COINEX       ExchangeName = "COINEX"
 	COINSUPER    ExchangeName = "COINSUPER"
 	COINTIGER    ExchangeName = "COINTIGER"
-	COINDEAL    ExchangeName = "COINDEAL"
+	COINDEAL     ExchangeName = "COINDEAL"
 	CRYPTOPIA    ExchangeName = "CRYPTOPIA"
 	DCOIN        ExchangeName = "DCOIN"
 	DERIBIT      ExchangeName = "DERIBIT"
@@ -171,4 +171,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BLOCKTRADE) // ID = 56
 	supportList = append(supportList, BKEX)       // ID = 57
 	supportList = append(supportList, NEWCAPITAL) // ID = 58
+	// supportList = append(supportList, COINDEAL)   // ID = 59
 }
