@@ -62,6 +62,7 @@ const (
 	COINEX       ExchangeName = "COINEX"
 	COINSUPER    ExchangeName = "COINSUPER"
 	COINTIGER    ExchangeName = "COINTIGER"
+	COINDEAL    ExchangeName = "COINDEAL"
 	CRYPTOPIA    ExchangeName = "CRYPTOPIA"
 	DCOIN        ExchangeName = "DCOIN"
 	DERIBIT      ExchangeName = "DERIBIT"

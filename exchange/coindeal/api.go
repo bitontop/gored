@@ -1,4 +1,4 @@
-package switcheo
+package coindeal
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -10,9 +10,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -22,7 +22,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://api.switcheo.network"
+	API_URL = "https://apigateway.coindeal.com"
 )
 
 /*API Base Knowledge
@@ -50,62 +50,67 @@ Get - Method
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestPath)*/
-func (e *Switcheo) GetCoinsData() error {
+func (e *Coindeal) GetCoinsData() error {
 	coinsData := CoinsData{}
+	strUrl := "https://coinmarketcap.coindeal.com/api/v1/ticker"
 
-	strRequestPath := "/v2/exchange/tokens"
-	strUrl := API_URL + strRequestPath
-
-	mapParams := make(map[string]string)
-	mapParams["show_listing_details"] = "1"
-	mapParams["show_inactive"] = "1"
-
-	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, mapParams)
+	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
 
-	for _, data := range coinsData {
-		if data.TradingActive {
-			c := &coin.Coin{}
-			switch e.Source {
-			case exchange.EXCHANGE_API:
-				c = coin.GetCoin(data.Symbol)
-				if c == nil {
-					c = &coin.Coin{
-						Code: data.Symbol,
-						Name: data.Name,
-					}
-					coin.AddCoin(c)
-				}
-			case exchange.JSON_FILE:
-				c = e.GetCoinBySymbol(data.Symbol)
-			}
+	for symbol, _ := range coinsData {
+		pairStrs := strings.Split(symbol, "_")
+		base := &coin.Coin{}
+		target := &coin.Coin{}
 
-			if c != nil {
-				withdraw := DEFAULT_WITHDRAW
-				deposit := DEFAULT_DEPOSIT
-				for k, item := range data.ListingInfo {
-					if k == "deposits" {
-						deposit = !item.Paused
-					} else if k == "withdrawals" {
-						withdraw = !item.Paused
-					}
-				}
-
-				coinConstraint := &exchange.CoinConstraint{
-					CoinID:       c.ID,
-					Coin:         c,
-					ExSymbol:     data.Symbol,
-					ChainType:    exchange.MAINNET,
-					TxFee:        DEFAULT_TXFEE,
-					Withdraw:     withdraw,
-					Deposit:      deposit,
-					Confirmation: DEFAULT_CONFIRMATION,
-					Listed:       DEFAULT_LISTED,
-				}
-				e.SetCoinConstraint(coinConstraint)
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			base = coin.GetCoin(pairStrs[1])
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = pairStrs[1]
+				coin.AddCoin(base)
 			}
+			target = coin.GetCoin(pairStrs[0])
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = pairStrs[0]
+				coin.AddCoin(target)
+			}
+		case exchange.JSON_FILE:
+			base = e.GetCoinBySymbol(pairStrs[1])
+			target = e.GetCoinBySymbol(pairStrs[0])
+		}
+
+		if base != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       base.ID,
+				Coin:         base,
+				ExSymbol:     pairStrs[1],
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+
+		if target != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       target.ID,
+				Coin:         target,
+				ExSymbol:     pairStrs[0],
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
+			e.SetCoinConstraint(coinConstraint)
 		}
 	}
 	return nil
@@ -115,42 +120,37 @@ func (e *Switcheo) GetCoinsData() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Switcheo) GetPairsData() error {
+func (e *Coindeal) GetPairsData() error {
 	pairsData := PairsData{}
+	strUrl := "https://coinmarketcap.coindeal.com/api/v1/ticker"
 
-	strRequestPath := "/v2/exchange/pairs"
-	strUrl := API_URL + strRequestPath
-
-	mapParams := make(map[string]string)
-	mapParams["show_details"] = "1"
-
-	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, mapParams)
+	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
-	for _, data := range pairsData {
+	for symbol, _ := range pairsData {
+		pairStrs := strings.Split(symbol, "_")
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.QuoteAssetSymbol)
-			target := coin.GetCoin(data.BaseAssetSymbol)
+			base := coin.GetCoin(pairStrs[1])
+			target := coin.GetCoin(pairStrs[0])
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data.Name)
+			p = e.GetPairBySymbol(symbol)
 		}
 		if p != nil {
-			priceFilter := math.Pow10(-1 * data.Precision)
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    data.Name,
+				ExSymbol:    symbol,
 				MakerFee:    DEFAULT_MAKER_FEE,
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: priceFilter,
+				PriceFilter: DEFAULT_PRICE_FILTER,
 				Listed:      true,
 			}
 			e.SetPairConstraint(pairConstraint)
@@ -166,22 +166,21 @@ Step 3: Get Exchange Pair Code ex. symbol := e.GetSymbolByPair(p)
 Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
-func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
-	orderBooks := OrderBooks{}
+func (e *Coindeal) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
+	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(p)
 
-	mapParams := make(map[string]string)
-	mapParams["pair"] = symbol
-
-	strRequestPath := "/v2/offers/book"
+	strRequestPath := fmt.Sprintf("/api/v1/public/orderbook/%s", strings.Replace(symbol, "_", "", -1))
 	strUrl := API_URL + strRequestPath
 
-	maker := &exchange.Maker{}
-	maker.WorkerIP = exchange.GetExternalIP()
-	maker.BeforeTimestamp = float64(time.Now().UnixNano() / 1e6)
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBooks); err != nil {
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	}
 
@@ -189,9 +188,9 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	var err error
 	//买入
-	for _, bid := range orderBooks.Bids {
+	for _, bid := range orderBook.Bids {
 		buydata := exchange.Order{}
-		buydata.Quantity, err = strconv.ParseFloat(bid.Quantity, 64)
+		buydata.Quantity, err = strconv.ParseFloat(bid.Amount, 64)
 		if err != nil {
 			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
@@ -205,16 +204,16 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	}
 
 	//卖出
-	for _, ask := range orderBooks.Asks {
+	for _, ask := range orderBook.Asks {
 		selldata := exchange.Order{}
-		selldata.Quantity, err = strconv.ParseFloat(ask.Quantity, 64)
+		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
 		if err != nil {
 			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
 
 		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v\n", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)
@@ -224,7 +223,7 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Switcheo) UpdateAllBalances() {
+func (e *Coindeal) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
@@ -257,7 +256,7 @@ func (e *Switcheo) UpdateAllBalances() {
 }
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
-func (e *Switcheo) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
+func (e *Coindeal) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return false
@@ -289,7 +288,7 @@ func (e *Switcheo) Withdraw(coin *coin.Coin, quantity float64, addr, tag string)
 	return true
 }
 
-func (e *Switcheo) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Coindeal) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -327,7 +326,7 @@ func (e *Switcheo) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	return order, nil
 }
 
-func (e *Switcheo) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
+func (e *Coindeal) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -365,7 +364,7 @@ func (e *Switcheo) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	return order, nil
 }
 
-func (e *Switcheo) OrderStatus(order *exchange.Order) error {
+func (e *Coindeal) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -410,11 +409,11 @@ func (e *Switcheo) OrderStatus(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Switcheo) ListOrders() ([]*exchange.Order, error) {
+func (e *Coindeal) ListOrders() ([]*exchange.Order, error) {
 	return nil, nil
 }
 
-func (e *Switcheo) CancelOrder(order *exchange.Order) error {
+func (e *Coindeal) CancelOrder(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -443,7 +442,7 @@ func (e *Switcheo) CancelOrder(order *exchange.Order) error {
 	return nil
 }
 
-func (e *Switcheo) CancelAllOrder() error {
+func (e *Coindeal) CancelAllOrder() error {
 	return nil
 }
 
@@ -452,7 +451,7 @@ func (e *Switcheo) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Switcheo) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
+func (e *Coindeal) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
@@ -483,7 +482,7 @@ func (e *Switcheo) ApiKeyGet(strRequestPath string, mapParams map[string]string)
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
-func (e *Switcheo) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+func (e *Coindeal) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
 	strUrl := API_URL + strRequestPath
 
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
