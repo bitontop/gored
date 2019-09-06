@@ -44,7 +44,7 @@ func CreateCoindeal(config *exchange.Config) *Coindeal {
 		instance = &Coindeal{
 			ID:      DEFAULT_ID,
 			Name:    "Coindeal",
-			Website: "https://www.blank.com/",
+			Website: "https://coindeal.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -102,7 +102,7 @@ func (e *Coindeal) GetName() exchange.ExchangeName {
 }
 
 func (e *Coindeal) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://frontend.coindeal.com/zh-cn/market//%s_%s/", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://frontend.coindeal.com/zh-cn/market/%s-%s/", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 func (e *Coindeal) GetBalance(coin *coin.Coin) float64 {

@@ -13,33 +13,32 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type Tick struct {
+	ID            int    `json:"id"`
+	Last          string `json:"last"`
+	LowestAsk     string `json:"lowestAsk"`
+	HighestBid    string `json:"highestBid"`
+	PercentChange string `json:"percentChange"`
+	BaseVolume    string `json:"baseVolume"`
+	QuoteVolume   string `json:"quoteVolume"`
+	IsFrozen      string `json:"isFrozen"`
+	High24hr      string `json:"high24hr"`
+	Low24hr       string `json:"low24hr"`
+	CurrencyName  string `json:"currencyName"`
+	WalletStatus  string `json:"walletStatus"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
-}
+type CoinsData map[string]Tick
 
+type PairsData map[string]Tick
+
+type OrderInfo struct {
+	Price  string `json:"price"`
+	Amount string `json:"amount"`
+}
 type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+	Asks []OrderInfo `json:"asks"`
+	Bids []OrderInfo `json:"bids"`
 }
 
 /********** Private API Structure**********/

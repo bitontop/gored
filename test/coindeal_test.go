@@ -21,6 +21,7 @@ import (
 func Test_Coindeal(t *testing.T) {
 	e := InitCoindeal()
 
+	//"BTC|ETH" 即 ETH_BTC
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
