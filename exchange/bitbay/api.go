@@ -206,7 +206,7 @@ func (e *Bitbay) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 		buydata.Rate, err = strconv.ParseFloat(bid.Ra, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
 		maker.Bids = append(maker.Bids, buydata)
 	}
