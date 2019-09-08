@@ -13,18 +13,16 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type CoinItem struct {
+	Symbol          string `json:"symbol"`
+	CoinName        string `json:"coinName"`
+	FullName        string `json:"fullName"`
+	Algorithm       string `json:"algorithm"`
+	ProofType       string `json:"proofType"`
+	TotalCoinSupply string `json:"totalCoinSupply"`
 }
+
+type CoinsData map[string]CoinItem
 
 type PairsData []struct {
 	Symbol      string  `json:"symbol"`

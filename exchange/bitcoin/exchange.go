@@ -229,7 +229,7 @@ func (e *Bitcoin) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bitcoin) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
