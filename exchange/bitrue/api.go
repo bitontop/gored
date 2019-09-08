@@ -231,7 +231,7 @@ func (e *Bitrue) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 		selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
 		maker.Asks = append(maker.Asks, selldata)
 	}

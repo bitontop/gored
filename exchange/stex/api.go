@@ -207,7 +207,7 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		//Modify according to type and structure
 		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
 		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
 		if err != nil {

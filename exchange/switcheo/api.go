@@ -214,7 +214,7 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v\n", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)

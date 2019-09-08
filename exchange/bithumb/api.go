@@ -216,7 +216,7 @@ func (e *Bithumb) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
 		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
 		if err != nil {
