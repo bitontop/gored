@@ -37,8 +37,8 @@ type OrderInfo struct {
 	Amount string `json:"amount"`
 }
 type OrderBook struct {
-	Asks []OrderInfo `json:"asks"`
-	Bids []OrderInfo `json:"bids"`
+	Asks []OrderInfo `json:"ask"`
+	Bids []OrderInfo `json:"bid"`
 }
 
 /********** Private API Structure**********/

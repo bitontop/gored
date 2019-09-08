@@ -102,7 +102,7 @@ func (e *Hibitex) GetName() exchange.ExchangeName {
 }
 
 func (e *Hibitex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://m.hibitex.com/tradingCenter/transaction")
+	return fmt.Sprintf("https://www.hibitex.com/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 func (e *Hibitex) GetBalance(coin *coin.Coin) float64 {
