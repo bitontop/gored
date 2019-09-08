@@ -37,6 +37,7 @@ const (
 	BINANCEDEX   ExchangeName = "BINANCEDEX"
 	BITATM       ExchangeName = "BITATM"
 	BITBAY       ExchangeName = "BITBAY"
+	BITCOIN      ExchangeName = "BITCOIN"
 	BITFINEX     ExchangeName = "BITFINEX"
 	BITFOREX     ExchangeName = "BITFOREX"
 	BITHUMB      ExchangeName = "BITHUMB"
