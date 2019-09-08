@@ -10,8 +10,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -50,53 +52,67 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestPath)*/
 func (e *Bgogo) GetCoinsData() error {
-	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/tickers"
 	strUrl := API_URL + strRequestPath
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	for _, data := range coinsData {
-		c := &coin.Coin{}
+	for symbol, _ := range coinsData {
+		pairStrs := strings.Split(symbol, "/")
+		base := &coin.Coin{}
+		target := &coin.Coin{}
+
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.AssetCode)
-			if c == nil {
-				c = &coin.Coin{
-					Code:     data.AssetCode,
-					Name:     data.AssetName,
-					Website:  data.Website,
-					Explorer: data.BlockURL,
-				}
-				coin.AddCoin(c)
+			base = coin.GetCoin(pairStrs[1])
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = pairStrs[1]
+				coin.AddCoin(base)
+			}
+			target = coin.GetCoin(pairStrs[0])
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = pairStrs[0]
+				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.AssetCode)
+			base = e.GetCoinBySymbol(pairStrs[1])
+			target = e.GetCoinBySymbol(pairStrs[0])
 		}
 
-		if c != nil {
+		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
+				CoinID:       base.ID,
+				Coin:         base,
+				ExSymbol:     pairStrs[1],
 				ChainType:    exchange.MAINNET,
-				TxFee:        data.TransactionFee,
-				Withdraw:     data.EnableWithdraw,
-				Deposit:      data.EnableCharge,
-				Confirmation: data.Confirmations,
-				Listed:       !data.Delisted,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
 			}
+			e.SetCoinConstraint(coinConstraint)
+		}
 
+		if target != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       target.ID,
+				Coin:         target,
+				ExSymbol:     pairStrs[0],
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
@@ -108,48 +124,52 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bgogo) GetPairsData() error {
-	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/tickers"
 	strUrl := API_URL + strRequestPath
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	for _, data := range pairsData {
-		if data.Status == "TRADING" {
-			p := &pair.Pair{}
-			switch e.Source {
-			case exchange.EXCHANGE_API:
-				base := coin.GetCoin(data.QuoteAsset)
-				target := coin.GetCoin(data.BaseAsset)
-				if base != nil && target != nil {
-					p = pair.GetPair(base, target)
-				}
-			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(data.Symbol)
+	for symbol, data := range pairsData {
+		pairStrs := strings.Split(symbol, "/")
+		p := &pair.Pair{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			base := coin.GetCoin(pairStrs[1])
+			target := coin.GetCoin(pairStrs[0])
+			if base != nil && target != nil {
+				p = pair.GetPair(base, target)
 			}
-			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    data.MakerFee,
-					TakerFee:    data.TakerFee,
-					LotSize:     data.LotSize,
-					PriceFilter: data.PriceFilter,
-					Listed:      true,
-				}
-				e.SetPairConstraint(pairConstraint)
+		case exchange.JSON_FILE:
+			p = e.GetPairBySymbol(symbol)
+		}
+		if p != nil {
+			volumePrecision := 0
+			if strings.Contains(data.Past24hrsQuoteTurnover, ".") {
+				volumePrecision = len(strings.Split(fmt.Sprintf("%v", data.Past24hrsQuoteTurnover), ".")[1])
 			}
+			lotSize := math.Pow10(-1 * volumePrecision)
+			pricePrecision := 0
+			if strings.Contains(data.LastPrice, ".") {
+				pricePrecision = len(strings.Split(fmt.Sprintf("%v", data.LastPrice), ".")[1])
+			}
+			priceFilter := math.Pow10(-1 * pricePrecision)
+
+			pairConstraint := &exchange.PairConstraint{
+				PairID:      p.ID,
+				Pair:        p,
+				ExSymbol:    symbol,
+				MakerFee:    DEFAULT_MAKER_FEE,
+				TakerFee:    DEFAULT_TAKER_FEE,
+				LotSize:     lotSize,
+				PriceFilter: priceFilter,
+				Listed:      true,
+			}
+			e.SetPairConstraint(pairConstraint)
 		}
 	}
 	return nil
@@ -163,47 +183,60 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Bgogo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
-	jsonResponse := &JsonResponse{}
-	orderBook := OrderBook{}
+	snapshotJson := SnapshotJson{}
+	snapshotData := SnapshotData{}
 	symbol := e.GetSymbolByPair(p)
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = symbol
-	mapParams["limit"] = "100"
-
-	strRequestPath := "/API Path"
+	strRequestPath := fmt.Sprintf("/api/v2/snapshot/%s", symbol)
 	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonOrderbook), &snapshotJson); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	if err := json.Unmarshal(snapshotJson.Data, &snapshotData); err != nil {
+		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, snapshotJson.Data)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
-	for _, bid := range orderBook.Bids {
+	//买入
+	for _, bid := range snapshotData.OrderBooks.Bids {
 		buydata := exchange.Order{}
-		buydata.Quantity = bid[1]
-		buydata.Rate = bid[0]
+
+		buydata.Quantity, err = strconv.ParseFloat(bid.Amount, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+		}
+
+		buydata.Rate, err = strconv.ParseFloat(bid.Price, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v\n", e.GetName(), err)
+		}
+
 		maker.Bids = append(maker.Bids, buydata)
 	}
 
-	for _, ask := range orderBook.Asks {
+	//卖出
+	for _, ask := range snapshotData.OrderBooks.Asks {
 		selldata := exchange.Order{}
-		selldata.Quantity = ask[1]
-		selldata.Rate = ask[0]
+
+		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+		}
+
+		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
+		}
 		maker.Asks = append(maker.Asks, selldata)
 	}
 

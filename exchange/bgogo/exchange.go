@@ -229,13 +229,13 @@ func (e *Bgogo) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bgogo) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
-	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false

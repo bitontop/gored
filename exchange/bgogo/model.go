@@ -13,33 +13,65 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type Ticker struct {
+	LastPrice              string `json:"last_price"`
+	LowestAskPrice         string `json:"lowest_ask_price"`
+	HighestBidPrice        string `json:"highest_bid_price"`
+	Past24hrsPriceChange   string `json:"past_24hrs_price_change"`
+	Past24hrsBaseVolume    string `json:"past_24hrs_base_volume"`
+	Past24hrsQuoteTurnover string `json:"past_24hrs_quote_turnover"`
+	Past24hrsHighPrice     string `json:"past_24hrs_high_price"`
+	Past24hrsLowPrice      string `json:"past_24hrs_low_price"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
+type CoinsData map[string]Ticker
+
+type PairsData map[string]Ticker
+
+type OrderItem struct {
+	Price  string `json:"price"`
+	Amount string `json:"amount"`
 }
 
 type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+	Bids []OrderItem `json:"bids"`
+	Asks []OrderItem `json:"asks"`
+}
+
+type SnapshotJson struct {
+	StatusCode int             `json:"status_code"`
+	Message    string          `json:"message"`
+	Time       int             `json:"time"`
+	Data       json.RawMessage `json:"data"`
+}
+
+type SnapshotData struct {
+	PriceStep                        string      `json:"price_step"`
+	AmountStep                       string      `json:"amount_step"`
+	AllSymbols                       interface{} `json:"all_symbols"`
+	LastPrices                       interface{} `json:"last_prices"`
+	Past24hrsPriceChanges            interface{} `json:"past_24hrs_price_changes"`
+	Past24hrsHighPrice               interface{} `json:"past_24hrs_high_price"`
+	Past24hrsLowPrice                interface{} `json:"past_24hrs_low_price"`
+	Past24hrsVolumes                 interface{} `json:"past_24hrs_volumes"`
+	Past24hrsTurnovers               interface{} `json:"past_24hrs_turnovers"`
+	OrderBooks                       OrderBook   `json:"order_book"`
+	TradeHistory                     interface{} `json:"trade_history"`
+	QuoteCurrencyToFiatCurrencyPrice string      `json:"quote_currency_to_fiat_currency_price"`
+	FiatCurrency                     string      `json:"fiat_currency"`
+	MyAccountBalances                interface{} `json:"my_account_balances"`
+	MyOrders                         interface{} `json:"my_orders"`
+	Superpower                       bool        `json:"superpower"`
+	FeeRate                          string      `json:"fee_rate"`
+	EstimatedBtc                     string      `json:"estimated_btc"`
+	EstimatedUsd                     string      `json:"estimated_usd"`
+	MyFeeRate                        string      `json:"my_fee_rate"`
+	BaseIntroLink                    string      `json:"base_intro_link"`
+	Quota                            string      `json:"quota"`
+	NextTimes                        int         `json:"next_time_s"`
+	IeoStatus                        int         `json:"ieo_status"`
+	QuotaCurrency                    string      `json:"quota_currency"`
+	Category                         interface{} `json:"category"`
 }
 
 /********** Private API Structure**********/
