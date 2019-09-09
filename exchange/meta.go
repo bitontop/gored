@@ -172,5 +172,7 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BLOCKTRADE) // ID = 56
 	supportList = append(supportList, BKEX)       // ID = 57
 	supportList = append(supportList, NEWCAPITAL) // ID = 58
-	// supportList = append(supportList, COINDEAL)   // ID = 59
+	supportList = append(supportList, COINDEAL)   // ID = 59
+	supportList = append(supportList, HIBITEX)    // ID = 60
+	supportList = append(supportList, BGOGO)      // ID = 61
 }

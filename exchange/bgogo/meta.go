@@ -5,7 +5,7 @@ package bgogo
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 const (
-	DEFAULT_ID           = 0
+	DEFAULT_ID           = 61
 	DEFAULT_TAKER_FEE    = 0.002
 	DEFAULT_MAKER_FEE    = 0.001
 	DEFAULT_LOT_SIZE     = 0.00000001

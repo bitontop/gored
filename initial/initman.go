@@ -6,6 +6,7 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/abcc"
 	"github.com/bitontop/gored/exchange/bcex"
+	"github.com/bitontop/gored/exchange/bgogo"
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/biki"
@@ -37,6 +38,7 @@ import (
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/goko"
+	"github.com/bitontop/gored/exchange/hibitex"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobidm"
@@ -475,6 +477,20 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.COINDEAL:
 		ex := coindeal.CreateCoindeal(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.HIBITEX:
+		ex := hibitex.CreateHibitex(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BGOGO:
+		ex := bgogo.CreateBgogo(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

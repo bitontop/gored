@@ -13,6 +13,7 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/exchange/abcc"
 	"github.com/bitontop/gored/exchange/bcex"
+	"github.com/bitontop/gored/exchange/bgogo"
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/biki"
@@ -41,6 +42,7 @@ import (
 	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/goko"
+	"github.com/bitontop/gored/exchange/hibitex"
 	"github.com/bitontop/gored/exchange/hitbtc"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobidm"
@@ -183,6 +185,8 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBkex(config)
 	InitNewcapital(config)
 	InitCoindeal(config)
+	InitHibitex(config)
+	InitBgogo(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -646,6 +650,24 @@ func InitNewcapital(config *exchange.Config) {
 func InitCoindeal(config *exchange.Config) {
 	conf.Exchange(exchange.COINDEAL, config)
 	ex := coindeal.CreateCoindeal(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitHibitex(config *exchange.Config) {
+	conf.Exchange(exchange.HIBITEX, config)
+	ex := hibitex.CreateHibitex(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBgogo(config *exchange.Config) {
+	conf.Exchange(exchange.BGOGO, config)
+	ex := bgogo.CreateBgogo(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
