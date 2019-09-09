@@ -15,7 +15,7 @@ import (
 
 	"github.com/bitontop/gored/exchange/bgogo"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/coindeal"
+	// "../exchange/bgogo"
 	// "./conf"
 )
 
