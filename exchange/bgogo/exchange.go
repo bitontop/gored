@@ -1,4 +1,4 @@
-package hibitex
+package bgogo
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -19,7 +19,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-type Hibitex struct {
+type Bgogo struct {
 	ID      int
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
@@ -35,16 +35,16 @@ var pairConstraintMap cmap.ConcurrentMap
 var coinConstraintMap cmap.ConcurrentMap
 var balanceMap cmap.ConcurrentMap
 
-var instance *Hibitex
+var instance *Bgogo
 var once sync.Once
 
 /***************************************************/
-func CreateHibitex(config *exchange.Config) *Hibitex {
+func CreateBgogo(config *exchange.Config) *Bgogo {
 	once.Do(func() {
-		instance = &Hibitex{
+		instance = &Bgogo{
 			ID:      DEFAULT_ID,
-			Name:    "Hibitex",
-			Website: "https://www.hibitex.com/",
+			Name:    "Bgogo",
+			Website: "https://bgogo.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -64,7 +64,7 @@ func CreateHibitex(config *exchange.Config) *Hibitex {
 	return instance
 }
 
-func (e *Hibitex) InitData() error {
+func (e *Bgogo) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
 		if err := e.GetCoinsData(); err != nil {
@@ -93,19 +93,19 @@ func (e *Hibitex) InitData() error {
 }
 
 /**************** Exchange Information ****************/
-func (e *Hibitex) GetID() int {
+func (e *Bgogo) GetID() int {
 	return e.ID
 }
 
-func (e *Hibitex) GetName() exchange.ExchangeName {
-	return exchange.BLANK
+func (e *Bgogo) GetName() exchange.ExchangeName {
+	return exchange.BGOGO
 }
 
-func (e *Hibitex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.hibitex.com/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+func (e *Bgogo) GetTradingWebURL(pair *pair.Pair) string {
+	return fmt.Sprintf("https://bgogo.com/exchange/%s/%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
-func (e *Hibitex) GetBalance(coin *coin.Coin) float64 {
+func (e *Bgogo) GetBalance(coin *coin.Coin) float64 {
 	if tmp, ok := balanceMap.Get(coin.Code); ok {
 		return tmp.(float64)
 	} else {
@@ -114,18 +114,18 @@ func (e *Hibitex) GetBalance(coin *coin.Coin) float64 {
 }
 
 /*************** Coins on the Exchanges ***************/
-func (e *Hibitex) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
+func (e *Bgogo) GetCoinConstraint(coin *coin.Coin) *exchange.CoinConstraint {
 	if tmp, ok := coinConstraintMap.Get(fmt.Sprintf("%d", coin.ID)); ok {
 		return tmp.(*exchange.CoinConstraint)
 	}
 	return nil
 }
 
-func (e *Hibitex) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
+func (e *Bgogo) SetCoinConstraint(coinConstraint *exchange.CoinConstraint) {
 	coinConstraintMap.Set(fmt.Sprintf("%d", coinConstraint.CoinID), coinConstraint)
 }
 
-func (e *Hibitex) GetCoins() []*coin.Coin {
+func (e *Bgogo) GetCoins() []*coin.Coin {
 	coinList := []*coin.Coin{}
 	keySort := []int{}
 	for _, key := range coinConstraintMap.Keys() {
@@ -142,7 +142,7 @@ func (e *Hibitex) GetCoins() []*coin.Coin {
 	return coinList
 }
 
-func (e *Hibitex) GetCoinBySymbol(symbol string) *coin.Coin {
+func (e *Bgogo) GetCoinBySymbol(symbol string) *coin.Coin {
 	for _, id := range coinConstraintMap.Keys() {
 		if tmp, ok := coinConstraintMap.Get(id); ok {
 			cc := tmp.(*exchange.CoinConstraint)
@@ -156,7 +156,7 @@ func (e *Hibitex) GetCoinBySymbol(symbol string) *coin.Coin {
 	return nil
 }
 
-func (e *Hibitex) GetSymbolByCoin(coin *coin.Coin) string {
+func (e *Bgogo) GetSymbolByCoin(coin *coin.Coin) string {
 	key := fmt.Sprintf("%d", coin.ID)
 	if tmp, ok := coinConstraintMap.Get(key); ok {
 		cc := tmp.(*exchange.CoinConstraint)
@@ -165,23 +165,23 @@ func (e *Hibitex) GetSymbolByCoin(coin *coin.Coin) string {
 	return ""
 }
 
-func (e *Hibitex) DeleteCoin(coin *coin.Coin) {
+func (e *Bgogo) DeleteCoin(coin *coin.Coin) {
 	coinConstraintMap.Remove(fmt.Sprintf("%d", coin.ID))
 }
 
 /*************** Pairs on the Exchanges ***************/
-func (e *Hibitex) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+func (e *Bgogo) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
 	return nil
 }
 
-func (e *Hibitex) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
+func (e *Bgogo) SetPairConstraint(pairConstraint *exchange.PairConstraint) {
 	pairConstraintMap.Set(fmt.Sprintf("%d", pairConstraint.PairID), pairConstraint)
 }
 
-func (e *Hibitex) GetPairs() []*pair.Pair {
+func (e *Bgogo) GetPairs() []*pair.Pair {
 	pairList := []*pair.Pair{}
 	keySort := []int{}
 	for _, key := range pairConstraintMap.Keys() {
@@ -198,7 +198,7 @@ func (e *Hibitex) GetPairs() []*pair.Pair {
 	return pairList
 }
 
-func (e *Hibitex) GetPairBySymbol(symbol string) *pair.Pair {
+func (e *Bgogo) GetPairBySymbol(symbol string) *pair.Pair {
 	for _, id := range pairConstraintMap.Keys() {
 		if tmp, ok := pairConstraintMap.Get(id); ok {
 			pc := tmp.(*exchange.PairConstraint)
@@ -210,7 +210,7 @@ func (e *Hibitex) GetPairBySymbol(symbol string) *pair.Pair {
 	return nil
 }
 
-func (e *Hibitex) GetSymbolByPair(pair *pair.Pair) string {
+func (e *Bgogo) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
@@ -218,16 +218,16 @@ func (e *Hibitex) GetSymbolByPair(pair *pair.Pair) string {
 	return ""
 }
 
-func (e *Hibitex) HasPair(pair *pair.Pair) bool {
+func (e *Bgogo) HasPair(pair *pair.Pair) bool {
 	return pairConstraintMap.Has(fmt.Sprintf("%d", pair.ID))
 }
 
-func (e *Hibitex) DeletePair(pair *pair.Pair) {
+func (e *Bgogo) DeletePair(pair *pair.Pair) {
 	pairConstraintMap.Remove(fmt.Sprintf("%d", pair.ID))
 }
 
 /**************** Exchange Constraint ****************/
-func (e *Hibitex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
+func (e *Bgogo) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
@@ -243,13 +243,13 @@ func (e *Hibitex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	return constrainFetchMethod
 }
 
-func (e *Hibitex) UpdateConstraint() {
+func (e *Bgogo) UpdateConstraint() {
 	e.GetCoinsData()
 	e.GetPairsData()
 }
 
 /**************** Coin Constraint ****************/
-func (e *Hibitex) GetTxFee(coin *coin.Coin) float64 {
+func (e *Bgogo) GetTxFee(coin *coin.Coin) float64 {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0.0
@@ -257,7 +257,7 @@ func (e *Hibitex) GetTxFee(coin *coin.Coin) float64 {
 	return coinConstraint.TxFee
 }
 
-func (e *Hibitex) CanWithdraw(coin *coin.Coin) bool {
+func (e *Bgogo) CanWithdraw(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -265,7 +265,7 @@ func (e *Hibitex) CanWithdraw(coin *coin.Coin) bool {
 	return coinConstraint.Withdraw
 }
 
-func (e *Hibitex) CanDeposit(coin *coin.Coin) bool {
+func (e *Bgogo) CanDeposit(coin *coin.Coin) bool {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return false
@@ -273,7 +273,7 @@ func (e *Hibitex) CanDeposit(coin *coin.Coin) bool {
 	return coinConstraint.Deposit
 }
 
-func (e *Hibitex) GetConfirmation(coin *coin.Coin) int {
+func (e *Bgogo) GetConfirmation(coin *coin.Coin) int {
 	coinConstraint := e.GetCoinConstraint(coin)
 	if coinConstraint == nil {
 		return 0
@@ -282,7 +282,7 @@ func (e *Hibitex) GetConfirmation(coin *coin.Coin) int {
 }
 
 /**************** Pair Constraint ****************/
-func (e *Hibitex) GetFee(pair *pair.Pair) float64 {
+func (e *Bgogo) GetFee(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -290,7 +290,7 @@ func (e *Hibitex) GetFee(pair *pair.Pair) float64 {
 	return pairConstraint.TakerFee
 }
 
-func (e *Hibitex) GetLotSize(pair *pair.Pair) float64 {
+func (e *Bgogo) GetLotSize(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0
@@ -298,7 +298,7 @@ func (e *Hibitex) GetLotSize(pair *pair.Pair) float64 {
 	return pairConstraint.LotSize
 }
 
-func (e *Hibitex) GetPriceFilter(pair *pair.Pair) float64 {
+func (e *Bgogo) GetPriceFilter(pair *pair.Pair) float64 {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint == nil {
 		return 0.0

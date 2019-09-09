@@ -1,4 +1,4 @@
-package coindeal
+package bitcoin
 
 import "encoding/json"
 
@@ -13,32 +13,31 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type Tick struct {
-	ID            int    `json:"id"`
-	Last          string `json:"last"`
-	LowestAsk     string `json:"lowestAsk"`
-	HighestBid    string `json:"highestBid"`
-	PercentChange string `json:"percentChange"`
-	BaseVolume    string `json:"baseVolume"`
-	QuoteVolume   string `json:"quoteVolume"`
-	IsFrozen      string `json:"isFrozen"`
-	High24hr      string `json:"high24hr"`
-	Low24hr       string `json:"low24hr"`
-	CurrencyName  string `json:"currencyName"`
-	WalletStatus  string `json:"walletStatus"`
+type CoinItem struct {
+	Symbol          string `json:"symbol"`
+	CoinName        string `json:"coinName"`
+	FullName        string `json:"fullName"`
+	Algorithm       string `json:"algorithm"`
+	ProofType       string `json:"proofType"`
+	TotalCoinSupply string `json:"totalCoinSupply"`
 }
 
-type CoinsData map[string]Tick
+type CoinsData map[string]CoinItem
 
-type PairsData map[string]Tick
-
-type OrderInfo struct {
-	Price  string `json:"price"`
-	Amount string `json:"amount"`
+type PairsData []struct {
+	Symbol      string  `json:"symbol"`
+	Status      string  `json:"status"`
+	BaseAsset   string  `json:"baseAsset"`
+	QuoteAsset  string  `json:"quoteAsset"`
+	MakerFee    float64 `json:"makerFee"`
+	TakerFee    float64 `json:"takerFee"`
+	PriceFilter float64 `json:"priceFilter"`
+	LotSize     float64 `json:"lotSize"`
 }
+
 type OrderBook struct {
-	Asks []OrderInfo `json:"ask"`
-	Bids []OrderInfo `json:"bid"`
+	Bids [][]float64 `json:"bids"`
+	Asks [][]float64 `json:"asks"`
 }
 
 /********** Private API Structure**********/
