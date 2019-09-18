@@ -33,8 +33,8 @@ type CoinsData struct {
 }
 
 type Pair struct {
-	Symbol             string      `json:"symbol"`
-	PriceChange        string      `json:"priceChange"`
+	Symbol string `json:"symbol"`
+	// PriceChange        string      `json:"priceChange"`
 	PriceChangePercent string      `json:"priceChangePercent"`
 	LastPrice          string      `json:"lastPrice"`
 	BidPrice           interface{} `json:"bidPrice"`

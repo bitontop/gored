@@ -15,7 +15,7 @@ import (
 
 	"github.com/bitontop/gored/exchange/newcapital"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/zebitex"
+	// "../exchange/newcapital"
 	// "./conf"
 )
 
