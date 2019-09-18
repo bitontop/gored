@@ -431,7 +431,12 @@ func (e *Bitmax) CancelOrder(order *exchange.Order) error {
 
 	mapParams := make(map[string]string)
 	mapParams["coid"] = fmt.Sprintf("%v%v", time.Now().UTC().UnixNano()/1000000, time.Now().UTC().UnixNano())
-	mapParams["origCoid"] = order.OrderID
+	if order != nil {
+		mapParams["origCoid"] = order.OrderID
+	} else {
+		log.Printf("%s CancelOrder, nil order", e.GetName())
+		mapParams["origCoid"] = ""
+	}
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
 
 	jsonCancelOrder := e.ApiKeyRequest(mapParams, "DELETE", strRequestUrl, "order")
