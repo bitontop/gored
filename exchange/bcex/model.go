@@ -23,10 +23,10 @@ type CoinsData struct {
 }
 
 type PairsData struct {
-	Main      map[string][]*PairDetail `json:"main"`
-	Hot       []*PairDetail            `json:"hot"`
-	ByPercent []*PairDetail            `json:"by_percent"`
-	ByTime    []*PairDetail            `json:"by_time"`
+	Main map[string][]*PairDetail `json:"main"`
+	// Hot       []*PairDetail            `json:"hot"`
+	// ByPercent []*PairDetail            `json:"by_percent"`
+	// ByTime    []*PairDetail            `json:"by_time"`
 }
 
 type PairDetail struct {
