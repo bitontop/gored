@@ -235,7 +235,7 @@ func (e *Bitfinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
@@ -332,6 +332,8 @@ func (e *Bitfinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	jsonPlaceReturn := e.ApiKeyPost(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if placeOrder.ID == 0 {
+		return nil, fmt.Errorf("%s LimitSell Fail: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -367,6 +369,8 @@ func (e *Bitfinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	jsonPlaceReturn := e.ApiKeyPost(mapParams, strRequest)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+	} else if placeOrder.ID == 0 {
+		return nil, fmt.Errorf("%s LimitSell Fail: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
