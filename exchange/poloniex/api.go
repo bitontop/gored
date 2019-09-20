@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -273,11 +274,14 @@ func (e *Poloniex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 	placeOrder := PlaceOrder{}
 	strRequest := "/tradingApi"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
 	mapParams["command"] = "sell"
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
@@ -307,11 +311,14 @@ func (e *Poloniex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 	placeOrder := PlaceOrder{}
 	strRequest := "/tradingApi"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
 	mapParams["command"] = "buy"
 	mapParams["currencyPair"] = e.GetSymbolByPair(pair)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
