@@ -115,12 +115,13 @@ type Maker struct {
 }
 
 type Margin struct {
-	Action   MarginAction
-	Pair     *pair.Pair
-	Currency *coin.Coin
-	Quantity float64
-	Order    *MarginOrder
-	Balance  *MarginBalance
+	Action     MarginAction
+	Pair       *pair.Pair
+	Currency   *coin.Coin
+	Quantity   float64
+	TransferID int
+	Order      *MarginOrder
+	Balance    *MarginBalance
 }
 
 type MarginOrder struct {
