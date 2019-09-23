@@ -30,6 +30,10 @@ const (
 	LOAN_REPAY   MarginAction = "LOAN_REPAY"
 	ORDER_STATUS MarginAction = "ORDER_STATUS"
 	BALANCE      MarginAction = "BALANCE"
+	LIMIT_BUY    MarginAction = "LIMIT_BUY"
+	LIMIT_SELL   MarginAction = "LIMIT_SELL"
+	MARKET_BUY   MarginAction = "MARKET_BUY"
+	MARKET_SELL  MarginAction = "MARKET_SELL"
 
 	API_TIGGER  UpdateMethod = "API_TIGGER"
 	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
