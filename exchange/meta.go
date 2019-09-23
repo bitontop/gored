@@ -4,14 +4,19 @@ package exchange
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-type ExchangeName string
-type DataSource string
 type ChainType string
+type DataSource string
+type ExchangeName string
+type MarginAction string
 type UpdateMethod string
 
 const (
-	API_TIGGER  UpdateMethod = "API_TIGGER"
-	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
+	MAINNET ChainType = "MAINNET"
+	BEP2    ChainType = "BEP2"
+	ERC20   ChainType = "ERC20"
+	NEP5    ChainType = "NEP5"
+	OMNI    ChainType = "OMNI"
+	TRC20   ChainType = "TRC20"
 
 	EXCHANGE_API     DataSource = "EXCHANGE_API"
 	WEBSOCKET        DataSource = "WEBSOCKET"
@@ -19,12 +24,14 @@ const (
 	JSON_FILE        DataSource = "JSON_FILE"
 	PSQL             DataSource = "PSQL"
 
-	MAINNET ChainType = "MAINNET"
-	BEP2    ChainType = "BEP2"
-	ERC20   ChainType = "ERC20"
-	NEP5    ChainType = "NEP5"
-	OMNI    ChainType = "OMNI"
-	TRC20   ChainType = "TRC20"
+	TRANSFER_IN  MarginAction = "TRANSFER_IN"
+	TRANSFER_OUT MarginAction = "TRANSFER_OUT"
+	LOAN_REQUEST MarginAction = "LOAN_REQUEST"
+	LOAN_REPAY   MarginAction = "LOAN_REPAY"
+	ORDER_STATUS MarginAction = "ORDER_STATUS"
+
+	API_TIGGER  UpdateMethod = "API_TIGGER"
+	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
 
 	ABCC         ExchangeName = "ABCC"
 	BCEX         ExchangeName = "BCEX"

@@ -113,3 +113,27 @@ type Maker struct {
 	Bids            []Order    `json:"bids"`
 	Asks            []Order    `json:"asks"`
 }
+
+type Margin struct {
+	Action   MarginAction
+	Pair     *pair.Pair
+	Currency *coin.Coin
+	Quantity float64
+	Order    *MarginOrder
+}
+
+type MarginOrder struct {
+	LoanBalance     string `json:"loan-balance"`
+	InterestBalance string `json:"interest-balance"`
+	InterestRate    string `json:"interest-rate"`
+	LoanAmount      string `json:"loan-amount"`
+	AccruedAt       int64  `json:"accrued-at"`
+	InterestAmount  string `json:"interest-amount"`
+	Symbol          string `json:"symbol"`
+	Currency        string `json:"currency"`
+	ID              int    `json:"id"`
+	State           string `json:"state"`
+	AccountID       int    `json:"account-id"`
+	UserID          int    `json:"user-id"`
+	CreatedAt       int64  `json:"created-at"`
+}
