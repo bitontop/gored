@@ -6,9 +6,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/biki"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/biki"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/biki"
+	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -29,8 +32,9 @@ func Test_Biki(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.0003, 1000)
+	// Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.01234567, 0.12345678)
+	// Test_Trading_Sell(e, pair, 0.02642640, 0.05700000)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 

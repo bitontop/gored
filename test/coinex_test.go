@@ -6,9 +6,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/test/conf"
+	// "../exchange/coinex"
+	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -29,7 +32,7 @@ func Test_Coinex(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
