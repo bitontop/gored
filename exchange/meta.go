@@ -29,6 +29,7 @@ const (
 	LOAN_REQUEST MarginAction = "LOAN_REQUEST"
 	LOAN_REPAY   MarginAction = "LOAN_REPAY"
 	ORDER_STATUS MarginAction = "ORDER_STATUS"
+	BALANCE      MarginAction = "BALANCE"
 
 	API_TIGGER  UpdateMethod = "API_TIGGER"
 	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
