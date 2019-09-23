@@ -120,6 +120,7 @@ type Margin struct {
 	Currency *coin.Coin
 	Quantity float64
 	Order    *MarginOrder
+	Balance  *MarginBalance
 }
 
 type MarginOrder struct {
@@ -136,4 +137,19 @@ type MarginOrder struct {
 	AccountID       int    `json:"account-id"`
 	UserID          int    `json:"user-id"`
 	CreatedAt       int64  `json:"created-at"`
+}
+
+type MarginBalance struct {
+	ID       int    `json:"id"`
+	Type     string `json:"type"`
+	State    string `json:"state"`
+	Symbol   string `json:"symbol"`
+	FlPrice  string `json:"fl-price"`
+	FlType   string `json:"fl-type"`
+	RiskRate string `json:"risk-rate"`
+	List     []struct {
+		Currency string `json:"currency"`
+		Type     string `json:"type"`
+		Balance  string `json:"balance"`
+	} `json:"list"`
 }
