@@ -118,6 +118,7 @@ type Margin struct {
 	Action        MarginAction
 	Pair          *pair.Pair
 	Currency      *coin.Coin
+	Rate          float64
 	Quantity      float64
 	TransferID    int
 	Order         *Order
