@@ -85,6 +85,7 @@ const (
 	EXX          ExchangeName = "EXX"
 	FATBTC       ExchangeName = "FATBTC"
 	FCOIN        ExchangeName = "FCOIN"
+	FTX          ExchangeName = "FTX"
 	GATEIO       ExchangeName = "GATEIO"
 	GEMINI       ExchangeName = "GEMINI"
 	GOKO         ExchangeName = "GOKO"
