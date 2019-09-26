@@ -36,6 +36,7 @@ import (
 	"github.com/bitontop/gored/exchange/deribit"
 	"github.com/bitontop/gored/exchange/digifinex"
 	"github.com/bitontop/gored/exchange/dragonex"
+	"github.com/bitontop/gored/exchange/ftx"
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/goko"
 	"github.com/bitontop/gored/exchange/hibitex"
@@ -491,6 +492,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BGOGO:
 		ex := bgogo.CreateBgogo(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.FTX:
+		ex := ftx.CreateFtx(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

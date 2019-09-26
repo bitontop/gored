@@ -40,6 +40,7 @@ import (
 	"github.com/bitontop/gored/exchange/deribit"
 	"github.com/bitontop/gored/exchange/digifinex"
 	"github.com/bitontop/gored/exchange/dragonex"
+	"github.com/bitontop/gored/exchange/ftx"
 	"github.com/bitontop/gored/exchange/gateio"
 	"github.com/bitontop/gored/exchange/goko"
 	"github.com/bitontop/gored/exchange/hibitex"
@@ -187,6 +188,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitCoindeal(config)
 	InitHibitex(config)
 	InitBgogo(config)
+	InitFtx(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -668,6 +670,15 @@ func InitHibitex(config *exchange.Config) {
 func InitBgogo(config *exchange.Config) {
 	conf.Exchange(exchange.BGOGO, config)
 	ex := bgogo.CreateBgogo(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitFtx(config *exchange.Config) {
+	conf.Exchange(exchange.FTX, config)
+	ex := ftx.CreateFtx(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
