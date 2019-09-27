@@ -402,6 +402,9 @@ func (e *TradeSatoshi) CancelOrder(order *exchange.Order) error {
 
 	mapParams := make(map[string]interface{})
 	mapParams["Type"] = "Single"
+	if order == nil{
+		return fmt.Errorf("%s CancelOrder, invalid order: %v", e.GetName(), order)
+	}
 	mapParams["OrderId"] = order.OrderID
 
 	jsonCancelOrder := e.ApiKeyPost(strRequest, mapParams)
