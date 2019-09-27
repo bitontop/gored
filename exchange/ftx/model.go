@@ -16,7 +16,7 @@ type JsonResponse struct {
 	Result  json.RawMessage `json:"result"`
 }
 
-type CoinsData []struct { // not useful
+type CoinsData []struct {
 	ID         string `json:"id"`
 	Name       string `json:"name"`
 	Index      bool   `json:"index,omitempty"`

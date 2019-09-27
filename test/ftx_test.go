@@ -23,7 +23,7 @@ import (
 func Test_Ftx(t *testing.T) {
 	e := InitFtx()
 
-	pair := pair.GetPairByKey("BTC|PERP")
+	pair := pair.GetPairByKey("USD|ETHMOON")
 
 	Test_Coins(e)
 	Test_Pairs(e)
