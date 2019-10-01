@@ -10,61 +10,60 @@ import (
 )
 
 type JsonResponse struct {
-	Errors []struct {
-		Code    int    `json:"code"`
-		Message string `json:"message"`
-	} `json:"errors"`
-	Data json.RawMessage `json:"data"`
+	Code    int             `json:"code"`
+	Message string          `json:"message"`
+	Data    json.RawMessage `json:"data"`
 }
 
 type PairsData []struct {
-	UUID       string `json:"uuid"`
-	QuoteScale int    `json:"quoteScale"`
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	QuoteScale int    `json:"quote_scale"`
 	QuoteAsset struct {
-		UUID   string `json:"uuid"`
+		ID     string `json:"id"`
 		Symbol string `json:"symbol"`
 		Name   string `json:"name"`
-	} `json:"quoteAsset"`
-	Name      string `json:"name"`
-	BaseScale int    `json:"baseScale"`
+	} `json:"quote_asset"`
 	BaseAsset struct {
-		UUID   string `json:"uuid"`
+		ID     string `json:"id"`
 		Symbol string `json:"symbol"`
 		Name   string `json:"name"`
-	} `json:"baseAsset"`
+	} `json:"base_asset"`
+	BaseScale     int    `json:"base_scale"`
+	MinQuoteValue string `json:"min_quote_value"`
 }
 
 type OrderBook struct {
-	MarketUUID string `json:"market_uuid"`
-	MarketID   string `json:"market_id"`
-	Bids       []struct {
+	AssetPairName string `json:"asset_pair_name"`
+	Bids          []struct {
 		Price      string `json:"price"`
 		OrderCount int    `json:"order_count"`
-		Amount     string `json:"amount"`
+		Quantity   string `json:"quantity"`
 	} `json:"bids"`
 	Asks []struct {
 		Price      string `json:"price"`
 		OrderCount int    `json:"order_count"`
-		Amount     string `json:"amount"`
+		Quantity   string `json:"quantity"`
 	} `json:"asks"`
 }
 
 type AccountBalances []struct {
-	LockedBalance string `json:"locked_balance"`
+	AssetSymbol   string `json:"asset_symbol"`
 	Balance       string `json:"balance"`
-	AssetUUID     string `json:"asset_uuid"`
-	AssetID       string `json:"asset_id"`
+	LockedBalance string `json:"locked_balance"`
 }
 
 type PlaceOrder struct {
-	ID           string `json:"id"`
-	MarketID     string `json:"market_id"`
-	Price        string `json:"price"`
-	Amount       string `json:"amount"`
-	FilledAmount string `json:"filled_amount"`
-	AvgDealPrice string `json:"avg_deal_price"`
-	Side         string `json:"side"`
-	State        string `json:"state"`
+	ID            int       `json:"id"`
+	AssetPairName string    `json:"asset_pair_name"`
+	Price         string    `json:"price"`
+	Amount        string    `json:"amount"`
+	FilledAmount  string    `json:"filled_amount"`
+	AvgDealPrice  string    `json:"avg_deal_price"`
+	Side          string    `json:"side"`
+	State         string    `json:"state"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
 }
 
 type Withdraw struct {

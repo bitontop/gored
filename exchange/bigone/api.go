@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	API_URL string = "https://big.one/api/v2"
+	API_URL string = "https://big.one/api/v3"
 )
 
 /*API Base Knowledge
@@ -54,13 +54,13 @@ func (e *Bigone) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestUrl := "/markets"
+	strRequestUrl := "/asset_pairs"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if false {
+	} else if jsonResponse.Code != 0 {
 		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
@@ -132,7 +132,7 @@ func (e *Bigone) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestUrl := "/markets"
+	strRequestUrl := "/asset_pairs"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -186,7 +186,7 @@ func (e *Bigone) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	strRequestUrl := fmt.Sprintf("/markets/%s/depth", symbol)
+	strRequestUrl := fmt.Sprintf("/asset_pairs/%v/depth", symbol)
 	strUrl := API_URL + strRequestUrl
 
 	maker := &exchange.Maker{
@@ -198,7 +198,7 @@ func (e *Bigone) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if len(jsonResponse.Errors) != 0 {
+	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
@@ -215,7 +215,7 @@ func (e *Bigone) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		if err != nil {
 			return nil, err
 		}
-		buydata.Quantity, err = strconv.ParseFloat(bid.Amount, 64)
+		buydata.Quantity, err = strconv.ParseFloat(bid.Quantity, 64)
 		if err != nil {
 			return nil, err
 		}
@@ -230,7 +230,7 @@ func (e *Bigone) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		if err != nil {
 			return nil, err
 		}
-		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
+		selldata.Quantity, err = strconv.ParseFloat(ask.Quantity, 64)
 		if err != nil {
 			return nil, err
 		}
@@ -255,7 +255,7 @@ func (e *Bigone) UpdateAllBalances() {
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} else if len(jsonResponse.Errors) != 0 {
+	} else if jsonResponse.Code != 0 {
 		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse)
 		return
 	}
@@ -265,16 +265,15 @@ func (e *Bigone) UpdateAllBalances() {
 	}
 
 	for _, v := range accountBalance {
-		c := e.GetCoinBySymbol(v.AssetID)
+		c := e.GetCoinBySymbol(v.AssetSymbol)
 		if c != nil {
 			balance, err := strconv.ParseFloat(v.Balance, 64)
 			if err == nil {
 				balanceMap.Set(c.Code, balance)
 			} else {
-				log.Printf("%s balance float64 convert err: %v", err)
+				log.Printf("%s balance float64 convert err: %v, %v", e.GetName(), err, v.Balance)
 				return
 			}
-
 		}
 	}
 }
@@ -326,15 +325,15 @@ func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["asset_pair_name"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "ASK"
-	mapParams["market_id"] = e.GetSymbolByPair(pair)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest(strRequest, mapParams, "POST")
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if len(jsonResponse.Errors) != 0 {
+	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
@@ -343,7 +342,7 @@ func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.ID,
+		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -367,15 +366,15 @@ func (e *Bigone) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["asset_pair_name"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BID"
-	mapParams["market_id"] = e.GetSymbolByPair(pair)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest(strRequest, mapParams, "POST")
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if len(jsonResponse.Errors) != 0 {
+	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
@@ -384,7 +383,7 @@ func (e *Bigone) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.ID,
+		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -407,7 +406,7 @@ func (e *Bigone) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyRequest(strRequest, make(map[string]string), "GET")
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if len(jsonResponse.Errors) != 0 {
+	} else if jsonResponse.Code != 0 {
 		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
@@ -420,11 +419,16 @@ func (e *Bigone) OrderStatus(order *exchange.Order) error {
 		log.Printf("Bigone order statuse parse filled amount to float64 error: %v  %v", err, orderStatus.FilledAmount)
 		filledF = 0.0
 	}
-	if filledF == order.Quantity {
-		order.Status = exchange.Filled
-	} else if filledF > 0 && filledF < order.Quantity {
+
+	if filledF > 0 && filledF < order.Quantity {
 		order.Status = exchange.Partial
+	} else if orderStatus.State == "FILLED" {
+		order.Status = exchange.Filled
+	} else if orderStatus.State == "CANCELLED" {
+		order.Status = exchange.Canceled
 	} else if filledF == 0 {
+		order.Status = exchange.New
+	} else if orderStatus.State == "PENDING" {
 		order.Status = exchange.New
 	} else {
 		order.Status = exchange.Other
@@ -442,8 +446,12 @@ func (e *Bigone) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	if order == nil {
+		return fmt.Errorf("%s CancelOrder Failed, nil Order", e.GetName())
+	}
+
 	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
+	mapParams["id"] = order.OrderID
 
 	jsonResponse := &JsonResponse{}
 	cancelOrder := PlaceOrder{}
@@ -452,7 +460,7 @@ func (e *Bigone) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyRequest(strRequest, mapParams, "POST")
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if len(jsonResponse.Errors) != 0 {
+	} else if jsonResponse.Code != 0 {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
@@ -475,7 +483,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Bigone) ApiKeyRequest(strRequestPath string, mapParams map[string]string, method string) string {
-	nonce := time.Now().UnixNano() + 20*1e9 //strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
+	nonce := strconv.FormatInt(time.Now().UnixNano()+20*1e9, 10) //time.Now().UnixNano() + 20*1e9 //strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
 	strRequestUrl := API_URL + strRequestPath
 
 	//Signature Request Params
@@ -484,9 +492,10 @@ func (e *Bigone) ApiKeyRequest(strRequestPath string, mapParams map[string]strin
 	headerParams["typ"] = "JWT"
 
 	payloadParams := make(map[string]interface{})
-	payloadParams["type"] = "OpenAPI"
+	payloadParams["type"] = "OpenAPIV2"
 	payloadParams["sub"] = e.API_KEY
 	payloadParams["nonce"] = nonce
+	// payloadParams["recv_window"] = "100"
 
 	signature := ""
 
@@ -506,7 +515,7 @@ func (e *Bigone) ApiKeyRequest(strRequestPath string, mapParams map[string]strin
 	payload64 := base64Encode([]byte(payload))
 
 	// final token
-	signature = exchange.ComputeHmac256Base64(header64+"."+payload64, e.API_SECRET)
+	signature = exchange.ComputeHmac256URL(header64+"."+payload64, e.API_SECRET)
 	token := header64 + "." + payload64 + "." + signature
 
 	request := &http.Request{}
@@ -517,14 +526,18 @@ func (e *Bigone) ApiKeyRequest(strRequestPath string, mapParams map[string]strin
 			return err.Error()
 		}
 	} else if method == "POST" {
-		request, err = http.NewRequest(method, strRequestUrl, strings.NewReader(exchange.Map2UrlQuery(mapParams)))
+		postBody, err := json.Marshal(mapParams)
+		if err != nil {
+			log.Printf("postBody marshal err: %v", err)
+		}
+		request, err = http.NewRequest(method, strRequestUrl, strings.NewReader(string(postBody)))
 		if err != nil {
 			return err.Error()
 		}
 	}
 
 	request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", token))
-	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Add("Content-Type", "application/json")
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
@@ -544,5 +557,5 @@ func (e *Bigone) ApiKeyRequest(strRequestPath string, mapParams map[string]strin
 }
 
 func base64Encode(b []byte) string {
-	return strings.TrimRight(base64.URLEncoding.EncodeToString(b), "=")
+	return base64.URLEncoding.EncodeToString(b)
 }
