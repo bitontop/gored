@@ -229,7 +229,7 @@ func (e *Ftx) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetch
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
-	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
