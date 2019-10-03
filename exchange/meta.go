@@ -112,6 +112,7 @@ const (
 	OTCBTC       ExchangeName = "OTCBTC"
 	P2PB2B       ExchangeName = "P2PB2B"
 	POLONIEX     ExchangeName = "POLONIEX"
+	PROBIT       ExchangeName = "PROBIT"
 	RIGHTBTC     ExchangeName = "RIGHTBTC"
 	STEX         ExchangeName = "STEX"
 	SWITCHEO     ExchangeName = "SWITCHEO"
@@ -191,4 +192,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, BGOGO)      // ID = 61
 	// supportList = append(supportList, FTX)        // ID = 62	orderbook not finished
 	supportList = append(supportList, TXBIT) // ID = 63
+	// supportList = append(supportList, PROBIT) // ID = 64
 }
