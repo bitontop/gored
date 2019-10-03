@@ -120,6 +120,7 @@ const (
 	TOPBTC       ExchangeName = "TOPBTC"
 	TRADEOGRE    ExchangeName = "TRADEOGRE"
 	TRADESATOSHI ExchangeName = "TRADESATOSHI"
+	TXBIT        ExchangeName = "TXBIT"
 	UEX          ExchangeName = "UEX"
 	VIRGOCX      ExchangeName = "VIRGOCX"
 	ZBEX         ExchangeName = "ZBEX"
