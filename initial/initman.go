@@ -62,6 +62,7 @@ import (
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
+	"github.com/bitontop/gored/exchange/txbit"
 	"github.com/bitontop/gored/exchange/virgocx"
 	"github.com/bitontop/gored/exchange/zebitex"
 )
@@ -499,6 +500,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.FTX:
 		ex := ftx.CreateFtx(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.TXBIT:
+		ex := txbit.CreateTxbit(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

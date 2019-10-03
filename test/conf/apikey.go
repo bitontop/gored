@@ -306,5 +306,9 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 	case exchange.FTX:
 		config.API_KEY = ""
 		config.API_SECRET = ""
+
+	case exchange.TXBIT:
+		config.API_KEY = ""
+		config.API_SECRET = ""
 	}
 }

@@ -64,6 +64,7 @@ import (
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
+	"github.com/bitontop/gored/exchange/txbit"
 	"github.com/bitontop/gored/exchange/virgocx"
 	"github.com/bitontop/gored/exchange/zebitex"
 	"github.com/bitontop/gored/pair"
@@ -189,6 +190,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitHibitex(config)
 	InitBgogo(config)
 	InitFtx(config)
+	InitTxbit(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -679,6 +681,15 @@ func InitBgogo(config *exchange.Config) {
 func InitFtx(config *exchange.Config) {
 	conf.Exchange(exchange.FTX, config)
 	ex := ftx.CreateFtx(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitTxbit(config *exchange.Config) {
+	conf.Exchange(exchange.TXBIT, config)
+	ex := txbit.CreateTxbit(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
