@@ -215,12 +215,19 @@ func (e *Bitforex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		buydata.Rate = bid.Price
 		maker.Bids = append(maker.Bids, buydata)
 	}
-	for i := len(orderBook.Asks) - 1; i > 0; i-- {
-		var selldata exchange.Order
-		selldata.Quantity = orderBook.Asks[i].Amount
-		selldata.Rate = orderBook.Asks[i].Price
-		maker.Asks = append(maker.Asks, selldata)
+	for _, ask := range orderBook.Asks {
+		var buydata exchange.Order
+		buydata.Quantity = ask.Amount
+		buydata.Rate = ask.Price
+		maker.Asks = append(maker.Asks, buydata)
 	}
+
+	// for i := len(orderBook.Asks) - 1; i > 0; i-- {
+	// 	var selldata exchange.Order
+	// 	selldata.Quantity = orderBook.Asks[i].Amount
+	// 	selldata.Rate = orderBook.Asks[i].Price
+	// 	maker.Asks = append(maker.Asks, selldata)
+	// }
 	return maker, nil
 }
 
