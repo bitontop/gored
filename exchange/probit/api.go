@@ -18,7 +18,7 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-	"github.com/bradfitz/slice"
+	// "github.com/bradfitz/slice"
 )
 
 /*The Base Endpoint URL*/
@@ -209,12 +209,12 @@ func (e *Probit) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	}
 
 	// sort maker's price
-	slice.Sort(maker.Bids[:], func(i, j int) bool {
-		return maker.Bids[i].Rate > maker.Bids[j].Rate
-	})
-	slice.Sort(maker.Asks[:], func(i, j int) bool {
-		return maker.Asks[i].Rate < maker.Asks[j].Rate
-	})
+	// slice.Sort(maker.Bids[:], func(i, j int) bool {
+	// 	return maker.Bids[i].Rate > maker.Bids[j].Rate
+	// })
+	// slice.Sort(maker.Asks[:], func(i, j int) bool {
+	// 	return maker.Asks[i].Rate < maker.Asks[j].Rate
+	// })
 
 	return maker, err
 }
