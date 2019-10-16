@@ -129,7 +129,7 @@ func (e *Huobidm) GetPairsData() error {
 			p := &pair.Pair{}
 			switch e.Source {
 			case exchange.EXCHANGE_API:
-				base := &coin.Coin{000, "USD", "USD", "", "", "", 0, 0}
+				base := coin.GetCoin("USD")
 				target := coin.GetCoin(GetContractName(data.ContractType) + data.Symbol)
 				if base != nil && target != nil {
 					p = pair.GetPair(base, target)
@@ -175,7 +175,7 @@ func (e *Huobidm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
