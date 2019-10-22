@@ -70,10 +70,10 @@ func (e *Huobidm) GetCoinsData() error {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(GetContractName(data.ContractType) + data.Symbol)
+			c = coin.GetCoin(fmt.Sprintf("%s%s", GetContractName(data.ContractType), data.Symbol))
 			if c == nil {
 				c = &coin.Coin{
-					Code:     GetContractName(data.ContractType) + data.Symbol,
+					Code:     fmt.Sprintf("%s%s", GetContractName(data.ContractType), data.Symbol),
 					Name:     data.Symbol,
 					Explorer: data.ContractType,
 				}
@@ -87,7 +87,7 @@ func (e *Huobidm) GetCoinsData() error {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     GetContractName(data.ContractType) + data.Symbol,
+				ExSymbol:     fmt.Sprintf("%s%s", GetContractName(data.ContractType), data.Symbol),
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
@@ -116,7 +116,7 @@ func (e *Huobidm) GetPairsData() error {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %s", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Status != "ok" {
 		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse)
 	}
@@ -135,13 +135,13 @@ func (e *Huobidm) GetPairsData() error {
 					p = pair.GetPair(base, target)
 				}
 			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(data.Symbol + "_" + data.ContractType)
+				p = e.GetPairBySymbol(fmt.Sprintf("%s_%s", data.Symbol, GetContractName(data.ContractType)))
 			}
 			if p != nil {
 				pairConstraint := &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
-					ExSymbol:    data.Symbol + "_" + data.ContractType,
+					ExSymbol:    fmt.Sprintf("%s_%s", data.Symbol, GetContractName(data.ContractType)),
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
 					LotSize:     data.ContractSize,
@@ -167,7 +167,7 @@ func (e *Huobidm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = p.Target.Name + "_" + GetContractName(p.Target.Explorer)
+	mapParams["symbol"] = e.GetSymbolByPair(p)
 	mapParams["type"] = "step0"
 
 	strRequestPath := "/market/depth"
