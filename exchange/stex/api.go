@@ -161,6 +161,7 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
+	// return e.webpageOrderBook(pair) // using webpage orderbook
 	jsonResponse := JsonResponseV3{}
 	orderBook := OrderBook{}
 
@@ -175,12 +176,15 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
+		log.Printf("%s Get Orderbook Err: %v, %v, Using webpage Orderbook...", e.GetName(), err, jsonOrderbook)
+		return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("Get Orderbook Failed: %v", jsonResponse.Message)
+		log.Printf("%s Get Orderbook fail: %v, Using webpage Orderbook...", e.GetName(), jsonOrderbook)
+		return e.webpageOrderBook(pair) //nil, fmt.Errorf("Get Orderbook Failed: %v", jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		log.Printf("%s Get Orderbook Err: %v, %v, Using webpage Orderbook...", e.GetName(), err, jsonOrderbook)
+		return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
@@ -191,11 +195,11 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		//Modify according to type and structure
 		buydata.Rate, err = strconv.ParseFloat(bid.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+			return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
 		buydata.Quantity, err = strconv.ParseFloat(bid.Amount, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		maker.Bids = append(maker.Bids, buydata)
@@ -207,11 +211,94 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 		//Modify according to type and structure
 		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+			return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
 		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		maker.Asks = append(maker.Asks, selldata)
+	}
+
+	// // test two orderbook get the same value
+	// webMaker, _ := e.webpageOrderBook(pair)
+	// for i, _ := range webMaker.Bids {
+	// 	if maker.Bids[i].Rate != webMaker.Bids[i].Rate {
+	// 		log.Printf("Rate not match here: %v->%v", maker.Bids[i].Rate, webMaker.Bids[i].Rate)
+	// 	}
+	// 	if maker.Bids[i].Quantity != webMaker.Bids[i].Quantity {
+	// 		log.Printf("Quantity not match here: %v->%v", maker.Bids[i].Quantity, webMaker.Bids[i].Quantity)
+	// 	}
+	// }
+	// for i, _ := range webMaker.Asks {
+	// 	if maker.Asks[i].Rate != webMaker.Asks[i].Rate {
+	// 		log.Printf("Rate not match here: %v->%v", maker.Asks[i].Rate, webMaker.Asks[i].Rate)
+	// 	}
+	// 	if maker.Asks[i].Quantity != webMaker.Asks[i].Quantity {
+	// 		log.Printf("Quantity not match here: %v->%v", maker.Asks[i].Quantity, webMaker.Asks[i].Quantity)
+	// 	}
+	// }
+
+	return maker, nil
+}
+
+// OrderBook from webpage
+func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
+	orderBookBuy := WebOrderBook{}
+	orderBookSell := WebOrderBook{}
+
+	// strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetIDByPair(pair))
+	strUrlBuy := fmt.Sprintf("https://app.stex.com/en/basic-trade/buy-glass/%v", e.GetPairConstraint(pair).ExID)
+	strUrlSell := fmt.Sprintf("https://app.stex.com/en/basic-trade/sell-glass/%v", e.GetPairConstraint(pair).ExID)
+
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	jsonOrderbookBuy := exchange.HttpGetRequest(strUrlBuy, nil)
+	if err := json.Unmarshal([]byte(jsonOrderbookBuy), &orderBookBuy); err != nil {
+		return nil, fmt.Errorf("%s Get WebOrderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookBuy)
+	} else if len(orderBookBuy) == 0 {
+		return nil, fmt.Errorf("Got empty WebOrderbook: %v", jsonOrderbookBuy)
+	}
+
+	jsonOrderbookSell := exchange.HttpGetRequest(strUrlSell, nil)
+	if err := json.Unmarshal([]byte(jsonOrderbookSell), &orderBookSell); err != nil {
+		return nil, fmt.Errorf("%s Get WebOrderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookSell)
+	} else if len(orderBookSell) == 0 {
+		return nil, fmt.Errorf("Got empty WebOrderbook: %v", jsonOrderbookSell)
+	}
+
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	var err error
+	for _, bid := range orderBookBuy {
+		var buydata exchange.Order
+
+		buydata.Rate, err = strconv.ParseFloat(bid.Price, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		buydata.Quantity, err = strconv.ParseFloat(bid.Amount, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		maker.Bids = append(maker.Bids, buydata)
+	}
+
+	for _, ask := range orderBookSell {
+		var selldata exchange.Order
+
+		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)

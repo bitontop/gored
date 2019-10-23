@@ -85,6 +85,15 @@ type OrderBook struct {
 	} `json:"bid"`
 }
 
+type WebOrderBook []struct {
+	CurrencyPairID   int     `json:"currency_pair_id"`
+	Amount           string  `json:"amount"`
+	Price            string  `json:"price"`
+	Amount2          string  `json:"amount2"`
+	Count            int     `json:"count"`
+	CumulativeAmount float64 `json:"cumulative_amount"`
+}
+
 type AccountBalances struct {
 	Email        string            `json:"email"`
 	Username     string            `json:"username"`
