@@ -47,21 +47,45 @@ type OrderBook struct {
 	} `json:"sell"`
 }
 
-// Old
-
 type AccountBalances []struct {
+	UUID          string  `json:"Uuid"`
 	Currency      string  `json:"Currency"`
 	Balance       float64 `json:"Balance"`
 	Available     float64 `json:"Available"`
 	Pending       float64 `json:"Pending"`
 	CryptoAddress string  `json:"CryptoAddress"`
 	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
 }
 
-type Uuid struct {
-	Id string `json:"uuid"`
+type Uuid struct { // PlaceOrder
+	UUID string `json:"uuid"`
 }
+
+type OrderStatus struct {
+	Type                       string      `json:"Type"`
+	AccountID                  interface{} `json:"AccountId"`
+	CommissionReserved         float64     `json:"CommissionReserved"`
+	CommissionReserveRemaining float64     `json:"CommissionReserveRemaining"`
+	Sentinel                   interface{} `json:"Sentinel"`
+	IsOpen                     bool        `json:"IsOpen"`
+	OrderUUID                  string      `json:"OrderUuid"`
+	Exchange                   string      `json:"Exchange"`
+	Quantity                   float64     `json:"Quantity"`
+	QuantityRemaining          float64     `json:"QuantityRemaining"`
+	Limit                      float64     `json:"Limit"`
+	CommissionPaid             float64     `json:"CommissionPaid"`
+	Price                      float64     `json:"Price"`
+	PricePerUnit               interface{} `json:"PricePerUnit"`
+	Opened                     time.Time   `json:"Opened"`
+	Closed                     interface{} `json:"Closed"`
+	CancelInitiated            bool        `json:"CancelInitiated"`
+	ImmediateOrCancel          bool        `json:"ImmediateOrCancel"`
+	IsConditional              bool        `json:"IsConditional"`
+	Condition                  interface{} `json:"Condition"`
+	ConditionTarget            interface{} `json:"ConditionTarget"`
+}
+
+// old
 
 type PlaceOrder struct {
 	AccountId                  string

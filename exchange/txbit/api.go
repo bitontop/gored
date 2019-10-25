@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -212,14 +213,14 @@ func (e *Txbit) UpdateAllBalances() {
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/v1.1/account/getbalances"
+	strRequest := "/account/getbalances" //https://api.txbit.io/api/account/getbalances
 
 	jsonBalanceReturn := e.ApiKeyGET(strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if !jsonResponse.Success {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
+		log.Printf("%s UpdateAllBalances Failed: %+v, %s", e.GetName(), jsonResponse, jsonResponse.Result)
 		return
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil {
@@ -235,6 +236,7 @@ func (e *Txbit) UpdateAllBalances() {
 	}
 }
 
+// TODO
 func (e *Txbit) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())
@@ -277,7 +279,7 @@ func (e *Txbit) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
-	strRequest := "/v1.1/market/selllimit"
+	strRequest := "/market/selllimit"
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -291,7 +293,7 @@ func (e *Txbit) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      uuid.UUID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -314,7 +316,7 @@ func (e *Txbit) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
-	strRequest := "/v1.1/market/buylimit"
+	strRequest := "/market/buylimit"
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -328,7 +330,7 @@ func (e *Txbit) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      uuid.UUID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -347,8 +349,8 @@ func (e *Txbit) OrderStatus(order *exchange.Order) error {
 	mapParams["uuid"] = order.OrderID
 
 	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
-	strRequest := "/v1.1/account/getorder"
+	orderStatus := OrderStatus{}
+	strRequest := "/account/getorder"
 
 	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
@@ -361,16 +363,18 @@ func (e *Txbit) OrderStatus(order *exchange.Order) error {
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.CancelInitiated {
-		order.Status = exchange.Canceling
-	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
+	if !orderStatus.IsOpen {
 		order.Status = exchange.Canceled
+	} else if orderStatus.CancelInitiated {
+		order.Status = exchange.Canceling
+	} else if orderStatus.QuantityRemaining == orderStatus.Quantity {
+		order.Status = exchange.New
+	} else if orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
+		order.Status = exchange.Partial
 	} else if orderStatus.QuantityRemaining == 0 {
 		order.Status = exchange.Filled
-	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {
-		order.Status = exchange.Partial
 	} else {
-		order.Status = exchange.New
+		order.Status = exchange.Other
 	}
 
 	return nil
@@ -390,7 +394,7 @@ func (e *Txbit) CancelOrder(order *exchange.Order) error {
 
 	jsonResponse := &JsonResponse{}
 	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	strRequest := "/market/cancel"
 
 	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
@@ -426,13 +430,16 @@ func (e *Txbit) ApiKeyGET(strRequestPath string, mapParams map[string]string) st
 	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
 	httpClient := &http.Client{}
 
+	// log.Printf("============strUrl: %v", strUrl)
+	// log.Printf("============signature: %v", signature)
+
 	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
 	request.Header.Add("Content-Type", "application/json;charset=utf-8")
 	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
+	request.Header.Add("apisign", strings.ToUpper(signature))
 
 	response, err := httpClient.Do(request)
 	if nil != err {
