@@ -33,10 +33,11 @@ func Test_Txbit(t *testing.T) {
 	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	Test_Trading(e, pair, 0.0001, 100)
-	Test_OrderStatus(e, pair, "8a19789b-d2bc-4dae-9c49-95e8bb3c16a5")
-	Test_CancelOrder(e, pair, "8a19789b-d2bc-4dae-9c49-95e8bb3c16a5")
-	Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	// Test_Trading(e, pair, 0.001, 0.033)
+	// Test_Trading_Sell(e, pair, 0.05, 0.1)
+	// Test_OrderStatus(e, pair, "b5d7d18c-61fb-479e-8ee6-b222ced93e56")
+	// Test_CancelOrder(e, pair, "b5d7d18c-61fb-479e-8ee6-b222ced93e56")
+	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
 }
 
