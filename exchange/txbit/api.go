@@ -250,7 +250,7 @@ func (e *Txbit) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bo
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
-	strRequest := "/v1.1/account/withdraw"
+	strRequest := "/account/withdraw"
 
 	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {

@@ -36,7 +36,7 @@ func Test_Txbit(t *testing.T) {
 	Test_Trading(e, pair, 0.0001, 100)
 	Test_OrderStatus(e, pair, "8a19789b-d2bc-4dae-9c49-95e8bb3c16a5")
 	Test_CancelOrder(e, pair, "8a19789b-d2bc-4dae-9c49-95e8bb3c16a5")
-	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
 }
 
