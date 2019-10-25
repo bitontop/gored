@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strings"
 	"time"
@@ -272,14 +273,17 @@ func (e *Txbit) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
-
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
 	strRequest := "/market/selllimit"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = e.GetSymbolByPair(pair)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -309,14 +313,17 @@ func (e *Txbit) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
-
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
 	strRequest := "/market/buylimit"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = e.GetSymbolByPair(pair)
+	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["rate"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 
 	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
