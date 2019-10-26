@@ -295,6 +295,7 @@ func (e *Huobi) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bo
 	mapParams["address"] = addr
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["currency"] = e.GetSymbolByCoin(coin)
+	// mapParams["fee"] = fee  // TODO, required parameter
 	if tag != "" {
 		mapParams["tag"] = tag
 	}
