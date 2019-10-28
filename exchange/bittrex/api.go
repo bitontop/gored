@@ -88,7 +88,7 @@ func (e *Bittrex) GetCoinsData() error {
 				ChainType:    exchange.MAINNET,
 				TxFee:        data.TxFee,
 				Withdraw:     data.IsActive,
-				Deposit:      data.IsActive,
+				Deposit:      DEFAULT_DEPOSIT, //data.IsActive, // IsActive==true if deposit==false & withdraw==true
 				Confirmation: data.MinConfirmation,
 				Listed:       true,
 			}
