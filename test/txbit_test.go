@@ -34,7 +34,7 @@ func Test_Txbit(t *testing.T) {
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.001, 0.033)
-	// Test_Trading_Sell(e, pair, 0.05, 0.1)
+	// Test_Trading_Sell(e, pair, 0.050012345678, 0.10001234567)
 	// Test_OrderStatus(e, pair, "b5d7d18c-61fb-479e-8ee6-b222ced93e56")
 	// Test_CancelOrder(e, pair, "b5d7d18c-61fb-479e-8ee6-b222ced93e56")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
