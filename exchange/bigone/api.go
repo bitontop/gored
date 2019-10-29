@@ -280,7 +280,7 @@ func (e *Bigone) UpdateAllBalances() {
 
 // read only withdrawal
 func (e *Bigone) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-	/* if e.API_KEY == "" || e.API_SECRET == "" {
+	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("bigone API Key or Secret Key are nil.")
 		return false
 	}
@@ -291,25 +291,27 @@ func (e *Bigone) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 	strRequest := "/viewer/withdrawals"
 
 	mapParams := make(map[string]string)
-	mapParams["first"] = "20"
-	// mapParams["after"] =
+	mapParams["symbol"] = coin.Code
+	mapParams["target_address"] = addr
+	mapParams["amount"] = fmt.Sprintf("%v", quantity)
+	if tag != "" {
+		mapParams["memo"] = tag
+	}
 
-
-	jsonWithdraw := e.ApiKeyRequest(strRequest, mapParams, "GET")
-	// log.Printf("withdraw return: %v", jsonWithdraw)
-	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
-		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdraw)
+	jsonWithdrawReturn := e.ApiKeyRequest(strRequest, mapParams, "POST")
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawReturn)
 		return false
-	} else if len(jsonResponse.Errors) != 0 {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
+	} else if jsonResponse.Code != 0 {
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdrawReturn)
 		return false
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
-		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		log.Printf("%s Withdraw Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return false
-	} */
+	}
 
-	return false
+	return true
 }
 
 func (e *Bigone) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {

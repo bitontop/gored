@@ -66,27 +66,21 @@ type PlaceOrder struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
-type Withdraw struct {
-	Edges []struct {
-		Node struct {
-			ID            int       `json:"id"`
-			CustomerID    string    `json:"customer_id"`
-			AssetID       string    `json:"asset_id"`
-			Amount        string    `json:"amount"`
-			State         string    `json:"state"`
-			Note          time.Time `json:"note"`
-			Txid          string    `json:"txid"`
-			CompletedAt   time.Time `json:"completed_at"`
-			InsertedAt    time.Time `json:"inserted_at"`
-			IsInternal    bool      `json:"is_internal"`
-			TargetAddress string    `json:"target_address"`
-		} `json:"node"`
-		Cursor string `json:"cursor"`
-	} `json:"edges"`
-	PageInfo struct {
-		EndCursor       string `json:"end_cursor"`
-		StartCursor     string `json:"start_cursor"`
-		HasNextPage     bool   `json:"has_next_page"`
-		HasPreviousPage bool   `json:"has_previous_page"`
-	} `json:"page_info"`
+type Withdraw []struct {
+	ID          int         `json:"id"`
+	CustomerID  int         `json:"customer_id"`
+	AssetUUID   string      `json:"asset_uuid"`
+	Amount      string      `json:"amount"`
+	Recipient   interface{} `json:"recipient"`
+	State       string      `json:"state"`
+	IsInternal  bool        `json:"is_internal"`
+	Note        string      `json:"note"`
+	Kind        string      `json:"kind"`
+	Txid        string      `json:"txid"`
+	Confirms    int         `json:"confirms"`
+	InsertedAt  interface{} `json:"inserted_at"`
+	UpdatedAt   interface{} `json:"updated_at"`
+	CompletedAt interface{} `json:"completed_at"`
+	Commision   interface{} `json:"commision"`
+	Explain     string      `json:"explain"`
 }
