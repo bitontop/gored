@@ -75,6 +75,10 @@ type Exchange interface {
 	GetFee(pair *pair.Pair) float64
 	GetLotSize(pair *pair.Pair) float64
 	GetPriceFilter(pair *pair.Pair) float64
+
+	/***** Ver 2.0  Account Operation *****/
+	// DoAccoutOperation(operation *AccountOperation) error
+
 }
 
 type ExchangeManager struct {

@@ -150,3 +150,40 @@ type MarginBalance struct {
 		Balance  string `json:"balance"`
 	} `json:"list"`
 }
+
+//AccountOperation
+
+type OperationType string
+
+const (
+	Withdraw OperationType = "New"
+	Transfer OperationType = "Transfer" // transfer  between inneral wallet
+)
+
+type WalletType string
+
+const (
+	SpotExchangeWallet WalletType = "SpotExchangeWallet"
+	FiatOTCWallet      WalletType = "FiatOTCWallet"
+	MarginWallet       WalletType = "MarginWallet"
+)
+
+type AccountOperation struct {
+	ID int `json:"id"` //dummy at this moment for
+
+	Type OperationType `json:"type"`
+	Ex   ExchangeName  `json:"exchange_name"`
+	Coin *coin.Coin    `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
+
+	//specific operations
+	// #Transfer
+	TransferFrom        WalletType `json:"transfer_from"`
+	TransferDestination WalletType `json:"transfer_dest"`
+	TransferAmount      string     `json:"transfer_amount"`
+
+	// #Withdraw
+	WithdrawAddress string `json:"withdraw_address"`
+	WithdrawTag     string `json:"withdraw_tag"`
+	WithdrawAmount  string `json:"withdraw_amount"` //here using string instead of float64
+
+}
