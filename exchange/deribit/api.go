@@ -205,6 +205,9 @@ func (e *Deribit) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Deribit) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Deribit) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

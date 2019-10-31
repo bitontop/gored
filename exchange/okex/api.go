@@ -237,6 +237,9 @@ func (e *Okex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Okex) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Okex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		log.Printf("%s API Key, Secret Key or Passphrase are nil", e.GetName())

@@ -204,6 +204,9 @@ func (e *Bitmart) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Bitmart) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Bitmart) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

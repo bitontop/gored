@@ -208,6 +208,9 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Huobi) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Huobi) GetAccounts() string {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())

@@ -77,7 +77,7 @@ type Exchange interface {
 	GetPriceFilter(pair *pair.Pair) float64
 
 	/***** Ver 2.0  Account Operation *****/
-	// DoAccoutOperation(operation *AccountOperation) error
+	DoAccoutOperation(operation *AccountOperation) error
 }
 
 type ExchangeManager struct {

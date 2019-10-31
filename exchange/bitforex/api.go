@@ -232,6 +232,9 @@ func (e *Bitforex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Bitforex) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 
 func (e *Bitforex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {

@@ -224,6 +224,9 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Switcheo) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Switcheo) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

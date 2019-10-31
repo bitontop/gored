@@ -196,7 +196,7 @@ func (e *Virgocx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
@@ -232,6 +232,9 @@ func (e *Virgocx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Virgocx) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Virgocx) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

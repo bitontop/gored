@@ -169,7 +169,7 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
@@ -212,6 +212,9 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Hitbtc) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Hitbtc) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

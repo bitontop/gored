@@ -231,6 +231,9 @@ func (e *Bitstamp) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Bitstamp) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Bitstamp) UpdateAllBalances() {
 
 }

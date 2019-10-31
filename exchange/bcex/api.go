@@ -249,6 +249,9 @@ func (e *Bcex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Bcex) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *Bcex) GetCoinList() []string {
 	jsonResponse := &JsonResponse{}
 	coinsData := make(map[string]*CoinsData)

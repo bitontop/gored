@@ -16,9 +16,10 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
-	"strconv"
+
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
@@ -176,7 +177,7 @@ func (e *TradeSatoshi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
-		Source:         exchange.EXCHANGE_API,
+		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
@@ -211,6 +212,9 @@ func (e *TradeSatoshi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *TradeSatoshi) DoAccoutOperation(operation *AccountOperation) error {
+	return nil
+}
 func (e *TradeSatoshi) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -402,7 +406,7 @@ func (e *TradeSatoshi) CancelOrder(order *exchange.Order) error {
 
 	mapParams := make(map[string]interface{})
 	mapParams["Type"] = "Single"
-	if order == nil{
+	if order == nil {
 		return fmt.Errorf("%s CancelOrder, invalid order: %v", e.GetName(), order)
 	}
 	mapParams["OrderId"] = order.OrderID
