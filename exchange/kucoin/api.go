@@ -359,7 +359,7 @@ func (e *Kucoin) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 	strRequestUrl := "/api/v1/withdrawals"
 
 	mapParams := make(map[string]string)
-	mapParams["currency"] = fmt.Sprintf("%v", strings.ToUpper(coin.Code))
+	mapParams["currency"] = e.GetSymbolByCoin(coin)
 	mapParams["address"] = addr
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 

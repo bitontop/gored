@@ -47,12 +47,12 @@ type AccountBalances []struct {
 }
 
 type WithdrawResponse struct {
-	Amount       float64 `json:"amount"`
-	WithdrawalID int     `json:"withdrawal_id"`
-	Currency     string  `json:"currency"`
-	Result       bool    `json:"result"`
-	Code         int     `json:"code"`
-	Message      string  `json:"message"`
+	Result       bool   `json:"result"`
+	Amount       string `json:"amount"`
+	WithdrawalID string `json:"withdrawal_id"`
+	Currency     string `json:"currency"`
+	Code         int    `json:"code"`
+	Message      string `json:"message"`
 }
 
 type WithdrawFee []struct {
