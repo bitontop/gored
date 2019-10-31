@@ -237,7 +237,7 @@ func (e *Okex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Okex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Okex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Okex) UpdateAllBalances() {

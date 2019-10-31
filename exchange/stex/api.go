@@ -308,7 +308,7 @@ func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Stex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Stex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Stex) UpdateAllBalances() {

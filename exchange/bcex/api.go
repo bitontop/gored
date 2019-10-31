@@ -249,7 +249,7 @@ func (e *Bcex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bcex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bcex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bcex) GetCoinList() []string {

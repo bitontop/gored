@@ -242,7 +242,7 @@ func (e *Gateio) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Gateio) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Gateio) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Gateio) UpdateAllBalances() {

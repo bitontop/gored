@@ -212,7 +212,7 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Hitbtc) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Hitbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Hitbtc) UpdateAllBalances() {

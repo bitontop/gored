@@ -241,7 +241,7 @@ func (e *Ibankdigital) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Ibankdigital) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Ibankdigital) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Ibankdigital) GetAccounts() { //doesn't work well, always got err-msg of signature not valid

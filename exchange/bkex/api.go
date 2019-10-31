@@ -211,7 +211,7 @@ func (e *Bkex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bkex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bkex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bkex) UpdateAllBalances() {

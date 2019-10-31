@@ -231,7 +231,7 @@ func (e *Gemini) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Gemini) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Gemini) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Gemini) UpdateAllBalances() {

@@ -212,7 +212,7 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitmax) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bitmax) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bitmax) AccountGroup() {

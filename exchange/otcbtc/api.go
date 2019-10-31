@@ -242,7 +242,7 @@ func (e *Otcbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Otcbtc) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Otcbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Otcbtc) UpdateAllBalances() {

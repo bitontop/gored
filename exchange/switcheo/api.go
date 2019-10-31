@@ -224,7 +224,7 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Switcheo) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Switcheo) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Switcheo) UpdateAllBalances() {

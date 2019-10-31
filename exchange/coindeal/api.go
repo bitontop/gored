@@ -223,7 +223,7 @@ func (e *Coindeal) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Coindeal) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Coindeal) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Coindeal) UpdateAllBalances() {

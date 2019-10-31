@@ -252,7 +252,7 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Cointiger) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Cointiger) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Cointiger) UpdateAllBalances() {

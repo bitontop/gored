@@ -215,7 +215,7 @@ func (e *Blocktrade) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Blocktrade) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Blocktrade) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Blocktrade) UpdateAllBalances() {

@@ -220,7 +220,7 @@ func (e *Bitz) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitz) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bitz) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bitz) UpdateAllBalances() {

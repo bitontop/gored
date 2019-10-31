@@ -242,7 +242,7 @@ func (e *Tradeogre) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Tradeogre) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Tradeogre) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Tradeogre) UpdateAllBalances() {

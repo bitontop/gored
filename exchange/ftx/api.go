@@ -198,7 +198,7 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Ftx) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Ftx) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Ftx) UpdateAllBalances() {

@@ -251,7 +251,7 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bibox) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bibox) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bibox) UpdateAllBalances() {

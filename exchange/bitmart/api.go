@@ -204,7 +204,7 @@ func (e *Bitmart) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitmart) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bitmart) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bitmart) UpdateAllBalances() {

@@ -200,7 +200,7 @@ func (e *Lbank) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Lbank) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Lbank) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Lbank) UpdateAllBalances() {

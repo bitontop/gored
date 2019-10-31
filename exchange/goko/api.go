@@ -230,7 +230,7 @@ func (e *Goko) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Goko) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Goko) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Goko) UpdateAllBalances() {

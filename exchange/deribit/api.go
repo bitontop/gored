@@ -205,7 +205,7 @@ func (e *Deribit) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Deribit) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Deribit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Deribit) UpdateAllBalances() {

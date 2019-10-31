@@ -202,7 +202,7 @@ func (e *BitATM) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *BitATM) DoAccoutOperation(operation *AccountOperation) error {
+func (e *BitATM) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *BitATM) UpdateAllBalances() {

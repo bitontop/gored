@@ -222,7 +222,7 @@ func (e *Tokok) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Tokok) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Tokok) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

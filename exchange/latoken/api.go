@@ -205,7 +205,7 @@ func (e *Latoken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Latoken) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Latoken) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Latoken) UpdateAllBalances() {

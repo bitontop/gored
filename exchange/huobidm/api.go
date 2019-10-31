@@ -210,7 +210,7 @@ func (e *Huobidm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Huobidm) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Huobidm) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Huobidm) UpdateAllBalances() {

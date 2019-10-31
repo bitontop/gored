@@ -241,7 +241,7 @@ func (e *Bigone) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bigone) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bigone) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bigone) UpdateAllBalances() {

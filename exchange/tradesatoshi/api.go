@@ -212,7 +212,7 @@ func (e *TradeSatoshi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *TradeSatoshi) DoAccoutOperation(operation *AccountOperation) error {
+func (e *TradeSatoshi) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *TradeSatoshi) UpdateAllBalances() {

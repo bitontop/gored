@@ -244,7 +244,7 @@ func (e *Mxc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Mxc) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Mxc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Mxc) UpdateAllBalances() {

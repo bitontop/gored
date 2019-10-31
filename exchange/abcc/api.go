@@ -228,7 +228,7 @@ func (e *Abcc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Abcc) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Abcc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Abcc) UpdateAllBalances() {

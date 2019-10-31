@@ -231,7 +231,7 @@ func (e *Coinbene) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Coinbene) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Coinbene) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Coinbene) UpdateAllBalances() {

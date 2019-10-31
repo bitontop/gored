@@ -222,7 +222,7 @@ func (e *Dragonex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Dragonex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Dragonex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Dragonex) UpdateAllBalances() {

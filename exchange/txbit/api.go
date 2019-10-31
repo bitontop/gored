@@ -206,7 +206,7 @@ func (e *Txbit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Txbit) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Txbit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Txbit) UpdateAllBalances() {

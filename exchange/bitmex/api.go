@@ -223,7 +223,7 @@ func (e *Bitmex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitmex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bitmex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bitmex) UpdateAllBalances() {

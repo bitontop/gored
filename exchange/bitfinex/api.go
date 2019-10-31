@@ -278,7 +278,7 @@ func (e *Bitfinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitfinex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bitfinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Bitfinex) UpdateAllBalances() {

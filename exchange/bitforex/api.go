@@ -232,7 +232,7 @@ func (e *Bitforex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitforex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Bitforex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

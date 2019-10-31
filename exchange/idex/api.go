@@ -212,7 +212,7 @@ func (e *Idex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Idex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Idex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Idex) UpdateAllBalances() {

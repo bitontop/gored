@@ -201,7 +201,7 @@ func (e *Liquid) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Liquid) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Liquid) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Liquid) UpdateAllBalances() {

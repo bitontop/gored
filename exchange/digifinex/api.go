@@ -242,7 +242,7 @@ func (e *Digifinex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Digifinex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Digifinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Digifinex) UpdateAllBalances() {

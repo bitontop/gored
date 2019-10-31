@@ -231,7 +231,7 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Zebitex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Zebitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Zebitex) UpdateAllBalances() {

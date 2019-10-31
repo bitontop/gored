@@ -224,7 +224,7 @@ func Sort(slice interface{}, less func(i, j int) bool) {
 }
 
 /*************** Private API ***************/
-func (e *Probit) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Probit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Probit) UpdateAllBalances() {

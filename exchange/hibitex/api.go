@@ -240,7 +240,7 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Hibitex) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Hibitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Hibitex) UpdateAllBalances() {

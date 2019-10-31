@@ -228,7 +228,7 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Kucoin) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Kucoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

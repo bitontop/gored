@@ -232,7 +232,7 @@ func (e *Virgocx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Virgocx) DoAccoutOperation(operation *AccountOperation) error {
+func (e *Virgocx) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 func (e *Virgocx) UpdateAllBalances() {
