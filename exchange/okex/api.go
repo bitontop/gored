@@ -358,24 +358,24 @@ func (e *Okex) Transfer(coin *coin.Coin, quantity float64, from, to int) bool {
 		return false
 	}
 
-	transfer := Transfer{}
-	strRequest := "/api/account/v3/transfer"
+	// transfer := Transfer{}
+	// strRequest := "/api/account/v3/transfer"
 
-	mapParams := make(map[string]interface{})
-	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["amount"] = quantity
-	mapParams["from"] = from
-	mapParams["to"] = to
+	// mapParams := make(map[string]interface{})
+	// mapParams["currency"] = e.GetSymbolByCoin(coin)
+	// mapParams["amount"] = quantity
+	// mapParams["from"] = from
+	// mapParams["to"] = to
 
-	jsonTransfer := e.ApiKeyRequest("POST", mapParams, strRequest)
+	// jsonTransfer := e.ApiKeyRequest("POST", mapParams, strRequest)
 
-	if err := json.Unmarshal([]byte(jsonTransfer), &transfer); err != nil {
-		log.Printf("%s Transfer Unmarshal Err: %v %v", e.GetName, err, jsonTransfer)
-		return false
-	} else if !transfer.Result {
-		log.Printf("%s Transfer Failed: %v %v", e.GetName, transfer.Code, transfer.Message)
-		return false
-	}
+	// if err := json.Unmarshal([]byte(jsonTransfer), &transfer); err != nil {
+	// 	log.Printf("%s Transfer Unmarshal Err: %v %v", e.GetName, err, jsonTransfer)
+	// 	return false
+	// } else if !transfer.Result {
+	// 	log.Printf("%s Transfer Failed: %v %v", e.GetName, transfer.Code, transfer.Message)
+	// 	return false
+	// }
 
 	return true
 }
