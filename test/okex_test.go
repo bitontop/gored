@@ -45,6 +45,18 @@ func Test_Okex(t *testing.T) {
 		log.Printf("%v", err)
 	}
 
+	// Test Balance ***** only support asset account
+	op2 := &exchange.AccountOperation{
+		Type:        exchange.Balance,
+		Coin:        pair.Target,
+		BalanceType: exchange.AssetWallet,
+	}
+	err = e.DoAccoutOperation(op2)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("Account available: %v, frozen: %v", op2.BalanceAvailable, op2.BalanceFrozen)
+
 	// okex.Socket(pair)
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
