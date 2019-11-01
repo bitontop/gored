@@ -64,10 +64,6 @@ type AccountBalance []struct {
 	freeAmount   float64
 } */
 
-type InnerTrans struct {
-	OrderID string `json:"orderId"`
-}
-
 type Withdraw struct {
 	WithdrawalID string `json:"withdrawalId"`
 }
@@ -110,4 +106,19 @@ type OrderStatus struct {
 
 type CancelOrder struct {
 	CancelledOrderIds []string `json:"cancelledOrderIds"`
+}
+
+type InnerTrans struct {
+	Code    string `json:"code"`
+	Msg     string `json:"msg"`
+	OrderID string `json:"orderId"`
+}
+
+type AccountID []struct {
+	ID        string `json:"id"`
+	Currency  string `json:"currency"`
+	Type      string `json:"type"`
+	Balance   string `json:"balance"`
+	Available string `json:"available"`
+	Holds     string `json:"holds"`
 }

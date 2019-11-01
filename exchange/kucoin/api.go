@@ -229,7 +229,101 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Kucoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.Transfer:
+		return e.transfer(operation)
+	case exchange.Balance:
+		return e.getBalance(operation)
+	}
+	log.Printf("Operation type invalid: %v", operation.Type)
 	return nil
+}
+
+func (e *Kucoin) transfer(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	innerTrans := InnerTrans{}
+	strRequestUrl := "/api/v2/accounts/inner-transfer"
+
+	mapParams := make(map[string]string)
+	mapParams["clientOid"] = "12345"
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.TransferAmount
+	switch operation.TransferFrom {
+	case exchange.AssetWallet:
+		mapParams["from"] = "main"
+	case exchange.SpotWallet:
+		mapParams["from"] = "trade"
+	}
+	switch operation.TransferDestination {
+	case exchange.AssetWallet:
+		mapParams["to"] = "main"
+	case exchange.SpotWallet:
+		mapParams["to"] = "trade"
+	}
+
+	jsonTransferReturn := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
+	// log.Printf("return: %v", jsonTransferReturn)
+	if err := json.Unmarshal([]byte(jsonTransferReturn), &innerTrans); err != nil {
+		return fmt.Errorf("%s InnerTrans Json Unmarshal Err: %v, %v", e.GetName(), err, jsonTransferReturn)
+	} else if innerTrans.Code != "200000" {
+		return fmt.Errorf("%s InnerTrans Failed: %s %v", e.GetName(), innerTrans.Code, innerTrans.Msg)
+	} else if innerTrans.Msg != "" {
+		return fmt.Errorf("%s InnerTrans Failed: %s %v", e.GetName(), innerTrans.Code, innerTrans.Msg)
+	}
+
+	log.Printf("InnerTrans response %v", jsonTransferReturn)
+
+	return nil
+}
+
+func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountID := AccountID{}
+	strRequest := "/api/v1/accounts"
+	accountType := ""
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	if operation.BalanceType == exchange.AssetWallet {
+		mapParams["type"] = "main" // "trade"
+		accountType = "main"
+	} else if operation.BalanceType == exchange.SpotWallet {
+		mapParams["type"] = "trade"
+		accountType = "trade"
+	}
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		return fmt.Errorf("%s getBalance Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+	} else if jsonResponse.Code != "200000" {
+		return fmt.Errorf("%s getBalance Failed: %s", e.GetName(), jsonBalanceReturn)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
+		return fmt.Errorf("%s getBalance Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	for _, account := range accountID {
+		if account.Type == accountType {
+			frozen, err := strconv.ParseFloat(account.Holds, 64)
+			avaliable, err := strconv.ParseFloat(account.Available, 64)
+			if err != nil {
+				return err
+			}
+			operation.BalanceFrozen = frozen
+			operation.BalanceAvailable = avaliable
+			return nil
+		}
+	}
+
+	return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
 }
 
 func (e *Kucoin) UpdateAllBalances() {
@@ -267,85 +361,6 @@ func (e *Kucoin) UpdateAllBalances() {
 			}
 		}
 	}
-}
-
-// for v1 api innerTrans
-/* func (e *Kucoin) GetIDs(coin *coin.Coin, accountType string) string {
-	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
-		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
-		return ""
-	}
-
-	jsonResponse := &JsonResponse{}
-	accountBalance := AccountBalance{}
-	strRequest := "/api/v1/accounts"
-
-	mapParams := make(map[string]string)
-	mapParams["type"] = accountType
-
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
-		log.Printf("%s GetIDs Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
-		return ""
-	} else if jsonResponse.Code != "200000" {
-		log.Printf("%s GetIDs Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
-		return ""
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
-		log.Printf("%s GetIDs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return ""
-	}
-
-	for _, balance := range accountBalance {
-		if balance.Currency == coin.Code && balance.Type == accountType {
-
-			// free, err := strconv.ParseFloat(balance.Available, 64)
-			// if err != nil {
-			// 	log.Printf("%s GetIDs parse failed: %v, %v", e.GetName(), err, balance.Available)
-			// }
-			// innerTransIDs.freeAmount = free
-
-			return balance.ID
-		}
-	}
-
-	log.Printf("%s GetIDs Failed, %v asset not exist: %v", e.GetName(), coin.Code, accountBalance)
-	return ""
-} */
-
-func (e *Kucoin) InnerTrans(quantity float64, coin *coin.Coin, fromType, toType, clientOid string) bool {
-	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
-		log.Printf("Kucoin API Key or Secret Key or passphrase are nil.")
-		return false
-	}
-
-	jsonResponse := JsonResponse{}
-	innerTrans := InnerTrans{}
-	strRequestUrl := "/api/v2/accounts/inner-transfer"
-
-	mapParams := make(map[string]string)
-	mapParams["clientOid"] = clientOid
-	mapParams["currency"] = coin.Code
-	mapParams["from"] = fromType
-	mapParams["to"] = toType
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64) //+ "0"
-
-	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &jsonResponse); err != nil {
-		log.Printf("%s InnerTrans Json Unmarshal Err: %v %v", e.GetName(), err, jsonCreateWithdraw)
-		return false
-	} else if jsonResponse.Code != "200000" {
-		log.Printf("%s InnerTrans Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
-		return false
-	}
-
-	if err := json.Unmarshal(jsonResponse.Data, &innerTrans); err != nil {
-		log.Printf("%s InnerTrans Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return false
-	}
-
-	// log.Printf("the withdraw state response %v and the withdraw id: %v", jsonCreateWithdraw, withdraw.WithdrawalID)
-	return true
 }
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */

@@ -25,14 +25,39 @@ func Test_Kucoin(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	Test_Coins(e)
-	Test_Pairs(e)
-	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Coins(e)
+	// Test_Pairs(e)
+	// Test_Pair(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test Transfer
+	op := &exchange.AccountOperation{
+		Type:                exchange.Transfer,
+		Coin:                pair.Target,
+		TransferAmount:      "0.1",
+		TransferFrom:        exchange.AssetWallet,
+		TransferDestination: exchange.SpotWallet,
+	}
+	err := e.DoAccoutOperation(op)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	// Test Balance
+	op2 := &exchange.AccountOperation{
+		Type:        exchange.Balance,
+		Coin:        pair.Target,
+		BalanceType: exchange.AssetWallet,
+	}
+	err = e.DoAccoutOperation(op2)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("Account available: %v, frozen: %v", op2.BalanceAvailable, op2.BalanceFrozen)
+
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
