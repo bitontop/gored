@@ -151,13 +151,14 @@ type MarginBalance struct {
 	} `json:"list"`
 }
 
-//AccountOperation
+//Account Operation Data Modeling
 
 type OperationType string
 
 const (
 	Withdraw OperationType = "New"
 	Transfer OperationType = "Transfer" // transfer  between inneral wallet
+	Balance  OperationType = "Balance"  // balance(s) of different accounts
 )
 
 type WalletType string
@@ -187,4 +188,8 @@ type AccountOperation struct {
 	WithdrawTag     string `json:"withdraw_tag"`
 	WithdrawAmount  string `json:"withdraw_amount"` //here using string instead of float64
 
+	// #Balance
+	BalanceType      WalletType `json:"balance_type"`
+	BalanceAvailable float64    `json:"balance_available"` //the fund able to do trading
+	BalanceFrozen    float64    `json:"balance_frozen"`    // the fund in order or frozen can't do trading         the total amount of fund should be   BalanceAvailable + BalanceFrozen
 }
