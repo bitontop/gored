@@ -25,12 +25,25 @@ func Test_Okex(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	Test_Coins(e)
-	Test_Pairs(e)
+	// Test_Coins(e)
+	// Test_Pairs(e)
 	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
+
+	// Test Transfer
+	op := &exchange.AccountOperation{
+		Type:                exchange.Transfer,
+		Coin:                pair.Target,
+		TransferAmount:      "0.1",
+		TransferFrom:        exchange.AssetWallet,
+		TransferDestination: exchange.SpotWallet,
+	}
+	err := e.DoAccoutOperation(op)
+	if err != nil {
+		log.Printf("%v", err)
+	}
 
 	// okex.Socket(pair)
 	// Test_Balance(e, pair)

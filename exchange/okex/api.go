@@ -238,8 +238,54 @@ func (e *Okex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Okex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.Transfer:
+		return e.transfer(operation)
+	}
+	log.Printf("Operation type invalid: %v", operation.Type)
 	return nil
 }
+
+func (e *Okex) transfer(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	trans := Transfer{}
+	strRequest := "/api/account/v3/transfer"
+
+	mapParams := make(map[string]interface{})
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.TransferAmount
+	switch operation.TransferFrom {
+	case exchange.AssetWallet:
+		mapParams["from"] = "6"
+	case exchange.SpotWallet:
+		mapParams["from"] = "1"
+	}
+	switch operation.TransferDestination {
+	case exchange.AssetWallet:
+		mapParams["to"] = "6"
+	case exchange.SpotWallet:
+		mapParams["to"] = "1"
+	}
+
+	jsonTransferReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if err := json.Unmarshal([]byte(jsonTransferReturn), &trans); err != nil {
+		errorJson := ErrorMsg{}
+		if err := json.Unmarshal([]byte(jsonTransferReturn), &errorJson); err != nil {
+			return fmt.Errorf("%s Transfer Err: Code: %v Msg: %s", e.GetName(), errorJson.Code, errorJson.Msg)
+		} else {
+			return fmt.Errorf("%s Transfer Json Unmarshal Err: %v %s", e.GetName(), err, jsonTransferReturn)
+		}
+	} else if !trans.Result {
+		return fmt.Errorf("%s Transfer Failed: %v", e.GetName(), jsonTransferReturn)
+	}
+	log.Printf("%s Transfer return: %+v", e.GetName(), jsonTransferReturn)
+
+	return nil
+}
+
 func (e *Okex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		log.Printf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
@@ -250,6 +296,7 @@ func (e *Okex) UpdateAllBalances() {
 	strRequest := "/api/spot/v3/accounts"
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
+	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		errorJson := ErrorMsg{}
 		if err := json.Unmarshal([]byte(jsonBalanceReturn), &errorJson); err != nil {

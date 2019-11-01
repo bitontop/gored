@@ -61,17 +61,6 @@ type WithdrawFee []struct {
 	MinFee   string `json:"min_fee"`
 }
 
-type Transfer struct {
-	TransferID int     `json:"transfer_id"`
-	Currency   string  `json:"currency"`
-	From       int     `json:"from"`
-	Amount     float64 `json:"amount"`
-	To         int     `json:"to"`
-	Result     bool    `json:"result"`
-	Code       int     `json:"code"`
-	Message    string  `json:"message"`
-}
-
 type PlaceOrder struct {
 	OrderID   string `json:"order_id"`
 	ClientOid string `json:"client_oid"`
@@ -106,4 +95,24 @@ type WSOrderBook struct {
 		Timestamp    time.Time  `json:"timestamp"`
 		Checksum     int        `json:"checksum"`
 	} `json:"data"`
+}
+
+// type Transfer struct {
+// 	TransferID int     `json:"transfer_id"`
+// 	Currency   string  `json:"currency"`
+// 	From       int     `json:"from"`
+// 	Amount     float64 `json:"amount"`
+// 	To         int     `json:"to"`
+// 	Result     bool    `json:"result"`
+// 	Code       int     `json:"code"`
+// 	Message    string  `json:"message"`
+// }
+
+type Transfer struct {
+	TransferID string `json:"transfer_id"`
+	Currency   string `json:"currency"`
+	From       string `json:"from"`
+	Amount     string `json:"amount"`
+	To         string `json:"to"`
+	Result     bool   `json:"result"`
 }
