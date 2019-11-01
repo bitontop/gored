@@ -163,9 +163,10 @@ const (
 type WalletType string
 
 const (
-	SpotExchangeWallet WalletType = "SpotExchangeWallet"
-	FiatOTCWallet      WalletType = "FiatOTCWallet"
-	MarginWallet       WalletType = "MarginWallet"
+	AssetWallet   WalletType = "AssetWallet"
+	SpotWallet    WalletType = "SpotWallet"
+	FiatOTCWallet WalletType = "FiatOTCWallet"
+	MarginWallet  WalletType = "MarginWallet"
 )
 
 type AccountOperation struct {
