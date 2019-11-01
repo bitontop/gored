@@ -55,14 +55,14 @@ func (e *Huobi) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	//strRequestUrl := "/v1/common/currencys"
-	strUrl := "https://www.huobi.com/-/x/pro/v1/settings/currencys?r=sqyeinryv8&language=en-US"
+	strRequestUrl := "/v2/reference/currencies"
+	strUrl := API_URL + strRequestUrl //"https://www.huobi.com/-/x/pro/v1/settings/currencys?r=sqyeinryv8&language=en-US"
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if jsonResponse.Status != "ok" {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse)
+	} else if jsonResponse.Code != 200 {
+		return fmt.Errorf("%s Get Coins Failed: %s", e.GetName(), jsonCurrencyReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -72,26 +72,35 @@ func (e *Huobi) GetCoinsData() error {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.DisplayName)
+			c = coin.GetCoin(data.Currency)
 			if c == nil {
 				c = &coin.Coin{}
-				c.Code = data.DisplayName
+				c.Code = data.Currency
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.DisplayName)
+			c = e.GetCoinBySymbol(data.Currency)
 		}
 
 		if c != nil {
+			withdrawStatus := false
+			depositStatus := false
+			confirmation := 2
+			if len(data.Chains) > 0 {
+				withdrawStatus = data.Chains[0].WithdrawStatus == "allowed"
+				depositStatus = data.Chains[0].DepositStatus == "allowed"
+				confirmation = data.Chains[0].NumOfConfirmations
+			}
+
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     data.Name,
+				ExSymbol:     data.Currency,
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     data.WithdrawEnabled,
-				Deposit:      data.DepositEnabled,
-				Confirmation: data.SafeConfirms,
+				Withdraw:     withdrawStatus,
+				Deposit:      depositStatus,
+				Confirmation: confirmation,
 				Listed:       true,
 			}
 			e.SetCoinConstraint(coinConstraint)

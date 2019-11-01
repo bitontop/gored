@@ -9,6 +9,7 @@ import (
 )
 
 type JsonResponse struct {
+	Code    int             `json:"code"`
 	Status  string          `json:"status"`
 	Data    json.RawMessage `json:"data"`
 	Tick    json.RawMessage `json:"tick"`
@@ -17,39 +18,61 @@ type JsonResponse struct {
 }
 
 type CoinsData []struct {
-	CurrencyAddrWithTag     bool          `json:"currency-addr-with-tag"`
-	FastConfirms            int           `json:"fast-confirms"`
-	SafeConfirms            int           `json:"safe-confirms"`
-	CurrencyType            string        `json:"currency-type"`
-	SupportSites            []interface{} `json:"support-sites"`
-	OtcEnable               int           `json:"otc-enable"`
-	CountryDisabled         bool          `json:"country-disabled"`
-	Tags                    interface{}   `json:"tags"`
-	DepositEnabled          bool          `json:"deposit-enabled"`
-	WithdrawEnabled         bool          `json:"withdraw-enabled"`
-	WhiteEnabled            bool          `json:"white-enabled"`
-	WithdrawPrecision       int           `json:"withdraw-precision"`
-	CurrencyPartition       string        `json:"currency-partition"`
-	QuoteCurrency           bool          `json:"quote-currency"`
-	WithdrawMinAmount       string        `json:"withdraw-min-amount"`
-	Weight                  int           `json:"weight"`
-	Visible                 bool          `json:"visible"`
-	ShowPrecision           string        `json:"show-precision"`
-	DepositMinAmount        string        `json:"deposit-min-amount"`
-	VisibleAssetsTimestamp  int64         `json:"visible-assets-timestamp"`
-	DepositEnableTimestamp  int64         `json:"deposit-enable-timestamp"`
-	WithdrawEnableTimestamp int64         `json:"withdraw-enable-timestamp"`
-	Name                    string        `json:"name"`
-	State                   string        `json:"state"`
-	DisplayName             string        `json:"display-name"`
-	DepositDesc             string        `json:"deposit-desc"`
-	WithdrawDesc            string        `json:"withdraw-desc"`
-	SuspendVisibleDesc      string        `json:"suspend-visible-desc"`
-	SuspendDepositDesc      string        `json:"suspend-deposit-desc"`
-	SuspendWithdrawDesc     string        `json:"suspend-withdraw-desc"`
-	CurrencyAddrOneoff      bool          `json:"currency-addr-oneoff,omitempty"`
-	Blockchains             string        `json:"blockchains,omitempty"`
+	Currency string `json:"currency"`
+	Chains   []struct {
+		Chain                  string `json:"chain"`
+		NumOfConfirmations     int    `json:"numOfConfirmations"`
+		NumOfFastConfirmations int    `json:"numOfFastConfirmations"`
+		DepositStatus          string `json:"depositStatus"`
+		MinDepositAmt          string `json:"minDepositAmt"`
+		WithdrawStatus         string `json:"withdrawStatus"`
+		MinWithdrawAmt         string `json:"minWithdrawAmt"`
+		WithdrawPrecision      int    `json:"withdrawPrecision"`
+		MaxWithdrawAmt         string `json:"maxWithdrawAmt"`
+		WithdrawQuotaPerDay    string `json:"withdrawQuotaPerDay"`
+		WithdrawQuotaPerYear   string `json:"withdrawQuotaPerYear"`
+		WithdrawQuotaTotal     string `json:"withdrawQuotaTotal"`
+		WithdrawFeeType        string `json:"withdrawFeeType"`
+		TransactFeeWithdraw    string `json:"transactFeeWithdraw"`
+	} `json:"chains"`
+	InstStatus string `json:"instStatus"`
 }
+
+// doesn't work anymore
+// type CoinsData []struct {
+// 	CurrencyAddrWithTag     bool          `json:"currency-addr-with-tag"`
+// 	FastConfirms            int           `json:"fast-confirms"`
+// 	SafeConfirms            int           `json:"safe-confirms"`
+// 	CurrencyType            string        `json:"currency-type"`
+// 	SupportSites            []interface{} `json:"support-sites"`
+// 	OtcEnable               int           `json:"otc-enable"`
+// 	CountryDisabled         bool          `json:"country-disabled"`
+// 	Tags                    interface{}   `json:"tags"`
+// 	DepositEnabled          bool          `json:"deposit-enabled"`
+// 	WithdrawEnabled         bool          `json:"withdraw-enabled"`
+// 	WhiteEnabled            bool          `json:"white-enabled"`
+// 	WithdrawPrecision       int           `json:"withdraw-precision"`
+// 	CurrencyPartition       string        `json:"currency-partition"`
+// 	QuoteCurrency           bool          `json:"quote-currency"`
+// 	WithdrawMinAmount       string        `json:"withdraw-min-amount"`
+// 	Weight                  int           `json:"weight"`
+// 	Visible                 bool          `json:"visible"`
+// 	ShowPrecision           string        `json:"show-precision"`
+// 	DepositMinAmount        string        `json:"deposit-min-amount"`
+// 	VisibleAssetsTimestamp  int64         `json:"visible-assets-timestamp"`
+// 	DepositEnableTimestamp  int64         `json:"deposit-enable-timestamp"`
+// 	WithdrawEnableTimestamp int64         `json:"withdraw-enable-timestamp"`
+// 	Name                    string        `json:"name"`
+// 	State                   string        `json:"state"`
+// 	DisplayName             string        `json:"display-name"`
+// 	DepositDesc             string        `json:"deposit-desc"`
+// 	WithdrawDesc            string        `json:"withdraw-desc"`
+// 	SuspendVisibleDesc      string        `json:"suspend-visible-desc"`
+// 	SuspendDepositDesc      string        `json:"suspend-deposit-desc"`
+// 	SuspendWithdrawDesc     string        `json:"suspend-withdraw-desc"`
+// 	CurrencyAddrOneoff      bool          `json:"currency-addr-oneoff,omitempty"`
+// 	Blockchains             string        `json:"blockchains,omitempty"`
+// }
 
 type PairsData []struct {
 	BaseCurrency    string `json:"base-currency"`
