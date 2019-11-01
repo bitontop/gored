@@ -315,7 +315,7 @@ func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
 			frozen, err := strconv.ParseFloat(account.Holds, 64)
 			avaliable, err := strconv.ParseFloat(account.Available, 64)
 			if err != nil {
-				return err
+				return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, account)
 			}
 			operation.BalanceFrozen = frozen
 			operation.BalanceAvailable = avaliable

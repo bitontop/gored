@@ -116,3 +116,10 @@ type Transfer struct {
 	To         string `json:"to"`
 	Result     bool   `json:"result"`
 }
+
+type AssetBalance struct {
+	Currency  string `json:"currency"`
+	Available string `json:"available"`
+	Balance   string `json:"balance"`
+	Hold      string `json:"hold"`
+}
