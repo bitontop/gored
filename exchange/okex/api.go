@@ -293,6 +293,7 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
+	symbol := e.GetSymbolByCoin(operation.Coin)
 	balance := AssetBalance{}
 	strRequest := fmt.Sprintf("/api/account/v3/wallet/%s", e.GetSymbolByCoin(operation.Coin))
 
@@ -305,7 +306,7 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 	} else if err := json.Unmarshal([]byte(jsonBalanceReturn), &balance); err != nil {
 		errorJson := ErrorMsg{}
 		if err := json.Unmarshal([]byte(jsonBalanceReturn), &errorJson); err != nil {
-			return fmt.Errorf("%s Transfer Err: Code: %v Msg: %s", e.GetName(), errorJson.Code, errorJson.Msg)
+			return fmt.Errorf("%s Transfer Err: %s", e.GetName(), jsonBalanceReturn)
 		} else {
 			return fmt.Errorf("%s Transfer Json Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
 		}
@@ -313,15 +314,20 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 		return fmt.Errorf("%s Transfer Failed: %v", e.GetName(), jsonBalanceReturn)
 	} */
 
-	frozen, err := strconv.ParseFloat(balance.Hold, 64)
-	avaliable, err := strconv.ParseFloat(balance.Available, 64)
-	if err != nil {
-		return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, balance)
+	for _, account := range balance {
+		if account.Currency == symbol {
+			frozen, err := strconv.ParseFloat(account.Hold, 64)
+			avaliable, err := strconv.ParseFloat(account.Available, 64)
+			if err != nil {
+				return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, balance)
+			}
+			operation.BalanceFrozen = frozen
+			operation.BalanceAvailable = avaliable
+			return nil
+		}
 	}
-	operation.BalanceFrozen = frozen
-	operation.BalanceAvailable = avaliable
 
-	return nil
+	return fmt.Errorf("%s getBalance get %v account balance fail: %v", e.GetName(), symbol, jsonBalanceReturn)
 }
 
 func (e *Okex) UpdateAllBalances() {

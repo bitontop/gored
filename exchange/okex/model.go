@@ -117,9 +117,9 @@ type Transfer struct {
 	Result     bool   `json:"result"`
 }
 
-type AssetBalance struct {
-	Currency  string `json:"currency"`
-	Available string `json:"available"`
+type AssetBalance []struct {
 	Balance   string `json:"balance"`
+	Available string `json:"available"`
+	Currency  string `json:"currency"`
 	Hold      string `json:"hold"`
 }
