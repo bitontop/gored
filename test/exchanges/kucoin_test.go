@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/kucoin"
-	// "./conf"
+	// "../../exchange/kucoin"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -23,11 +23,11 @@ import (
 func Test_Kucoin(t *testing.T) {
 	e := InitKucoin()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|BSV")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
-	// Test_Pair(e, pair)
+	Test_Coins(e)
+	Test_Pairs(e)
+	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
@@ -67,6 +67,10 @@ func InitKucoin() exchange.Exchange {
 	pair.Init()
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	// utils.GetCommonDataFromJSON(config.SourceURI)
+
 	conf.Exchange(exchange.KUCOIN, config)
 
 	ex := kucoin.CreateKucoin(config)

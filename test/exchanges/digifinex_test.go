@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/digifinex"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/digifinex"
-	// "./conf"
+	// "../../exchange/digifinex"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -23,7 +23,7 @@ import (
 func Test_Digifinex(t *testing.T) {
 	e := InitDigifinex()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|BTT")
 
 	Test_Coins(e)
 	Test_Pairs(e)
