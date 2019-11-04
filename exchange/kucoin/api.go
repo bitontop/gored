@@ -302,7 +302,7 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
-	log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
+	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s getBalance Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 	} else if jsonResponse.Code != "200000" {
@@ -326,11 +326,11 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 				BalanceFrozen:    frozen,
 			}
 			operation.BalanceList = append(operation.BalanceList, balance)
-			return nil
 		}
 	}
 
-	return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
+	return nil
+	// return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
 }
 
 func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
