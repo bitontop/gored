@@ -311,7 +311,7 @@ func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
 	}
 
 	for _, account := range accountID {
-		if account.Type == accountType {
+		if account.Type == accountType && account.Currency == mapParams["currency"] {
 			frozen, err := strconv.ParseFloat(account.Holds, 64)
 			avaliable, err := strconv.ParseFloat(account.Available, 64)
 			if err != nil {
