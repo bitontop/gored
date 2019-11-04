@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/okex"
-	// "./conf"
+	// "../../exchange/okex"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
