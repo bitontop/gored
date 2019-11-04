@@ -232,6 +232,8 @@ func (e *Kucoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Transfer:
 		return e.transfer(operation)
+	case exchange.BalanceList:
+		return e.getAllBalance(operation)
 	case exchange.Balance:
 		return e.getBalance(operation)
 	}
@@ -277,6 +279,58 @@ func (e *Kucoin) transfer(operation *exchange.AccountOperation) error {
 	log.Printf("InnerTrans response %v", jsonTransferReturn)
 
 	return nil
+}
+
+func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountID := AccountID{}
+	strRequest := "/api/v1/accounts"
+	accountType := ""
+	// balanceList := []exchange.AssetBalance{}
+
+	mapParams := make(map[string]string)
+	if operation.BalanceType == exchange.AssetWallet {
+		mapParams["type"] = "main" // "trade"
+		accountType = "main"
+	} else if operation.BalanceType == exchange.SpotWallet {
+		mapParams["type"] = "trade"
+		accountType = "trade"
+	}
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		return fmt.Errorf("%s getBalance Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+	} else if jsonResponse.Code != "200000" {
+		return fmt.Errorf("%s getBalance Failed: %s", e.GetName(), jsonBalanceReturn)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
+		return fmt.Errorf("%s getBalance Result Unmarshal Err: %v %v", e.GetName(), err, jsonResponse.Data)
+	}
+
+	for _, account := range accountID {
+		if account.Type == accountType {
+			frozen, err := strconv.ParseFloat(account.Holds, 64)
+			avaliable, err := strconv.ParseFloat(account.Available, 64)
+			if err != nil {
+				return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, account)
+			}
+
+			balance := exchange.AssetBalance{
+				Coin:             e.GetCoinBySymbol(account.Currency),
+				BalanceAvailable: avaliable,
+				BalanceFrozen:    frozen,
+			}
+			operation.BalanceList = append(operation.BalanceList, balance)
+			return nil
+		}
+	}
+
+	return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
 }
 
 func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {

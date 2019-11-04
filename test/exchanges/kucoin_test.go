@@ -23,10 +23,10 @@ import (
 func Test_Kucoin(t *testing.T) {
 	e := InitKucoin()
 
-	pair := pair.GetPairByKey("BTC|BSV")
+	pair := pair.GetPairByKey("BTC|ETH")
 
-	Test_Coins(e)
-	Test_Pairs(e)
+	// Test_Coins(e)
+	// Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
@@ -56,6 +56,19 @@ func Test_Kucoin(t *testing.T) {
 		log.Printf("%v", err)
 	}
 	log.Printf("Account available: %v, frozen: %v", op2.BalanceAvailable, op2.BalanceFrozen)
+
+	// Test AllBalance
+	op3 := &exchange.AccountOperation{
+		Type:        exchange.BalanceList,
+		BalanceType: exchange.AssetWallet,
+	}
+	err = e.DoAccoutOperation(op3)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, balance := range op3.BalanceList {
+		log.Printf("Account balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
