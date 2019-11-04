@@ -156,9 +156,11 @@ type MarginBalance struct {
 type OperationType string
 
 const (
-	Withdraw OperationType = "New"
-	Transfer OperationType = "Transfer" // transfer  between inneral wallet
-	Balance  OperationType = "Balance"  // balance(s) of different accounts
+	Withdraw    OperationType = "New"
+	Transfer    OperationType = "Transfer"   // transfer  between inneral wallet
+	Balance     OperationType = "Balance"    // balance(s) of different accounts
+	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
+
 )
 
 type WalletType string
@@ -175,7 +177,9 @@ type AccountOperation struct {
 
 	Type OperationType `json:"type"`
 	Ex   ExchangeName  `json:"exchange_name"`
-	Coin *coin.Coin    `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
+
+	//#Transfer,Balance,Withdraw
+	Coin *coin.Coin `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
 
 	//specific operations
 	// #Transfer
@@ -189,7 +193,20 @@ type AccountOperation struct {
 	WithdrawAmount  string `json:"withdraw_amount"` //here using string instead of float64
 
 	// #Balance
-	BalanceType      WalletType `json:"balance_type"`
+	BalanceType WalletType `json:"balance_type"`
+
+	//#Single Balance
+	BalanceAvailable float64 `json:"balance_available"` //the fund able to do trading
+	BalanceFrozen    float64 `json:"balance_frozen"`    // the fund in order or frozen can't do trading         the total amount of fund should be   BalanceAvailable + BalanceFrozen
+
+	//#Balance Listed
+	//Coin = nil
+	BalanceList []AssetBalance `json:"balance_list"`
+}
+
+type AssetBalance struct {
+	Coin             *coin.Coin `json:"balance_coin"`
 	BalanceAvailable float64    `json:"balance_available"` //the fund able to do trading
 	BalanceFrozen    float64    `json:"balance_frozen"`    // the fund in order or frozen can't do trading         the total amount of fund should be   BalanceAvailable + BalanceFrozen
+
 }
