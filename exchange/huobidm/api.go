@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -70,10 +71,10 @@ func (e *Huobidm) GetCoinsData() error {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(fmt.Sprintf("%s%s", GetContractName(data.ContractType), data.Symbol))
+			c = coin.GetCoin(GetContractName(data.ContractType) + data.Symbol)
 			if c == nil {
 				c = &coin.Coin{
-					Code:     fmt.Sprintf("%s%s", GetContractName(data.ContractType), data.Symbol),
+					Code:     GetContractName(data.ContractType) + data.Symbol,
 					Name:     data.Symbol,
 					Explorer: data.ContractType,
 				}
@@ -87,7 +88,7 @@ func (e *Huobidm) GetCoinsData() error {
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
-				ExSymbol:     fmt.Sprintf("%s%s", GetContractName(data.ContractType), data.Symbol),
+				ExSymbol:     strings.ToLower(data.Symbol),
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
@@ -99,6 +100,30 @@ func (e *Huobidm) GetCoinsData() error {
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+
+	// add USD
+	c := &coin.Coin{}
+	if e.Source == exchange.EXCHANGE_API {
+		c = &coin.Coin{
+			ID:   311,
+			Code: "USD",
+			Name: "US Dollar",
+		}
+		coin.AddCoin(c)
+	}
+	coinConstraint := &exchange.CoinConstraint{
+		CoinID:       c.ID,
+		Coin:         c,
+		ExSymbol:     "usd",
+		ChainType:    exchange.MAINNET,
+		TxFee:        DEFAULT_TXFEE,
+		Withdraw:     DEFAULT_WITHDRAW,
+		Deposit:      DEFAULT_DEPOSIT,
+		Confirmation: DEFAULT_CONFIRMATION,
+		Listed:       DEFAULT_LISTED,
+	}
+	e.SetCoinConstraint(coinConstraint)
+
 	return nil
 }
 
@@ -116,7 +141,7 @@ func (e *Huobidm) GetPairsData() error {
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %s", e.GetName(), err, jsonSymbolsReturn)
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Status != "ok" {
 		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse)
 	}
@@ -135,13 +160,14 @@ func (e *Huobidm) GetPairsData() error {
 					p = pair.GetPair(base, target)
 				}
 			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(fmt.Sprintf("%s_%s", data.Symbol, GetContractName(data.ContractType)))
+				p = e.GetPairBySymbol(data.Symbol + "_" + data.ContractType)
 			}
 			if p != nil {
 				pairConstraint := &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
-					ExSymbol:    fmt.Sprintf("%s_%s", data.Symbol, GetContractName(data.ContractType)),
+					ExSymbol:    data.Symbol + "_" + data.ContractType,
+					ExID:        strings.ToLower(data.Symbol),
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
 					LotSize:     data.ContractSize,
@@ -210,9 +236,6 @@ func (e *Huobidm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Huobidm) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
 func (e *Huobidm) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
