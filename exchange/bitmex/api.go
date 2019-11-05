@@ -134,30 +134,32 @@ func (e *Bitmex) GetPairsData() error {
 	}
 
 	for _, data := range *pairsData {
-		p := &pair.Pair{}
-		switch e.Source {
-		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.QuoteCurrency)
-			target := coin.GetCoin(data.RootSymbol)
-			if base != nil && target != nil && base != target {
-				p = pair.GetPair(base, target)
+		if (data.QuoteCurrency == "USD" && data.Typ == "FFWCSX") || data.QuoteCurrency != "USD" {
+			p := &pair.Pair{}
+			switch e.Source {
+			case exchange.EXCHANGE_API:
+				base := coin.GetCoin(data.QuoteCurrency)
+				target := coin.GetCoin(data.RootSymbol)
+				if base != nil && target != nil && base != target {
+					p = pair.GetPair(base, target)
+				}
+			case exchange.JSON_FILE:
+				p = e.GetPairBySymbol(data.Symbol)
 			}
-		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data.Symbol)
-		}
 
-		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    data.MakerFee,
-				TakerFee:    data.TakerFee,
-				LotSize:     data.LotSize,
-				PriceFilter: data.TickSize,
-				Listed:      true,
+			if p != nil {
+				pairConstraint := &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    data.MakerFee,
+					TakerFee:    data.TakerFee,
+					LotSize:     data.LotSize,
+					PriceFilter: data.TickSize,
+					Listed:      true,
+				}
+				e.SetPairConstraint(pairConstraint)
 			}
-			e.SetPairConstraint(pairConstraint)
 		}
 	}
 	return nil
