@@ -301,15 +301,15 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 		accountType = "trade"
 	}
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
-	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
-	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s getBalance Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
+		return fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v %v", e.GetName(), err, jsonAllBalanceReturn)
 	} else if jsonResponse.Code != "200000" {
-		return fmt.Errorf("%s getBalance Failed: %s", e.GetName(), jsonBalanceReturn)
+		return fmt.Errorf("%s getAllBalance Failed: %s", e.GetName(), jsonAllBalanceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
-		return fmt.Errorf("%s getBalance Result Unmarshal Err: %v %v", e.GetName(), err, jsonResponse.Data)
+		return fmt.Errorf("%s getAllBalance Result Unmarshal Err: %v %v", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, account := range accountID {

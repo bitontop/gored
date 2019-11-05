@@ -57,6 +57,19 @@ func Test_Okex(t *testing.T) {
 	}
 	log.Printf("Account available: %v, frozen: %v", op2.BalanceAvailable, op2.BalanceFrozen)
 
+	// Test AllBalance
+	op3 := &exchange.AccountOperation{
+		Type:        exchange.BalanceList,
+		BalanceType: exchange.SpotWallet,
+	}
+	err = e.DoAccoutOperation(op3)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, balance := range op3.BalanceList {
+		log.Printf("Account balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
+
 	// okex.Socket(pair)
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)

@@ -241,6 +241,8 @@ func (e *Okex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Transfer:
 		return e.transfer(operation)
+	case exchange.BalanceList:
+		return e.getAllBalance(operation)
 	case exchange.Balance:
 		return e.getBalance(operation)
 	}
@@ -288,6 +290,61 @@ func (e *Okex) transfer(operation *exchange.AccountOperation) error {
 	return nil
 }
 
+func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	balance := AssetBalance{}
+
+	strRequest := ""
+	switch operation.BalanceType {
+	case exchange.AssetWallet:
+		strRequest = "/api/account/v3/wallet" // asset api
+	case exchange.SpotWallet:
+		strRequest = "/api/spot/v3/accounts" // coin api
+	}
+
+	jsonAllBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
+	log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn) //====================
+	if jsonAllBalanceReturn == "[]" {
+		log.Printf("getBalance empty return: %v", jsonAllBalanceReturn)
+		return nil
+	} else if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &balance); err != nil {
+		errorJson := ErrorMsg{}
+		if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &errorJson); err != nil {
+			return fmt.Errorf("%s getAllBalance Err: %s", e.GetName(), jsonAllBalanceReturn)
+		} else {
+			return fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v %s", e.GetName(), err, jsonAllBalanceReturn)
+		}
+	} /* else if !balance.Result {
+		return fmt.Errorf("%s getAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
+	} */
+
+	for _, account := range balance {
+		if account.Balance == "0" {
+			continue
+		}
+		frozen, err := strconv.ParseFloat(account.Hold, 64)
+		avaliable, err := strconv.ParseFloat(account.Available, 64)
+		if err != nil {
+			return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, balance)
+		}
+		operation.BalanceFrozen = frozen
+		operation.BalanceAvailable = avaliable
+
+		b := exchange.AssetBalance{
+			Coin:             e.GetCoinBySymbol(account.Currency),
+			BalanceAvailable: avaliable,
+			BalanceFrozen:    frozen,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
+	return nil
+	// return fmt.Errorf("%s getBalance get %v account balance fail: %v", e.GetName(), symbol, jsonBalanceReturn)
+}
+
 func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
@@ -306,12 +363,12 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 	} else if err := json.Unmarshal([]byte(jsonBalanceReturn), &balance); err != nil {
 		errorJson := ErrorMsg{}
 		if err := json.Unmarshal([]byte(jsonBalanceReturn), &errorJson); err != nil {
-			return fmt.Errorf("%s Transfer Err: %s", e.GetName(), jsonBalanceReturn)
+			return fmt.Errorf("%s getBalance Err: %s", e.GetName(), jsonBalanceReturn)
 		} else {
-			return fmt.Errorf("%s Transfer Json Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
+			return fmt.Errorf("%s getBalance Json Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
 		}
 	} /* else if !balance.Result {
-		return fmt.Errorf("%s Transfer Failed: %v", e.GetName(), jsonBalanceReturn)
+		return fmt.Errorf("%s getBalance Failed: %v", e.GetName(), jsonBalanceReturn)
 	} */
 
 	for _, account := range balance {
