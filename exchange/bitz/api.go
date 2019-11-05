@@ -265,7 +265,34 @@ func (e *Bitz) UpdateAllBalances() {
 }
 
 func (e *Bitz) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-	return false
+	if e.API_KEY == "" || e.API_SECRET == "" || e.TradePassword == "" {
+		log.Printf("%s API Key, Secret Key or TradePassword are nil", e.GetName())
+		return false
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+	strRequest := "/Trade/coinOut"
+
+	mapParams := make(map[string]string)
+	mapParams["coin"] = e.GetSymbolByCoin(coin) /* strconv.FormatFloat(quantity, 'f', -1, 64) */ //===========
+	mapParams["number"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["address"] = addr
+
+	jsonWithdrawReturn := e.ApiKeyPOST(mapParams, strRequest)
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &jsonResponse); err != nil {
+		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawReturn)
+		return false
+	} else if jsonResponse.Status != 200 {
+		log.Printf("%s Withdraw Failed: %v %+v", e.GetName(), jsonResponse.Status, jsonResponse)
+		return false
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		log.Printf("%s Withdraw Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return false
+	}
+
+	return true
 }
 
 func (e *Bitz) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {

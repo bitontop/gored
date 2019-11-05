@@ -103,3 +103,11 @@ type CancelOrder struct {
 		Lock string `json:"lock"`
 	} `json:"assetsInfo"`
 }
+
+type Withdraw struct {
+	ID         int    `json:"id"`
+	Email      string `json:"email"`
+	Coin       string `json:"coin"`
+	NetworkFee string `json:"network_fee"`
+	Eid        int    `json:"eid"`
+}
