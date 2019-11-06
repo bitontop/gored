@@ -403,7 +403,7 @@ func (e *Bitrue) OrderStatus(order *exchange.Order) error {
 		case "PENDING_CANCEL":
 			order.Status = exchange.Canceling
 		case "CANCELED":
-			order.Status = exchange.Canceled
+			order.Status = exchange.Cancelled
 		case "FILLED":
 			order.Status = exchange.Filled
 		case "EXPIRED":

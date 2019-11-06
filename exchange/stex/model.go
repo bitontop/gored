@@ -24,46 +24,48 @@ type JsonResponseV3 struct {
 }
 
 type CoinsData []struct {
-	ID                        int    `json:"id"`
-	Code                      string `json:"code"`
-	Name                      string `json:"name"`
-	Active                    bool   `json:"active"`
-	Delisted                  bool   `json:"delisted"`
-	Precision                 int    `json:"precision"`
-	MinimumWithdrawalAmount   string `json:"minimum_withdrawal_amount"`
-	MinimumDepositAmount      string `json:"minimum_deposit_amount"`
-	DepositFeeCurrencyID      int    `json:"deposit_fee_currency_id"`
-	DepositFeeCurrencyCode    string `json:"deposit_fee_currency_code"`
-	DepositFeeConst           string `json:"deposit_fee_const"`
-	DepositFeePercent         string `json:"deposit_fee_percent"`
-	WithdrawalFeeCurrencyID   int    `json:"withdrawal_fee_currency_id"`
-	WithdrawalFeeCurrencyCode string `json:"withdrawal_fee_currency_code"`
-	WithdrawalFeeConst        string `json:"withdrawal_fee_const"`
-	WithdrawalFeePercent      string `json:"withdrawal_fee_percent"`
-	BlockExplorerURL          string `json:"block_explorer_url"`
+	ID                        int         `json:"id"`
+	Code                      string      `json:"code"`
+	Name                      string      `json:"name"`
+	Active                    bool        `json:"active"`
+	Delisted                  bool        `json:"delisted"`
+	Precision                 int         `json:"precision"`
+	MinimumTxConfirmations    int         `json:"minimum_tx_confirmations"`
+	MinimumWithdrawalAmount   string      `json:"minimum_withdrawal_amount"`
+	MinimumDepositAmount      string      `json:"minimum_deposit_amount"`
+	DepositFeeCurrencyID      int         `json:"deposit_fee_currency_id"`
+	DepositFeeCurrencyCode    string      `json:"deposit_fee_currency_code"`
+	DepositFeeConst           string      `json:"deposit_fee_const"`
+	DepositFeePercent         string      `json:"deposit_fee_percent"`
+	WithdrawalFeeCurrencyID   int         `json:"withdrawal_fee_currency_id"`
+	WithdrawalFeeCurrencyCode string      `json:"withdrawal_fee_currency_code"`
+	WithdrawalFeeConst        string      `json:"withdrawal_fee_const"`
+	WithdrawalFeePercent      string      `json:"withdrawal_fee_percent"`
+	BlockExplorerURL          string      `json:"block_explorer_url"`
+	ProtocolSpecificSettings  interface{} `json:"protocol_specific_settings"`
 }
 
 type PairsData []struct {
-	ID                int         `json:"id"`
-	CurrencyID        int         `json:"currency_id"`
-	CurrencyCode      string      `json:"currency_code"`
-	CurrencyName      string      `json:"currency_name"`
-	MarketCurrencyID  int         `json:"market_currency_id"`
-	MarketCode        string      `json:"market_code"`
-	MarketName        string      `json:"market_name"`
-	MinOrderAmount    string      `json:"min_order_amount"`
-	MinBuyPrice       string      `json:"min_buy_price"`
-	MinSellPrice      string      `json:"min_sell_price"`
-	BuyFeePercent     string      `json:"buy_fee_percent"`
-	SellFeePercent    string      `json:"sell_fee_percent"`
-	Active            bool        `json:"active"`
-	Delisted          bool        `json:"delisted"`
-	PairMessage       interface{} `json:"pair_message"`
-	CurrencyPrecision int         `json:"currency_precision"`
-	MarketPrecision   int         `json:"market_precision"`
-	Symbol            string      `json:"symbol"`
-	GroupName         string      `json:"group_name"`
-	GroupID           int         `json:"group_id"`
+	ID                int    `json:"id"`
+	CurrencyID        int    `json:"currency_id"`
+	CurrencyCode      string `json:"currency_code"`
+	CurrencyName      string `json:"currency_name"`
+	MarketCurrencyID  int    `json:"market_currency_id"`
+	MarketCode        string `json:"market_code"`
+	MarketName        string `json:"market_name"`
+	MinOrderAmount    string `json:"min_order_amount"`
+	MinBuyPrice       string `json:"min_buy_price"`
+	MinSellPrice      string `json:"min_sell_price"`
+	BuyFeePercent     string `json:"buy_fee_percent"`
+	SellFeePercent    string `json:"sell_fee_percent"`
+	Active            bool   `json:"active"`
+	Delisted          bool   `json:"delisted"`
+	PairMessage       string `json:"pair_message"`
+	CurrencyPrecision int    `json:"currency_precision"`
+	MarketPrecision   int    `json:"market_precision"`
+	Symbol            string `json:"symbol"`
+	GroupName         string `json:"group_name"`
+	GroupID           int    `json:"group_id"`
 }
 
 type OrderBook struct {
@@ -117,46 +119,56 @@ type EmptyAccount struct {
 	} `json:"data"`
 }
 
-type Withdraw struct {
-	Code                  string `json:"code"`
-	ID                    int    `json:"id"`
-	Amount                string `json:"amount"`
-	Address               string `json:"address"`
-	WithdrawalFee         string `json:"withdrawal_fee"`
-	WithdrawalFeeCurrency string `json:"withdrawal_fee_currency"`
-	Token                 string `json:"token"`
-	Date                  struct {
-		Date         string `json:"date"`
-		TimezoneType int    `json:"timezone_type"`
-		Timezone     string `json:"timezone"`
-	} `json:"date"`
-	Msg string `json:"msg"`
+type WithdrawResult struct {
+	ID                int         `json:"id"`
+	Amount            string      `json:"amount"`
+	CurrencyID        int         `json:"currency_id"`
+	CurrencyCode      string      `json:"currency_code"`
+	Fee               string      `json:"fee"`
+	FeeCurrencyID     int         `json:"fee_currency_id"`
+	FeeCurrencyCode   string      `json:"fee_currency_code"`
+	Status            string      `json:"status"`
+	CreatedAt         string      `json:"created_at"`
+	CreatedTs         string      `json:"created_ts"`
+	UpdatedAt         string      `json:"updated_at"`
+	UpdatedTs         string      `json:"updated_ts"`
+	Txid              interface{} `json:"txid"`
+	WithdrawalAddress struct {
+		Address                        string `json:"address"`
+		AddressName                    string `json:"address_name"`
+		AdditionalAddressParameter     string `json:"additional_address_parameter"`
+		AdditionalAddressParameterName string `json:"additional_address_parameter_name"`
+	} `json:"withdrawal_address"`
 }
 
 type CancelOrder struct {
-	Funds   map[string]string `json:"funds"`
-	OrderID string            `json:"order_id"`
+	PutIntoProcessingQueue    []*PlaceOrder `json:"put_into_processing_queue"`
+	NotPutIntoProcessingQueue []interface{} `json:"not_put_into_processing_queue"`
+	Message                   string        `json:"message"`
 }
 
-type TradeDetail struct {
-	Funds   map[string]string `json:"funds"`
-	OrderID int64             `json:"order_id"`
+type PlaceOrder struct {
+	ID              int         `json:"id"`
+	CurrencyPairID  int         `json:"currency_pair_id"`
+	Price           string      `json:"price"`
+	TriggerPrice    float64     `json:"trigger_price"`
+	InitialAmount   string      `json:"initial_amount"`
+	ProcessedAmount string      `json:"processed_amount"`
+	Type            string      `json:"type"`
+	OriginalType    string      `json:"original_type"`
+	Created         string      `json:"created"`
+	Timestamp       interface{} `json:"timestamp"`
+	Status          string      `json:"status"`
 }
 
-type ActiveOrder map[string]*OrderDetail
-
-type OrderDetail struct {
-	Pair           string                    `json:"pair"`
-	Type           string                    `json:"type"`
-	OriginalAmount string                    `json:"original_amount"`
-	BuyAmount      interface{}               `json:"buy_amount"`
-	SellAmount     interface{}               `json:"sell_amount"`
-	IsYourOrder    int                       `json:"is_your_order"`
-	Timestamp      int                       `json:"timestamp"`
-	Rates          map[string]*BuySellAmount `json:"rates"`
-}
-
-type BuySellAmount struct {
-	BuyAmount  interface{} `json:"buy_amount"`
-	SellAmount interface{} `json:"sell_amount"`
+type WalletDetails []struct {
+	ID              int    `json:"id"`
+	CurrencyID      int    `json:"currency_id"`
+	Delisted        bool   `json:"delisted"`
+	Disabled        bool   `json:"disabled"`
+	DisableDeposits bool   `json:"disable_deposits"`
+	CurrencyCode    string `json:"currency_code"`
+	Balance         string `json:"balance"`
+	FrozenBalance   string `json:"frozen_balance"`
+	BonusBalance    string `json:"bonus_balance"`
 }

@@ -388,7 +388,7 @@ func (e *Bitforex) OrderStatus(order *exchange.Order) error {
 	} else if str == "3" {
 		order.Status = exchange.Partial
 	} else {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	}
 
 	return nil

@@ -379,7 +379,7 @@ func (e *Gateio) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.Order.Status == "cancelled" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Order.Status == "filled" {
 		order.Status = exchange.Filled
 	} else if orderStatus.Order.Status == "partial-filled" || orderStatus.Order.Status == "partial-canceled" {

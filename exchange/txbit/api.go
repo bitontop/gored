@@ -374,7 +374,7 @@ func (e *Txbit) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if !orderStatus.IsOpen {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.CancelInitiated {
 		order.Status = exchange.Canceling
 	} else if orderStatus.QuantityRemaining == orderStatus.Quantity {

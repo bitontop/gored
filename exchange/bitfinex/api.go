@@ -418,7 +418,7 @@ func (e *Bitfinex) OrderStatus(order *exchange.Order) error {
 			order.Status = exchange.New
 		}
 	} else if orderStatus.IsCancelled {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else {
 		order.Status = exchange.Other
 	}

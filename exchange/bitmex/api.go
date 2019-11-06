@@ -342,7 +342,7 @@ func (e *Bitmex) OrderStatus(order *exchange.Order) error {
 				if orderStatus.OrdStatus == "Filled" {
 					order.Status = exchange.Filled
 				} else if orderStatus.OrdStatus == "Canceled" {
-					order.Status = exchange.Canceled
+					order.Status = exchange.Cancelled
 				} else if orderStatus.OrdStatus == "Partial" {
 					order.Status = exchange.Partial
 				} else {

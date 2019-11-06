@@ -351,7 +351,7 @@ func (e *Hitbtc) OrderStatus(order *exchange.Order) error {
 		} else if orderStatus.Status == "partiallyFilled" {
 			order.Status = exchange.Partial
 		} else if orderStatus.Status == "canceled" {
-			order.Status = exchange.Canceled
+			order.Status = exchange.Cancelled
 		} else if orderStatus.Status == "expired" {
 			order.Status = exchange.Expired
 		} else if orderStatus.Status == "suspended" {

@@ -405,7 +405,7 @@ func (e *Cointiger) OrderStatus(order *exchange.Order) error {
 	}
 
 	if orderStatus.Status == 4 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Status == 2 {
 		order.Status = exchange.Filled
 	} else if orderStatus.Status == 3 {

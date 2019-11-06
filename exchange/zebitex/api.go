@@ -463,7 +463,7 @@ func (e *Zebitex) OrderStatus(order *exchange.Order) error {
 			state := strings.ToUpper(orderItem.State)
 			switch state {
 			case "CANCELED":
-				order.Status = exchange.Canceled
+				order.Status = exchange.Cancelled
 			case "FILLED":
 				order.Status = exchange.Filled
 			case "PARTIALLY_FILLED":

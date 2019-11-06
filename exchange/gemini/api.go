@@ -374,7 +374,7 @@ func (e *Gemini) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.IsCancelled {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if !orderStatus.IsLive && orderStatus.RemainingAmount != "0" {
 		order.Status = exchange.Canceling
 	} else if orderStatus.RemainingAmount == "0" {

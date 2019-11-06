@@ -382,7 +382,7 @@ func (e *Bitz) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.Status == 0 {
 		order.Status = exchange.New
 	} else if orderStatus.Status == 3 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else {
 		order.Status = exchange.Other
 	}

@@ -385,7 +385,7 @@ func (e *Otcbtc) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.State == "cancel" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.State == "done" {
 		order.Status = exchange.Filled
 	} else if orderStatus.State == "wait" {

@@ -443,7 +443,7 @@ func (e *Ibankdigital) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.State == "canceled" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.State == "filled" {
 		order.Status = exchange.Filled
 	} else if orderStatus.State == "partial-filled" || orderStatus.State == "partial-canceled" {

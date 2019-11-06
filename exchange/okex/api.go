@@ -581,7 +581,7 @@ func (e *Okex) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.Status == "canceling" {
 		order.Status = exchange.Canceling
 	} else if orderStatus.Status == "cancelled" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Status == "failure" {
 		order.Status = exchange.Rejected
 	} else {

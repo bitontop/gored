@@ -334,7 +334,7 @@ func (e *Bitmart) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.Status == 4 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Status == 0 {
 		order.Status = exchange.Other
 	} else if orderStatus.Status == 3 {

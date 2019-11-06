@@ -572,7 +572,7 @@ func (e *Kucoin) OrderStatus(order *exchange.Order) error {
 			order.Status = exchange.Other
 		}
 	case "CANCEL":
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	default:
 		order.Status = exchange.Other
 	}

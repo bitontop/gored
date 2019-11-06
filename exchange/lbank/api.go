@@ -355,7 +355,7 @@ func (e *Lbank) OrderStatus(order *exchange.Order) error {
 	for _, v := range orderStatus.Orders {
 		if v.OrderID == order.OrderID {
 			if v.Status == -1 {
-				order.Status = exchange.Canceled
+				order.Status = exchange.Cancelled
 			} else if v.Status == 0 {
 				order.Status = exchange.New
 			} else if v.Status == 1 {

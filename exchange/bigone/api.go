@@ -430,7 +430,7 @@ func (e *Bigone) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.State == "FILLED" {
 		order.Status = exchange.Filled
 	} else if orderStatus.State == "CANCELLED" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if filledF == 0 {
 		order.Status = exchange.New
 	} else if orderStatus.State == "PENDING" {

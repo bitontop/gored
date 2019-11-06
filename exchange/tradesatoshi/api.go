@@ -377,7 +377,7 @@ func (e *TradeSatoshi) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.Status == "Canceled" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Status == "Filled" {
 		order.Status = exchange.Filled
 	} else if orderStatus.Status == "Partial" {

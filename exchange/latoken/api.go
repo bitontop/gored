@@ -334,7 +334,7 @@ func (e *Latoken) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.ExecutedAmount == 0 {
 		order.Status = exchange.New
 	} else if strings.ToLower(orderStatus.OrderStatus) == "cancelled" { // need to verify this
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else {
 		order.Status = exchange.Other
 	}

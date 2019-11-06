@@ -376,7 +376,7 @@ func (e *Tokok) OrderStatus(order *exchange.Order) error {
 
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.Status == 4 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Status == 2 {
 		order.Status = exchange.Filled
 	} else if orderStatus.Status == 1 || orderStatus.Status == 3 {

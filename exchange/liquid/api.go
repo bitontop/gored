@@ -341,7 +341,7 @@ func (e *Liquid) OrderStatus(order *exchange.Order) error {
 		case "partially_filled":
 			order.Status = exchange.Partial
 		case "cancelled":
-			order.Status = exchange.Canceled
+			order.Status = exchange.Cancelled
 		case "filled":
 			order.Status = exchange.Filled
 		default:

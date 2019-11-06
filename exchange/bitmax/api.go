@@ -411,7 +411,7 @@ func (e *Bitmax) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.Status == "Filled" {
 		order.Status = exchange.Filled
 	} else if orderStatus.Status == "Canceled" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else {
 		order.Status = exchange.Other
 	}
