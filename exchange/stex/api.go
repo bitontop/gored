@@ -137,8 +137,8 @@ func (e *Stex) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil && !data.Delisted {
-			makerFee, err := strconv.ParseFloat(data.BuyFeePercent, 64)
-			takerFee, err := strconv.ParseFloat(data.SellFeePercent, 64)
+			makerFee, _ := strconv.ParseFloat(data.BuyFeePercent, 64)
+			takerFee, _ := strconv.ParseFloat(data.SellFeePercent, 64)
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
