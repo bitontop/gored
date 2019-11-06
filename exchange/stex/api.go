@@ -168,7 +168,7 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonResponse := JsonResponseV3{}
 	orderBook := OrderBook{}
 
-	strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetIDByPair(pair))
+	strRequestUrl := fmt.Sprintf("/public/orderbook/%s", e.GetIDByPair(pair))
 	strUrl := API3_URL + strRequestUrl
 
 	maker := &exchange.Maker{
@@ -179,14 +179,14 @@ func (e *Stex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-		log.Printf("%s Get Orderbook Err: %v, %v, Using webpage Orderbook...", e.GetName(), err, jsonOrderbook)
+		log.Printf("%s Get Orderbook Err: %v, %s, Using webpage Orderbook...", e.GetName(), err, jsonOrderbook)
 		return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if !jsonResponse.Success {
-		log.Printf("%s Get Orderbook fail: %v, Using webpage Orderbook...", e.GetName(), jsonOrderbook)
+		log.Printf("%s Get Orderbook fail: %s, Using webpage Orderbook...", e.GetName(), jsonOrderbook)
 		return e.webpageOrderBook(pair) //nil, fmt.Errorf("Get Orderbook Failed: %v", jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
-		log.Printf("%s Get Orderbook Err: %v, %v, Using webpage Orderbook...", e.GetName(), err, jsonOrderbook)
+		log.Printf("%s Get Orderbook Err: %v, %s, Using webpage Orderbook...", e.GetName(), err, jsonOrderbook)
 		return e.webpageOrderBook(pair) //nil, fmt.Errorf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
@@ -340,7 +340,7 @@ func (e *Stex) UpdateAllBalances() {
 	}
 
 	for _, data := range accountBalance {
-		c := e.GetCoinBySymbol(data.CurrencyCode)
+		c := e.GetCoinBySymbol(fmt.Sprintf("%d", data.CurrencyID))
 		if c != nil {
 			balance, err := strconv.ParseFloat(data.Balance, 64)
 			if err != nil {
@@ -390,7 +390,7 @@ func (e *Stex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	placeOrder := PlaceOrder{}
 	jsonResponse := JsonResponseV3{}
 
-	strRequestUrl := fmt.Sprintf("/trading/orders/%d", e.GetIDByPair(pair))
+	strRequestUrl := fmt.Sprintf("/trading/orders/%s", e.GetIDByPair(pair))
 
 	mapParams := make(map[string]interface{})
 	mapParams["type"] = "SELL"
@@ -428,7 +428,7 @@ func (e *Stex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	placeOrder := PlaceOrder{}
 	jsonResponse := JsonResponseV3{}
 
-	strRequestUrl := fmt.Sprintf("/trading/orders/%d", e.GetIDByPair(pair))
+	strRequestUrl := fmt.Sprintf("/trading/orders/%s", e.GetIDByPair(pair))
 
 	mapParams := make(map[string]interface{})
 	mapParams["type"] = "BUY"
@@ -466,7 +466,7 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 	jsonResponse := &JsonResponseV3{}
 	placeOrder := PlaceOrder{}
 
-	strRequestUrl := fmt.Sprintf("/trading/order/%d", order.OrderID)
+	strRequestUrl := fmt.Sprintf("/trading/order/%s", order.OrderID)
 
 	jsonOrderStatus := e.ApiKeyGet(nil, strRequestUrl)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
@@ -482,7 +482,7 @@ func (e *Stex) OrderStatus(order *exchange.Order) error {
 	if placeOrder.Status == "PROCESSING" {
 		order.Status = exchange.Other
 	} else if placeOrder.Status == "PENDING" {
-		order.Status = exchange.New
+		order.Status = exchange.Cancelled
 	} else if placeOrder.Status == "FINISHED" {
 		order.Status = exchange.Filled
 	} else if placeOrder.Status == "PARTIAL" {
@@ -506,7 +506,7 @@ func (e *Stex) CancelOrder(order *exchange.Order) error {
 	jsonResponse := &JsonResponseV3{}
 	cancelOrder := CancelOrder{}
 
-	strRequestUrl := fmt.Sprintf("/trading/order/%d", order.OrderID)
+	strRequestUrl := fmt.Sprintf("/trading/order/%s", order.OrderID)
 
 	jsonCancelOrder := e.ApiKeyRequest("DELETE", nil, strRequestUrl)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
