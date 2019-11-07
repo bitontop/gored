@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/mxc"
-	// "./conf"
+	// "../../exchange/mxc"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -22,18 +22,44 @@ import (
 
 func Test_Mxc(t *testing.T) {
 	e := InitMxc()
+	var err error
 
-	pair := pair.GetPairByKey("BTC|BTT")
+	pair := pair.GetPairByKey("BTC|ETH")
 
-	Test_Coins(e)
-	Test_Pairs(e)
-	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Coins(e)
+	// Test_Pairs(e)
+	// Test_Pair(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
+
+	// Test Balance
+	op2 := &exchange.AccountOperation{
+		Type:        exchange.Balance,
+		Coin:        pair.Target,
+		BalanceType: exchange.AssetWallet,
+	}
+	err = e.DoAccoutOperation(op2)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("Account available: %v, frozen: %v", op2.BalanceAvailable, op2.BalanceFrozen)
+
+	// Test AllBalance
+	op3 := &exchange.AccountOperation{
+		Type:        exchange.BalanceList,
+		BalanceType: exchange.SpotWallet,
+	}
+	err = e.DoAccoutOperation(op3)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, balance := range op3.BalanceList {
+		log.Printf("Account balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
 
 	// Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Trading(e, pair, 0.00001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 

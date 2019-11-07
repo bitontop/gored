@@ -246,8 +246,7 @@ func (e *Okex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	case exchange.Balance:
 		return e.getBalance(operation)
 	}
-	log.Printf("Operation type invalid: %v", operation.Type)
-	return nil
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
 
 func (e *Okex) transfer(operation *exchange.AccountOperation) error {
