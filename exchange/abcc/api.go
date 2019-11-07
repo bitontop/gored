@@ -391,7 +391,7 @@ func (e *Abcc) OrderStatus(order *exchange.Order) error {
 	if orderStatus.CancelInitiated {
 		order.Status = exchange.Canceling
 	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.QuantityRemaining == 0 {
 		order.Status = exchange.Filled
 	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {

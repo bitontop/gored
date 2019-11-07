@@ -392,7 +392,7 @@ func (e *Coineal) OrderStatus(order *exchange.Order) error {
 	order.StatusMessage = jsonOrderStatus
 	status := orderStatus.OrderInfo.Status
 	if status == 4 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if status == 5 {
 		order.Status = exchange.Canceling
 	} else if status == 6 {

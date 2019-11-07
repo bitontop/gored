@@ -405,7 +405,7 @@ func (e *Biki) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.OrderInfo.Status == 3 {
 		order.Status = exchange.Partial
 	} else if orderStatus.OrderInfo.Status == 4 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.OrderInfo.Status == 5 {
 		order.Status = exchange.Canceling
 	} else if orderStatus.OrderInfo.Status == 6 {

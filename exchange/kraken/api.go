@@ -407,7 +407,7 @@ func (e *Kraken) OrderStatus(order *exchange.Order) error {
 	for _, orders := range orderStatus {
 		vol, _ := strconv.ParseFloat(orders.Volume, 64)
 		if orders.Status == "canceled" {
-			order.Status = exchange.Canceled
+			order.Status = exchange.Cancelled
 		} else if vol == orders.VolumeExecuted {
 			order.Status = exchange.Filled
 		} else if orders.VolumeExecuted != 0 && orders.Status == "open" {

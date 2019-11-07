@@ -374,7 +374,7 @@ func (e *Dcoin) OrderStatus(order *exchange.Order) error {
 	}
 
 	if orderStatus.OrderInfo.Status == 4 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.OrderInfo.Status == 5 {
 		order.Status = exchange.Canceling
 	} else if orderStatus.OrderInfo.Status == 2 {

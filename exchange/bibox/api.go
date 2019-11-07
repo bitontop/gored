@@ -530,7 +530,7 @@ func (e *Bibox) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus[0].Result.Status == 4 {
 		order.Status = exchange.Canceling
 	} else if orderStatus[0].Result.Status == 5 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus[0].Result.Status == 6 {
 		order.Status = exchange.Canceling
 

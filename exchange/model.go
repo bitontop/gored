@@ -24,6 +24,7 @@ type Config struct {
 	Account_ID    string
 	API_KEY       string
 	API_SECRET    string
+	ExpireTS      int64
 	Two_Factor    string
 	Passphrase    string //Memo for bitmart
 	TradePassword string
@@ -78,7 +79,7 @@ const (
 	Filled    OrderStatus = "Filled"
 	Partial   OrderStatus = "Partial"
 	Canceling OrderStatus = "Canceling"
-	Canceled  OrderStatus = "Canceled"
+	Cancelled OrderStatus = "Cancelled"
 	Rejected  OrderStatus = "Rejected"
 	Expired   OrderStatus = "Expired"
 	Other     OrderStatus = "Other"

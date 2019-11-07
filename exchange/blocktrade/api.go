@@ -383,7 +383,7 @@ func (e *Blocktrade) OrderStatus(order *exchange.Order) error {
 	}
 
 	if orderStatus.Status == "CANCELED" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Status == "FILLED" {
 		order.Status = exchange.Filled
 	} else if orderStatus.Status == "PARTIALLY_FILLED" {

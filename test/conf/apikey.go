@@ -27,8 +27,9 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		break
 
 	case exchange.STEX:
-		config.API_KEY = ""
-		config.API_SECRET = ""
+		config.API_KEY = " "
+		config.API_SECRET = "S2S Token"
+		config.ExpireTS = 1573081822
 		break
 
 	case exchange.BITMEX:

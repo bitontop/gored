@@ -399,7 +399,7 @@ func (e *Mxc) OrderStatus(order *exchange.Order) error {
 		case "5":
 			order.Status = exchange.Canceling
 		case "4":
-			order.Status = exchange.Canceled
+			order.Status = exchange.Cancelled
 		case "2":
 			order.Status = exchange.Filled
 		default:

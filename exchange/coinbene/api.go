@@ -393,7 +393,7 @@ func (e *Coinbene) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.Order.Orderstatus == "partialFilled" {
 		order.Status = exchange.Partial
 	} else if orderStatus.Order.Orderstatus == "canceled" || orderStatus.Order.Orderstatus == "partialCanceled" {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Order.Orderstatus == "unfilled" {
 		order.Status = exchange.New
 	} else {

@@ -375,7 +375,7 @@ func (e *BitATM) OrderStatus(order *exchange.Order) error {
 	} else if orderStatus.Orderstatus == 1 {
 		order.Status = exchange.Partial
 	} else if orderStatus.Orderstatus == 2 {
-		order.Status = exchange.Canceled
+		order.Status = exchange.Cancelled
 	} else if orderStatus.Orderstatus == 3 {
 		order.Status = exchange.Filled
 	} else if orderStatus.Orderstatus == 4 {

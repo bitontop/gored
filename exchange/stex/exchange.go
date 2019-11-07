@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"sync"
+	"time"
 
 	cmap "github.com/orcaman/concurrent-map"
 
@@ -26,6 +27,7 @@ type Stex struct {
 
 	API_KEY    string
 	API_SECRET string
+	ExpireTS   int64
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -48,6 +50,7 @@ func CreateStex(config *exchange.Config) *Stex {
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
+			ExpireTS:   config.ExpireTS,
 			Source:     config.Source,
 			SourceURI:  config.SourceURI,
 		}
@@ -59,6 +62,10 @@ func CreateStex(config *exchange.Config) *Stex {
 		if err := instance.InitData(); err != nil {
 			log.Printf("%v", err)
 			instance = nil
+		}
+
+		if time.Now().Unix()-instance.ExpireTS <= (30 * 24 * 60 * 60) {
+			log.Printf("API Key will be expired in %d days", (time.Now().Unix()-instance.ExpireTS)/(24*60*60))
 		}
 	})
 	return instance
