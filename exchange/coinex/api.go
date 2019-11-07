@@ -265,7 +265,7 @@ func (e *Coinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
 
-func (e *Coinex) Withdraw(operation *exchange.AccountOperation) error {
+func (e *Coinex) doWithdraw(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("coinex API Key or Secret Key are nil.")
 	}
@@ -277,14 +277,14 @@ func (e *Coinex) Withdraw(operation *exchange.AccountOperation) error {
 
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
-	mapParams["coin_type"] = e.GetSymbolByCoin(coin)
+	mapParams["coin_type"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["transfer_method"] = "onchain"
-	mapParams["actual_amount"] = fmt.Sprintf("%.8f", quantity)
+	mapParams["actual_amount"] = fmt.Sprintf("%.8f", operation.WithdrawAmount)
 
-	if tag != "" {
-		mapParams["coin_address"] = fmt.Sprintf("%s:%s", addr, tag)
+	if operation.WithdrawTag != "" {
+		mapParams["coin_address"] = fmt.Sprintf("%s:%s", operation.WithdrawAddress, operation.WithdrawTag)
 	} else {
-		mapParams["coin_address"] = addr
+		mapParams["coin_address"] = operation.WithdrawAddress
 	}
 
 	jsonWithdraw := e.ApiKeyPost(strRequestUrl, mapParams)
