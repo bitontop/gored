@@ -249,6 +249,63 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Coinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Coinex) Withdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("coinex API Key or Secret Key are nil.")
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+
+	strRequestUrl := "/v1/balance/coin/withdraw"
+
+	mapParams := make(map[string]string)
+	mapParams["access_id"] = e.API_KEY
+	mapParams["coin_type"] = e.GetSymbolByCoin(coin)
+	mapParams["transfer_method"] = "onchain"
+	mapParams["actual_amount"] = fmt.Sprintf("%.8f", quantity)
+
+	if tag != "" {
+		mapParams["coin_address"] = fmt.Sprintf("%s:%s", addr, tag)
+	} else {
+		mapParams["coin_address"] = addr
+	}
+
+	jsonWithdraw := e.ApiKeyPost(strRequestUrl, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName())
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
 	return nil
 }
 

@@ -157,7 +157,7 @@ type MarginBalance struct {
 type OperationType string
 
 const (
-	Withdraw    OperationType = "New"
+	Withdraw    OperationType = "Withdraw"
 	Transfer    OperationType = "Transfer"   // transfer  between inneral wallet
 	Balance     OperationType = "Balance"    // balance(s) of different accounts
 	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
@@ -192,6 +192,7 @@ type AccountOperation struct {
 	WithdrawAddress string `json:"withdraw_address"`
 	WithdrawTag     string `json:"withdraw_tag"`
 	WithdrawAmount  string `json:"withdraw_amount"` //here using string instead of float64
+	WithdrawID      string `json:"withdraw_id"`
 
 	// #Balance
 	BalanceType WalletType `json:"balance_type"`
@@ -203,6 +204,13 @@ type AccountOperation struct {
 	//#Balance Listed
 	//Coin = nil
 	BalanceList []AssetBalance `json:"balance_list"`
+
+	//#Debug
+	DebugMode    bool   `json:"debug mode"`
+	RequestURI   string `json:"request_uri"`
+	MapParams    string `json:"map_params"`
+	CallResponce string `json:"call_responce"`
+	Error        error  `json:"error"`
 }
 
 type AssetBalance struct {
