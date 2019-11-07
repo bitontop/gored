@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	API_URL string = "https://www.mxc.com"
+	API_URL string = "https://www.mxc.co" //"https://www.mxc.com"
 )
 
 /*API Base Knowledge
@@ -261,10 +261,10 @@ func (e *Mxc) UpdateAllBalances() {
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
-	} else if jsonResponse.Code != 200 {
+	} /* else if jsonResponse.Code != 200 {
 		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse)
 		return
-	}
+	} */
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Data Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -310,7 +310,7 @@ func (e *Mxc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 200 {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitSell Failed: %s", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
@@ -347,7 +347,7 @@ func (e *Mxc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 200 {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %s", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
@@ -459,13 +459,16 @@ func (e *Mxc) ApiKeyRequest(strMethod string, strRequestPath string, mapParams m
 	signature := exchange.ComputeMD5(authParams)
 	mapParams["sign"] = signature
 
-	jsonParams := ""
-	if nil != mapParams {
-		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
-	}
+	// jsonParams := ""
+	// if nil != mapParams {
+	// 	bytesParams, _ := json.Marshal(mapParams)
+	// 	jsonParams = string(bytesParams)
+	// }
 
-	request, err := http.NewRequest("GET", strUrl, strings.NewReader(jsonParams))
+	strUrl = strUrl + "?" + exchange.Map2UrlQuery(mapParams)
+
+	// request, err := http.NewRequest("GET", strUrl, strings.NewReader(jsonParams))
+	request, err := http.NewRequest(strMethod, strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
