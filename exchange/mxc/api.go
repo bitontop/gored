@@ -392,6 +392,8 @@ func (e *Mxc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
+	// log.Printf("mapParams: %+v", mapParams)
+
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
@@ -540,7 +542,7 @@ func (e *Mxc) ApiKeyRequest(strMethod string, strRequestPath string, mapParams m
 	strUrl := API_URL + strRequestPath // + "?" + exchange.Map2UrlQuery(mapParams)
 
 	mapParams["api_key"] = e.API_KEY
-	mapParams["req_time"] = fmt.Sprintf("%d", time.Now().UnixNano()) //"1234567890"
+	mapParams["req_time"] = fmt.Sprintf("%d", time.Now().Unix()) //"1234567890"
 	authParams := exchange.Map2UrlQuery(mapParams)
 	authParams += "&api_secret=" + e.API_SECRET
 
@@ -555,7 +557,7 @@ func (e *Mxc) ApiKeyRequest(strMethod string, strRequestPath string, mapParams m
 
 	strUrl = strUrl + "?" + exchange.Map2UrlQuery(mapParams)
 
-	// request, err := http.NewRequest("GET", strUrl, strings.NewReader(jsonParams))
+	// request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
 	request, err := http.NewRequest(strMethod, strUrl, nil)
 	if nil != err {
 		return err.Error()
