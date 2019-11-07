@@ -14,30 +14,30 @@ type JsonResponse struct {
 
 /********** Public API Structure**********/
 type Tick struct {
-	Name         string      `json:"name"`
-	BaseUnit     string      `json:"base_unit"`
-	QuoteUnit    string      `json:"quote_unit"`
-	AskFee       float64     `json:"ask_fee"`
-	BidFee       float64     `json:"bid_fee"`
-	Low          string      `json:"low"`
-	High         string      `json:"high"`
-	Last         string      `json:"last"`
-	VisualLow    string      `json:"visualLow"`
-	VisualHigh   string      `json:"visualHigh"`
-	VisualLast   string      `json:"visualLast"`
-	At           int         `json:"at"`
-	Open         string      `json:"open"`
-	Volume       interface{} `json:"volume"` //接口返回有时是浮点,有时是字符串
-	Market       string      `json:"market"`
-	Buy          string      `json:"buy"`
-	IsUpTend     bool        `json:"isUpTend"`
-	Sell         string      `json:"sell"`
-	Percent      string      `json:"percent"`
-	Change       string      `json:"change"`
-	VisualOpen   string      `json:"visualOpen"`
-	VisualVolume string      `json:"visualVolume"`
-	VisualBuy    string      `json:"visualBuy"`
-	VisualSell   string      `json:"visualSell"`
+	Name       string      `json:"name"`
+	BaseUnit   string      `json:"base_unit"`
+	QuoteUnit  string      `json:"quote_unit"`
+	AskFee     float64     `json:"ask_fee"`
+	BidFee     float64     `json:"bid_fee"`
+	Low        string      `json:"low"`
+	High       string      `json:"high"`
+	Last       string      `json:"last"`
+	VisualLow  string      `json:"visualLow"`
+	VisualHigh string      `json:"visualHigh"`
+	VisualLast string      `json:"visualLast"`
+	At         int         `json:"at"`
+	Open       string      `json:"open"`
+	Volume     interface{} `json:"volume"` //接口返回有时是浮点,有时是字符串
+	Market     string      `json:"market"`
+	// Buy          float64     `json:"buy"`
+	IsUpTend bool `json:"isUpTend"`
+	// Sell         float64     `json:"sell"`
+	Percent      string `json:"percent"`
+	Change       string `json:"change"`
+	VisualOpen   string `json:"visualOpen"`
+	VisualVolume string `json:"visualVolume"`
+	VisualBuy    string `json:"visualBuy"`
+	VisualSell   string `json:"visualSell"`
 }
 
 type CoinsData map[string]Tick
@@ -65,7 +65,7 @@ type Balance struct {
 type AccountBalances map[string]Balance
 
 type WithdrawResponse struct {
-	Error     string `json:"error"`
+	Error string `json:"error"`
 }
 
 type PlaceOrder struct {
@@ -101,7 +101,7 @@ type OrdersPage struct {
 	NextCursor interface{}   `json:"nextCursor"`
 }
 
-type FundSource struct{
+type FundSource struct {
 	Id          int64       `json:"id"`
 	Iban        interface{} `json:"iban"`
 	Label       string      `json:"label"`

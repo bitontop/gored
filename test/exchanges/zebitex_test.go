@@ -15,8 +15,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/zebitex"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/zebitex"
-	// "./conf"
+	// "../../exchange/zebitex"
+	// "../conf"
 )
 
 /********************Public API********************/
