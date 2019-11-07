@@ -279,7 +279,7 @@ func (e *Coinex) doWithdraw(operation *exchange.AccountOperation) error {
 	mapParams["access_id"] = e.API_KEY
 	mapParams["coin_type"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["transfer_method"] = "onchain"
-	mapParams["actual_amount"] = fmt.Sprintf("%.8f", operation.WithdrawAmount)
+	mapParams["actual_amount"] = operation.WithdrawAmount
 
 	if operation.WithdrawTag != "" {
 		mapParams["coin_address"] = fmt.Sprintf("%s:%s", operation.WithdrawAddress, operation.WithdrawTag)
@@ -295,16 +295,18 @@ func (e *Coinex) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
 		return operation.Error
 	} else if jsonResponse.Code != 0 {
-		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName())
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
 		return operation.Error
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
 		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return operation.Error
 	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.CoinWithdrawID)
 
 	return nil
 }
