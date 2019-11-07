@@ -207,8 +207,27 @@ func (e *Txbit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Txbit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	// case exchange.Withdraw:
+	// 	return e.withdraw(operation)
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Txbit) withdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
 	return nil
 }
+
 func (e *Txbit) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -240,7 +259,7 @@ func (e *Txbit) UpdateAllBalances() {
 	}
 }
 
-// TODO
+// done
 func (e *Txbit) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())
@@ -268,6 +287,8 @@ func (e *Txbit) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bo
 		log.Printf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 		return false
 	}
+
+	log.Printf("%s Withdraw response: %s", e.GetName(), jsonSubmitWithdraw)
 	return true
 }
 

@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/txbit"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/txbit"
-	// "./conf"
+	// "../../exchange/txbit"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -32,12 +32,12 @@ func Test_Txbit(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.001, 0.033)
 	// Test_Trading_Sell(e, pair, 0.050012345678, 0.10001234567)
 	// Test_OrderStatus(e, pair, "b5d7d18c-61fb-479e-8ee6-b222ced93e56")
 	// Test_CancelOrder(e, pair, "b5d7d18c-61fb-479e-8ee6-b222ced93e56")
-	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	// Test_Withdraw(e, pair.Target, 0.1, "0xf252be0c7758094a37bf10a4cbf4dec0d69b7bcc")
 	// log.Println(e.GetTradingWebURL(pair))
 }
 
