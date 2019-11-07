@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/coinex"
-	// "./conf"
+	// "../../exchange/coinex"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -25,18 +25,33 @@ func Test_Coinex(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	Test_Coins(e)
-	Test_Pairs(e)
-	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Coins(e)
+	// Test_Pairs(e)
+	// Test_Pair(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
+
+	// Test Withdraw
+	op1 := &exchange.AccountOperation{
+		Type:            exchange.Withdraw,
+		Coin:            pair.Target,
+		WithdrawAmount:  "1",
+		WithdrawAddress: "addr",
+		DebugMode:       true,
+	}
+	err := e.DoAccoutOperation(op1)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("WithdrawID, err: %v, %v", op1.WithdrawID, op1.Error)
+
 }
 
 func InitCoinex() exchange.Exchange {
