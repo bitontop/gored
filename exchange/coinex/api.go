@@ -265,7 +265,7 @@ func (e *Coinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
 
-func (e *Coinex) Withdraw(operation *exchange.AccountOperation) error {
+func (e *Coinex) doWithdraw(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("coinex API Key or Secret Key are nil.")
 	}
@@ -277,14 +277,14 @@ func (e *Coinex) Withdraw(operation *exchange.AccountOperation) error {
 
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
-	mapParams["coin_type"] = e.GetSymbolByCoin(coin)
+	mapParams["coin_type"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["transfer_method"] = "onchain"
-	mapParams["actual_amount"] = fmt.Sprintf("%.8f", quantity)
+	mapParams["actual_amount"] = operation.WithdrawAmount
 
-	if tag != "" {
-		mapParams["coin_address"] = fmt.Sprintf("%s:%s", addr, tag)
+	if operation.WithdrawTag != "" {
+		mapParams["coin_address"] = fmt.Sprintf("%s:%s", operation.WithdrawAddress, operation.WithdrawTag)
 	} else {
-		mapParams["coin_address"] = addr
+		mapParams["coin_address"] = operation.WithdrawAddress
 	}
 
 	jsonWithdraw := e.ApiKeyPost(strRequestUrl, mapParams)
@@ -295,16 +295,18 @@ func (e *Coinex) Withdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
 		return operation.Error
 	} else if jsonResponse.Code != 0 {
-		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName())
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
 		return operation.Error
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
 		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return operation.Error
 	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.CoinWithdrawID)
 
 	return nil
 }
