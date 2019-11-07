@@ -245,8 +245,94 @@ func (e *Mxc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Mxc) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.BalanceList:
+		return e.getAllBalance(operation)
+	case exchange.Balance:
+		return e.getBalance(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Mxc) getBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	symbol := e.GetSymbolByCoin(operation.Coin)
+	jsonResponse := &JsonResponse{}
+	accountBalance := make(map[string]*AccountBalances)
+	strRequest := "/open/api/v1/private/account/info"
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		return fmt.Errorf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+	}
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
+		return fmt.Errorf("%s UpdateAllBalances Data Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
+	}
+
+	for key, v := range accountBalance {
+		if key != symbol {
+			continue
+		}
+
+		freeAmount, err := strconv.ParseFloat(v.Available, 64)
+		if err != nil {
+			return fmt.Errorf("%s balance parse Err: %v %v", e.GetName(), err, v.Available)
+		}
+		frozen, err := strconv.ParseFloat(v.Frozen, 64)
+		if err != nil {
+			return fmt.Errorf("%s balance parse Err: %v %v", e.GetName(), err, v.Available)
+		}
+
+		operation.BalanceAvailable = freeAmount
+		operation.BalanceFrozen = frozen
+	}
+
 	return nil
 }
+
+func (e *Mxc) getAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountBalance := make(map[string]*AccountBalances)
+	strRequest := "/open/api/v1/private/account/info"
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		return fmt.Errorf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+	}
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
+		return fmt.Errorf("%s UpdateAllBalances Data Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
+	}
+
+	for key, v := range accountBalance {
+		c := e.GetCoinBySymbol(key)
+		if c != nil {
+			freeAmount, err := strconv.ParseFloat(v.Available, 64)
+			if err != nil {
+				return fmt.Errorf("%s balance parse Err: %v %v", e.GetName(), err, v.Available)
+			}
+			frozen, err := strconv.ParseFloat(v.Frozen, 64)
+			if err != nil {
+				return fmt.Errorf("%s balance parse Err: %v %v", e.GetName(), err, v.Available)
+			}
+			b := exchange.AssetBalance{
+				Coin:             c,
+				BalanceAvailable: freeAmount,
+				BalanceFrozen:    frozen,
+			}
+			operation.BalanceList = append(operation.BalanceList, b)
+		}
+	}
+
+	return nil
+}
+
 func (e *Mxc) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -342,6 +428,8 @@ func (e *Mxc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 	mapParams["trade_type"] = "1"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+
+	// log.Printf("mapParams: %+v", mapParams)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -473,8 +561,8 @@ func (e *Mxc) ApiKeyRequest(strMethod string, strRequestPath string, mapParams m
 		return err.Error()
 	}
 
-	log.Printf("to MD5: %v", authParams)
-	log.Printf("====mapParams: %+v", mapParams)
+	// log.Printf("to MD5: %v", authParams)
+	// log.Printf("====mapParams: %+v", mapParams)
 
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
