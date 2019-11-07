@@ -245,8 +245,46 @@ func (e *Okex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 		return e.getAllBalance(operation)
 	case exchange.Balance:
 		return e.getBalance(operation)
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Okex) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	withdrawResponse := WithdrawResponse{}
+	strRequest := "/api/account/v3/withdrawal"
+
+	mapParams := make(map[string]interface{})
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["destination"] = "4"
+	mapParams["to_address"] = operation.WithdrawAddress
+	mapParams["trade_pwd"] = e.TradePassword
+	mapParams["fee"] = e.GetTxFee(operation.Coin)
+
+	jsonSubmitWithdraw := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdrawResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if !withdrawResponse.Result {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	}
+
+	operation.WithdrawID = withdrawResponse.WithdrawalID
+
+	return nil
 }
 
 func (e *Okex) transfer(operation *exchange.AccountOperation) error {
