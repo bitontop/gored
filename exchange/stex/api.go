@@ -252,8 +252,8 @@ func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBookSell := WebOrderBook{}
 
 	// strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetIDByPair(pair))
-	strUrlBuy := fmt.Sprintf("https://app.stex.com/en/basic-trade/buy-glass/%v", e.GetPairConstraint(pair).ExID)
-	strUrlSell := fmt.Sprintf("https://app.stex.com/en/basic-trade/sell-glass/%v", e.GetPairConstraint(pair).ExID)
+	strUrlBuy := fmt.Sprintf("https://app.stex.com/en/basic-trade/buy-glass/%v", e.GetIDByPair(pair))
+	strUrlSell := fmt.Sprintf("https://app.stex.com/en/basic-trade/sell-glass/%v", e.GetIDByPair(pair))
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),

@@ -14,8 +14,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/stex"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/stex"
-	// "./conf"
+	// "../../exchange/stex"
+	// "../conf"
 )
 
 /********************Public API********************/

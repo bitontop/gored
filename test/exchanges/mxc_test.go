@@ -22,9 +22,8 @@ import (
 
 func Test_Mxc(t *testing.T) {
 	e := InitMxc()
-	var err error
-
-	pair := pair.GetPairByKey("BTC|ETH")
+	// api only accept usdt based pair
+	pair := pair.GetPairByKey("USDT|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -33,6 +32,7 @@ func Test_Mxc(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
+	var err error
 	// Test Balance
 	op2 := &exchange.AccountOperation{
 		Type:        exchange.Balance,
@@ -60,6 +60,7 @@ func Test_Mxc(t *testing.T) {
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00001, 100)
+	// Test_Trading_Sell(e, pair, 220, 0.05)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 

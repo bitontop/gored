@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/bigone"
-	// "./conf"
+	// "../../exchange/bigone"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -33,7 +33,7 @@ func Test_Bigone(t *testing.T) {
 	Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00001, 100)
+	// Test_Trading(e, pair, 0.01, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
