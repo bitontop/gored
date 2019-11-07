@@ -18,12 +18,12 @@ type JsonResponse struct {
 
 type CoinsData struct {
 	CoinConfig []struct {
-		MakerFeeRate   string `json:"makerFeeRate"`
-		MinTxAmt       string `json:"minTxAmt,omitempty"`
-		Name           string `json:"name"`
-		DepositStatus  string `json:"depositStatus"`
-		FullName       string `json:"fullName"`
-		TakerFeeRate   string `json:"takerFeeRate"`
+		// MakerFeeRate   string `json:"makerFeeRate"`
+		MinTxAmt      string `json:"minTxAmt,omitempty"`
+		Name          string `json:"name"`
+		DepositStatus string `json:"depositStatus"`
+		FullName      string `json:"fullName"`
+		// TakerFeeRate   string `json:"takerFeeRate"`
 		MinWithdraw    string `json:"minWithdraw"`
 		WithdrawFee    string `json:"withdrawFee"`
 		WithdrawStatus string `json:"withdrawStatus"`

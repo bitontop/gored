@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/bithumb"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/bithumb"
-	// "./conf"
+	// "../../exchange/bithumb"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
