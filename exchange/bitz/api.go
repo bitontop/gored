@@ -221,8 +221,60 @@ func (e *Bitz) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Bitz) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Bitz) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.TradePassword == "" {
+		return fmt.Errorf("%s API Key, Secret Key or TradePassword are nil", e.GetName())
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+	strRequest := "/Trade/coinOut"
+
+	mapParams := make(map[string]string)
+	mapParams["coin"] = e.GetSymbolByCoin(operation.Coin) /* strconv.FormatFloat(quantity, 'f', -1, 64) */ //===========
+	mapParams["number"] = operation.WithdrawAmount
+	mapParams["address"] = operation.WithdrawAddress
+
+	jsonWithdrawReturn := e.ApiKeyPOST(mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonWithdrawReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if jsonResponse.Status != 200 {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdrawReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.ID)
+
 	return nil
 }
+
 func (e *Bitz) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

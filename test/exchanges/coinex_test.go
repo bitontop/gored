@@ -50,7 +50,7 @@ func Test_Coinex(t *testing.T) {
 	if err != nil {
 		log.Printf("%v", err)
 	}
-	log.Printf("WithdrawID, err: %v, %v", opWithdraw.WithdrawID, opWithdraw.Error)
+	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
 }
 
