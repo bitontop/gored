@@ -161,12 +161,13 @@ func Test_Withdraw(e exchange.Exchange, c *coin.Coin, amount float64, addr strin
 	}
 }
 
-func Test_DoWithdraw(e exchange.Exchange, c *coin.Coin, amount string, addr string) {
+func Test_DoWithdraw(e exchange.Exchange, c *coin.Coin, amount string, addr string, tag string) {
 	opWithdraw := &exchange.AccountOperation{
 		Type:            exchange.Withdraw,
 		Coin:            c,
 		WithdrawAmount:  amount,
 		WithdrawAddress: addr,
+		WithdrawTag:     tag,
 		DebugMode:       true,
 	}
 	err := e.DoAccoutOperation(opWithdraw)
@@ -177,7 +178,7 @@ func Test_DoWithdraw(e exchange.Exchange, c *coin.Coin, amount string, addr stri
 }
 
 func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to exchange.WalletType) {
-	opWithdraw := &exchange.AccountOperation{
+	opTransfer := &exchange.AccountOperation{
 		Type:                exchange.Transfer,
 		Coin:                c,
 		TransferAmount:      amount,
@@ -185,11 +186,37 @@ func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to 
 		TransferDestination: to,
 		DebugMode:           true,
 	}
-	err := e.DoAccoutOperation(opWithdraw)
+	err := e.DoAccoutOperation(opTransfer)
 	if err != nil {
 		log.Printf("%v", err)
 	}
-	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+}
+
+func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.WalletType) {
+	opBalance := &exchange.AccountOperation{
+		Type:        exchange.Balance,
+		Coin:        c,
+		BalanceType: balanceType,
+	}
+	err := e.DoAccoutOperation(opBalance)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("Account available: %v, frozen: %v", opBalance.BalanceAvailable, opBalance.BalanceFrozen)
+}
+
+func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) {
+	opAllBalance := &exchange.AccountOperation{
+		Type:        exchange.BalanceList,
+		BalanceType: balanceType,
+	}
+	err := e.DoAccoutOperation(opAllBalance)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, balance := range opAllBalance.BalanceList {
+		log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
 }
 
 /********************General********************/

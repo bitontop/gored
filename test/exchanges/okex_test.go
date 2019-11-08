@@ -32,57 +32,11 @@ func Test_Okex(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	// Test Withdraw
-	opWith := &exchange.AccountOperation{
-		Type:            exchange.Withdraw,
-		Coin:            pair.Target,
-		WithdrawAmount:  "1",
-		WithdrawAddress: "addr",
-		DebugMode:       true,
-	}
-	err := e.DoAccoutOperation(opWith)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	log.Printf("WithdrawID, err: %v, %v", opWith.WithdrawID, opWith.Error)
-
-	// Test Transfer
-	op := &exchange.AccountOperation{
-		Type:                exchange.Transfer,
-		Coin:                pair.Target,
-		TransferAmount:      "0.1",
-		TransferFrom:        exchange.AssetWallet,
-		TransferDestination: exchange.SpotWallet,
-	}
-	err = e.DoAccoutOperation(op)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-
-	// Test Balance ***** only support asset account
-	op2 := &exchange.AccountOperation{
-		Type:        exchange.Balance,
-		Coin:        pair.Target,
-		BalanceType: exchange.AssetWallet,
-	}
-	err = e.DoAccoutOperation(op2)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	log.Printf("Account available: %v, frozen: %v", op2.BalanceAvailable, op2.BalanceFrozen)
-
-	// Test AllBalance
-	op3 := &exchange.AccountOperation{
-		Type:        exchange.BalanceList,
-		BalanceType: exchange.SpotWallet,
-	}
-	err = e.DoAccoutOperation(op3)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	for _, balance := range op3.BalanceList {
-		log.Printf("Account balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
-	}
+	// new interface methods
+	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
+	Test_DoTransfer(e, pair.Target, "10", exchange.AssetWallet, exchange.SpotWallet)
+	Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
+	Test_CheckAllBalance(e, exchange.AssetWallet)
 
 	// okex.Socket(pair)
 	// Test_Balance(e, pair)
