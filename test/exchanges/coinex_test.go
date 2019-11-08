@@ -39,18 +39,18 @@ func Test_Coinex(t *testing.T) {
 	// log.Println(e.GetTradingWebURL(pair))
 
 	// Test Withdraw
-	op1 := &exchange.AccountOperation{
+	opWithdraw := &exchange.AccountOperation{
 		Type:            exchange.Withdraw,
 		Coin:            pair.Target,
 		WithdrawAmount:  "1",
 		WithdrawAddress: "addr",
 		DebugMode:       true,
 	}
-	err := e.DoAccoutOperation(op1)
+	err := e.DoAccoutOperation(opWithdraw)
 	if err != nil {
 		log.Printf("%v", err)
 	}
-	log.Printf("WithdrawID, err: %v, %v", op1.WithdrawID, op1.Error)
+	log.Printf("WithdrawID, err: %v, %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
 }
 

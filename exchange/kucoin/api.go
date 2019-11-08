@@ -236,8 +236,50 @@ func (e *Kucoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
 		return e.getAllBalance(operation)
 	case exchange.Balance:
 		return e.getBalance(operation)
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
 	}
-	log.Printf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Kucoin) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("Kucoin API Key or Secret Key or passphrase are nil.")
+	}
+
+	// need to use inner transfer before withdraw
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+	strRequestUrl := "/api/v1/withdrawals"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["address"] = operation.WithdrawAddress
+	mapParams["amount"] = operation.WithdrawAmount
+
+	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonCreateWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if jsonResponse.Code != "200000" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonCreateWithdraw)
+		return operation.Error
+	}
+
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.WithdrawID = withdraw.WithdrawalID
+
 	return nil
 }
 

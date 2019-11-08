@@ -32,6 +32,20 @@ func Test_Kucoin(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
+	// Test Withdraw
+	opWithdraw := &exchange.AccountOperation{
+		Type:            exchange.Withdraw,
+		Coin:            pair.Target,
+		WithdrawAmount:  "1",
+		WithdrawAddress: "addr",
+		DebugMode:       true,
+	}
+	err := e.DoAccoutOperation(opWithdraw)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("WithdrawID, err: %v, %v", opWithdraw.WithdrawID, opWithdraw.Error)
+
 	// Test Transfer
 	op := &exchange.AccountOperation{
 		Type:                exchange.Transfer,
@@ -40,7 +54,7 @@ func Test_Kucoin(t *testing.T) {
 		TransferFrom:        exchange.AssetWallet,
 		TransferDestination: exchange.SpotWallet,
 	}
-	err := e.DoAccoutOperation(op)
+	err = e.DoAccoutOperation(op)
 	if err != nil {
 		log.Printf("%v", err)
 	}

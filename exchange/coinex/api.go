@@ -272,7 +272,6 @@ func (e *Coinex) doWithdraw(operation *exchange.AccountOperation) error {
 
 	jsonResponse := JsonResponse{}
 	withdraw := Withdraw{}
-
 	strRequestUrl := "/v1/balance/coin/withdraw"
 
 	mapParams := make(map[string]string)
