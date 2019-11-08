@@ -24,16 +24,31 @@ func Test_Stex(t *testing.T) {
 
 	pair := pair.GetPairByKey("ETH|AIB")
 
-	Test_Coins(e)
-	Test_Pairs(e)
-	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Coins(e)
+	// Test_Pairs(e)
+	// Test_Pair(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
+	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+
+	// Test Withdraw
+	opWithdraw := &exchange.AccountOperation{
+		Type:            exchange.Withdraw,
+		Coin:            pair.Target,
+		WithdrawAmount:  "1",
+		WithdrawAddress: "addr",
+		DebugMode:       true,
+	}
+	err := e.DoAccoutOperation(opWithdraw)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+
 }
 
 func InitStex() exchange.Exchange {
