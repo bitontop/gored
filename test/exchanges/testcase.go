@@ -39,6 +39,7 @@ func Test_Pairs(e exchange.Exchange) {
 func Test_Pair(e exchange.Exchange, pair *pair.Pair) {
 	log.Printf("%s Pair: %+v", e.GetName(), pair)
 	log.Printf("%s Pair Code: %s", e.GetName(), e.GetSymbolByPair(pair))
+	log.Printf("%s Coin Codes: %s, %s", e.GetName(), e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target))
 }
 
 func Test_Orderbook(e exchange.Exchange, p *pair.Pair) {
@@ -158,6 +159,37 @@ func Test_Withdraw(e exchange.Exchange, c *coin.Coin, amount float64, addr strin
 	} else {
 		log.Printf("%s %s Withdraw Failed!", e.GetName(), c.Code)
 	}
+}
+
+func Test_DoWithdraw(e exchange.Exchange, c *coin.Coin, amount string, addr string) {
+	opWithdraw := &exchange.AccountOperation{
+		Type:            exchange.Withdraw,
+		Coin:            c,
+		WithdrawAmount:  amount,
+		WithdrawAddress: addr,
+		DebugMode:       true,
+	}
+	err := e.DoAccoutOperation(opWithdraw)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+}
+
+func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to exchange.WalletType) {
+	opWithdraw := &exchange.AccountOperation{
+		Type:                exchange.Transfer,
+		Coin:                c,
+		TransferAmount:      amount,
+		TransferFrom:        from,
+		TransferDestination: to,
+		DebugMode:           true,
+	}
+	err := e.DoAccoutOperation(opWithdraw)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 }
 
 /********************General********************/

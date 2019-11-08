@@ -252,8 +252,121 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Bibox) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	case exchange.Transfer:
+		return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+// direction: 0钱包转币币; 1币币转钱包
+func (e *Bibox) transfer(operation *exchange.AccountOperation) error { //(coin *coin.Coin, quantity float64, direction int) bool {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	innerTrans := InnerTrans{}
+	strRequest := "/v2/assets/transfer/spot"
+
+	mapParams := make(map[string]interface{})
+
+	mapParams["symbol"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.TransferAmount
+	switch operation.TransferFrom {
+	case exchange.AssetWallet:
+		mapParams["type"] = 0
+	case exchange.SpotWallet:
+		mapParams["type"] = 1
+	default:
+		return fmt.Errorf("%s transfer type not supported: %v", e.GetName(), operation.TransferFrom)
+	}
+
+	jsonInnerReturn := e.ApiKeyPOSTInner(strRequest, mapParams) //ApiKeyPOST
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonInnerReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonInnerReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Transfer Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if jsonResponse.Error.Code != "" {
+		operation.Error = fmt.Errorf("%s Transfer Failed: %v", e.GetName(), jsonInnerReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &innerTrans); err != nil {
+		operation.Error = fmt.Errorf("%s Transfer Result Unmarshal Err: %v %s", e.GetName(), err, jsonInnerReturn)
+		return operation.Error
+	}
+
 	return nil
 }
+
+// googleAuth: google验证码
+// tag： the remark of withdraw address
+// memo: memo is required for some tokens, such as EOS
+// if it's new address, need to provide trade_pwd and google code. Could do this on webpage.
+func (e *Bibox) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("bibox API Key or Secret Key are nil.")
+	}
+
+	jsonResponse := JsonResponse{}
+	withdraw := Withdraw{}
+
+	strRequestUrl := "/v1/transfer"
+
+	mapParams := make(map[string]interface{})
+	mapParams["cmd"] = "transfer/transferOut"
+
+	body := make(map[string]interface{})
+	body["coin_symbol"] = e.GetSymbolByCoin(operation.Coin)
+	body["amount"] = operation.WithdrawAmount
+	body["addr"] = operation.WithdrawAddress
+	if operation.WithdrawTag != "" {
+		body["addr_remark"] = operation.WithdrawTag
+	}
+	// body["totp_code"] = 123456     //googleAuth, need if new addr
+	// body["trade_pwd"] = "tradePWD" //tradePWD, need if new addr
+	// body["memo"] = "" // memo is required for some tokens, such as EOS
+
+	mapParams["body"] = body
+
+	jsonWithdraw := e.ApiKeyPOST(strRequestUrl, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if jsonResponse.Error.Code != "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
+		return operation.Error
+	}
+	if err := json.Unmarshal([]byte(jsonWithdraw), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonWithdraw)
+		return operation.Error
+	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.Result)
+
+	return nil
+}
+
 func (e *Bibox) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -303,53 +416,6 @@ func (e *Bibox) UpdateAllBalances() {
 		}
 	}
 
-}
-
-// direction: 0钱包转币币; 1币币转钱包
-// need API2 AUTH, different structure
-func (e *Bibox) InnerTrans(coin *coin.Coin, quantity float64, direction int) bool {
-	if e.API_KEY == "" || e.API_SECRET == "" {
-		log.Printf("%s API Key or Secret Key are nil", e.GetName())
-		return false
-	}
-
-	jsonResponse := &JsonResponse{}
-	innerTrans := InnerTrans{}
-	strRequest := "/v2/assets/transfer/spot"
-
-	mapParams := make(map[string]interface{})
-
-	//-----
-	/* mapParams["cmd"] = "assets/transfer/spot"
-
-	body := make(map[string]interface{})
-	body["symbol"] = e.GetSymbolByCoin(coin)
-	body["amount"] = quantity
-	body["type"] = direction
-
-	mapParams["body"] = body */
-	//-------
-
-	mapParams["symbol"] = e.GetSymbolByCoin(coin)
-	mapParams["amount"] = quantity
-	mapParams["type"] = direction
-
-	// log.Printf("====Inner mapParams: %+v", mapParams)
-
-	jsonInnerReturn := e.ApiKeyPOSTInner(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonInnerReturn), &jsonResponse); err != nil {
-		log.Printf("%s Inner Transfer Json Unmarshal Err: %v %v", e.GetName(), err, jsonInnerReturn)
-		return false
-	} else if jsonResponse.Error.Code != "" {
-		log.Printf("%s Inner Transfer Failed: %v", e.GetName(), jsonResponse.Error)
-		return false
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &innerTrans); err != nil {
-		log.Printf("%s Inner Transfer Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
-		return false
-	}
-
-	return false
 }
 
 // googleAuth: google验证码
@@ -606,6 +672,8 @@ func (e *Bibox) ApiKeyPOST(strRequestPath string, mapParams map[string]interface
 	Params["apikey"] = e.API_KEY
 	Params["sign"] = exchange.ComputeHmacMd5(jsonParams, e.API_SECRET)
 
+	// log.Printf("Params: %+v", Params)
+
 	request, err := http.NewRequest("POST", strRequestUrl, strings.NewReader(exchange.Map2UrlQuery(Params)))
 	if err != nil {
 		return err.Error()
@@ -634,14 +702,15 @@ func (e *Bibox) ApiKeyPOSTInner(strRequestPath string, mapParams map[string]inte
 	jsonParams := ""
 	if nil != mapParams {
 		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = "[" + string(bytesParams) + "]"
+		jsonParams = /* "[" +  */ string(bytesParams) /* + "]" */
 	}
 
 	Params := make(map[string]string)
-	Params["body"] = jsonParams
+	Params["body"] = jsonParams //"{\"type\":0,\"amount\":\"100\",\"symbol\":\"USDT\"}"
 	Params["apikey"] = e.API_KEY
 	Params["sign"] = exchange.ComputeHmacMd5(jsonParams, e.API_SECRET)
 
+	// log.Printf(`Params["body"]: %v`, Params["body"])
 	//log.Printf("====Post mapParams: %+v", Params)
 
 	request, err := http.NewRequest("POST", strRequestUrl, strings.NewReader(exchange.Map2UrlQuery(Params)))
