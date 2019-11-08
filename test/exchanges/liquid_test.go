@@ -33,11 +33,11 @@ func Test_Liquid(t *testing.T) {
 	// Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
-	Test_Trading(e, pair, 0.00000001, 100)
-	Test_OrderStatus(e, pair, "123556")
+	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_OrderStatus(e, pair, "123556")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46")
+	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 }
 
 func InitLiquid() exchange.Exchange {

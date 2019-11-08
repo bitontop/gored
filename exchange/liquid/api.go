@@ -230,6 +230,14 @@ func (e *Liquid) doWithdraw(operation *exchange.AccountOperation) error {
 	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["amount"] = operation.WithdrawAmount
 	mapParams["address"] = operation.WithdrawAddress
+	if operation.Coin.Code == "XRP" {
+		mapParams["payment_id"] = operation.WithdrawTag
+	} else if operation.Coin.Code == "XLM" {
+		mapParams["memo_type"] = "text"
+		mapParams["memo_value"] = operation.WithdrawTag
+	}
+
+	log.Printf("test param: %+v", mapParams)
 	// mapParams["auth_code"] = "288754"
 
 	// optional parameters
