@@ -234,8 +234,61 @@ func (e *Kraken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Kraken) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Kraken) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	withdraw := WithdrawResponse{}
+	strRequestPath := "/0/private/Withdraw"
+
+	values := url.Values{
+		"asset":  {e.GetSymbolByCoin(operation.Coin)},
+		"key":    {operation.WithdrawAddress},
+		"amount": {operation.WithdrawAmount},
+	}
+
+	jsonSubmitWithdraw := e.ApiKeyPost(strRequestPath, values, &WithdrawResponse{})
+	if operation.DebugMode {
+		operation.RequestURI = strRequestPath
+		operation.MapParams = fmt.Sprintf("%+v", values)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if len(jsonResponse.Error) != 0 {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return operation.Error
+	}
+
+	operation.WithdrawID = withdraw.RefID
+
 	return nil
 }
+
 func (e *Kraken) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
