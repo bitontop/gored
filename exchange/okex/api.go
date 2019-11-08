@@ -312,15 +312,24 @@ func (e *Okex) transfer(operation *exchange.AccountOperation) error {
 	}
 
 	jsonTransferReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonTransferReturn
+	}
+
 	if err := json.Unmarshal([]byte(jsonTransferReturn), &trans); err != nil {
 		errorJson := ErrorMsg{}
 		if err := json.Unmarshal([]byte(jsonTransferReturn), &errorJson); err != nil {
-			return fmt.Errorf("%s Transfer Err: Code: %v Msg: %s", e.GetName(), errorJson.Code, errorJson.Msg)
+			operation.Error = fmt.Errorf("%s Transfer Err: %v", e.GetName(), jsonTransferReturn)
+			return operation.Error
 		} else {
-			return fmt.Errorf("%s Transfer Json Unmarshal Err: %v %s", e.GetName(), err, jsonTransferReturn)
+			operation.Error = fmt.Errorf("%s Transfer Json Unmarshal Err: %v", e.GetName(), err)
+			return operation.Error
 		}
 	} else if !trans.Result {
-		return fmt.Errorf("%s Transfer Failed: %v", e.GetName(), jsonTransferReturn)
+		operation.Error = fmt.Errorf("%s Transfer failed: %v", e.GetName(), jsonTransferReturn)
+		return operation.Error
 	}
 	log.Printf("%s Transfer return: %+v", e.GetName(), jsonTransferReturn)
 
@@ -343,20 +352,26 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
-	log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn) //====================
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn) //====================
 	if jsonAllBalanceReturn == "[]" {
-		log.Printf("getBalance empty return: %v", jsonAllBalanceReturn)
+		log.Printf("getAllBalance empty return: %v", jsonAllBalanceReturn)
 		return nil
 	} else if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &balance); err != nil {
 		errorJson := ErrorMsg{}
 		if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &errorJson); err != nil {
-			return fmt.Errorf("%s getAllBalance Err: %s", e.GetName(), jsonAllBalanceReturn)
+			operation.Error = fmt.Errorf("%s getAllBalance Err: %v", e.GetName(), jsonAllBalanceReturn)
+			return operation.Error
 		} else {
-			return fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v %s", e.GetName(), err, jsonAllBalanceReturn)
+			operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v", e.GetName(), err)
+			return operation.Error
 		}
-	} /* else if !balance.Result {
-		return fmt.Errorf("%s getAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
-	} */
+	}
 
 	for _, account := range balance {
 		if account.Balance == "0" {
@@ -392,6 +407,12 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 	strRequest := fmt.Sprintf("/api/account/v3/wallet/%s", e.GetSymbolByCoin(operation.Coin))
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonBalanceReturn
+	}
+
 	if jsonBalanceReturn == "[]" {
 		log.Printf("getBalance empty return: %v", jsonBalanceReturn)
 		operation.BalanceFrozen = 0
@@ -400,13 +421,13 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 	} else if err := json.Unmarshal([]byte(jsonBalanceReturn), &balance); err != nil {
 		errorJson := ErrorMsg{}
 		if err := json.Unmarshal([]byte(jsonBalanceReturn), &errorJson); err != nil {
-			return fmt.Errorf("%s getBalance Err: %s", e.GetName(), jsonBalanceReturn)
+			operation.Error = fmt.Errorf("%s getBalance Err: %v", e.GetName(), jsonBalanceReturn)
+			return operation.Error
 		} else {
-			return fmt.Errorf("%s getBalance Json Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
+			operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v", e.GetName(), err)
+			return operation.Error
 		}
-	} /* else if !balance.Result {
-		return fmt.Errorf("%s getBalance Failed: %v", e.GetName(), jsonBalanceReturn)
-	} */
+	}
 
 	for _, account := range balance {
 		if account.Currency == symbol {

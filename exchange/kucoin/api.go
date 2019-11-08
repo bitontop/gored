@@ -309,13 +309,22 @@ func (e *Kucoin) transfer(operation *exchange.AccountOperation) error {
 	}
 
 	jsonTransferReturn := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonTransferReturn
+	}
+
 	// log.Printf("return: %v", jsonTransferReturn)
 	if err := json.Unmarshal([]byte(jsonTransferReturn), &innerTrans); err != nil {
-		return fmt.Errorf("%s InnerTrans Json Unmarshal Err: %v, %v", e.GetName(), err, jsonTransferReturn)
+		operation.Error = fmt.Errorf("%s InnerTrans Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
 	} else if innerTrans.Code != "200000" {
-		return fmt.Errorf("%s InnerTrans Failed: %s %v", e.GetName(), innerTrans.Code, innerTrans.Msg)
+		operation.Error = fmt.Errorf("%s InnerTrans Failed: %v", e.GetName(), jsonTransferReturn)
+		return operation.Error
 	} else if innerTrans.Msg != "" {
-		return fmt.Errorf("%s InnerTrans Failed: %s %v", e.GetName(), innerTrans.Code, innerTrans.Msg)
+		operation.Error = fmt.Errorf("%s InnerTrans Failed: %v", e.GetName(), jsonTransferReturn)
+		return operation.Error
 	}
 
 	log.Printf("InnerTrans response %v", jsonTransferReturn)
@@ -344,14 +353,23 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
 	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v %v", e.GetName(), err, jsonAllBalanceReturn)
+		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
 	} else if jsonResponse.Code != "200000" {
-		return fmt.Errorf("%s getAllBalance Failed: %s", e.GetName(), jsonAllBalanceReturn)
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
-		return fmt.Errorf("%s getAllBalance Result Unmarshal Err: %v %v", e.GetName(), err, jsonResponse.Data)
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
 	}
 
 	for _, account := range accountID {
@@ -396,14 +414,23 @@ func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
 	}
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonBalanceReturn
+	}
+
 	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s getBalance Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
 	} else if jsonResponse.Code != "200000" {
-		return fmt.Errorf("%s getBalance Failed: %s", e.GetName(), jsonBalanceReturn)
+		operation.Error = fmt.Errorf("%s getBalance Failed: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
-		return fmt.Errorf("%s getBalance Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		operation.Error = fmt.Errorf("%s getBalance Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
 	}
 
 	for _, account := range accountID {
