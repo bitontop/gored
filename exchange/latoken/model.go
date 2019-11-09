@@ -49,7 +49,7 @@ type PairsData []struct {
 }
 
 type OrderBook struct {
-	PairID int     `json:"pairId"`
+	PairID string  `json:"pairId"`
 	Symbol string  `json:"symbol"`
 	Spread float64 `json:"spread"`
 	Asks   []struct {
