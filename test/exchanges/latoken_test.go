@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/latoken"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/latoken"
-	// "./conf"
+	// "../../exchange/latoken"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
