@@ -125,10 +125,10 @@ type CancelOrder struct {
 type Withdraw struct {
 	ID            int         `json:"id"`
 	Address       string      `json:"address"`
-	Amount        float64     `json:"amount"`
+	Amount        string      `json:"amount"`
 	State         string      `json:"state"`
 	Currency      string      `json:"currency"`
-	WithdrawalFee float64     `json:"withdrawal_fee"`
+	WithdrawalFee string      `json:"withdrawal_fee"`
 	CreatedAt     int         `json:"created_at"`
 	UpdatedAt     int         `json:"updated_at"`
 	PaymentID     interface{} `json:"payment_id"`
