@@ -236,7 +236,7 @@ func (e *Ibankdigital) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Const
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
