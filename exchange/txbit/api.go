@@ -408,6 +408,8 @@ func (e *Txbit) OrderStatus(order *exchange.Order) error {
 		order.Status = exchange.Other
 	}
 
+	log.Printf("Orderstatus struct: %+v", orderStatus) // ======================================
+
 	return nil
 }
 
