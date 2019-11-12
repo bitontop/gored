@@ -268,6 +268,9 @@ func (e *Bitz) doWithdraw(operation *exchange.AccountOperation) error {
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
 		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return operation.Error
+	} else if withdraw.ID == 0 {
+		operation.Error = fmt.Errorf("%s Withdraw Failed, withdraw ID = 0: %v", e.GetName(), jsonWithdrawReturn)
+		return operation.Error
 	}
 
 	operation.WithdrawID = fmt.Sprintf("%v", withdraw.ID)
