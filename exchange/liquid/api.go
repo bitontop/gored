@@ -202,8 +202,69 @@ func (e *Liquid) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Liquid) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Liquid) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	withdraw := Withdraw{}
+	strRequest := "/crypto_withdrawals"
+
+	mapParams := make(map[string]interface{})
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["address"] = operation.WithdrawAddress
+	if operation.Coin.Code == "XRP" {
+		mapParams["payment_id"] = operation.WithdrawTag
+	} else if operation.Coin.Code == "XLM" {
+		mapParams["memo_type"] = "text"
+		mapParams["memo_value"] = operation.WithdrawTag
+	}
+
+	log.Printf("test param: %+v", mapParams)
+	// mapParams["auth_code"] = "288754"
+
+	// optional parameters
+	// payment_id: XRP only
+	// memo_type,memo_value: XLM only
+
+	jsonWithdraw := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonWithdraw), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	}
+	if withdraw.ID == 0 {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
+		return operation.Error
+	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.ID)
+
 	return nil
 }
+
 func (e *Liquid) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

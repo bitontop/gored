@@ -197,8 +197,60 @@ func (e *Bittrex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Bittrex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Bittrex) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["quantity"] = operation.WithdrawAmount
+	mapParams["address"] = operation.WithdrawAddress
+
+	jsonResponse := &JsonResponse{}
+	uuid := Uuid{}
+	strRequest := "/v1.1/account/withdraw"
+
+	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if !jsonResponse.Success {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return operation.Error
+	}
+
+	operation.WithdrawID = uuid.Id
+
 	return nil
 }
+
 func (e *Bittrex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

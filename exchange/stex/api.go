@@ -252,8 +252,8 @@ func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBookSell := WebOrderBook{}
 
 	// strRequestUrl := fmt.Sprintf("/public/orderbook/%v", e.GetIDByPair(pair))
-	strUrlBuy := fmt.Sprintf("https://app.stex.com/en/basic-trade/buy-glass/%v", e.GetPairConstraint(pair).ExID)
-	strUrlSell := fmt.Sprintf("https://app.stex.com/en/basic-trade/sell-glass/%v", e.GetPairConstraint(pair).ExID)
+	strUrlBuy := fmt.Sprintf("https://app.stex.com/en/basic-trade/buy-glass/%v", e.GetIDByPair(pair))
+	strUrlSell := fmt.Sprintf("https://app.stex.com/en/basic-trade/sell-glass/%v", e.GetIDByPair(pair))
 
 	maker := &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),
@@ -312,8 +312,62 @@ func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Stex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Stex) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
+
+	jsonResponse := JsonResponseV3{}
+	withdraw := WithdrawResult{}
+	strRequestUrl := "/profile/withdraw"
+
+	mapParams := make(map[string]interface{})
+	mapParams["currency_id "] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["address"] = operation.WithdrawAddress // "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46"
+	mapParams["amount"] = operation.WithdrawAmount
+
+	// log.Printf("mapParams: %+v", mapParams)
+
+	jsonCreateWithdraw := e.ApiKeyRequest("POST", mapParams, strRequestUrl)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonCreateWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if !jsonResponse.Success {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonCreateWithdraw)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.ID)
+
 	return nil
 }
+
 func (e *Stex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

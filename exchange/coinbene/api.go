@@ -232,8 +232,58 @@ func (e *Coinbene) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Coinbene) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Coinbene) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	withdraw := Withdraw{}
+	strRequest := "/v1/withdraw/apply"
+
+	mapParams := make(map[string]string)
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["asset"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["address"] = operation.WithdrawAddress
+	if operation.WithdrawTag != "" {
+		mapParams["tag"] = operation.WithdrawTag
+	}
+
+	jsonWithdrawReturn := e.ApiKeyPost(strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonWithdrawReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	} else if withdraw.Status != "ok" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdrawReturn)
+		return operation.Error
+	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.WithdrawID)
+
 	return nil
 }
+
 func (e *Coinbene) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

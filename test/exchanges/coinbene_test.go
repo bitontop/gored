@@ -6,9 +6,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/coinbene"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/coinbene"
 	"github.com/bitontop/gored/test/conf"
+	// "../../exchange/coinbene"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
