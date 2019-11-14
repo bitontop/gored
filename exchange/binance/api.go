@@ -228,8 +228,57 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Binance) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+		// case exchange.Transfer:
+		// 	return e.transfer(operation)
+		// case exchange.BalanceList:
+		// 	return e.getAllBalance(operation)
+		// case exchange.Balance:
+		// 	return e.getBalance(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Binance) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	withdraw := WithdrawResponse{}
+	strRequest := "/wapi/v3/withdraw.html"
+
+	mapParams := make(map[string]string)
+	mapParams["asset"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["address"] = operation.WithdrawAddress
+	if operation.WithdrawTag != "" { //this part is not working yet
+		mapParams["addressTag"] = operation.WithdrawTag
+	}
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
+
+	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		return operation.Error
+	}
+	if !withdraw.Success {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	}
+
+	operation.WithdrawID = withdraw.ID
+
 	return nil
 }
+
 func (e *Binance) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
