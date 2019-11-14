@@ -50,7 +50,7 @@ func CreateStex(config *exchange.Config) *Stex {
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
-			ExpireTS:   config.ExpireTS,
+			ExpireTS:   config.ExpireTS + (365 * 24 * 60 * 60),
 			Source:     config.Source,
 			SourceURI:  config.SourceURI,
 		}
@@ -64,8 +64,8 @@ func CreateStex(config *exchange.Config) *Stex {
 			instance = nil
 		}
 
-		if time.Now().Unix()-instance.ExpireTS <= (30 * 24 * 60 * 60) {
-			log.Printf("API Key will be expired in %d days", (time.Now().Unix()-instance.ExpireTS)/(24*60*60))
+		if instance.ExpireTS-time.Now().Unix() <= (30 * 24 * 60 * 60) {
+			log.Printf("API Key will be expired in %d days", (instance.ExpireTS-time.Now().Unix())/(24*60*60))
 		}
 	})
 	return instance
