@@ -25,6 +25,7 @@ func Test_Txbit(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
+	// log.Printf("coin.LastID: %v", coin.LastID)
 	// Test_Coins(e)
 	// Test_Pairs(e)
 	// Test_Pair(e, pair)
