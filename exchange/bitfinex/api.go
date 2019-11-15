@@ -314,7 +314,7 @@ func (e *Bitfinex) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %v", e.GetName(), err, jsonWithdrawReturn)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonWithdrawReturn)
 		return operation.Error
 	} else if len(withdraw) == 0 {
 		operation.Error = fmt.Errorf("%s Withdraw Failed, empty return: %v", e.GetName(), jsonWithdrawReturn)

@@ -299,7 +299,7 @@ func (e *Bibox) transfer(operation *exchange.AccountOperation) error { //(coin *
 	}
 
 	if err := json.Unmarshal([]byte(jsonInnerReturn), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s Transfer Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Transfer Json Unmarshal Err: %v, %v", e.GetName(), err, jsonInnerReturn)
 		return operation.Error
 	} else if jsonResponse.Error.Code != "" {
 		operation.Error = fmt.Errorf("%s Transfer Failed: %v", e.GetName(), jsonInnerReturn)
@@ -351,7 +351,7 @@ func (e *Bibox) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonWithdraw)
 		return operation.Error
 	} else if jsonResponse.Error.Code != "" {
 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)

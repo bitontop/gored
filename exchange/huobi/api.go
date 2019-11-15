@@ -260,7 +260,7 @@ func (e *Huobi) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonWithdraw)
 		return operation.Error
 	} else if jsonResponse.Status != "ok" {
 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)

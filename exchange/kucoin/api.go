@@ -266,7 +266,7 @@ func (e *Kucoin) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonCreateWithdraw)
 		return operation.Error
 	} else if jsonResponse.Code != "200000" {
 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonCreateWithdraw)
@@ -317,7 +317,7 @@ func (e *Kucoin) transfer(operation *exchange.AccountOperation) error {
 
 	// log.Printf("return: %v", jsonTransferReturn)
 	if err := json.Unmarshal([]byte(jsonTransferReturn), &innerTrans); err != nil {
-		operation.Error = fmt.Errorf("%s InnerTrans Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s InnerTrans Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferReturn)
 		return operation.Error
 	} else if innerTrans.Code != "200000" {
 		operation.Error = fmt.Errorf("%s InnerTrans Failed: %v", e.GetName(), jsonTransferReturn)
@@ -361,7 +361,7 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 
 	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
 	} else if jsonResponse.Code != "200000" {
 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonAllBalanceReturn)
@@ -422,7 +422,7 @@ func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
 
 	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
 		return operation.Error
 	} else if jsonResponse.Code != "200000" {
 		operation.Error = fmt.Errorf("%s getBalance Failed: %v", e.GetName(), jsonBalanceReturn)

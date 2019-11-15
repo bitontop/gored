@@ -275,7 +275,7 @@ func (e *Okex) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdrawResponse); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
 		return operation.Error
 	} else if !withdrawResponse.Result {
 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
@@ -324,7 +324,7 @@ func (e *Okex) transfer(operation *exchange.AccountOperation) error {
 			operation.Error = fmt.Errorf("%s Transfer Err: %v", e.GetName(), jsonTransferReturn)
 			return operation.Error
 		} else {
-			operation.Error = fmt.Errorf("%s Transfer Json Unmarshal Err: %v", e.GetName(), err)
+			operation.Error = fmt.Errorf("%s Transfer Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferReturn)
 			return operation.Error
 		}
 	} else if !trans.Result {
@@ -368,7 +368,7 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 			operation.Error = fmt.Errorf("%s getAllBalance Err: %v", e.GetName(), jsonAllBalanceReturn)
 			return operation.Error
 		} else {
-			operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v", e.GetName(), err)
+			operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 			return operation.Error
 		}
 	}
@@ -424,7 +424,7 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 			operation.Error = fmt.Errorf("%s getBalance Err: %v", e.GetName(), jsonBalanceReturn)
 			return operation.Error
 		} else {
-			operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v", e.GetName(), err)
+			operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
 			return operation.Error
 		}
 	}
