@@ -65,3 +65,9 @@ type PlaceOrder struct {
 	OrderID           int64       `json:"order_id"`
 	Message           string      `json:"message"`
 }
+
+type Withdraw []struct {
+	Status       string `json:"status"`
+	Message      string `json:"message"`
+	WithdrawalID int    `json:"withdrawal_id"`
+}

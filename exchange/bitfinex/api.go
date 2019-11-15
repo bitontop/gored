@@ -279,8 +279,56 @@ func (e *Bitfinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Bitfinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+		// case exchange.Transfer:
+		// 	return e.transfer(operation)
+		// case exchange.BalanceList:
+		// 	return e.getAllBalance(operation)
+		// case exchange.Balance:
+		// 	return e.getBalance(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Bitfinex) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	withdraw := Withdraw{}
+	strRequest := "/v1/withdraw"
+
+	mapParams := make(map[string]interface{})
+	mapParams["withdraw_type"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["walletselected"] = "exchange"
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["address"] = operation.WithdrawAddress
+
+	jsonWithdrawReturn := e.ApiKeyPost(mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonWithdrawReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %v", e.GetName(), err, jsonWithdrawReturn)
+		return operation.Error
+	} else if len(withdraw) == 0 {
+		operation.Error = fmt.Errorf("%s Withdraw Failed, empty return: %v", e.GetName(), jsonWithdrawReturn)
+		return operation.Error
+	} else if withdraw[0].Status != "success" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdrawReturn)
+		return operation.Error
+	}
+
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw[0].WithdrawalID)
+
 	return nil
 }
+
 func (e *Bitfinex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
