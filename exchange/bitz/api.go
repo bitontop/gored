@@ -232,7 +232,6 @@ func (e *Bitz) DoAccoutOperation(operation *exchange.AccountOperation) error {
 
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
-
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
