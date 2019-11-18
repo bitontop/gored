@@ -37,18 +37,7 @@ func Test_Huobi(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
 	// Test Withdraw
-	opWithdraw := &exchange.AccountOperation{
-		Type:            exchange.Withdraw,
-		Coin:            pair.Target,
-		WithdrawAmount:  "1",
-		WithdrawAddress: "addr",
-		DebugMode:       true,
-	}
-	err := e.DoAccoutOperation(opWithdraw)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
 }
 
