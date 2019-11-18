@@ -9,6 +9,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -117,7 +118,10 @@ func (e *Stex) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Stex) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://app.stex.com/en/basic-trade/pair/%s/%s", e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target))
+	coins := strings.Split(e.GetSymbolByPair(pair), "_")
+	base := coins[1]
+	target := coins[0]
+	return fmt.Sprintf("https://app.stex.com/en/basic-trade/pair/%s/%s", base, target)
 }
 
 /*************** Coins on the Exchanges ***************/
