@@ -19,6 +19,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
 	"github.com/bitontop/gored/exchange/bitmex"
+	"github.com/bitontop/gored/exchange/bitpie"
 	"github.com/bitontop/gored/exchange/bitrue"
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
@@ -515,6 +516,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.PROBIT:
 		ex := probit.CreateProbit(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BITPIE:
+		ex := bitpie.CreateBitpie(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

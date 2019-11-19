@@ -23,6 +23,7 @@ import (
 	"github.com/bitontop/gored/exchange/bithumb"
 	"github.com/bitontop/gored/exchange/bitmart"
 	"github.com/bitontop/gored/exchange/bitmax"
+	"github.com/bitontop/gored/exchange/bitpie"
 	"github.com/bitontop/gored/exchange/bitrue"
 	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/exchange/bittrex"
@@ -193,6 +194,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitFtx(config)
 	InitTxbit(config)
 	InitProbit(config)
+	InitBitpie(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -697,9 +699,19 @@ func InitTxbit(config *exchange.Config) {
 	exMan := exchange.CreateExchangeManager()
 	exMan.Add(ex)
 }
+
 func InitProbit(config *exchange.Config) {
 	conf.Exchange(exchange.PROBIT, config)
 	ex := probit.CreateProbit(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBitpie(config *exchange.Config) {
+	conf.Exchange(exchange.BITPIE, config)
+	ex := bitpie.CreateBitpie(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
