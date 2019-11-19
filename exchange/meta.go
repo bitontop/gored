@@ -56,6 +56,7 @@ const (
 	BITMART      ExchangeName = "BITMART"
 	BITMAX       ExchangeName = "BITMAX"
 	BITMEX       ExchangeName = "BITMEX"
+	BITPIE       ExchangeName = "BITPIE"
 	BITSTAMP     ExchangeName = "BITSTAMP"
 	BITTREX      ExchangeName = "BITTREX"
 	BITLISH      ExchangeName = "BITLISH"
@@ -194,4 +195,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	// supportList = append(supportList, FTX)        // ID = 62	orderbook not finished
 	supportList = append(supportList, TXBIT)  // ID = 63
 	supportList = append(supportList, PROBIT) // ID = 64
+	supportList = append(supportList, BITPIE) // ID = 65
 }

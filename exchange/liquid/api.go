@@ -237,7 +237,7 @@ func (e *Liquid) doWithdraw(operation *exchange.AccountOperation) error {
 		mapParams["memo_value"] = operation.WithdrawTag
 	}
 
-	log.Printf("test param: %+v", mapParams)
+	// log.Printf("test param: %+v", mapParams)
 	// mapParams["auth_code"] = "288754"
 
 	// optional parameters
