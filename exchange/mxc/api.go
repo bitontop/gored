@@ -266,7 +266,7 @@ func (e *Mxc) getBalance(operation *exchange.AccountOperation) error {
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
+		return fmt.Errorf("%s UpdateAllBalances Json Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
 	}
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		return fmt.Errorf("%s UpdateAllBalances Data Unmarshal Err: %v %s", e.GetName(), err, jsonBalanceReturn)
