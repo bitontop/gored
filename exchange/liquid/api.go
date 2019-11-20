@@ -252,7 +252,7 @@ func (e *Liquid) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonWithdraw), &withdraw); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v", e.GetName(), err)
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonWithdraw)
 		return operation.Error
 	}
 	if withdraw.ID == 0 {
