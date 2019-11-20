@@ -133,7 +133,7 @@ func (e *Bitmax) GetPairsData() error {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.Symbol)
 		}
-		if p != nil {
+		if p != nil && data.Status != "NoTrading" {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
@@ -142,7 +142,7 @@ func (e *Bitmax) GetPairsData() error {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     math.Pow10(-1 * data.QtyScale),
 				PriceFilter: math.Pow10(-1 * data.PriceScale),
-				Listed:      true,
+				Listed:      data.Status != "NoTrading",
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
