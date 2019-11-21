@@ -525,55 +525,57 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 		order.Status = exchange.Other
 	}
 
+	/* else if order.Status == exchange.Canceling {
+		order.Status = exchange.Cancelled
+	} */
+
 	return nil
 }
 
-// change to finished orderStatus
-func (e *Bkex) ListOrders() ([]*exchange.Order, error) {
+// no updateTime avaliable
+func (e *Bkex) finishedOrderStatus(order *exchange.Order, updateTime int64) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
-		return nil, fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
-
-	strRequestPath := "/v1/u/trade/order/listUnfinished"
-	mapParams := make(map[string]string)
-	var res []*exchange.Order
 
 	jsonResponse := &JsonResponse{}
-	orders := OrdersPage{}
+	orderStatus := OrderStatus{}
+	strRequestPath := "/v1/u/trade/order/finished/detail"
 
-	pairs := e.GetPairs()
-	if len(pairs) > 0 {
-		for _, pairIt := range pairs {
-			mapParams["pair"] = e.GetSymbolByPair(pairIt)
+	mapParams := make(map[string]string)
+	mapParams["orderNo"] = order.OrderID
+	// mapParams["updateTime"] = "0" // timestamp int64
 
-			jsonOrders := e.ApiKeyGet(strRequestPath, mapParams)
-			if err := json.Unmarshal([]byte(jsonOrders), &jsonResponse); err != nil {
-				return nil, fmt.Errorf("%s ListOrders Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrders)
-			} else if jsonResponse.Code != 0 {
-				return nil, fmt.Errorf("%s ListOrders Failed: %v", e.GetName(), jsonResponse.Msg)
-			}
-			if err := json.Unmarshal(jsonResponse.Data, &orders); err != nil {
-				return nil, fmt.Errorf("%s ListOrders Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-			}
-
-			for _, orderItem := range orders.Data {
-				tmpPair := e.GetPairBySymbol(orderItem.Pair)
-
-				order := &exchange.Order{
-					Pair:         tmpPair,
-					OrderID:      fmt.Sprintf("%d", orderItem.Id),
-					Rate:         orderItem.Price,
-					Quantity:     orderItem.DealAmount,
-					Side:         orderItem.Direction,
-					Status:       exchange.New,
-					JsonResponse: jsonOrders,
-				}
-				res = append(res, order)
-			}
-		}
+	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
+		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+	} else if jsonResponse.Code != 0 {
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	return res, nil
+	order.StatusMessage = jsonOrderStatus
+	if orderStatus.DealAmount == 0 {
+		order.Status = exchange.New
+	} else if orderStatus.DealAmount < orderStatus.TotalAmount {
+		order.Status = exchange.Partial
+	} else if orderStatus.DealAmount == orderStatus.TotalAmount {
+		order.Status = exchange.Filled
+	} else {
+		order.Status = exchange.Other
+	}
+
+	/* else if order.Status == exchange.Canceling {
+		order.Status = exchange.Cancelled
+	} */
+
+	return nil
+}
+
+func (e *Bkex) ListOrders() ([]*exchange.Order, error) {
+	return nil, nil
 }
 
 func (e *Bkex) CancelOrder(order *exchange.Order) error {
