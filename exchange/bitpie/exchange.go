@@ -44,7 +44,7 @@ func CreateBitpie(config *exchange.Config) *Bitpie {
 		instance = &Bitpie{
 			ID:      DEFAULT_ID,
 			Name:    "Bitpie",
-			Website: "https://www.bitpie.com/",
+			Website: "https://bitpie.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -109,8 +109,10 @@ func (e *Bitpie) GetBalance(coin *coin.Coin) float64 {
 	}
 }
 
+// no website version, use app
 func (e *Bitpie) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://bitpie.com/Market/Index?MarketName=%s", e.GetSymbolByPair(pair))
+	return "https://bitpie.com/"
+	// return fmt.Sprintf("https://bitpie.com/Market/Index?MarketName=%s", e.GetSymbolByPair(pair))
 }
 
 /*************** Coins on the Exchanges ***************/
@@ -227,17 +229,17 @@ func (e *Bitpie) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bitpie) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = true
-	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
-	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
+	constrainFetchMethod.Confirmation = false
 	return constrainFetchMethod
 }
 

@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -20,7 +22,7 @@ import (
 )
 
 const (
-	API_URL string = "https://bitpie.com/api"
+	API_URL string = "https://api.expie.com"
 )
 
 /*API Base Knowledge
@@ -49,10 +51,12 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitpie) GetCoinsData() error {
-	jsonResponse := &JsonResponse{}
-	coinsData := CoinsData{}
+	e.TestAuth()
 
-	strRequestUrl := "/v1.1/public/getcurrencies"
+	jsonResponse := &JsonResponse{}
+	pairsData := PairsData{}
+
+	strRequestUrl := "/v1/markets" // ********* move to base url
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -61,35 +65,57 @@ func (e *Bitpie) GetCoinsData() error {
 	} else if !jsonResponse.Success {
 		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
+	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
-	for _, data := range coinsData {
-		c := &coin.Coin{}
+	for _, data := range pairsData {
+		base := &coin.Coin{}
+		target := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.Currency)
-			if c == nil {
-				c = &coin.Coin{}
-				c.Code = data.Currency
-				c.Name = data.CurrencyLong
-				coin.AddCoin(c)
+			base = coin.GetCoin(data.Money)
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = data.Money
+				coin.AddCoin(base)
+			}
+			target = coin.GetCoin(data.Stock)
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = data.Stock
+				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.Currency)
+			base = e.GetCoinBySymbol(data.Money)
+			target = e.GetCoinBySymbol(data.Stock)
 		}
 
-		if c != nil {
+		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
+				CoinID:       base.ID,
+				Coin:         base,
+				ExSymbol:     data.Money,
 				ChainType:    exchange.MAINNET,
-				TxFee:        data.TxFee,
-				Withdraw:     data.IsActive,
-				Deposit:      DEFAULT_DEPOSIT, //data.IsActive, // IsActive==true if deposit==false & withdraw==true
-				Confirmation: data.MinConfirmation,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       true,
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+
+		if target != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       target.ID,
+				Coin:         target,
+				ExSymbol:     data.Stock,
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       true,
 			}
 			e.SetCoinConstraint(coinConstraint)
@@ -123,26 +149,26 @@ func (e *Bitpie) GetPairsData() error {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.BaseCurrency)
-			target := coin.GetCoin(data.MarketCurrency)
+			base := coin.GetCoin(data.Money)
+			target := coin.GetCoin(data.Stock)
 			if base != nil && target != nil {
 
 				p = pair.GetPair(base, target)
 
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(data.MarketName)
+			p = e.GetPairBySymbol(data.Name)
 		}
 		if p != nil {
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
-				ExSymbol:    data.MarketName,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      true,
+				ExSymbol:    data.Name,
+				MakerFee:    float64(data.MakerFeeRate),
+				TakerFee:    float64(data.TakerFeeRate),
+				LotSize:     math.Pow10(-1 * data.StockPrecision),
+				PriceFilter: math.Pow10(-1 * data.MoneyPrecision),
+				Listed:      data.Enabled,
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -492,5 +518,57 @@ func (e *Bitpie) ApiKeyGET(strRequestPath string, mapParams map[string]string) s
 		return err.Error()
 	}
 
+	return string(body)
+}
+
+func (e *Bitpie) TestAuth() string {
+	mapParams := make(map[string]string)
+	mapParams["appkey"] = "1b57e40a27e9d1c6bcb90cff85eff2ea748b48bcbf918eac6829c86394edc335" //e.API_KEY
+
+	// mapParams["time"] = fmt.Sprintf("%d", time.Now().UnixNano())
+
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	// strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	// 获取登陆二维码
+	strUrl := "https://pieopen.getcai.com" + "/api/v1/open/third/party/login/qr"
+	// strUrl := "https://pieopen.getcai.com" + "/api/v1/open/third/party/login/qr" + "?" + exchange.Map2UrlQuery(mapParams)
+	// 获取登陆二维码状态
+	// strUrl := "https://pieopen.getcai.com" + "/api/v1/open/third/party/login/query/" + "3ff92e9739dd91accaab394b16aea5d161887ca8b4899fc994b337328d889fdb"
+	// 获取用户信息
+	// strUrl := "https://pieopen.getcai.com" + "/api/v1/open/third/party/login/query/" + "3ff92e9739dd91accaab394b16aea5d161887ca8b4899fc994b337328d889fdb"
+
+	// signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
+	httpClient := &http.Client{}
+
+	log.Printf("jsonParams: %+v\n strUrl: %v", jsonParams, strUrl)
+
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
+	if nil != err {
+		log.Printf("REQUEST ERROR!!!!!!!!!!!! %v", err)
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/json")
+	// request.Header.Add("Accept", "application/json")
+	// request.Header.Add("apisign", signature)
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		log.Printf("RESPONSE ERROR!!!!!!!!!!!! %v", err)
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		log.Printf("READBODY ERROR!!!!!!!!!!!! %v", err)
+		return err.Error()
+	}
+
+	log.Printf("*************** RETURN: %v", string(body))
 	return string(body)
 }

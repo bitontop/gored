@@ -16,6 +16,36 @@ type JsonResponse struct {
 	Result  json.RawMessage `json:"result"`
 }
 
+type PairsData []struct {
+	Name                string `json:"name"`
+	MarketOrderMinMoney string `json:"market_order_min_money"`
+	StockPrecision      int    `json:"stock_precision"`
+	Money               string `json:"money"`
+	MakerFeeRate        int    `json:"maker_fee_rate"`
+	OrderMinVol         string `json:"order_min_vol"`
+	MoneyPrecision      int    `json:"money_precision"`
+	MarketOrderEnabled  bool   `json:"market_order_enabled"`
+	Stock               string `json:"stock"`
+	Enabled             bool   `json:"enabled"`
+	TakerFeeRate        int    `json:"taker_fee_rate"`
+}
+
+//-------
+
+// type PairsData []struct {
+// 	MarketCurrency     string      `json:"MarketCurrency"`
+// 	BaseCurrency       string      `json:"BaseCurrency"`
+// 	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
+// 	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
+// 	MinTradeSize       float64     `json:"MinTradeSize"`
+// 	MarketName         string      `json:"MarketName"`
+// 	IsActive           bool        `json:"IsActive"`
+// 	Created            string      `json:"Created"`
+// 	Notice             interface{} `json:"Notice"`
+// 	IsSponsored        interface{} `json:"IsSponsored"`
+// 	LogoURL            string      `json:"LogoUrl"`
+// }
+
 type AccountBalances []struct {
 	Currency      string  `json:"Currency"`
 	Balance       float64 `json:"Balance"`
@@ -54,32 +84,6 @@ type PlaceOrder struct {
 	IsConditional              bool
 	Condition                  string
 	ConditionTarget            float64
-}
-
-type PairsData []struct {
-	MarketCurrency     string      `json:"MarketCurrency"`
-	BaseCurrency       string      `json:"BaseCurrency"`
-	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
-	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
-	MinTradeSize       float64     `json:"MinTradeSize"`
-	MarketName         string      `json:"MarketName"`
-	IsActive           bool        `json:"IsActive"`
-	Created            string      `json:"Created"`
-	Notice             interface{} `json:"Notice"`
-	IsSponsored        interface{} `json:"IsSponsored"`
-	LogoURL            string      `json:"LogoUrl"`
-}
-
-type CoinsData []struct {
-	Currency        string      `json:"Currency"`
-	CurrencyLong    string      `json:"CurrencyLong"`
-	MinConfirmation int         `json:"MinConfirmation"`
-	TxFee           float64     `json:"TxFee"`
-	IsActive        bool        `json:"IsActive"`
-	IsRestricted    bool        `json:"IsRestricted"`
-	CoinType        string      `json:"CoinType"`
-	BaseAddress     string      `json:"BaseAddress"`
-	Notice          interface{} `json:"Notice"`
 }
 
 type OrderBook struct {
