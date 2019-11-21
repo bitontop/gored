@@ -382,8 +382,6 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 		if err != nil {
 			return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, balance)
 		}
-		operation.BalanceFrozen = frozen
-		operation.BalanceAvailable = avaliable
 
 		b := exchange.AssetBalance{
 			Coin:             e.GetCoinBySymbol(account.Currency),
@@ -442,7 +440,8 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 		}
 	}
 
-	return fmt.Errorf("%s getBalance get %v account balance fail: %v", e.GetName(), symbol, jsonBalanceReturn)
+	operation.Error = fmt.Errorf("%s getBalance get %v account balance fail: %v", e.GetName(), symbol, jsonBalanceReturn)
+	return operation.Error
 }
 
 func (e *Okex) UpdateAllBalances() {
