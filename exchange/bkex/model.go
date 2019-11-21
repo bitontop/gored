@@ -53,14 +53,24 @@ type OrderBook struct {
 }
 
 /********** Private API Structure**********/
-type Balance struct {
-	Available float64 `json:"available"`
-	CoinType  string  `json:"coinType"`
-	Frozen    float64 `json:"frozen"`
-	Total     float64 `json:"total"`
-}
+// type Balance struct {
+// 	Available float64 `json:"available"`
+// 	CoinType  string  `json:"coinType"`
+// 	Frozen    float64 `json:"frozen"`
+// 	Total     float64 `json:"total"`
+// }
 
-type AccountBalances []Balance
+// type AccountBalances []Balance
+
+type AccountBalances struct {
+	WALLET []struct {
+		Available float64 `json:"available"`
+		CoinType  string  `json:"coinType"`
+		Frozen    float64 `json:"frozen"`
+		Total     float64 `json:"total"`
+	} `json:"WALLET"`
+	OTC []interface{} `json:"OTC"`
+}
 
 type WithdrawResponse struct {
 	Msg     string `json:"msg"`
@@ -74,7 +84,7 @@ type OrderDetail struct {
 	DealAvgPrice        float64     `json:"dealAvgPrice"`
 	Direction           string      `json:"direction"`
 	FrozenAmountByOrder float64     `json:"frozenAmountByOrder"`
-	Id                  int         `json:"id"`
+	Id                  string         `json:"id"`
 	OrderType           string      `json:"orderType"`
 	Pair                string      `json:"pair"`
 	Price               float64     `json:"price"`

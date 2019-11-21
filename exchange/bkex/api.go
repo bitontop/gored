@@ -83,7 +83,7 @@ func (e *Bkex) GetCoinsData() error {
 				c = e.GetCoinBySymbol(data.CoinType)
 			}
 
-			if c != nil {
+			if c != nil && data.SupportTrade {
 				coinConstraint := &exchange.CoinConstraint{
 					CoinID:       c.ID,
 					Coin:         c,
@@ -93,7 +93,7 @@ func (e *Bkex) GetCoinsData() error {
 					Withdraw:     data.SupportWithdraw,
 					Deposit:      data.SupportDeposit,
 					Confirmation: DEFAULT_CONFIRMATION,
-					Listed:       DEFAULT_LISTED,
+					Listed:       data.SupportTrade,
 				}
 
 				e.SetCoinConstraint(coinConstraint)
@@ -137,7 +137,8 @@ func (e *Bkex) GetPairsData() error {
 		case exchange.JSON_FILE:
 			p = e.GetPairBySymbol(data.Pair)
 		}
-		if p != nil {
+
+		if p != nil && data.SupportTrade {
 			lotSize := math.Pow10(-1 * data.AmountPrecision)
 			priceFilter := math.Pow10(-1 * data.DefaultPrecision)
 			pairConstraint := &exchange.PairConstraint{
@@ -148,7 +149,7 @@ func (e *Bkex) GetPairsData() error {
 				TakerFee:    DEFAULT_TAKER_FEE,
 				LotSize:     lotSize,
 				PriceFilter: priceFilter,
-				Listed:      true,
+				Listed:      data.SupportTrade,
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -212,8 +213,144 @@ func (e *Bkex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Bkex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.BalanceList:
+		return e.getAllBalance(operation)
+	case exchange.Balance:
+		return e.getBalance(operation)
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Bkex) getAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountBalance := AccountBalances{}
+
+	strRequestPath := "/v1/u/wallet/balance"
+
+	jsonAllBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
+	if operation.DebugMode {
+		operation.RequestURI = strRequestPath
+		operation.MapParams = ""
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s getAllBalance Err: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s getAllBalance Result Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	}
+
+	for _, balance := range accountBalance.WALLET {
+		if balance.Total == 0 {
+			continue
+		}
+
+		b := exchange.AssetBalance{
+			Coin:             e.GetCoinBySymbol(balance.CoinType),
+			BalanceAvailable: balance.Available,
+			BalanceFrozen:    balance.Frozen,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
 	return nil
 }
+
+func (e *Bkex) getBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	symbol := e.GetSymbolByCoin(operation.Coin)
+	jsonResponse := &JsonResponse{}
+	accountBalance := AccountBalances{}
+
+	strRequestPath := "/v1/u/wallet/balance"
+
+	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
+	if operation.DebugMode {
+		operation.RequestURI = strRequestPath
+		operation.MapParams = ""
+		operation.CallResponce = jsonBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s getBalance Err: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s getBalance Result Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	}
+
+	for _, balance := range accountBalance.WALLET {
+		if balance.CoinType != symbol {
+			continue
+		}
+
+		operation.BalanceAvailable = balance.Available
+		operation.BalanceFrozen = balance.Frozen
+
+		return nil
+	}
+
+	operation.Error = fmt.Errorf("%s getBalance get %v account balance fail: %v", e.GetName(), symbol, jsonBalanceReturn)
+	return operation.Error
+}
+
+func (e *Bkex) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	withdraw := WithdrawResponse{}
+	strRequestPath := "/v1/u/wallet/withdraw"
+
+	mapParams := make(map[string]string)
+	mapParams["coinType"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["txAddress"] = operation.WithdrawAddress
+	mapParams["password"] = "" // *************************************
+	mapParams["amount"] = operation.WithdrawAmount
+
+	jsonSubmitWithdraw := e.ApiKeyGet(strRequestPath, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestPath
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
+		return operation.Error
+	}
+
+	return nil
+}
+
 func (e *Bkex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -238,7 +375,7 @@ func (e *Bkex) UpdateAllBalances() {
 		return
 	}
 
-	for _, balance := range accountBalance {
+	for _, balance := range accountBalance.WALLET {
 		c := e.GetCoinBySymbol(balance.CoinType)
 		if c != nil {
 			balanceMap.Set(c.Code, balance.Available)
@@ -268,7 +405,7 @@ func (e *Bkex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) boo
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
 		return false
 	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonResponse.Msg)
+		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
 		return false
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &withdraw); err != nil {
@@ -287,11 +424,14 @@ func (e *Bkex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	jsonResponse := &JsonResponse{}
 	strRequestPath := "/v1/u/trade/order/create"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
 	mapParams["pair"] = e.GetSymbolByPair(pair)
 	mapParams["direction"] = "ASK"
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -299,11 +439,11 @@ func (e *Bkex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
-	orderId := fmt.Sprint("%s", jsonResponse.Data)
 
+	orderID := fmt.Sprintf("%s", jsonResponse.Data)
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      orderId,
+		OrderID:      orderID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -321,11 +461,14 @@ func (e *Bkex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	jsonResponse := &JsonResponse{}
 	strRequestPath := "/v1/u/trade/order/create"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
+
 	mapParams := make(map[string]string)
 	mapParams["pair"] = e.GetSymbolByPair(pair)
 	mapParams["direction"] = "ASK"
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -333,11 +476,11 @@ func (e *Bkex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
-	orderId := fmt.Sprint("%s", jsonResponse.Data)
 
+	orderID := fmt.Sprintf("%s", jsonResponse.Data)
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      orderId,
+		OrderID:      orderID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -347,6 +490,7 @@ func (e *Bkex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	return order, nil
 }
 
+// unfinished order, need finished order after this
 func (e *Bkex) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
@@ -376,6 +520,7 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 	return nil
 }
 
+// change to finished orderStatus
 func (e *Bkex) ListOrders() ([]*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
