@@ -533,6 +533,7 @@ func (e *Bitpie) TestAuth() string {
 		jsonParams = string(bytesParams)
 	}
 
+	// these api has been suspended
 	// strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
 	// 获取登陆二维码
 	strUrl := "https://pieopen.getcai.com" + "/api/v1/open/third/party/login/qr"
