@@ -22,7 +22,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://api.bkex.vip"
+	API_URL = "https://api.bkex.com"
 )
 
 /*API Base Knowledge
