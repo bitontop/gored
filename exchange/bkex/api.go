@@ -497,7 +497,7 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	orderStatus := OrderItem{}
+	orderStatus := OrderStatus{}
 	strRequestPath := "/v1/u/trade/order/unfinished/detail"
 
 	mapParams := make(map[string]string)
@@ -514,8 +514,16 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	order.DealRate = orderStatus.Price
-	order.DealQuantity = orderStatus.Amt
+	order.StatusMessage = jsonOrderStatus
+	if orderStatus.DealAmount == 0 {
+		order.Status = exchange.New
+	} else if orderStatus.DealAmount < orderStatus.TotalAmount {
+		order.Status = exchange.Partial
+	} else if orderStatus.DealAmount == orderStatus.TotalAmount {
+		order.Status = exchange.Filled
+	} else {
+		order.Status = exchange.Other
+	}
 
 	return nil
 }

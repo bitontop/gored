@@ -78,13 +78,28 @@ type WithdrawResponse struct {
 	ID      string `json:"id"`
 }
 
+type OrderStatus struct {
+	CreatedTime         int64       `json:"createdTime"`
+	DealAmount          float64     `json:"dealAmount"`
+	DealAvgPrice        float64     `json:"dealAvgPrice"`
+	Direction           string      `json:"direction"`
+	FrozenAmountByOrder float64     `json:"frozenAmountByOrder"`
+	ID                  string      `json:"id"`
+	OrderType           string      `json:"orderType"`
+	Pair                string      `json:"pair"`
+	Price               float64     `json:"price"`
+	Status              int         `json:"status"`
+	TotalAmount         float64     `json:"totalAmount"`
+	UpdateTime          interface{} `json:"updateTime"`
+}
+
 type OrderDetail struct {
 	CreatedTime         int         `json:"createdTime"`
 	DealAmount          float64     `json:"dealAmount"`
 	DealAvgPrice        float64     `json:"dealAvgPrice"`
 	Direction           string      `json:"direction"`
 	FrozenAmountByOrder float64     `json:"frozenAmountByOrder"`
-	Id                  string         `json:"id"`
+	Id                  string      `json:"id"`
 	OrderType           string      `json:"orderType"`
 	Pair                string      `json:"pair"`
 	Price               float64     `json:"price"`
