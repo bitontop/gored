@@ -546,7 +546,7 @@ func (e *Bitpie) TestAuth() string {
 	// signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
 	httpClient := &http.Client{}
 
-	log.Printf("jsonParams: %+v\n strUrl: %v", jsonParams, strUrl)
+	// log.Printf("jsonParams: %+v\n strUrl: %v", jsonParams, strUrl)
 
 	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
 	if nil != err {
