@@ -27,7 +27,7 @@ func Test_Coinex(t *testing.T) {
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
-	// Test_Pair(e, pair)
+	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
