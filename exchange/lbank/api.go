@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	API_URL string = "https://api.lbkex.com"
+	API_URL string = "https://www.lbkex.net"//"https://api.lbkex.com"
 )
 
 /*API Base Knowledge
