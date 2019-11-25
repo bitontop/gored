@@ -4,12 +4,27 @@ package lbank
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-type CoinsData []struct {
+// v2
+type CoinsData struct {
+	Result string `json:"result"`
+	Data   []struct {
+		AmountScale string `json:"amountScale"`
+		AssetCode   string `json:"assetCode"`
+		CanWithDraw bool   `json:"canWithDraw"`
+		Fee         string `json:"fee"`
+		Type        string `json:"type"`
+		Min         string `json:"min,omitempty"`
+	} `json:"data"`
+	ErrorCode int   `json:"error_code"`
+	Ts        int64 `json:"ts"`
+}
+
+/* type CoinsData []struct {
 	AssetCode   string `json:"assetCode"`
 	Min         string `json:"min"`
 	CanWithDraw bool   `json:"canWithDraw"`
 	Fee         string `json:"fee"`
-}
+} */
 
 type PairsData []struct {
 	MinTranQua       string `json:"minTranQua"`

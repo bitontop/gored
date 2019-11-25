@@ -62,15 +62,17 @@ Step 3: Modify API Path(strRequestUrl)*/
 func (e *Lbank) GetCoinsData() error {
 	coinsData := CoinsData{}
 
-	strRequestUrl := "/v1/withdrawConfigs.do"
+	strRequestUrl := "/v2/withdrawConfigs.do" //"/v1/withdrawConfigs.do"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+	} else if coinsData.Result != "true" {
+		return fmt.Errorf("%s Get Coin Failed: %s", e.GetName(), jsonCurrencyReturn)
 	}
 
-	for _, data := range coinsData {
+	for _, data := range coinsData.Data {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
