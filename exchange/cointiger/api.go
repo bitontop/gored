@@ -55,7 +55,7 @@ func (e *Cointiger) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
-	strRequestPath := "/api/v2/currencys"
+	strRequestPath := "/api/v2/currencys/v2"
 	strUrl := API_URL + strRequestPath
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -91,20 +91,22 @@ func (e *Cointiger) GetCoinsData() error {
 				target = e.GetCoinBySymbol(details.BaseCurrency)
 			}
 
+			// data contain target's txfee only
 			if base != nil {
-				coinConstraint := &exchange.CoinConstraint{
-					CoinID:       base.ID,
-					Coin:         base,
-					ExSymbol:     details.QuoteCurrency,
-					ChainType:    exchange.MAINNET,
-					TxFee:        details.WithdrawFeeMin,
-					Withdraw:     DEFAULT_WITHDRAW,
-					Deposit:      DEFAULT_DEPOSIT,
-					Confirmation: DEFAULT_CONFIRMATION,
-					Listed:       DEFAULT_LISTED,
+				if e.GetCoinConstraint(base) == nil {
+					coinConstraint := &exchange.CoinConstraint{
+						CoinID:       base.ID,
+						Coin:         base,
+						ExSymbol:     details.QuoteCurrency,
+						ChainType:    exchange.MAINNET,
+						TxFee:        DEFAULT_TXFEE,
+						Withdraw:     DEFAULT_WITHDRAW,
+						Deposit:      DEFAULT_DEPOSIT,
+						Confirmation: DEFAULT_CONFIRMATION,
+						Listed:       DEFAULT_LISTED,
+					}
+					e.SetCoinConstraint(coinConstraint)
 				}
-
-				e.SetCoinConstraint(coinConstraint)
 			}
 
 			if target != nil {

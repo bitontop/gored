@@ -241,7 +241,7 @@ func (e *Dragonex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.TxFee = true
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false

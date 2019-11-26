@@ -20,6 +20,7 @@ type PairsDetails []struct {
 	QuoteCurrency   string  `json:"quoteCurrency"`
 	PricePrecision  int     `json:"pricePrecision"`
 	AmountPrecision int     `json:"amountPrecision"`
+	AmountMin       float64 `json:"amountMin"`
 	WithdrawFeeMin  float64 `json:"withdrawFeeMin"`
 	WithdrawFeeMax  float64 `json:"withdrawFeeMax"`
 	WithdrawOneMin  float64 `json:"withdrawOneMin"`
