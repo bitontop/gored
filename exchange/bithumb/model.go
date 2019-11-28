@@ -46,3 +46,30 @@ type OrderBook struct {
 	Ver    string     `json:"ver"`
 	S      [][]string `json:"s"`
 }
+
+type AccountBalances []struct {
+	CoinType    string `json:"coinType"`
+	Count       string `json:"count"`
+	Frozen      string `json:"frozen"`
+	BtcQuantity string `json:"btcQuantity"`
+	Type        string `json:"type"`
+}
+
+type PlaceOrder struct {
+	OrderID string `json:"orderId"`
+	Symbol  string `json:"symbol"`
+}
+
+type OrderStatus struct {
+	OrderID    string `json:"orderId"`
+	Symbol     string `json:"symbol"`
+	Price      string `json:"price"`
+	TradedNum  string `json:"tradedNum"`
+	Quantity   string `json:"quantity"`
+	AvgPrice   string `json:"avgPrice"`
+	Status     string `json:"status"`
+	Type       string `json:"type"`
+	Side       string `json:"side"`
+	CreateTime string `json:"createTime"`
+	TradeTotal string `json:"tradeTotal"`
+}
