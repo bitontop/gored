@@ -65,7 +65,6 @@ func (e *Bitfinex) GetCoinsData() error {
 		strURL := API_URL + strRequestUrl + field
 
 		jsonCurrencyReturn := exchange.HttpGetRequest(strURL, nil)
-		log.Printf("COIN: %v", jsonCurrencyReturn)
 		if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 			return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 		}
