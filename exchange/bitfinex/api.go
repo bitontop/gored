@@ -65,6 +65,7 @@ func (e *Bitfinex) GetCoinsData() error {
 		strURL := API_URL + strRequestUrl + field
 
 		jsonCurrencyReturn := exchange.HttpGetRequest(strURL, nil)
+		log.Printf("COIN: %v", jsonCurrencyReturn)
 		if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 			return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 		}
@@ -73,16 +74,22 @@ func (e *Bitfinex) GetCoinsData() error {
 		case 0:
 			for _, fixSymbol := range coinsData[0] {
 				c := &coin.Coin{}
+				fixed := fixSymbol[1]
+				if fixed == "LEO-EOS" {
+					fixed = "EOS"
+				} else if fixed == "LEO-ERC20" {
+					fixed = "LEO"
+				}
 				switch e.Source {
 				case exchange.EXCHANGE_API:
-					c = coin.GetCoin(fixSymbol[1])
+					c = coin.GetCoin(fixed)
 					if c == nil {
 						c = &coin.Coin{}
-						c.Code = fixSymbol[1]
+						c.Code = fixed
 						coin.AddCoin(c)
 					}
 				case exchange.JSON_FILE:
-					c = e.GetCoinBySymbol(fixSymbol[1])
+					c = e.GetCoinBySymbol(fixed)
 				}
 				if c != nil {
 					coinConstraint := &exchange.CoinConstraint{

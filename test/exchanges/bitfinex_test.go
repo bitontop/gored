@@ -22,14 +22,14 @@ import (
 func Test_Bitfinex(t *testing.T) {
 	e := InitBitfinex()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|EOS")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
-	// Test_Pair(e, pair)
+	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.0001000123, 100)
@@ -44,6 +44,9 @@ func InitBitfinex() exchange.Exchange {
 	pair.Init()
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	// utils.GetCommonDataFromJSON(config.SourceURI)
 	conf.Exchange(exchange.BITFINEX, config)
 
 	ex := bitfinex.CreateBitfinex(config)
