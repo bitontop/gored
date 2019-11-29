@@ -27,10 +27,10 @@ func Test_Bitz(t *testing.T) {
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
-	// Test_Pair(e, pair)
+	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
@@ -56,6 +56,9 @@ func InitBitz() exchange.Exchange {
 	pair.Init()
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	// utils.GetCommonDataFromJSON(config.SourceURI)
 	conf.Exchange(exchange.BITZ, config)
 
 	ex := bitz.CreateBitz(config)
