@@ -280,6 +280,9 @@ func (e *Okex) doWithdraw(operation *exchange.AccountOperation) error {
 	} else if !withdrawResponse.Result {
 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
 		return operation.Error
+	} else if withdrawResponse.WithdrawalID == "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
 	}
 
 	operation.WithdrawID = withdrawResponse.WithdrawalID
@@ -378,14 +381,14 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 			continue
 		}
 		frozen, err := strconv.ParseFloat(account.Hold, 64)
-		avaliable, err := strconv.ParseFloat(account.Available, 64)
+		available, err := strconv.ParseFloat(account.Available, 64)
 		if err != nil {
 			return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, balance)
 		}
 
 		b := exchange.AssetBalance{
 			Coin:             e.GetCoinBySymbol(account.Currency),
-			BalanceAvailable: avaliable,
+			BalanceAvailable: available,
 			BalanceFrozen:    frozen,
 		}
 		operation.BalanceList = append(operation.BalanceList, b)
@@ -430,12 +433,12 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 	for _, account := range balance {
 		if account.Currency == symbol {
 			frozen, err := strconv.ParseFloat(account.Hold, 64)
-			avaliable, err := strconv.ParseFloat(account.Available, 64)
+			available, err := strconv.ParseFloat(account.Available, 64)
 			if err != nil {
 				return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, balance)
 			}
 			operation.BalanceFrozen = frozen
-			operation.BalanceAvailable = avaliable
+			operation.BalanceAvailable = available
 			return nil
 		}
 	}

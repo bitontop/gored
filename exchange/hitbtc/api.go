@@ -213,8 +213,164 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Hitbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.BalanceList:
+		return e.getAllBalance(operation)
+	case exchange.Balance:
+		return e.getBalance(operation)
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Hitbtc) getAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountBalance := AccountBalances{}
+	errResponse := ErrResponse{}
+	strRequest := "/api/2/trading/balance"
+
+	jsonAllBalanceReturn := e.ApiKeyRequest("GET", make(map[string]string), strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	json.Unmarshal([]byte(jsonAllBalanceReturn), &errResponse)
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else if errResponse.Error.Code != 0 {
+		operation.Error = fmt.Errorf("%s getAllBalance failed: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
+	}
+
+	for _, v := range accountBalance {
+		available, err := strconv.ParseFloat(v.Available, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s getAllBalance parse balance Err: %v, %s", e.GetName(), err, accountBalance)
+			return operation.Error
+		}
+		frozen, err := strconv.ParseFloat(v.Available, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s getAllBalance parse balance Err: %v, %s", e.GetName(), err, accountBalance)
+			return operation.Error
+		}
+
+		if available == 0 && frozen == 0 {
+			continue
+		}
+
+		b := exchange.AssetBalance{
+			Coin:             e.GetCoinBySymbol(v.Currency),
+			BalanceAvailable: available,
+			BalanceFrozen:    frozen,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
 	return nil
 }
+
+func (e *Hitbtc) getBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountBalance := AccountBalances{}
+	errResponse := ErrResponse{}
+	strRequest := "/api/2/trading/balance"
+	symbol := e.GetSymbolByCoin(operation.Coin)
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", make(map[string]string), strRequest)
+	// log.Printf("RETURN : %v", jsonBalanceReturn)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonBalanceReturn
+	}
+
+	json.Unmarshal([]byte(jsonBalanceReturn), &errResponse)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	} else if errResponse.Error.Code != 0 {
+		operation.Error = fmt.Errorf("%s getBalance failed: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
+	}
+
+	for _, v := range accountBalance {
+		if v.Currency != symbol {
+			// log.Printf("v.Currency,symbol: [%v-%v]", v.Currency, symbol)
+			continue
+		}
+
+		available, err := strconv.ParseFloat(v.Available, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s getBalance parse balance Err: %v, %s", e.GetName(), err, accountBalance)
+			return operation.Error
+		}
+		frozen, err := strconv.ParseFloat(v.Available, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s getBalance parse balance Err: %v, %s", e.GetName(), err, accountBalance)
+			return operation.Error
+		}
+
+		if available == 0 && frozen == 0 {
+			continue
+		}
+
+		operation.BalanceFrozen = frozen
+		operation.BalanceAvailable = available
+		return nil
+	}
+
+	operation.Error = fmt.Errorf("%s getBalance get %v account balance fail: %v", e.GetName(), symbol, jsonBalanceReturn)
+	return operation.Error
+}
+
+func (e *Hitbtc) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	withdraw := Withdraw{}
+	errResponse := ErrResponse{}
+	strRequest := "/api/2/account/crypto/withdraw"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["address"] = operation.WithdrawAddress
+
+	jsonWithdrawReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonWithdrawReturn
+	}
+
+	json.Unmarshal([]byte(jsonWithdrawReturn), &errResponse)
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonWithdrawReturn)
+		return operation.Error
+	} else if errResponse.Error.Code != 0 {
+		operation.Error = fmt.Errorf("%s withdraw failed: %v", e.GetName(), jsonWithdrawReturn)
+		return operation.Error
+	} else if withdraw.ID == "" {
+		operation.Error = fmt.Errorf("%s withdraw failed: %v", e.GetName(), jsonWithdrawReturn)
+		return operation.Error
+	}
+
+	operation.WithdrawID = withdraw.ID
+
+	return nil
+}
+
 func (e *Hitbtc) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

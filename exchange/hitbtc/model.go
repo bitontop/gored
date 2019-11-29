@@ -71,3 +71,7 @@ type PlaceOrder struct {
 	UpdatedAt     time.Time `json:"updatedAt"`
 	PostOnly      bool      `json:"postOnly"`
 }
+
+type Withdraw struct {
+	ID string `json:"id"`
+}
