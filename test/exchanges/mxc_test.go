@@ -23,12 +23,12 @@ import (
 func Test_Mxc(t *testing.T) {
 	e := InitMxc()
 	// api only accept usdt based pair
-	pair := pair.GetPairByKey("USDT|ETH")
+	pair := pair.GetPairByKey("USDT|ETH") //"USDT|EOS"
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
-	// Test_Pair(e, pair)
-	// Test_Orderbook(e, pair)
+	Test_Pair(e, pair)
+	Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 

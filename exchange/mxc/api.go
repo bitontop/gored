@@ -549,22 +549,12 @@ func (e *Mxc) ApiKeyRequest(strMethod string, strRequestPath string, mapParams m
 	signature := exchange.ComputeMD5(authParams)
 	mapParams["sign"] = signature
 
-	// jsonParams := ""
-	// if nil != mapParams {
-	// 	bytesParams, _ := json.Marshal(mapParams)
-	// 	jsonParams = string(bytesParams)
-	// }
-
 	strUrl = strUrl + "?" + exchange.Map2UrlQuery(mapParams)
 
-	// request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
 	request, err := http.NewRequest(strMethod, strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
-
-	// log.Printf("to MD5: %v", authParams)
-	// log.Printf("====mapParams: %+v", mapParams)
 
 	request.Header.Add("Content-Type", "application/json")
 	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
