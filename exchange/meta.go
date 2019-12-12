@@ -197,5 +197,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, TXBIT)  // ID = 63
 	supportList = append(supportList, PROBIT) // ID = 64
 	supportList = append(supportList, BITPIE) // ID = 65 // api unavailable
-	// supportList = append(supportList, TAGZ) // ID = 66
+	supportList = append(supportList, TAGZ)   // ID = 66
 }
