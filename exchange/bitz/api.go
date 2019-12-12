@@ -21,7 +21,8 @@ import (
 )
 
 const (
-	API_URL string = "https://apiv2.bit-z.pro"
+	// API_URL string = "https://apiv2.bit-z.pro" // lookup apiv2.bit-z.pro: no such host
+	API_URL string = "https://apiv2.bitz.com"
 )
 
 /*API Base Knowledge
