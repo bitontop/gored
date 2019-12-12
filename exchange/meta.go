@@ -118,6 +118,7 @@ const (
 	RIGHTBTC     ExchangeName = "RIGHTBTC"
 	STEX         ExchangeName = "STEX"
 	SWITCHEO     ExchangeName = "SWITCHEO"
+	TAGZ         ExchangeName = "TAGZ"
 	TOKOK        ExchangeName = "TOKOK"
 	TIDEX        ExchangeName = "TIDEX"
 	TOPBTC       ExchangeName = "TOPBTC"
@@ -195,5 +196,6 @@ func (e *ExchangeManager) initExchangeNames() {
 	// supportList = append(supportList, FTX)        // ID = 62	orderbook not finished
 	supportList = append(supportList, TXBIT)  // ID = 63
 	supportList = append(supportList, PROBIT) // ID = 64
-	supportList = append(supportList, BITPIE) // ID = 65
+	supportList = append(supportList, BITPIE) // ID = 65 // api unavailable
+	// supportList = append(supportList, TAGZ) // ID = 66
 }
