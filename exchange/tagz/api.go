@@ -197,7 +197,7 @@ func (e *Tagz) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if len(orderBook.Bids) == 0 && len(orderBook.Asks) == 0 {
-		return nil, fmt.Errorf("%s Get Pairs Failed: %s", e.GetName(), jsonOrderbook)
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %s", e.GetName(), jsonOrderbook)
 	}
 
 	maker.LastUpdateID = int64(orderBook.Version)
