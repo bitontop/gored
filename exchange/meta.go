@@ -94,6 +94,8 @@ const (
 	GRAVIEX      ExchangeName = "GRAVIEX"
 	HITBTC       ExchangeName = "HITBTC"
 	HIBITEX      ExchangeName = "HIBITEX"
+	HOMIEX       ExchangeName = "HOMIEX"
+	HOO          ExchangeName = "HOO"
 	HOTBIT       ExchangeName = "HOTBIT"
 	HUOBI        ExchangeName = "HUOBI"
 	HUOBIDM      ExchangeName = "HUOBIDM"
@@ -101,6 +103,7 @@ const (
 	IBANKDIGITAL ExchangeName = "IBANKDIGITAL"
 	IDAX         ExchangeName = "IDAX"
 	IDEX         ExchangeName = "IDEX"
+	IDCM         ExchangeName = "IDCM"
 	KRAKEN       ExchangeName = "KRAKEN"
 	KUCOIN       ExchangeName = "KUCOIN"
 	LATOKEN      ExchangeName = "LATOKEN"
@@ -198,4 +201,7 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, PROBIT) // ID = 64
 	supportList = append(supportList, BITPIE) // ID = 65 // api unavailable
 	supportList = append(supportList, TAGZ)   // ID = 66
+	// supportList = append(supportList, IDCM)   // ID = 67
+	// supportList = append(supportList, HOO)    // ID = 68
+	// supportList = append(supportList, HOMIEX) // ID = 69
 }
