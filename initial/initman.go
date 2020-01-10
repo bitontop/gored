@@ -42,10 +42,13 @@ import (
 	"github.com/bitontop/gored/exchange/goko"
 	"github.com/bitontop/gored/exchange/hibitex"
 	"github.com/bitontop/gored/exchange/hitbtc"
+	"github.com/bitontop/gored/exchange/homiex"
+	"github.com/bitontop/gored/exchange/hoo"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobidm"
 	"github.com/bitontop/gored/exchange/huobiotc"
 	"github.com/bitontop/gored/exchange/ibankdigital"
+	"github.com/bitontop/gored/exchange/idcm"
 	"github.com/bitontop/gored/exchange/idex"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
@@ -531,6 +534,27 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.TAGZ:
 		ex := tagz.CreateTagz(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.IDCM:
+		ex := idcm.CreateIdcm(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.HOO:
+		ex := hoo.CreateHoo(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.HOMIEX:
+		ex := homiex.CreateHomiex(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}

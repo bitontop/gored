@@ -46,9 +46,12 @@ import (
 	"github.com/bitontop/gored/exchange/goko"
 	"github.com/bitontop/gored/exchange/hibitex"
 	"github.com/bitontop/gored/exchange/hitbtc"
+	"github.com/bitontop/gored/exchange/homiex"
+	"github.com/bitontop/gored/exchange/hoo"
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/exchange/huobidm"
 	"github.com/bitontop/gored/exchange/ibankdigital"
+	"github.com/bitontop/gored/exchange/idcm"
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/exchange/kucoin"
 	"github.com/bitontop/gored/exchange/latoken"
@@ -197,6 +200,9 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitProbit(config)
 	InitBitpie(config)
 	InitTagz(config)
+	InitIdcm(config)
+	InitHoo(config)
+	InitHomiex(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -723,6 +729,33 @@ func InitBitpie(config *exchange.Config) {
 func InitTagz(config *exchange.Config) {
 	conf.Exchange(exchange.TAGZ, config)
 	ex := tagz.CreateTagz(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitIdcm(config *exchange.Config) {
+	conf.Exchange(exchange.IDCM, config)
+	ex := idcm.CreateIdcm(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitHoo(config *exchange.Config) {
+	conf.Exchange(exchange.HOO, config)
+	ex := hoo.CreateHoo(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitHomiex(config *exchange.Config) {
+	conf.Exchange(exchange.HOMIEX, config)
+	ex := homiex.CreateHomiex(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()
