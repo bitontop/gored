@@ -323,5 +323,17 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 	case exchange.TAGZ:
 		config.API_KEY = ""
 		config.API_SECRET = ""
+
+	case exchange.IDCM:
+		config.API_KEY = ""
+		config.API_SECRET = ""
+
+	case exchange.HOO:
+		config.API_KEY = ""
+		config.API_SECRET = ""
+
+	case exchange.HOMIEX:
+		config.API_KEY = ""
+		config.API_SECRET = ""
 	}
 }
