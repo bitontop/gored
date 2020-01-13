@@ -118,6 +118,9 @@ func (e *Tagz) GetCoinsData() error {
 		}
 	}
 
+	// limit 1 per 1s
+	time.Sleep(time.Second * 2)
+
 	return nil
 }
 
