@@ -9,6 +9,10 @@ import (
 )
 
 type JsonResponse struct {
+	// error section
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+
 	Success bool            `json:"success"`
 	Message string          `json:"message"`
 	Result  json.RawMessage `json:"result"`
@@ -88,44 +92,51 @@ type OrderBook struct {
 	Asks [][]string `json:"asks"`
 }
 
-// TODO
-
-type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
-}
-
-type Uuid struct {
-	Id string `json:"uuid"`
+type AccountBalances struct {
+	CanTrade    bool `json:"canTrade"`
+	CanWithdraw bool `json:"canWithdraw"`
+	CanDeposit  bool `json:"canDeposit"`
+	UpdateTime  int  `json:"updateTime"`
+	Balances    []struct {
+		Asset   string `json:"asset"`
+		Total   string `json:"total"`
+		Free    string `json:"free"`
+		Locked  string `json:"locked"`
+		AssetID string `json:"assetId"`
+	} `json:"balances"`
 }
 
 type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            float64
+	OrderID       int    `json:"orderId"`
+	ClientOrderID string `json:"clientOrderId"`
+}
+
+type OrderStatus struct {
+	Symbol              string `json:"symbol"`
+	OrderID             int    `json:"orderId"`
+	ClientOrderID       string `json:"clientOrderId"`
+	Price               string `json:"price"`
+	OrigQty             string `json:"origQty"`
+	ExecutedQty         string `json:"executedQty"`
+	CummulativeQuoteQty string `json:"cummulativeQuoteQty"`
+	Status              string `json:"status"`
+	TimeInForce         string `json:"timeInForce"`
+	Type                string `json:"type"`
+	Side                string `json:"side"`
+	StopPrice           string `json:"stopPrice"`
+	IcebergQty          string `json:"icebergQty"`
+	Time                int64  `json:"time"`
+	UpdateTime          int64  `json:"updateTime"`
+	IsWorking           bool   `json:"isWorking"`
+}
+
+type CancelOrder struct {
+	Symbol        string `json:"symbol"`
+	ClientOrderID string `json:"clientOrderId"`
+	OrderID       int    `json:"orderId"`
+	Status        string `json:"status"`
+}
+
+type Withdraw struct {
+	Ret int `json:"ret"`
 }
