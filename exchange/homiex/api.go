@@ -571,26 +571,22 @@ func (e *Homiex) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonOrderStatus)
 	}
 
-	// TODO: need to test api response and add more cases
-	log.Printf("OrderStatus: %v", orderStatus.Status) // =================
 	order.StatusMessage = jsonOrderStatus
 	if orderStatus.Status == "NEW" {
 		order.Status = exchange.New
 	} else if orderStatus.Status == "CANCELED" {
 		order.Status = exchange.Cancelled
+	} else if orderStatus.Status == "PARTIALLY_FILLED" {
+		order.Status = exchange.Partial
+	} else if orderStatus.Status == "FILLED" {
+		order.Status = exchange.Filled
+	} else if orderStatus.Status == "PENDING_CANCEL" {
+		order.Status = exchange.Canceling
+	} else if orderStatus.Status == "REJECTED" {
+		order.Status = exchange.Rejected
+	} else {
+		order.Status = exchange.Other
 	}
-
-	// if orderStatus.CancelInitiated {
-	// 	order.Status = exchange.Canceling
-	// } else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
-	// 	order.Status = exchange.Cancelled
-	// } else if orderStatus.QuantityRemaining == 0 {
-	// 	order.Status = exchange.Filled
-	// } else if orderStatus.QuantityRemaining != orderStatus.Quantity {
-	// 	order.Status = exchange.Partial
-	// } else {
-	// 	order.Status = exchange.New
-	// }
 
 	return nil
 }
