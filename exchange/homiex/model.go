@@ -107,13 +107,13 @@ type AccountBalances struct {
 }
 
 type PlaceOrder struct {
-	OrderID       int    `json:"orderId"`
+	OrderID       string `json:"orderId"`
 	ClientOrderID string `json:"clientOrderId"`
 }
 
 type OrderStatus struct {
 	Symbol              string `json:"symbol"`
-	OrderID             int    `json:"orderId"`
+	OrderID             string `json:"orderId"`
 	ClientOrderID       string `json:"clientOrderId"`
 	Price               string `json:"price"`
 	OrigQty             string `json:"origQty"`
@@ -125,15 +125,15 @@ type OrderStatus struct {
 	Side                string `json:"side"`
 	StopPrice           string `json:"stopPrice"`
 	IcebergQty          string `json:"icebergQty"`
-	Time                int64  `json:"time"`
-	UpdateTime          int64  `json:"updateTime"`
+	Time                string `json:"time"`
+	UpdateTime          string `json:"updateTime"`
 	IsWorking           bool   `json:"isWorking"`
 }
 
 type CancelOrder struct {
 	Symbol        string `json:"symbol"`
 	ClientOrderID string `json:"clientOrderId"`
-	OrderID       int    `json:"orderId"`
+	OrderID       string `json:"orderId"`
 	Status        string `json:"status"`
 }
 
