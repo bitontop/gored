@@ -89,25 +89,25 @@ func Test_Trading(e exchange.Exchange, p *pair.Pair, rate, quantity float64) {
 func Test_Trading_Sell(e exchange.Exchange, p *pair.Pair, rate, quantity float64) {
 	order, err := e.LimitSell(p, quantity, rate)
 	if err == nil {
-		log.Printf("%s Limit Sell: %v", e.GetName(), order)
+		log.Printf("%s Limit Sell: %+v", e.GetName(), order)
 
 		err = e.OrderStatus(order)
 		if err == nil {
-			log.Printf("%s Order Status: %v", e.GetName(), order)
+			log.Printf("%s Order Status: %+v", e.GetName(), order)
 		} else {
 			log.Printf("%s Order Status Err: %s", e.GetName(), err)
 		}
 
 		err = e.CancelOrder(order)
 		if err == nil {
-			log.Printf("%s Cancel Order: %v", e.GetName(), order)
+			log.Printf("%s Cancel Order: %+v", e.GetName(), order)
 		} else {
 			log.Printf("%s Cancel Err: %s", e.GetName(), err)
 		}
 
 		err = e.OrderStatus(order)
 		if err == nil {
-			log.Printf("%s Order Status: %v", e.GetName(), order)
+			log.Printf("%s Order Status: %+v", e.GetName(), order)
 		} else {
 			log.Printf("%s Order Status Err: %s", e.GetName(), err)
 		}
@@ -202,7 +202,7 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 	if err != nil {
 		log.Printf("%v", err)
 	}
-	log.Printf("Account available: %v, frozen: %v", opBalance.BalanceAvailable, opBalance.BalanceFrozen)
+	log.Printf("%v Account available: %v, frozen: %v", opBalance.Coin.Code, opBalance.BalanceAvailable, opBalance.BalanceFrozen)
 }
 
 func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) {
