@@ -10,8 +10,8 @@ import (
 
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/test/conf"
-	// "../exchange/bw"
-	// "./conf"
+	// "../../exchange/bw"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.

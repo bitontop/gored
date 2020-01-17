@@ -85,13 +85,12 @@ func (e *Bw) GetCoinsData() error {
 		}
 
 		if c != nil {
-			fee, _ := strconv.ParseFloat(data.DrawFee, 64)
 			coinConstraint := &exchange.CoinConstraint{
 				CoinID:       c.ID,
 				Coin:         c,
 				ExSymbol:     data.CurrencyID,
 				ChainType:    exchange.MAINNET,
-				TxFee:        fee,
+				TxFee:        data.DrawFee,
 				Withdraw:     data.DrawFlag == 1,
 				Deposit:      data.RechargeFlag == 1,
 				Confirmation: DEFAULT_CONFIRMATION,
