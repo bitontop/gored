@@ -6,15 +6,62 @@ package idcm
 
 import (
 	"encoding/json"
-
-	"github.com/bitontop/gored/exchange"
 )
 
+// type JsonResponse struct {
+// 	Success bool            `json:"success"`
+// 	Message string          `json:"message"`
+// 	Result  json.RawMessage `json:"result"`
+// }
+
 type JsonResponse struct {
-	Success bool            `json:"success"`
-	Message string          `json:"message"`
-	Result  json.RawMessage `json:"result"`
+	Result int             `json:"result"`
+	Code   string          `json:"code"`
+	Data   json.RawMessage `json:"data"`
+	// old
+	// Success bool   `json:"success"`
+	// Message string `json:"message"`
 }
+
+type PairsData struct {
+	Data []struct {
+		TradePairID   string  `json:"TradePairID"`
+		TradePairCode string  `json:"TradePairCode"`
+		LastPrice     float64 `json:"LastPrice"`
+		Change        float64 `json:"Change"`
+		Rose          float64 `json:"Rose"`
+		Volume        float64 `json:"Volume"`
+		High          float64 `json:"High"`
+		Low           float64 `json:"Low"`
+		Open          float64 `json:"Open"`
+		Close         float64 `json:"Close"`
+		Turnover      float64 `json:"Turnover"`
+		Sort          int     `json:"Sort"`
+		PriceDigit    int     `json:"PriceDigit"`
+		QuantityDigit int     `json:"QuantityDigit"`
+	} `json:"Data"`
+	NeedLang   bool        `json:"NeedLang"`
+	Status     bool        `json:"Status"`
+	Msg        interface{} `json:"Msg"`
+	URL        interface{} `json:"Url"`
+	StatusCode string      `json:"StatusCode"`
+	Extra      interface{} `json:"Extra"`
+}
+
+type OrderBook struct {
+	Asks []struct {
+		Symbol string  `json:"symbol"`
+		Price  float64 `json:"price"`
+		Amount float64 `json:"amount"`
+	} `json:"asks"`
+	Bids []struct {
+		Symbol string  `json:"symbol"`
+		Price  float64 `json:"price"`
+		Amount float64 `json:"amount"`
+	} `json:"bids"`
+}
+
+// TODO
 
 type AccountBalances []struct {
 	Currency      string  `json:"Currency"`
@@ -54,35 +101,4 @@ type PlaceOrder struct {
 	IsConditional              bool
 	Condition                  string
 	ConditionTarget            float64
-}
-
-type PairsData []struct {
-	MarketCurrency     string      `json:"MarketCurrency"`
-	BaseCurrency       string      `json:"BaseCurrency"`
-	MarketCurrencyLong string      `json:"MarketCurrencyLong"`
-	BaseCurrencyLong   string      `json:"BaseCurrencyLong"`
-	MinTradeSize       float64     `json:"MinTradeSize"`
-	MarketName         string      `json:"MarketName"`
-	IsActive           bool        `json:"IsActive"`
-	Created            string      `json:"Created"`
-	Notice             interface{} `json:"Notice"`
-	IsSponsored        interface{} `json:"IsSponsored"`
-	LogoURL            string      `json:"LogoUrl"`
-}
-
-type CoinsData []struct {
-	Currency        string      `json:"Currency"`
-	CurrencyLong    string      `json:"CurrencyLong"`
-	MinConfirmation int         `json:"MinConfirmation"`
-	TxFee           float64     `json:"TxFee"`
-	IsActive        bool        `json:"IsActive"`
-	IsRestricted    bool        `json:"IsRestricted"`
-	CoinType        string      `json:"CoinType"`
-	BaseAddress     string      `json:"BaseAddress"`
-	Notice          interface{} `json:"Notice"`
-}
-
-type OrderBook struct {
-	Buy  []exchange.Order `json:"buy"`
-	Sell []exchange.Order `json:"sell"`
 }

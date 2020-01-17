@@ -110,7 +110,7 @@ func (e *Idcm) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Idcm) GetTradingWebURL(pair *pair.Pair) string { // BTC_USDT
-	return fmt.Sprintf("https://idcm.io/trading/%s", e.GetSymbolByPair(pair))
+	return fmt.Sprintf("https://idcm.io/trading/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 /*************** Coins on the Exchanges ***************/
@@ -227,13 +227,13 @@ func (e *Idcm) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Idcm) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
-	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
