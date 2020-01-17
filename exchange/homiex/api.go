@@ -681,7 +681,7 @@ func (e *Homiex) ApiKeyRequest(strMethod string, strRequestPath string, mapParam
 
 	httpClient := &http.Client{}
 
-	log.Printf("url: %v, body: %v", strUrl, jsonParams) // ========================
+	// log.Printf("url: %v, body: %v", strUrl, jsonParams) // ========================
 
 	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(jsonParams))
 	if nil != err {
