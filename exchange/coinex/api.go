@@ -204,7 +204,7 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Code != 0 {
-		return nil, fmt.Errorf("%s Get Pairs Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
