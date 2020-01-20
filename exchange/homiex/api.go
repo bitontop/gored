@@ -161,6 +161,8 @@ func (e *Homiex) GetPairsData() error {
 		if p != nil {
 			lotSize, _ := strconv.ParseFloat(data.BaseAssetPrecision, 64)
 			priceFilter, _ := strconv.ParseFloat(data.QuotePrecision, 64)
+			lotSize = 0.00000001 // ***** api wrong precision, set to default value for now
+			priceFilter = 0.00000001
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
