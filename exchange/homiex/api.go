@@ -159,10 +159,12 @@ func (e *Homiex) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil {
-			lotSize, _ := strconv.ParseFloat(data.BaseAssetPrecision, 64)
-			priceFilter, _ := strconv.ParseFloat(data.QuotePrecision, 64)
-			lotSize = 0.00000001 // ***** api wrong precision, set to default value for now
-			priceFilter = 0.00000001
+			// lotSize, _ := strconv.ParseFloat(data.BaseAssetPrecision, 64)
+			// priceFilter, _ := strconv.ParseFloat(data.QuotePrecision, 64)
+
+			priceFilter, _ := strconv.ParseFloat(data.Filters[0].TickSize, 64)
+			lotSize, _ := strconv.ParseFloat(data.Filters[1].StepSize, 64)
+
 			pairConstraint := &exchange.PairConstraint{
 				PairID:      p.ID,
 				Pair:        p,
