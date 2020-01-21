@@ -1,52 +1,51 @@
 package coinbene
 
+import (
+	"encoding/json"
+	"time"
+)
+
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-type PairsData struct {
-	Status      string `json:"status"`
-	Description string `json:"description"`
-	Timestamp   int64  `json:"timestamp"`
-	Symbol      []struct {
-		Ticker      string `json:"ticker"`
-		BaseAsset   string `json:"baseAsset"`
-		QuoteAsset  string `json:"quoteAsset"`
-		TakerFee    string `json:"takerFee"`
-		MakerFee    string `json:"makerFee"`
-		TickSize    string `json:"tickSize"`
-		LotStepSize string `json:"lotStepSize"`
-		MinQuantity string `json:"minQuantity"`
-	} `json:"symbol"`
+type JsonResponse struct {
+	Code    int             `json:"code"`
+	Message interface{}     `json:"message"`
+	Data    json.RawMessage `json:"data"`
+}
+
+type PairsData []struct {
+	Symbol           string `json:"symbol"`
+	BaseAsset        string `json:"baseAsset"`
+	QuoteAsset       string `json:"quoteAsset"`
+	PricePrecision   string `json:"pricePrecision"`
+	AmountPrecision  string `json:"amountPrecision"`
+	TakerFeeRate     string `json:"takerFeeRate"`
+	MakerFeeRate     string `json:"makerFeeRate"`
+	MinAmount        string `json:"minAmount"`
+	PriceFluctuation string `json:"priceFluctuation"`
+	Site             string `json:"site"`
 }
 
 type OrderBook struct {
-	Orderbook struct {
-		Asks OrderBookDetail `json:"asks"`
-		Bids OrderBookDetail `json:"bids"`
-	} `json:"orderbook"`
-	Status      string `json:"status"`
-	Description string `json:"description"`
-	Symbol      string `json:"symbol"`
-	Timestamp   int64  `json:"timestamp"`
+	Asks      [][]string `json:"asks"`
+	Bids      [][]string `json:"bids"`
+	Timestamp time.Time  `json:"timestamp"`
 }
+
+type AccountBalances []struct {
+	Asset         string `json:"asset"`
+	Available     string `json:"available"`
+	RrozenBalance string `json:"rrozenBalance"`
+	TotalBalance  string `json:"totalBalance"`
+}
+
+// TODO
 
 type OrderBookDetail []struct {
 	Quantity float64 `json:"quantity"`
 	Price    float64 `json:"price"`
-}
-
-type AccountBalances struct {
-	Account string `json:"account"`
-	Balance []struct {
-		Asset     string `json:"asset"`
-		Available string `json:"available"`
-		Reserved  string `json:"reserved"`
-		Total     string `json:"total"`
-	} `json:"balance"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
-	Timestamp   int64  `json:"timestamp"`
 }
 
 type PlaceOrder struct {
