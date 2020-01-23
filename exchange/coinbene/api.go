@@ -586,6 +586,9 @@ func (e *Coinbene) ApiKeyGET(strRequestPath string, mapParams map[string]string)
 	timestamp = fmt.Sprintf("%v", time.Now().UTC().Format("2006-01-02T15:04:05.009Z"))
 
 	// add condition here
+	if mapParams != nil {
+		strRequestPath = strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	}
 	strUrl := API_URL + strRequestPath //+ "?" + exchange.Map2UrlQuery(mapParams)
 
 	httpClient := &http.Client{}
