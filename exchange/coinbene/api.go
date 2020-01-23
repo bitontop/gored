@@ -5,7 +5,6 @@ package coinbene
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -323,7 +322,8 @@ func (e *Coinbene) UpdateAllBalances() {
 	mapParams := make(map[string]string)
 	// mapParams["account"] = "exchange"
 
-	jsonBalanceReturn := e.ApiKeyPost(strRequest, mapParams)
+	jsonBalanceReturn := e.ApiKeyGET(strRequest, mapParams)
+	// log.Printf("===========jsonBalanceReturn: %v", jsonBalanceReturn) // =====================
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -364,7 +364,7 @@ func (e *Coinbene) Withdraw(coin *coin.Coin, quantity float64, addr, tag string)
 	mapParams["address"] = addr
 	mapParams["tag"] = tag
 
-	jsonWithdrawReturn := e.ApiKeyPost(strRequest, mapParams)
+	jsonWithdrawReturn := e.ApiKeyWithdraw(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawReturn)
 		return false
@@ -381,28 +381,33 @@ func (e *Coinbene) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	jsonResponse := JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequest := "/v1/trade/order/place"
+	strRequest := "/api/exchange/v2/order/place"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
-	mapParams["type"] = "sell-limit"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["orderType"] = "1" // 1: Limit price 2: Market price
+	mapParams["direction"] = "2" // 1: buy 2: sell
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if placeOrder.Status != "ok" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), placeOrder.Description)
+	} else if jsonResponse.Code != 200 {
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Orderid,
+		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -418,28 +423,33 @@ func (e *Coinbene) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	jsonResponse := JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequest := "/v1/trade/order/place"
+	strRequest := "/api/exchange/v2/order/place"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
-	mapParams["type"] = "buy-limit"
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["orderType"] = "1" // 1: Limit price 2: Market price
+	mapParams["direction"] = "1" // 1: buy 2: sell
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyPost(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if placeOrder.Status != "ok" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), placeOrder.Description)
+	} else if jsonResponse.Code != 200 {
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.Orderid,
+		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -455,27 +465,31 @@ func (e *Coinbene) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	jsonResponse := JsonResponse{}
 	orderStatus := OrderStatus{}
-	strRequest := "/v1/trade/order/info"
+	strRequest := "/api/exchange/v2/order/info"
 
 	mapParams := make(map[string]string)
-	mapParams["orderid"] = order.OrderID
+	mapParams["orderId"] = order.OrderID
 
-	jsonOrderStatus := e.ApiKeyPost(strRequest, mapParams)
+	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if orderStatus.Status != "ok" {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), orderStatus.Description)
+	} else if jsonResponse.Code != 200 {
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.Order.Orderstatus == "filled" {
+	if orderStatus.OrderStatus == "Filled" {
 		order.Status = exchange.Filled
-	} else if orderStatus.Order.Orderstatus == "partialFilled" {
+	} else if orderStatus.OrderStatus == "Partially" {
 		order.Status = exchange.Partial
-	} else if orderStatus.Order.Orderstatus == "canceled" || orderStatus.Order.Orderstatus == "partialCanceled" {
+	} else if orderStatus.OrderStatus == "Canceled" {
 		order.Status = exchange.Cancelled
-	} else if orderStatus.Order.Orderstatus == "unfilled" {
+	} else if orderStatus.OrderStatus == "Open" {
 		order.Status = exchange.New
 	} else {
 		order.Status = exchange.Other
@@ -493,17 +507,18 @@ func (e *Coinbene) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	cancelOrder := PlaceOrder{}
-	strRequest := "/v1/trade/order/cancel"
+	jsonResponse := JsonResponse{}
+	// orderID := ""
+	strRequest := "/api/exchange/v2/order/cancel"
 
 	mapParams := make(map[string]string)
-	mapParams["orderid"] = order.OrderID
+	mapParams["orderId"] = order.OrderID
 
 	jsonCancelOrder := e.ApiKeyPost(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if cancelOrder.Status != "ok" {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), cancelOrder.Description)
+	} else if jsonResponse.Code != 200 {
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
@@ -522,26 +537,33 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Coinbene) ApiKeyPost(strRequestPath string, mapParams map[string]string) string {
-	strUrl := API_URL + strRequestPath
+	timestamp := fmt.Sprintf("%v", time.Now().Unix())
+	timestamp = fmt.Sprintf("%v", time.Now().UTC().Format("2006-01-02T15:04:05.009Z"))
 
-	//Signature Request Params
-	mapParams["apiid"] = e.API_KEY
-	mapParams["secret"] = e.API_SECRET
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1000000)
-	strMessage := strings.ToUpper(exchange.Map2UrlQuery(mapParams))
-	mapParams["sign"] = exchange.ComputeMD5(strMessage)
-	delete(mapParams, "secret")
+	// add condition here
+	strUrl := API_URL + strRequestPath //+ "?" + exchange.Map2UrlQuery(mapParams)
 
 	httpClient := &http.Client{}
-	bytesParams, _ := json.Marshal(mapParams)
 
-	request, err := http.NewRequest("POST", strUrl, bytes.NewBuffer(bytesParams))
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("Connection", "keep-alive")
+
+	preSign := timestamp + "POST" + strRequestPath + jsonParams
+	signature := exchange.ComputeHmac256NoDecode(preSign, e.API_SECRET)
+
+	request.Header.Add("ACCESS-KEY", e.API_KEY)
+	request.Header.Add("ACCESS-SIGN", signature)
+	request.Header.Add("ACCESS-TIMESTAMP", timestamp)
+	request.Header.Add("Content-Type", "application/json;charset=utf-8")
+	request.Header.Add("Accept", "application/json")
 
 	response, err := httpClient.Do(request)
 	if nil != err {
@@ -558,21 +580,72 @@ func (e *Coinbene) ApiKeyPost(strRequestPath string, mapParams map[string]string
 }
 
 func (e *Coinbene) ApiKeyGET(strRequestPath string, mapParams map[string]string) string {
-	mapParams["apikey"] = e.API_KEY
-	mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+	// mapParams["apikey"] = e.API_KEY
+	// mapParams["nonce"] = fmt.Sprintf("%d", time.Now().UnixNano())
+	timestamp := fmt.Sprintf("%v", time.Now().Unix())
+	timestamp = fmt.Sprintf("%v", time.Now().UTC().Format("2006-01-02T15:04:05.009Z"))
 
-	strUrl := API_URL + strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	// add condition here
+	strUrl := API_URL + strRequestPath //+ "?" + exchange.Map2UrlQuery(mapParams)
 
-	signature := exchange.ComputeHmac512NoDecode(strUrl, e.API_SECRET)
 	httpClient := &http.Client{}
 
 	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
+
+	preSign := timestamp + "GET" + strRequestPath
+	signature := exchange.ComputeHmac256NoDecode(preSign, e.API_SECRET)
+
+	request.Header.Add("ACCESS-KEY", e.API_KEY)
+	request.Header.Add("ACCESS-SIGN", signature)
+	request.Header.Add("ACCESS-TIMESTAMP", timestamp)
 	request.Header.Add("Content-Type", "application/json;charset=utf-8")
 	request.Header.Add("Accept", "application/json")
-	request.Header.Add("apisign", signature)
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func (e *Coinbene) ApiKeyWithdraw(strRequestPath string, mapParams map[string]string) string {
+	timestamp := fmt.Sprintf("%v", time.Now().Unix())
+	timestamp = fmt.Sprintf("%v", time.Now().UTC().Format("2006-01-02T15:04:05.009Z"))
+
+	// add condition here
+	strUrl := "http://api.coinbene.com" + strRequestPath //+ "?" + exchange.Map2UrlQuery(mapParams)
+
+	httpClient := &http.Client{}
+
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+
+	request, err := http.NewRequest("POST", strUrl, strings.NewReader(jsonParams))
+	if nil != err {
+		return err.Error()
+	}
+
+	preSign := timestamp + "POST" + strRequestPath + jsonParams
+	signature := exchange.ComputeHmac256NoDecode(preSign, e.API_SECRET)
+
+	request.Header.Add("ACCESS-KEY", e.API_KEY)
+	request.Header.Add("ACCESS-SIGN", signature)
+	request.Header.Add("ACCESS-TIMESTAMP", timestamp)
+	request.Header.Add("Content-Type", "application/json;charset=utf-8")
+	request.Header.Add("Accept", "application/json")
 
 	response, err := httpClient.Do(request)
 	if nil != err {

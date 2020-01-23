@@ -41,36 +41,29 @@ type AccountBalances []struct {
 	TotalBalance  string `json:"totalBalance"`
 }
 
-// TODO
-
-type OrderBookDetail []struct {
-	Quantity float64 `json:"quantity"`
-	Price    float64 `json:"price"`
-}
-
 type PlaceOrder struct {
-	Orderid     string `json:"orderid"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
-	Timestamp   int64  `json:"timestamp"`
+	OrderID  string `json:"orderId"`
+	ClientID string `json:"clientId"`
 }
 
 type OrderStatus struct {
-	Order struct {
-		Createtime     int64  `json:"createtime"`
-		Filledamount   string `json:"filledamount"`
-		Filledquantity string `json:"filledquantity"`
-		Orderid        string `json:"orderid"`
-		Orderquantity  string `json:"orderquantity"`
-		Orderstatus    string `json:"orderstatus"`
-		Price          string `json:"price"`
-		Symbol         string `json:"symbol"`
-		Type           string `json:"type"`
-	} `json:"order"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
-	Timestamp   int64  `json:"timestamp"`
+	OrderID        string    `json:"orderId"`
+	BaseAsset      string    `json:"baseAsset"`
+	QuoteAsset     string    `json:"quoteAsset"`
+	OrderDirection string    `json:"orderDirection"`
+	Quantity       string    `json:"quantity"`
+	Amount         string    `json:"amount"`
+	FilledAmount   string    `json:"filledAmount"`
+	AvgPrice       string    `json:"avgPrice"`
+	OrderPrice     string    `json:"orderPrice"`
+	TakerFeeRate   string    `json:"takerFeeRate"`
+	MakerFeeRate   string    `json:"makerFeeRate"`
+	OrderStatus    string    `json:"orderStatus"`
+	OrderTime      time.Time `json:"orderTime"`
+	TotalFee       string    `json:"totalFee"`
 }
+
+// TODO
 
 type Withdraw struct {
 	Status     string `json:"status"`
