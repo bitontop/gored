@@ -53,74 +53,69 @@ Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitpie) GetCoinsData() error {
 	e.TestAuth()
 
-	jsonResponse := &JsonResponse{}
-	pairsData := PairsData{}
+	// jsonResponse := &JsonResponse{}
+	// pairsData := PairsData{}
 
-	strRequestUrl := "/v1/markets" // ********* move to base url
-	strUrl := API_URL + strRequestUrl
+	// strRequestUrl := "/v1/markets" // ********* move to base url
+	// strUrl := API_URL + strRequestUrl
 
-	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
-		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
-	}
+	// jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	// if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
+	// 	return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+	// } else if !jsonResponse.Success {
+	// 	return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+	// }
+	// if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
+	// 	return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	// }
 
-	for _, data := range pairsData {
-		base := &coin.Coin{}
-		target := &coin.Coin{}
+	// coinsData := CoinsData{}
+
+	// file, err := ioutil.ReadFile(DATA_FILE)
+	// if err != nil {
+	// 	log.Printf("Mxc getCoin read file err: %v", err)
+	// 	UsingBackupData()
+	// 	return false
+	// }
+
+	// if err := json.Unmarshal(file, &coinsData); err != nil {
+	// 	log.Printf("Mxc Get Coins Json Unmarshal Err: %v %v", err, file)
+	// 	UsingBackupData()
+	// 	return false
+	// }
+
+	coins := []string{"BTC", "ETH", "LTC", "EOS", "TRX", "BCH", "BSV", "CKB", "ALGO", "DASH", "ETC", "ZEC", "DOGE", "BTM", "ATOM"}
+
+	for _, symbol := range coins {
+		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base = coin.GetCoin(data.Money)
-			if base == nil {
-				base = &coin.Coin{}
-				base.Code = data.Money
-				coin.AddCoin(base)
-			}
-			target = coin.GetCoin(data.Stock)
-			if target == nil {
-				target = &coin.Coin{}
-				target.Code = data.Stock
-				coin.AddCoin(target)
+			c = coin.GetCoin(symbol)
+			if c == nil {
+				c = &coin.Coin{}
+				c.Code = symbol
+				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			base = e.GetCoinBySymbol(data.Money)
-			target = e.GetCoinBySymbol(data.Stock)
+			c = e.GetCoinBySymbol(symbol)
 		}
 
-		if base != nil {
+		if c != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.Money,
+				CoinID:       c.ID,
+				Coin:         c,
+				ExSymbol:     symbol,
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,
 				Withdraw:     DEFAULT_WITHDRAW,
 				Deposit:      DEFAULT_DEPOSIT,
 				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
-			}
-			e.SetCoinConstraint(coinConstraint)
-		}
-
-		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.Stock,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+				Listed:       DEFAULT_LISTED,
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+
 	return nil
 }
 

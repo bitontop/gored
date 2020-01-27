@@ -16,6 +16,25 @@ type JsonResponse struct {
 	Result  json.RawMessage `json:"result"`
 }
 
+type CoinsData []struct {
+	Coins []struct {
+		Chain                  string `json:"chain"`
+		NumOfConfirmations     int    `json:"numOfConfirmations"`
+		NumOfFastConfirmations int    `json:"numOfFastConfirmations"`
+		DepositStatus          string `json:"depositStatus"`
+		MinDepositAmt          string `json:"minDepositAmt"`
+		WithdrawStatus         string `json:"withdrawStatus"`
+		MinWithdrawAmt         string `json:"minWithdrawAmt"`
+		WithdrawPrecision      int    `json:"withdrawPrecision"`
+		MaxWithdrawAmt         string `json:"maxWithdrawAmt"`
+		WithdrawQuotaPerDay    string `json:"withdrawQuotaPerDay"`
+		WithdrawQuotaPerYear   string `json:"withdrawQuotaPerYear"`
+		WithdrawQuotaTotal     string `json:"withdrawQuotaTotal"`
+		WithdrawFeeType        string `json:"withdrawFeeType"`
+		TransactFeeWithdraw    string `json:"transactFeeWithdraw"`
+	} `json:"coins"`
+}
+
 type PairsData []struct {
 	Name                string `json:"name"`
 	MarketOrderMinMoney string `json:"market_order_min_money"`
