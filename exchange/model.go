@@ -62,6 +62,7 @@ type ConstrainFetchMethod struct {
 	PrivateAPI  bool
 	HealthAPI   bool // get exchange health status from exchange's API directly
 	HasWithdraw bool // has withdraw method implemented
+	HasTransfer bool // has transfer method
 
 	Fee          bool // true only when get Fee from API directly
 	LotSize      bool
