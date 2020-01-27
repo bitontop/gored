@@ -51,7 +51,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitpie) GetCoinsData() error {
-	e.TestAuth()
+	// e.TestAuth()
 
 	// jsonResponse := &JsonResponse{}
 	// pairsData := PairsData{}
@@ -124,6 +124,8 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bitpie) GetPairsData() error {
+	return nil
+
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
