@@ -188,10 +188,14 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Status != "ok" {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse)
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonOrderbook)
 	}
 	if err := json.Unmarshal(jsonResponse.Tick, &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Tick)
+	}
+
+	if len(orderBook.Bids) == 0 || len(orderBook.Asks) == 0 {
+		return nil, fmt.Errorf("%s Get Orderbook Failed, Empty Orderbook: %v", e.GetName(), jsonOrderbook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
