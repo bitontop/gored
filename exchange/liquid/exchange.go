@@ -231,6 +231,7 @@ func (e *Liquid) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

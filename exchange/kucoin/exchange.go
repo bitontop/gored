@@ -236,6 +236,7 @@ func (e *Kucoin) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

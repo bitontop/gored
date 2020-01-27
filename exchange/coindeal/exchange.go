@@ -233,6 +233,7 @@ func (e *Coindeal) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

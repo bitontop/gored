@@ -237,6 +237,7 @@ func (e *Tagz) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

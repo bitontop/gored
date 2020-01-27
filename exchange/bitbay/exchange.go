@@ -231,6 +231,7 @@ func (e *Bitbay) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

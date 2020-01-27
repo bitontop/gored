@@ -231,6 +231,7 @@ func (e *Tradeogre) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrai
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

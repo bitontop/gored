@@ -231,6 +231,7 @@ func (e *Mxc) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetch
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

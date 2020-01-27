@@ -233,6 +233,7 @@ func (e *Bitpie) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
 	constrainFetchMethod.PriceFilter = false

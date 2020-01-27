@@ -236,6 +236,7 @@ func (e *Bitmax) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

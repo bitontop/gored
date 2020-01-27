@@ -235,6 +235,7 @@ func (e *Huobi) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

@@ -233,6 +233,7 @@ func (e *Goko) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true

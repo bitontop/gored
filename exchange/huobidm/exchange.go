@@ -232,6 +232,7 @@ func (e *Huobidm) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
+	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
