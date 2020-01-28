@@ -241,6 +241,7 @@ func (e *Hitbtc) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	json.Unmarshal([]byte(jsonAllBalanceReturn), &errResponse)
+	// log.Printf("=========ALLBALANCE ERR: %v", errResponse) // ==============
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalance); err != nil {
 		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
@@ -248,6 +249,7 @@ func (e *Hitbtc) getAllBalance(operation *exchange.AccountOperation) error {
 		operation.Error = fmt.Errorf("%s getAllBalance failed: %v", e.GetName(), jsonAllBalanceReturn)
 		return operation.Error
 	}
+	// log.Printf("=========ALLBALANCE: %v", jsonAllBalanceReturn) // ==============
 
 	for _, v := range accountBalance {
 		available, err := strconv.ParseFloat(v.Available, 64)
@@ -295,6 +297,7 @@ func (e *Hitbtc) getBalance(operation *exchange.AccountOperation) error {
 	}
 
 	json.Unmarshal([]byte(jsonBalanceReturn), &errResponse)
+	// log.Printf("=========BALANCE ERR: %v, %v", errResponse, errResponse.Error.Code) // ==============
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
 		return operation.Error
@@ -320,9 +323,9 @@ func (e *Hitbtc) getBalance(operation *exchange.AccountOperation) error {
 			return operation.Error
 		}
 
-		if available == 0 && frozen == 0 {
-			continue
-		}
+		// if available == 0 && frozen == 0 {
+		// 	continue
+		// }
 
 		operation.BalanceFrozen = frozen
 		operation.BalanceAvailable = available
