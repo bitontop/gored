@@ -230,7 +230,7 @@ func (e *Hitbtc) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasWithdraw = true
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true

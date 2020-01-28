@@ -248,14 +248,14 @@ func (e *Tagz) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 /*************** Private API ***************/
 func (e *Tagz) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
-	case exchange.Transfer:
-		return e.transfer(operation)
-	case exchange.BalanceList:
-		return e.getAllBalance(operation)
-	case exchange.Balance:
-		return e.getBalance(operation)
-	case exchange.Withdraw:
-		return e.doWithdraw(operation)
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+	// case exchange.Withdraw:
+	// 	return e.doWithdraw(operation)
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }

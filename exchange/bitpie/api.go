@@ -229,8 +229,8 @@ func (e *Bitpie) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	// case exchange.Balance:
 	// 	return e.getBalance(operation)
 
-	case exchange.Withdraw:
-		return e.doWithdraw(operation)
+	// case exchange.Withdraw:
+	// 	return e.doWithdraw(operation)
 
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
