@@ -50,7 +50,11 @@ func GetCoinByID(id int) *Coin {
 }
 
 func GetCoinID(code string) int {
-	return GetCoin(code).ID
+	coin := GetCoin(code)
+	if coin == nil {
+		return -1 // return -1 if coin not found
+	}
+	return coin.ID
 }
 
 func GetCoin(code string) *Coin {
