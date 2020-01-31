@@ -230,7 +230,7 @@ func (e *Gateio) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = true // need test
+	constrainFetchMethod.HasWithdraw = false // need test
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = true
