@@ -229,7 +229,7 @@ func (e *Virgocx) DeletePair(pair *pair.Pair) {
 func (e *Virgocx) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.PrivateAPI = false // need test
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.HasTransfer = false
