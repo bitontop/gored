@@ -25,6 +25,7 @@ import (
 const (
 	API_URL     string = "https://data.gate.io"
 	Private_URL string = "https://api.gateio.io"
+	// Private_URL string = "https://api.gateio.life"
 )
 
 /*API Base Knowledge
@@ -243,8 +244,61 @@ func (e *Gateio) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Gateio) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+	case exchange.Withdraw:
+		return e.doWithdraw(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+// need to add address to address book, or set TOTP or add phone number
+func (e *Gateio) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	withdrawResponse := WithdrawResponse{}
+	strRequest := "/api2/1/private/withdraw" //"https://api.gateio.life/api2/1/private/withdraw"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["address"] = operation.WithdrawAddress
+	/* if operation.WithdrawTag != "" {
+		mapParams["address"] += fmt.Sprintf(" %v", operation.WithdrawTag)
+	} */
+
+	log.Printf("mapParams: %v", mapParams) //=================
+
+	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+
+	log.Printf("Withdraw: %v", jsonSubmitWithdraw) // ===========================
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdrawResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
+		return operation.Error
+	} else if withdrawResponse.Result != "true" || withdrawResponse.Message != "Success" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	} /* else if withdrawResponse.WithdrawalID == "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	} */
+
+	// operation.WithdrawID = withdrawResponse.WithdrawalID
+
 	return nil
 }
+
 func (e *Gateio) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -438,6 +492,39 @@ func (e *Gateio) ApiKeyPost(strRequestPath string, mapParams map[string]string) 
 	Signature := ComputeHmac512(payload, e.API_SECRET)
 
 	strUrl := Private_URL + strRequestPath
+
+	httpClient := &http.Client{}
+
+	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(payload))
+	if nil != err {
+		return err.Error()
+	}
+
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Set("key", e.API_KEY)
+	request.Header.Set("sign", Signature)
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func (e *Gateio) WithdrawKeyRequest(strRequestPath string, mapParams map[string]string) string {
+	strMethod := "POST"
+
+	payload := exchange.Map2UrlQuery(mapParams)
+	Signature := ComputeHmac512(payload, e.API_SECRET)
+
+	strUrl := /* Private_URL + */ strRequestPath
 
 	httpClient := &http.Client{}
 

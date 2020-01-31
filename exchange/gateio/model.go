@@ -136,3 +136,8 @@ type CancelOrder struct {
 	Code    int    `json:"code"`
 	Elapsed string `json:"elapsed"`
 }
+
+type WithdrawResponse struct {
+	Result  string `json:"result"`
+	Message string `json:"message"`
+}
