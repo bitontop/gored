@@ -279,7 +279,7 @@ func (e *Coinbene) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	withdraw := Withdraw{}
-	strRequest := "/v1/withdraw/apply"
+	strRequest := "/api/capital/v1/withdraw/apply"
 
 	mapParams := make(map[string]string)
 	mapParams["amount"] = operation.WithdrawAmount
@@ -319,10 +319,10 @@ func (e *Coinbene) UpdateAllBalances() {
 	accountBalance := AccountBalances{}
 	strRequest := "/api/exchange/v2/account/list"
 
-	mapParams := make(map[string]string)
+	// mapParams := make(map[string]string)
 	// mapParams["account"] = "exchange"
 
-	jsonBalanceReturn := e.ApiKeyGET(strRequest, mapParams)
+	jsonBalanceReturn := e.ApiKeyGET(strRequest, nil)
 	// log.Printf("===========jsonBalanceReturn: %v", jsonBalanceReturn) // =====================
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
@@ -564,6 +564,7 @@ func (e *Coinbene) ApiKeyPost(strRequestPath string, mapParams map[string]string
 	request.Header.Add("ACCESS-TIMESTAMP", timestamp)
 	request.Header.Add("Content-Type", "application/json;charset=utf-8")
 	request.Header.Add("Accept", "application/json")
+	// request.Header.Add("Cookie", "locale = en_US")
 
 	response, err := httpClient.Do(request)
 	if nil != err {
