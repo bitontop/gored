@@ -42,44 +42,34 @@ type OrderBook struct {
 	Ts int64 `json:"ts"`
 }
 
-//--------------
+type PlaceOrder struct {
+	OrderID int `json:"OrderId"`
+}
 
 type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
+	FreezingBalance float64 `json:"freezingBalance"`
+	Total           float64 `json:"total"`
+	Balance         float64 `json:"balance"` // available
+	CoinName        string  `json:"coinName"`
 }
 
-type Uuid struct {
-	Id string `json:"uuid"`
+type CancelOrder struct {
+	Code    int    `json:"code"`
+	Msg     string `json:"msg"`
+	Data    string `json:"data"`
+	Success bool   `json:"success"`
 }
 
-type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            string
+type OrderStatus struct {
+	Order []SingleOrder `json:"data"`
+}
+
+type SingleOrder struct {
+	Price     float64 `json:"price"`
+	Qty       float64 `json:"qty"`
+	TradeQty  float64 `json:"tradeQty"`
+	ID        int     `json:"id"`
+	Type      int     `json:"type"`
+	Direction int     `json:"direction"`
+	Status    int     `json:"status"`
 }

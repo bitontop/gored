@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -233,8 +234,105 @@ func (e *Virgocx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Virgocx) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	case exchange.BalanceList:
+		return e.getAllBalance(operation)
+	case exchange.Balance:
+		return e.getBalance(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Virgocx) getAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := JsonResponse{}
+	balance := AccountBalances{}
+	strRequest := "/member/account"
+
+	mapParams := make(map[string]string)
+
+	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn) //====================
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s getAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &balance); err != nil {
+		operation.Error = fmt.Errorf("%s getAllBalance Data Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	}
+
+	for _, account := range balance {
+		if account.Total == 0 {
+			continue
+		}
+
+		b := exchange.AssetBalance{
+			Coin:             e.GetCoinBySymbol(account.CoinName),
+			BalanceAvailable: account.Balance,
+			BalanceFrozen:    account.FreezingBalance,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
 	return nil
 }
+
+func (e *Virgocx) getBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	symbol := e.GetSymbolByCoin(operation.Coin)
+	jsonResponse := JsonResponse{}
+	balance := AccountBalances{}
+	strRequest := "/member/account"
+
+	mapParams := make(map[string]string)
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s getBalance Failed: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &balance); err != nil {
+		operation.Error = fmt.Errorf("%s getBalance Data Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	}
+
+	for _, account := range balance {
+		if account.CoinName == symbol {
+			operation.BalanceFrozen = account.FreezingBalance
+			operation.BalanceAvailable = account.Balance
+			return nil
+		}
+	}
+
+	operation.Error = fmt.Errorf("%s getBalance get %v account balance fail: %v", e.GetName(), symbol, jsonBalanceReturn)
+	return operation.Error
+}
+
 func (e *Virgocx) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -243,9 +341,11 @@ func (e *Virgocx) UpdateAllBalances() {
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/v1.1/account/getbalances"
+	strRequest := "/member/account"
 
-	jsonBalanceReturn := e.ApiKeyGET(strRequest, make(map[string]string))
+	mapParams := make(map[string]string)
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -259,9 +359,9 @@ func (e *Virgocx) UpdateAllBalances() {
 	}
 
 	for _, v := range accountBalance {
-		c := e.GetCoinBySymbol(v.Currency)
+		c := e.GetCoinBySymbol(v.CoinName)
 		if c != nil {
-			balanceMap.Set(c.Code, v.Available)
+			balanceMap.Set(c.Code, v.Balance)
 		}
 	}
 }
@@ -272,28 +372,30 @@ func (e *Virgocx) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 		return false
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["currency"] = e.GetSymbolByCoin(coin)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["address"] = addr
+	// mapParams := make(map[string]string)
+	// mapParams["currency"] = e.GetSymbolByCoin(coin)
+	// mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	// mapParams["address"] = addr
 
-	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/account/withdraw"
+	// jsonResponse := &JsonResponse{}
+	// uuid := Uuid{}
+	// strRequest := "/v1.1/account/withdraw"
 
-	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
-		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
-		return false
-	} else if jsonResponse.Code != 0 {
-		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
-		return false
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &uuid); err != nil {
-		log.Printf("%s Withdraw Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return false
-	}
-	return true
+	// jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
+	// if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &jsonResponse); err != nil {
+	// 	log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonSubmitWithdraw)
+	// 	return false
+	// } else if jsonResponse.Code != 0 {
+	// 	log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+	// 	return false
+	// }
+	// if err := json.Unmarshal(jsonResponse.Data, &uuid); err != nil {
+	// 	log.Printf("%s Withdraw Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	// 	return false
+	// }
+	// return true
+
+	return false
 }
 
 func (e *Virgocx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
@@ -302,27 +404,29 @@ func (e *Virgocx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	}
 
 	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["qty"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["category"] = "1" // limit
+	mapParams["type"] = "2"     // buy: 1, sell: 2
 
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/selllimit"
+	placeOrder := PlaceOrder{}
+	strRequest := "/member/addOrder"
 
-	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &uuid); err != nil {
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -339,27 +443,32 @@ func (e *Virgocx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	}
 
 	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["symbol"] = e.GetSymbolByPair(pair)
+	mapParams["qty"] = strconv.FormatFloat(quantity, 'f', -1, 64) // "1.2"
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)   // "9000.1"
+	mapParams["category"] = "1"                                   // limit
+	mapParams["type"] = "1"                                       // buy: 1, sell: 2
 
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/buylimit"
+	placeOrder := PlaceOrder{}
+	strRequest := "/member/addOrder"
 
-	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &uuid); err != nil {
+	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	} else if placeOrder.OrderID == 0 {
+
 	}
+	// log.Printf("==%t,%s, %v", jsonResponse.Data, jsonResponse.Data, string(jsonResponse.Data) == "null")
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -369,19 +478,20 @@ func (e *Virgocx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	return order, nil
 }
 
+// need test Status code
 func (e *Virgocx) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
-
 	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
-	strRequest := "/v1.1/account/getorder"
+	orderStatus := OrderStatus{}
+	strRequest := "/member/queryOrder"
 
-	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
+
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 0 {
@@ -391,17 +501,30 @@ func (e *Virgocx) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
+	requiredOrder := SingleOrder{}
+	found := false
+	for _, tempOrder := range orderStatus.Order {
+		if fmt.Sprintf("%v", tempOrder.ID) == order.OrderID {
+			requiredOrder = tempOrder
+			found = true
+			break
+		}
+	}
+	if !found {
+		return fmt.Errorf("%s OrderStatus order not found: %v", e.GetName(), jsonOrderStatus)
+	}
+
 	order.StatusMessage = jsonOrderStatus
-	if orderStatus.CancelInitiated {
-		order.Status = exchange.Canceling
-	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
+	if requiredOrder.Status == 0 {
+		order.Status = exchange.New
+	} else if requiredOrder.Status == -1 {
 		order.Status = exchange.Cancelled
-	} else if orderStatus.QuantityRemaining == 0 {
+	} else if requiredOrder.Status == 3 {
 		order.Status = exchange.Filled
-	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {
+	} else if requiredOrder.Status == 2 {
 		order.Status = exchange.Partial
 	} else {
-		order.Status = exchange.New
+		order.Status = exchange.Other
 	}
 
 	return nil
@@ -417,20 +540,18 @@ func (e *Virgocx) CancelOrder(order *exchange.Order) error {
 	}
 
 	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
+	mapParams["id"] = order.OrderID
 
-	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	cancelOrder := CancelOrder{}
+	strRequest := "/member/cancelOrder"
 
-	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
+	jsonCancelOrder := e.ApiKeyRequest("GET", strRequest, mapParams)
+	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if jsonResponse.Code != 0 {
+	} else if cancelOrder.Code != 0 {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	} else if !strings.Contains(cancelOrder.Data, "successfulCancel") {
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
@@ -477,4 +598,78 @@ func (e *Virgocx) ApiKeyGET(strRequestPath string, mapParams map[string]string) 
 	}
 
 	return string(body)
+}
+
+func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapParams map[string]string) string {
+	// timestamp := time.Now().UnixNano() / 1e6
+	// mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
+	mapParams["apiKey"] = "AAAAA"
+	mapParams["apiSecret"] = "BBBBB" // ********************* delete
+
+	// sort params
+	keySort := []string{}
+	for key := range mapParams {
+		keySort = append(keySort, key)
+	}
+	sort.Strings(keySort)
+
+	/* preSign := `{`
+	for _, key := range keySort {
+		preSign += fmt.Sprintf(`"%v",`, mapParams[key])
+	}
+	if 1 < len(preSign) {
+		preSign = string([]rune(preSign)[:len(preSign)-1])
+	}
+	preSign += "}" */
+	preSign := ""
+	for _, key := range keySort {
+		preSign += mapParams[key]
+	}
+	log.Printf("========preSign: %v", preSign) //=======
+
+	var strRequestUrl string
+	if nil == mapParams {
+		strRequestUrl = API_URL + strRequestPath
+	} else {
+		strParams := exchange.Map2UrlQuery(mapParams)
+		strRequestUrl = API_URL + strRequestPath + "?" + strParams
+	}
+
+	// TODO
+	signature := exchange.ComputeMD5(preSign)
+	mapParams["sign"] = signature
+	log.Printf("========signature: %v", signature) //=======
+
+	jsonParams := ""
+	if nil != mapParams {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+	}
+	log.Printf("========mapParams: %v", jsonParams) //=======
+
+	// 构建Request, 并且按官方要求添加Http Header
+	httpClient := &http.Client{}
+	request, err := http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("authorization", strings.ToUpper(exchange.ComputeMD5(signature)))
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+
+	// 发出请求
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	// 解析响应内容
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+
 }
