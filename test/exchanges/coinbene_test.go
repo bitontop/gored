@@ -38,6 +38,8 @@ func Test_Coinbene(t *testing.T) {
 	Test_OrderStatus(e, pair, "1234567890")
 	Test_CancelOrder(e, pair, "1234567890")
 	Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+
+	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 }
 
 func InitCoinbene() exchange.Exchange {
