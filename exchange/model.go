@@ -64,13 +64,14 @@ type ConstrainFetchMethod struct {
 	HasWithdraw bool // has withdraw method implemented
 	HasTransfer bool // has transfer method
 
-	Fee          bool // true only when get Fee from API directly
-	LotSize      bool
-	PriceFilter  bool
-	TxFee        bool
-	Withdraw     bool
-	Deposit      bool
-	Confirmation bool
+	Fee             bool // true only when get Fee from API directly
+	LotSize         bool
+	PriceFilter     bool
+	TxFee           bool
+	Withdraw        bool
+	Deposit         bool
+	Confirmation    bool
+	ConstrainSource int // 1）API   2)WEB 3）Manual
 }
 
 type OrderStatus string
