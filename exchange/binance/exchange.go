@@ -241,6 +241,7 @@ func (e *Binance) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

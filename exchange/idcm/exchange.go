@@ -239,6 +239,7 @@ func (e *Idcm) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

@@ -239,6 +239,7 @@ func (e *Lbank) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

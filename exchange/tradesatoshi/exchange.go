@@ -239,6 +239,7 @@ func (e *TradeSatoshi) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Const
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

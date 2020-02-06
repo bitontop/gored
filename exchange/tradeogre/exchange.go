@@ -239,6 +239,7 @@ func (e *Tradeogre) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrai
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

@@ -241,6 +241,7 @@ func (e *Bitpie) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

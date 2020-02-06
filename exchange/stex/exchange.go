@@ -255,6 +255,7 @@ func (e *Stex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

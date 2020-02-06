@@ -241,6 +241,7 @@ func (e *Coinex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

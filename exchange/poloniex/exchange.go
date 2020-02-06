@@ -239,6 +239,7 @@ func (e *Poloniex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 

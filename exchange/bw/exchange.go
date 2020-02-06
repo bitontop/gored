@@ -241,6 +241,7 @@ func (e *Bw) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchM
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
 }
 
