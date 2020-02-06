@@ -23,13 +23,13 @@ import (
 func Test_Txbit(t *testing.T) {
 	e := InitTxbit()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|AIB")
 
 	// log.Printf("coin.LastID: %v", coin.LastID)
 	// Test_Coins(e)
 	// Test_Pairs(e)
-	// Test_Pair(e, pair)
-	// Test_Orderbook(e, pair)
+	Test_Pair(e, pair)
+	Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
@@ -41,19 +41,19 @@ func Test_Txbit(t *testing.T) {
 	// Test_Withdraw(e, pair.Target, 0.1, "0xf252be0c7758094a37bf10a4cbf4dec0d69b7bcc")
 	// log.Println(e.GetTradingWebURL(pair))
 
-	// Test Withdraw
-	opWithdraw := &exchange.AccountOperation{
-		Type:            exchange.Withdraw,
-		Coin:            pair.Target,
-		WithdrawAmount:  "1",
-		WithdrawAddress: "addr",
-		DebugMode:       true,
-	}
-	err := e.DoAccoutOperation(opWithdraw)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+	// // Test Withdraw
+	// opWithdraw := &exchange.AccountOperation{
+	// 	Type:            exchange.Withdraw,
+	// 	Coin:            pair.Target,
+	// 	WithdrawAmount:  "1",
+	// 	WithdrawAddress: "addr",
+	// 	DebugMode:       true,
+	// }
+	// err := e.DoAccoutOperation(opWithdraw)
+	// if err != nil {
+	// 	log.Printf("%v", err)
+	// }
+	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
 }
 
