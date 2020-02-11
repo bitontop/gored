@@ -65,7 +65,9 @@ func CreateStex(config *exchange.Config) *Stex {
 			instance = nil
 		}
 
-		if instance.ExpireTS-time.Now().Unix() <= (30 * 24 * 60 * 60) {
+		if instance == nil {
+			log.Printf("Stex initial failed, nil instance. conf: %+v", *config)
+		} else if instance.ExpireTS-time.Now().Unix() <= (30 * 24 * 60 * 60) {
 			log.Printf("API Key will be expired in %d days", (instance.ExpireTS-time.Now().Unix())/(24*60*60))
 		}
 	})
