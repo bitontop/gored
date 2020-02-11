@@ -67,24 +67,48 @@ func (e *Gateio) GetCoinsData() error {
 	}
 
 	for _, data := range coinsData.Data {
-		c := &coin.Coin{}
+		baseSymbol := strings.TrimSpace(data.CurrSuffix)
+		base := &coin.Coin{}
+		target := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.Symbol)
-			if c == nil {
-				c = &coin.Coin{}
-				c.Code = data.Symbol
-				c.Name = data.Name
-				coin.AddCoin(c)
+			base = coin.GetCoin(baseSymbol)
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = baseSymbol
+				coin.AddCoin(base)
+			}
+			target = coin.GetCoin(data.Symbol)
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = data.Symbol
+				target.Name = data.Name
+				coin.AddCoin(target)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.Symbol)
+			base = e.GetCoinBySymbol(baseSymbol)
+			target = e.GetCoinBySymbol(data.Symbol)
 		}
 
-		if c != nil {
+		if base != nil {
 			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
+				CoinID:       base.ID,
+				Coin:         base,
+				ExSymbol:     baseSymbol,
+				ChainType:    exchange.MAINNET,
+				TxFee:        DEFAULT_TXFEE,
+				Withdraw:     DEFAULT_WITHDRAW,
+				Deposit:      DEFAULT_DEPOSIT,
+				Confirmation: DEFAULT_CONFIRMATION,
+				Listed:       DEFAULT_LISTED,
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+
+		if target != nil {
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       target.ID,
+				Coin:         target,
 				ExSymbol:     data.Symbol,
 				ChainType:    exchange.MAINNET,
 				TxFee:        DEFAULT_TXFEE,

@@ -31,6 +31,7 @@ func Test_Gateio(t *testing.T) {
 	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
+	log.Println(e.GetTradingWebURL(pair))
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
