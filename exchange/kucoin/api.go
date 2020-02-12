@@ -364,11 +364,11 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
 	} else if jsonResponse.Code != "200000" {
-		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonAllBalanceReturn)
+		operation.Error = fmt.Errorf("%s getAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
 		return operation.Error
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		operation.Error = fmt.Errorf("%s getAllBalance Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return operation.Error
 	}
 
