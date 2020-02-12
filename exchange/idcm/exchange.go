@@ -228,9 +228,9 @@ func (e *Idcm) DeletePair(pair *pair.Pair) {
 func (e *Idcm) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasWithdraw = true
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true

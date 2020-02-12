@@ -61,44 +61,29 @@ type OrderBook struct {
 	} `json:"bids"`
 }
 
-// TODO
-
 type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
-}
-
-type Uuid struct {
-	Id string `json:"uuid"`
+	Code    string  `json:"code"`
+	Free    float64 `json:"free"`
+	Freezed float64 `json:"freezed"`
 }
 
 type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            float64
+	Orderid string `json:"orderid"`
+}
+
+type OrderStatus []struct {
+	Orderid        string  `json:"orderid"`
+	Symbol         string  `json:"symbol"`
+	Price          float64 `json:"price"`
+	Avgprice       float64 `json:"avgprice"`
+	Side           int     `json:"side"`
+	Type           int     `json:"type"`
+	Timestamp      string  `json:"timestamp"`
+	Amount         int     `json:"amount"`
+	Executedamount int     `json:"executedamount"`
+	Status         int     `json:"status"`
+}
+
+type Withdraw struct {
+	WithdrawID string `json:"WithdrawID"`
 }
