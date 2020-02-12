@@ -373,6 +373,9 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	for _, account := range accountID {
+		if account.Balance == "0" {
+			continue
+		}
 		if account.Type == accountType {
 			frozen, err := strconv.ParseFloat(account.Holds, 64)
 			avaliable, err := strconv.ParseFloat(account.Available, 64)
