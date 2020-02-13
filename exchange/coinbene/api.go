@@ -473,7 +473,7 @@ func (e *Coinbene) OrderStatus(order *exchange.Order) error {
 	mapParams["orderId"] = order.OrderID
 
 	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 200 {
 		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
