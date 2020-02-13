@@ -662,6 +662,10 @@ func (e *Bithumb) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	if order == nil {
+		return fmt.Errorf("%s CancelOrder Failed, nil order", e.GetName())
+	}
+
 	mapParams := make(map[string]string)
 	mapParams["orderId"] = order.OrderID
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
