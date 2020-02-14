@@ -72,18 +72,18 @@ func (e *Kraken) GetCoinsData() error {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
-	for key, _ := range coinsData {
+	for key, data := range coinsData {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(key)
+			c = coin.GetCoin(data.Altname)
 			if c == nil {
 				c = &coin.Coin{}
-				c.Code = key
+				c.Code = data.Altname
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(key)
+			c = e.GetCoinBySymbol(data.Altname)
 		}
 
 		if c != nil {
