@@ -742,7 +742,7 @@ func (e *Bithumb) ApiKeyRequest(strMethod string, mapParams map[string]string, s
 		strParams = exchange.Map2UrlQuery(mapParams)
 	}
 
-	log.Printf("strParams: %v", strParams) //===========================
+	// log.Printf("strParams: %v", strParams) //===========================
 
 	signature := exchange.ComputeHmac256NoDecode(strParams, e.API_SECRET)
 	signMessage := strUrl + "?" + strParams

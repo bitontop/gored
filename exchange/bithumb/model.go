@@ -70,6 +70,6 @@ type OrderStatus struct {
 	Status     string `json:"status"`
 	Type       string `json:"type"`
 	Side       string `json:"side"`
-	CreateTime string `json:"createTime"`
+	CreateTime int64  `json:"createTime"`
 	TradeTotal string `json:"tradeTotal"`
 }
