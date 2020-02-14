@@ -437,16 +437,17 @@ func (e *Poloniex) CancelOrder(order *exchange.Order) error {
 	}
 
 	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
+	mapParams["command"] = "cancelOrder"
+	mapParams["orderNumber"] = order.OrderID
 
 	cancelOrder := CancelOrder{}
-	strRequest := "/v1.1/market/cancel"
+	strRequest := "/tradingApi"
 
 	jsonCancelOrder := e.ApiKeyPost(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if cancelOrder.Success != 1 {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), cancelOrder.Message)
+		return fmt.Errorf("%s CancelOrder Failed: %s", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
