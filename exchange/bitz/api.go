@@ -294,7 +294,7 @@ func (e *Bitz) UpdateAllBalances() {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if jsonResponse.Status != 200 {
-		log.Printf("%s UpdateAllBalances Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
+		log.Printf("%s UpdateAllBalances Failed: %s", e.GetName(), jsonBalanceReturn)
 		return
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &userInfo); err != nil {
@@ -370,7 +370,7 @@ func (e *Bitz) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Status != 200 {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v %+v", e.GetName(), jsonResponse.Status, jsonResponse)
+		return nil, fmt.Errorf("%s LimitSell Failed: %s", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -410,7 +410,7 @@ func (e *Bitz) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Status != 200 {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v %+v", e.GetName(), jsonResponse.Status, jsonPlaceReturn)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %s", e.GetName(), jsonPlaceReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -450,7 +450,7 @@ func (e *Bitz) OrderStatus(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Status != 200 {
-		return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
+		return fmt.Errorf("%s OrderStatus Failed: %s", e.GetName(), jsonOrderStatus)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -492,7 +492,7 @@ func (e *Bitz) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Status != 200 {
-		return fmt.Errorf("%s CancelOrder Failed: %v %v", e.GetName(), jsonResponse.Status, jsonResponse.Msg)
+		return fmt.Errorf("%s CancelOrder Failed: %s", e.GetName(), jsonCancelOrder)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)

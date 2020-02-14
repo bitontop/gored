@@ -160,7 +160,7 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, TOKOK)        // ID = 23
 	supportList = append(supportList, MXC)          // ID = 24
 	supportList = append(supportList, BITRUE)       // ID = 25
-	supportList = append(supportList, BITATM)       // ID = 26
+	supportList = append(supportList, BITATM)       // ID = 26	// not work
 	supportList = append(supportList, TRADESATOSHI) // ID = 27
 	supportList = append(supportList, KRAKEN)       // ID = 28
 	supportList = append(supportList, POLONIEX)     // ID = 29
