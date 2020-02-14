@@ -71,7 +71,14 @@ type OrderDetail struct {
 }
 
 type CancelOrder struct {
-	Success int    `json:"success"`
-	Amount  string `json:"amount"`
-	Message string `json:"message"`
+	Success       int    `json:"success"`
+	Amount        string `json:"amount"`
+	ClientOrderID string `json:"clientOrderId"`
+	Message       string `json:"message"`
 }
+
+// type CancelOrder struct {
+// 	Success int    `json:"success"`
+// 	Amount  string `json:"amount"`
+// 	Message string `json:"message"`
+// }

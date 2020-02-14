@@ -11,6 +11,7 @@ import (
 	"github.com/bitontop/gored/exchange/kraken"
 	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/kraken"
+	// "../../utils"
 	// "../conf"
 )
 
@@ -23,20 +24,21 @@ import (
 func Test_Kraken(t *testing.T) {
 	e := InitKraken()
 
-	pair := pair.GetPairByKey("ETH|ETC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
-	// Test_Pair(e, pair)
+	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.0001, 100)
+	// Test_Trading_Sell(e, pair, 0.05, 0.04)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
+	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 }
 
 func InitKraken() exchange.Exchange {
