@@ -5,13 +5,13 @@ package hitbtc
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -437,7 +437,7 @@ func (e *Hitbtc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.ID,
+		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -474,7 +474,7 @@ func (e *Hitbtc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.ID,
+		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -563,12 +563,12 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Hitbtc) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
 	strUrl := API_URL + strRequestPath
 
-	var strParams string
+	var bytesParams []byte
 	if mapParams != nil {
-		strParams = exchange.Map2UrlQuery(mapParams)
+		bytesParams, _ = json.Marshal(mapParams)
 	}
 
-	request, err := http.NewRequest(strMethod, strUrl, strings.NewReader(strParams))
+	request, err := http.NewRequest(strMethod, strUrl, bytes.NewReader(bytesParams))
 	if nil != err {
 		return err.Error()
 	}
