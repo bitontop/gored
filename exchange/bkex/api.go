@@ -422,6 +422,7 @@ func (e *Bkex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	}
 
 	jsonResponse := &JsonResponse{}
+	orderID := ""
 	strRequestPath := "/v1/u/trade/order/create"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
@@ -439,8 +440,10 @@ func (e *Bkex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
+	if err := json.Unmarshal(jsonResponse.Data, &orderID); err != nil {
+		return nil, fmt.Errorf("%s LimitSell Data Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
+	}
 
-	orderID := fmt.Sprintf("%s", jsonResponse.Data)
 	order := &exchange.Order{
 		Pair:         pair,
 		OrderID:      orderID,
@@ -459,6 +462,7 @@ func (e *Bkex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	}
 
 	jsonResponse := &JsonResponse{}
+	orderID := ""
 	strRequestPath := "/v1/u/trade/order/create"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
@@ -476,8 +480,10 @@ func (e *Bkex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	} else if jsonResponse.Code != 0 {
 		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
+	if err := json.Unmarshal(jsonResponse.Data, &orderID); err != nil {
+		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
+	}
 
-	orderID := fmt.Sprintf("%s", jsonResponse.Data)
 	order := &exchange.Order{
 		Pair:         pair,
 		OrderID:      orderID,
@@ -504,7 +510,7 @@ func (e *Bkex) OrderStatus(order *exchange.Order) error {
 	mapParams["pair"] = e.GetSymbolByPair(order.Pair)
 	mapParams["orderNo"] = order.OrderID
 
-	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != 0 {
