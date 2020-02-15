@@ -110,7 +110,7 @@ func (e *Lbank) GetBalance(coin *coin.Coin) float64 {
 }
 
 func (e *Lbank) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.lbank.info/exchange.html?asset=%s&post=%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://www.lbank.info/exchange.html?asset=%s&post=%s#/%s/%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base), e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 /*************** Coins on the Exchanges ***************/
