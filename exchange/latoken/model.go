@@ -104,3 +104,24 @@ type TestBuy struct {
 	Message string `json:"message"`
 	OrderID string `json:"orderId"`
 }
+
+type WithdrawResponse struct {
+	WithdrawalID string `json:"withdrawalId"`
+	CodeRequired bool   `json:"codeRequired"`
+	Transaction  struct {
+		ID               string `json:"id"`
+		Status           string `json:"status"`
+		Type             string `json:"type"`
+		SenderAddress    string `json:"senderAddress"`
+		RecipientAddress string `json:"recipientAddress"`
+		Amount           string `json:"amount"`
+		Timestamp        int64  `json:"timestamp"`
+		TransactionHash  string `json:"transactionHash"`
+		BlockHeight      int    `json:"blockHeight"`
+		Currency         string `json:"currency"`
+		RejectReason     string `json:"rejectReason"`
+		Memo             string `json:"memo"`
+		PaymentProvider  string `json:"paymentProvider"`
+		RequiresCode     bool   `json:"requiresCode"`
+	} `json:"transaction"`
+}

@@ -232,8 +232,56 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Zebitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+	case exchange.Withdraw: // TODO
+		return e.doWithdraw(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+// TODO
+func (e *Zebitex) doWithdraw(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
+	}
+
+	// withdrawResponse := WithdrawResponse{}
+	// strRequest := "/api/v1/withdrawals"
+
+	// mapParams := make(map[string]interface{})
+	// mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	// mapParams["amount"] = operation.WithdrawAmount
+	// mapParams["destination"] = "4"
+	// mapParams["to_address"] = operation.WithdrawAddress
+	// mapParams["fee"] = e.GetTxFee(operation.Coin)
+
+	// jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequest, mapParams)
+	// if operation.DebugMode {
+	// 	operation.RequestURI = strRequest
+	// 	operation.MapParams = fmt.Sprintf("%+v", mapParams)
+	// 	operation.CallResponce = jsonSubmitWithdraw
+	// }
+
+	// if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdrawResponse); err != nil {
+	// 	operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
+	// 	return operation.Error
+	// } else if !withdrawResponse.Result {
+	// 	operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+	// 	return operation.Error
+	// } else if withdrawResponse.WithdrawalID == "" {
+	// 	operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+	// 	return operation.Error
+	// }
+
+	// operation.WithdrawID = withdrawResponse.WithdrawalID
+
 	return nil
 }
+
 func (e *Zebitex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

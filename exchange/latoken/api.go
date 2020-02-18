@@ -206,8 +206,56 @@ func (e *Latoken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 func (e *Latoken) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	switch operation.Type {
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+	case exchange.Withdraw: // TODO, v2 key
+		return e.doWithdraw(operation)
+	}
+	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Latoken) doWithdraw(operation *exchange.AccountOperation) error { // TODO
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	withdrawResponse := WithdrawResponse{}
+	strRequest := "/v2/auth/transaction/withdraw"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["destination"] = "4"
+	mapParams["to_address"] = operation.WithdrawAddress
+
+	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdrawResponse); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
+		return operation.Error
+	} /* else if !withdrawResponse.Result {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	} else if withdrawResponse.WithdrawalID == "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	} */
+
+	operation.WithdrawID = withdrawResponse.WithdrawalID
+
 	return nil
 }
+
 func (e *Latoken) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
@@ -215,9 +263,11 @@ func (e *Latoken) UpdateAllBalances() {
 	}
 
 	accountBalance := AccountBalances{}
-	strRequest := "/api/v1/Account/balances"
+	// strRequest := "/api/v1/Account/balances"
+	strRequest := "/v2/auth/account"
+	// strRequest := "/v2/auth/transaction"
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	jsonBalanceReturn := e.ApiKeyRequestV2("GET", strRequest, make(map[string]string))
 	log.Printf("balance: %v", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
@@ -424,6 +474,42 @@ func (e *Latoken) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	request.Header.Add("Accept", "application/json")
 
 	request.Header.Add("X-LA-KEY", e.API_KEY)
+	request.Header.Add("X-LA-SIGNATURE", signature)
+	request.Header.Add("X-LA-HASHTYPE", "HMAC-SHA256") //HMAC-SHA384, default HMAC-SHA256
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func (e *Latoken) ApiKeyRequestV2(strMethod, strRequestPath string, mapParams map[string]string) string {
+	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/int64(time.Millisecond))
+
+	signURL := strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	strUrl := API_URL + signURL
+
+	preSign := strMethod + strRequestPath
+
+	signature := exchange.ComputeHmac256NoDecode(preSign, e.API_SECRET)
+
+	request, err := http.NewRequest(strMethod, strUrl, nil)
+	if nil != err {
+		return err.Error()
+	}
+	request.Header.Add("Content-Type", "application/json;charset=utf-8")
+	request.Header.Add("Accept", "application/json")
+
+	request.Header.Add("X-LA-APIKEY", e.API_KEY)
 	request.Header.Add("X-LA-SIGNATURE", signature)
 	request.Header.Add("X-LA-HASHTYPE", "HMAC-SHA256") //HMAC-SHA384, default HMAC-SHA256
 
