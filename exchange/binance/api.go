@@ -360,21 +360,29 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if placeOrder.Code != 0 {
-		return nil, fmt.Errorf("%s LimitSell failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
-	}
 
 	order := &exchange.Order{
-		Pair:         pair,
-		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
+		Pair: pair,
+		// OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
+
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		err = fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+		order.Error = err
+		return nil, err
+	} else if placeOrder.Code != 0 {
+		err = fmt.Errorf("%s LimitSell failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
+		order.Error = err
+		return nil, err
+	}
+
+	order.OrderID = fmt.Sprintf("%d", placeOrder.OrderID)
+
 	return order, nil
 }
 
@@ -398,21 +406,28 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if placeOrder.Code != 0 {
-		return nil, fmt.Errorf("%s LimitBuy failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
-	}
 
 	order := &exchange.Order{
-		Pair:         pair,
-		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
+		Pair: pair,
+		// OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
+
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
+		err = fmt.Errorf("%s LimitBuy Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+		order.Error = err
+		return nil, err
+	} else if placeOrder.Code != 0 {
+		err = fmt.Errorf("%s LimitBuy failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
+		order.Error = err
+		return nil, err
+	}
+
+	order.OrderID = fmt.Sprintf("%d", placeOrder.OrderID)
 
 	return order, nil
 }

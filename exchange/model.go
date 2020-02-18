@@ -102,6 +102,7 @@ type Order struct {
 
 	Canceled     bool
 	CancelStatus string
+	Error        error
 }
 
 type Maker struct {
