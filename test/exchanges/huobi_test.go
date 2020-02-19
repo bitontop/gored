@@ -59,7 +59,7 @@ func Test_Huobi_TradeHistory(t *testing.T) {
 
 	opTradeHistory := &exchange.PublicOperation{
 		Type:      exchange.TradeHistory,
-		EX:        e,
+		EX:        e.GetName(),
 		Pair:      p,
 		DebugMode: true,
 	}
@@ -72,3 +72,4 @@ func Test_Huobi_TradeHistory(t *testing.T) {
 	// log.Printf("TradeHistory: %v, err: %v", opTradeHistory.Data)
 
 }
+

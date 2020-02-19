@@ -1,14 +1,16 @@
 package huobi
+// Contributor 2015-2020 Bitontop Technologies Inc.
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
 	"fmt"
-
-	"github.com/bitontop/gored/exchange"
+	"log"
+	utils "github.com/bitontop/gored/utils"
+	exchange "github.com/bitontop/gored/exchange"
 )
 
-// Contributionr 2015-2020 Bitontop Technologies Inc.
-// Distributed under the MIT software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 
 /*************** PUBLIC  API ***************/
 func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
@@ -22,6 +24,32 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
+
+
+	
+	get := &utils.HttpGet{
+		URI:         fmt.Sprintf("https://api.huobi.pro/market/history/trade?symbol=%s&size=%d", 
+		e.GetSymbolByPair(operation.Pair),
+		5,//TRADE_HISTORY_MAX_LIMIT,
+	),
+		
+	}
+
+	err := utils.HttpGetRequest(get)
+
+	if err != nil {
+		log.Printf("%+v", err)
+		return err
+
+	} else {
+		log.Printf("%+v  ERR:%+v", string(get.ResponseBody),err)
+		// if err := json.Unmarshal(post.ResponseBody, &e.User); err != nil {
+		// 	return err
+		// }
+	}
+
+
+
 
 	// jsonResponse := &JsonResponse{}
 	// orderBook := OrderBook{}
