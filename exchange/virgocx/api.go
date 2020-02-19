@@ -346,6 +346,7 @@ func (e *Virgocx) UpdateAllBalances() {
 	mapParams := make(map[string]string)
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	log.Printf("Balance Return: %v", jsonBalanceReturn) // =====================================
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
