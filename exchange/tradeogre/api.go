@@ -245,6 +245,10 @@ func (e *Tradeogre) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Tradeogre) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Tradeogre) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Tradeogre) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

@@ -228,9 +228,14 @@ func (e *Abcc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+
 func (e *Abcc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Abcc) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Abcc) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

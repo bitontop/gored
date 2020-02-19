@@ -165,6 +165,7 @@ const (
 	Balance     OperationType = "Balance"    // balance(s) of different accounts
 	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
 
+	TradeHistory OperationType = "TradeHistory"
 )
 
 type WalletType string
@@ -212,6 +213,22 @@ type AccountOperation struct {
 	DebugMode    bool   `json:"debug mode"`
 	RequestURI   string `json:"request_uri"`
 	MapParams    string `json:"map_params"`
+	CallResponce string `json:"call_responce"`
+	Error        error  `json:"error"`
+}
+
+type PublicOperation struct {
+	ID int `json:"id"` //dummy at this moment for
+
+	Type OperationType `json:"type"`
+	EX   ExchangeName  `json:"exchange_name"`
+
+	Coin *coin.Coin `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
+	Pair *pair.Pair `json:"op_pair"`
+
+	//#Debug
+	DebugMode    bool   `json:"debug mode"`
+	RequestURI   string `json:"request_uri"`
 	CallResponce string `json:"call_responce"`
 	Error        error  `json:"error"`
 }

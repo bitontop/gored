@@ -77,6 +77,7 @@ type Exchange interface {
 	GetPriceFilter(pair *pair.Pair) float64
 
 	/***** Ver 2.0  Account Operation *****/
+	LoadPublicData(operation *PublicOperation) error
 	DoAccoutOperation(operation *AccountOperation) error
 }
 

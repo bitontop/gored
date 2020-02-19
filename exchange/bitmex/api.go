@@ -228,6 +228,10 @@ func (e *Bitmex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitmex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Bitmex) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Bitmex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

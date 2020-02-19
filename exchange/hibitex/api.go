@@ -243,6 +243,10 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Hibitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Hibitex) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Hibitex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

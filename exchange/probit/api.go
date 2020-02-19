@@ -227,6 +227,10 @@ func Sort(slice interface{}, less func(i, j int) bool) {
 func (e *Probit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Probit) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Probit) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

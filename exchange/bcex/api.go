@@ -252,6 +252,10 @@ func (e *Bcex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bcex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Bcex) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Bcex) GetCoinList() []string {
 	jsonResponse := &JsonResponse{}
 	coinsData := make(map[string]*CoinsData)

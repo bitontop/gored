@@ -235,6 +235,9 @@ func (e *Bitforex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitforex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Bitforex) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
 
 func (e *Bitforex) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {

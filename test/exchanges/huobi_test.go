@@ -54,3 +54,23 @@ func InitHuobi() exchange.Exchange {
 	config = nil
 	return ex
 }
+
+func Test_Huobi_TradeHistory(t *testing.T) {
+	e := InitHuobi()
+	p := pair.GetPairByKey("BTC|ETH")
+
+	opTradeHistory := &exchange.PublicOperation{
+		Type:      exchange.TradeHistory,
+		EX:        e,
+		Pair:      p,
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	// log.Printf("TradeHistory: %v, err: %v", opTradeHistory.Data)
+
+}

@@ -257,6 +257,10 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Cointiger) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Cointiger) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Cointiger) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

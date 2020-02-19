@@ -209,6 +209,10 @@ func (e *BinanceDex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *BinanceDex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *BinanceDex) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *BinanceDex) UpdateAllBalances() {
 	if fmt.Sprintf("%s", e.API_KEY) == "" || fmt.Sprintf("%s", e.API_SECRET) == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

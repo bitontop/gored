@@ -245,6 +245,10 @@ func (e *Otcbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Otcbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Otcbtc) LoadPublicData(operation *exchange.AccountOperation) error {
+	return nil
+}
+
 func (e *Otcbtc) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
