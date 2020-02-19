@@ -250,7 +250,7 @@ func (e *Virgocx) getAllBalance(operation *exchange.AccountOperation) error {
 
 	jsonResponse := JsonResponse{}
 	balance := AccountBalances{}
-	strRequest := "/member/account"
+	strRequest := "/member/accounts"
 
 	mapParams := make(map[string]string)
 
@@ -298,7 +298,7 @@ func (e *Virgocx) getBalance(operation *exchange.AccountOperation) error {
 	symbol := e.GetSymbolByCoin(operation.Coin)
 	jsonResponse := JsonResponse{}
 	balance := AccountBalances{}
-	strRequest := "/member/account"
+	strRequest := "/member/accounts"
 
 	mapParams := make(map[string]string)
 
@@ -341,7 +341,7 @@ func (e *Virgocx) UpdateAllBalances() {
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/member/account"
+	strRequest := "/member/accounts"
 
 	mapParams := make(map[string]string)
 
@@ -601,10 +601,16 @@ func (e *Virgocx) ApiKeyGET(strRequestPath string, mapParams map[string]string) 
 }
 
 func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapParams map[string]string) string {
-	// timestamp := time.Now().UnixNano() / 1e6
-	// mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
-	mapParams["apiKey"] = "AAAAA"
-	mapParams["apiSecret"] = "BBBBB" // ********************* delete
+	// test parameters
+	// mapParams["apiKey"] = "AAAAA"
+	// mapParams["apiSecret"] = "BBBBB"
+	// mapParams["category"] = "1"
+	// mapParams["price"] = "9000.1"
+	// mapParams["qty"] = "1.2"
+	// mapParams["symbol"] = "BTC/CAD"
+	// mapParams["type"] = "1"
+	mapParams["apiKey"] = e.API_KEY
+	mapParams["apiSecret"] = e.API_SECRET
 
 	// sort params
 	keySort := []string{}
@@ -625,6 +631,9 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	for _, key := range keySort {
 		preSign += mapParams[key]
 	}
+
+	// delete secret from params
+	delete(mapParams, "apiSecret")
 	log.Printf("========preSign: %v", preSign) //=======
 
 	var strRequestUrl string
@@ -635,7 +644,7 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 		strRequestUrl = API_URL + strRequestPath + "?" + strParams
 	}
 
-	// TODO
+	// try
 	signature := exchange.ComputeMD5(preSign)
 	mapParams["sign"] = signature
 	log.Printf("========signature: %v", signature) //=======
