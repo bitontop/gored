@@ -248,6 +248,8 @@ func (e *Bcex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Bcex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

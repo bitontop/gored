@@ -205,6 +205,8 @@ func (e *BinanceDex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+
+
 /*************** Private API ***************/
 func (e *BinanceDex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

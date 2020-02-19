@@ -226,6 +226,8 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+
+
 /*************** Private API ***************/
 
 func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {

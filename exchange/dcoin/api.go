@@ -231,6 +231,8 @@ func (e *Dcoin) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+
+
 /*************** Private API ***************/
 func (e *Dcoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

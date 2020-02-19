@@ -223,6 +223,8 @@ func Sort(slice interface{}, less func(i, j int) bool) {
 	sort.Slice(slice, less)
 }
 
+
+
 /*************** Private API ***************/
 func (e *Probit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

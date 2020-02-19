@@ -215,6 +215,15 @@ func (e *TradeSatoshi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
+func (e *TradeSatoshi) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
+
+
+
 /*************** Private API ***************/
 func (e *TradeSatoshi) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

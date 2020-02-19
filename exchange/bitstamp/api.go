@@ -230,6 +230,7 @@ func (e *Bitstamp) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
 /*************** Private API ***************/
 func (e *Bitstamp) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

@@ -204,6 +204,11 @@ func (e *Latoken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+/*************** Public API ***************/
+func (e *Latoken) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Latoken) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

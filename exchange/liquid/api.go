@@ -200,6 +200,12 @@ func (e *Liquid) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+func (e *Liquid) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
+
+
 /*************** Private API ***************/
 func (e *Liquid) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

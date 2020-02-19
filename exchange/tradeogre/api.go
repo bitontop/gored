@@ -241,6 +241,8 @@ func (e *Tradeogre) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Tradeogre) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

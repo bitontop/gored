@@ -221,6 +221,7 @@ func (e *Dragonex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
 /*************** Private API ***************/
 func (e *Dragonex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

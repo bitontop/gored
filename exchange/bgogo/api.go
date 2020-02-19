@@ -243,6 +243,7 @@ func (e *Bgogo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+
 /*************** Private API ***************/
 func (e *Bgogo) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

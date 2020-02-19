@@ -204,6 +204,7 @@ func (e *HuobiOTC) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
 /*************** Private API ***************/
 func (e *HuobiOTC) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

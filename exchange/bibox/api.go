@@ -250,6 +250,8 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Bibox) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil

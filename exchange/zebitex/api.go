@@ -230,6 +230,11 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+/*************** Public API ***************/
+func (e *Zebitex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Zebitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

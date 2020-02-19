@@ -243,6 +243,8 @@ func (e *Biki) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Biki) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

@@ -210,6 +210,8 @@ func (e *Blank) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+
+
 /*************** Private API ***************/
 func (e *Blank) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

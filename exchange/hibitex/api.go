@@ -239,6 +239,8 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+
+
 /*************** Private API ***************/
 func (e *Hibitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

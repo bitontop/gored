@@ -224,6 +224,8 @@ func (e *Bitmex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Bitmex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil

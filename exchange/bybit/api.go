@@ -219,6 +219,8 @@ func (e *Bybit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return nil, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Bybit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
