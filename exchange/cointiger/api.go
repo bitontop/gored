@@ -257,7 +257,7 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Cointiger) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Cointiger) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Cointiger) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

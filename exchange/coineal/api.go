@@ -240,7 +240,7 @@ func (e *Coineal) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Coineal) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Coineal) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Coineal) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

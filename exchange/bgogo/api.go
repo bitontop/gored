@@ -247,7 +247,7 @@ func (e *Bgogo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Bgogo) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bgogo) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bgogo) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

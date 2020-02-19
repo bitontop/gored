@@ -201,7 +201,7 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Ftx) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Ftx) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Ftx) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -230,7 +230,7 @@ func (e *Bitbay) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitbay) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bitbay) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bitbay) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

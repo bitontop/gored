@@ -209,7 +209,7 @@ func (e *BinanceDex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *BinanceDex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *BinanceDex) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *BinanceDex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -239,7 +239,7 @@ func (e *Huobidm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Huobidm) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Huobidm) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Huobidm) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

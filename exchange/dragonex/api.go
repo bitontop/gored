@@ -225,7 +225,7 @@ func (e *Dragonex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Dragonex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Dragonex) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Dragonex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

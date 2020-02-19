@@ -245,7 +245,7 @@ func (e *Digifinex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Digifinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Digifinex) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Digifinex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

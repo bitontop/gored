@@ -208,7 +208,7 @@ func (e *Deribit) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Deribit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Deribit) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Deribit) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

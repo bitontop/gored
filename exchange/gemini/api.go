@@ -234,7 +234,7 @@ func (e *Gemini) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Gemini) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Gemini) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Gemini) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -226,7 +226,7 @@ func (e *Coindeal) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Coindeal) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Coindeal) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Coindeal) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

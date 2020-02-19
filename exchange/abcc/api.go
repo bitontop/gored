@@ -232,7 +232,7 @@ func (e *Abcc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Abcc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Abcc) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Abcc) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

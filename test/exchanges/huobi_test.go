@@ -10,8 +10,6 @@ import (
 
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/test/conf"
-	// "../../exchange/huobi"
-	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.

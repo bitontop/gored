@@ -225,7 +225,7 @@ func (e *Tokok) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Tokok) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Tokok) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Tokok) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

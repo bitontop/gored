@@ -262,7 +262,7 @@ func (e *Newcapital) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Newcapital) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Newcapital) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Newcapital) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

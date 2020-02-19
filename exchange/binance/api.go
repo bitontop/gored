@@ -227,6 +227,11 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+
+func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 func (e *Binance) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Withdraw:

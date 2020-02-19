@@ -235,7 +235,7 @@ func (e *Dcoin) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Dcoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Dcoin) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Dcoin) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

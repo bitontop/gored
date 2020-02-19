@@ -205,7 +205,7 @@ func (e *BitATM) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *BitATM) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *BitATM) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *BitATM) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

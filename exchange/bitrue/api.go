@@ -242,7 +242,7 @@ func (e *Bitrue) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitrue) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bitrue) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bitrue) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

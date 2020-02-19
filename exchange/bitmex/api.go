@@ -228,7 +228,7 @@ func (e *Bitmex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitmex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bitmex) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bitmex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

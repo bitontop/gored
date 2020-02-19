@@ -215,7 +215,7 @@ func (e *Idex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Idex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Idex) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Idex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

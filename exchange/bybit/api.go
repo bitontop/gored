@@ -223,7 +223,7 @@ func (e *Bybit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bybit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bybit) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bybit) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -215,7 +215,7 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitmax) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bitmax) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bitmax) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

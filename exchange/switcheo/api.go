@@ -227,7 +227,7 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Switcheo) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Switcheo) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Switcheo) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -234,7 +234,7 @@ func (e *Bitstamp) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitstamp) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bitstamp) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bitstamp) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

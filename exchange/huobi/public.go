@@ -11,7 +11,7 @@ import (
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 /*************** PUBLIC  API ***************/
-func (e *Huobi) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
 
 	case exchange.TradeHistory:
@@ -21,7 +21,7 @@ func (e *Huobi) LoadPublicData(operation *exchange.AccountOperation) error {
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
-func (e *Huobi) doTradeHistory(operation *exchange.AccountOperation) error {
+func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 
 	// jsonResponse := &JsonResponse{}
 	// orderBook := OrderBook{}

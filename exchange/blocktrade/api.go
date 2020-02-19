@@ -218,7 +218,7 @@ func (e *Blocktrade) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Blocktrade) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Blocktrade) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Blocktrade) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

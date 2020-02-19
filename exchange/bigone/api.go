@@ -244,7 +244,7 @@ func (e *Bigone) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bigone) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Bigone) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Bigone) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

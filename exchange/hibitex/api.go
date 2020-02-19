@@ -243,7 +243,7 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Hibitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Hibitex) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Hibitex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

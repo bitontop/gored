@@ -191,7 +191,7 @@ func (e *Okexdm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Okexdm) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Okexdm) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Okexdm) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

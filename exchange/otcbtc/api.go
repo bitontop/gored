@@ -245,7 +245,7 @@ func (e *Otcbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Otcbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Otcbtc) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Otcbtc) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

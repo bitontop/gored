@@ -233,7 +233,7 @@ func (e *Goko) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *Goko) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Goko) LoadPublicData(operation *exchange.AccountOperation) error {	return nil
+func (e *Goko) LoadPublicData(operation *exchange.PublicOperation) error {	return nil
 }
 
 

@@ -227,7 +227,7 @@ func Sort(slice interface{}, less func(i, j int) bool) {
 func (e *Probit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Probit) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Probit) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

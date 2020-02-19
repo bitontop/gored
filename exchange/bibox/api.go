@@ -251,7 +251,12 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
+func (e *Bibox) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 func (e *Bibox) DoAccoutOperation(operation *exchange.AccountOperation) error {
+
 	switch operation.Type {
 
 	case exchange.Transfer:

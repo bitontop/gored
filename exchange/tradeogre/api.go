@@ -245,7 +245,7 @@ func (e *Tradeogre) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Tradeogre) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *Tradeogre) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *Tradeogre) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

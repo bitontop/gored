@@ -208,7 +208,7 @@ func (e *HuobiOTC) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 func (e *HuobiOTC) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
-func (e *HuobiOTC) LoadPublicData(operation *exchange.AccountOperation) error {
+func (e *HuobiOTC) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 
