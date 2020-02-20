@@ -82,8 +82,8 @@ func (e *Liquid) GetCoinsData() error {
 				ExSymbol:     data.Currency,
 				ChainType:    exchange.MAINNET,
 				TxFee:        data.WithdrawalFee,
-				Withdraw:     data.Depositable,
-				Deposit:      data.Withdrawable,
+				Withdraw:     data.Withdrawable,
+				Deposit:      data.Depositable,
 				Confirmation: DEFAULT_CONFIRMATION,
 				Listed:       DEFAULT_LISTED,
 			}
