@@ -51,6 +51,7 @@ func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 		for _, d1 := range tradeHistory.Data {
 			for _, d2 := range d1.Data {
 				td := &exchange.TradeDetail{
+					ID:       fmt.Sprintf("%d", d2.TradeID),
 					Quantity: d2.Amount,
 
 					TimeStamp: d2.Ts,

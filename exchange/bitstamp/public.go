@@ -41,6 +41,7 @@ func (e *Bitstamp) doTradeHistory(operation *exchange.PublicOperation) error {
 		for _, d := range *tradeHistory {
 			td := &exchange.TradeDetail{}
 
+			td.ID = d.Tid
 			if d.Type == "0" {
 				td.Direction = exchange.Buy
 			} else if d.Type == "1" {

@@ -250,6 +250,7 @@ const (
 )
 
 type TradeDetail struct {
+	ID        string         `json:"id"`
 	Quantity  float64        `json:"quantity"`  //amount 	/ Qty
 	TimeStamp int64          `json:"timestamp"` //TS ts
 	Rate      float64        `json:"rate"`      //Price
