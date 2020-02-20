@@ -641,6 +641,7 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	if nil == mapParams {
 		strRequestUrl = API_URL + strRequestPath
 	} else {
+
 		strParams := exchange.Map2UrlQuery(mapParams)
 		strRequestUrl = API_URL + strRequestPath + "?" + strParams
 	}
@@ -648,14 +649,16 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	// try
 	signature := exchange.ComputeMD5(preSign)
 	mapParams["sign"] = signature
-	log.Printf("========signature: %v", signature) //=======
+	// log.Printf("========signature: %v", signature) //=======
 
 	jsonParams := ""
 	if nil != mapParams {
 		bytesParams, _ := json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
-	log.Printf("========mapParams: %v", jsonParams) //=======
+	log.Printf("========strMethod: %v", strMethod)         //=======
+	log.Printf("========strRequestUrl: %v", strRequestUrl) //=======
+	log.Printf("========jsonParams: %v", jsonParams)       //=======
 
 	// 构建Request, 并且按官方要求添加Http Header
 	httpClient := &http.Client{}
