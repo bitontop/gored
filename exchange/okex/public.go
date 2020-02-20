@@ -41,6 +41,7 @@ func (e *Okex) doTradeHistory(operation *exchange.PublicOperation) error {
 		for _, d := range *tradeHistory {
 			td := &exchange.TradeDetail{}
 
+			td.ID = d.TradeID
 			if d.Side == "buy" {
 				td.Direction = exchange.Buy
 			} else if d.Side == "sell" {

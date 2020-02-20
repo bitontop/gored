@@ -144,7 +144,7 @@ type TradeHistory struct {
 		Data []struct {
 			Amount  float64 `json:"amount"`
 			TradeID uint    `json:"trade-id"`
-			Ts      uint    `json:"ts"`
+			Ts      int64   `json:"ts"`
 			// ID        uint64  `json:"id"`
 			Price     float64 `json:"price"`
 			Direction string  `json:"direction"`
