@@ -1,16 +1,16 @@
 package huobi
+
 // Contributor 2015-2020 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"encoding/json"
 	"fmt"
-	"log"
-	utils "github.com/bitontop/gored/utils"
+
 	exchange "github.com/bitontop/gored/exchange"
+	utils "github.com/bitontop/gored/utils"
 )
-
-
 
 /*************** PUBLIC  API ***************/
 func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
@@ -25,126 +25,51 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 
 func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 
-
-	
 	get := &utils.HttpGet{
-		URI:         fmt.Sprintf("https://api.huobi.pro/market/history/trade?symbol=%s&size=%d", 
-		e.GetSymbolByPair(operation.Pair),
-		5,//TRADE_HISTORY_MAX_LIMIT,
-	),
-		
+		URI: fmt.Sprintf("https://api.huobi.pro/market/history/trade?symbol=%s&size=%d",
+			e.GetSymbolByPair(operation.Pair),
+			5, //TRADE_HISTORY_MAX_LIMIT,
+		),
 	}
 
 	err := utils.HttpGetRequest(get)
 
 	if err != nil {
-		log.Printf("%+v", err)
+		// log.Printf("%+v", err)
 		return err
 
 	} else {
-		log.Printf("%+v  ERR:%+v", string(get.ResponseBody),err)
-		// if err := json.Unmarshal(post.ResponseBody, &e.User); err != nil {
-		// 	return err
-		// }
+		// log.Printf("%+v  ERR:%+v", string(get.ResponseBody), err)
+		tradeHistory := &TradeHistory{}
+		if err := json.Unmarshal(get.ResponseBody, &tradeHistory); err != nil {
+			return err
+		} else {
+			// log.Printf("%+v ", tradeHistory)
+		}
+
+		operation.TradeHistory = []*exchange.TradeDetail{}
+		for _, d1 := range tradeHistory.Data {
+			for _, d2 := range d1.Data {
+				td := &exchange.TradeDetail{
+					Quantity: d2.Amount,
+
+					TimeStamp: d2.Ts,
+					Rate:      d2.Price,
+				}
+
+				if d2.Direction == "buy" {
+					td.Direction = exchange.Buy
+				} else if d2.Direction == "sell" {
+					td.Direction = exchange.Sell
+				}
+				// log.Printf("d2: %+v ", d2)
+				// log.Printf("TD: %+v ", td)
+
+				operation.TradeHistory = append(operation.TradeHistory, td)
+			}
+		}
 	}
-
-
-
-
-	// jsonResponse := &JsonResponse{}
-	// orderBook := OrderBook{}
-	// symbol := e.GetSymbolByPair(pair)
-
-	// strRequestUrl := "/market/depth"
-	// strUrl := API_URL + strRequestUrl
-
-	// mapParams := make(map[string]string)
-	// mapParams["symbol"] = symbol
-	// mapParams["type"] = "step0"
-
-	// maker := &exchange.Maker{
-	// 	WorkerIP:        exchange.GetExternalIP(),
-	// 	Source:          exchange.EXCHANGE_API,
-	// 	BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
-	// }
-
-	// jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	// if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-	// 	return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	// } else if jsonResponse.Status != "ok" {
-	// 	return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonOrderbook)
-	// }
-	// if err := json.Unmarshal(jsonResponse.Tick, &orderBook); err != nil {
-	// 	return nil, fmt.Errorf("%s Get Orderbook Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Tick)
-	// }
-
-	// if len(orderBook.Bids) == 0 || len(orderBook.Asks) == 0 {
-	// 	return nil, fmt.Errorf("%s Get Orderbook Failed, Empty Orderbook: %v", e.GetName(), jsonOrderbook)
-	// }
-
-	// maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
-	// for _, bid := range orderBook.Bids {
-	// 	var buydata exchange.Order
-
-	// 	buydata.Rate = bid[0]
-	// 	buydata.Quantity = bid[1]
-
-	// 	maker.Bids = append(maker.Bids, buydata)
-	// }
-	// for _, ask := range orderBook.Asks {
-	// 	var selldata exchange.Order
-
-	// 	selldata.Rate = ask[0]
-	// 	selldata.Quantity = ask[1]
-
-	// 	maker.Asks = append(maker.Asks, selldata)
-	// }
-	// maker.LastUpdateID = orderBook.Version
-
-	// return maker,nil
 
 	return nil
 
 }
-
-// func (e *Huobi) doWithdraw(operation *exchange.AccountOperation) error {
-// 	if e.API_KEY == "" || e.API_SECRET == "" {
-// 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
-// 	}
-
-// 	jsonResponse := &JsonResponse{}
-// 	var withdrawID int64
-// 	strRequest := "/v1/dw/withdraw/api/create"
-
-// 	mapParams := make(map[string]string)
-// 	mapParams["address"] = operation.WithdrawAddress
-// 	mapParams["amount"] = operation.WithdrawAmount
-// 	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
-// 	// mapParams["fee"] = strconv.FormatFloat(e.GetTxFee(operation.Coin), 'f', -1, 64) // Required parameter
-// 	if operation.WithdrawTag != "" {
-// 		mapParams["tag"] = operation.WithdrawTag
-// 	}
-
-// 	jsonWithdraw := e.ApiKeyRequest("POST", mapParams, strRequest)
-// 	if operation.DebugMode {
-// 		operation.RequestURI = strRequest
-// 		operation.MapParams = fmt.Sprintf("%+v", mapParams)
-// 		operation.CallResponce = jsonWithdraw
-// 	}
-
-// 	if err := json.Unmarshal([]byte(jsonWithdraw), &jsonResponse); err != nil {
-// 		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonWithdraw)
-// 		return operation.Error
-// 	} else if jsonResponse.Status != "ok" {
-// 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdraw)
-// 		return operation.Error
-// 	}
-// 	if err := json.Unmarshal(jsonResponse.Data, &withdrawID); err != nil {
-// 		operation.Error = fmt.Errorf("%s Withdraw Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-// 		return operation.Error
-// 	}
-
-// 	operation.WithdrawID = fmt.Sprintf("%v", withdrawID)
-
-// 	return nil
-// }

@@ -7,11 +7,10 @@ package binance
 import (
 	"fmt"
 	"log"
-	utils "github.com/bitontop/gored/utils"
+
 	exchange "github.com/bitontop/gored/exchange"
+	utils "github.com/bitontop/gored/utils"
 )
-
-
 
 /*************** PUBLIC  API ***************/
 func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {
@@ -26,14 +25,11 @@ func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {
 
 func (e *Binance) doTradeHistory(operation *exchange.PublicOperation) error {
 
-
-	
 	get := &utils.HttpGet{
-		URI:         fmt.Sprintf("https://api.binance.com/api/v3/trades?symbol=%s&limit=%d", 
-		e.GetSymbolByPair(operation.Pair),
-		5,//TRADE_HISTORY_MAX_LIMIT,
-	),
-		
+		URI: fmt.Sprintf("https://api.binance.com/api/v3/trades?symbol=%s&limit=%d",
+			e.GetSymbolByPair(operation.Pair),
+			5, //TRADE_HISTORY_MAX_LIMIT,
+		),
 	}
 
 	err := utils.HttpGetRequest(get)
@@ -43,12 +39,11 @@ func (e *Binance) doTradeHistory(operation *exchange.PublicOperation) error {
 		return err
 
 	} else {
-		log.Printf("%+v  ERR:%+v", string(get.ResponseBody),err)
-		// if err := json.Unmarshal(post.ResponseBody, &e.User); err != nil {
+		log.Printf("%+v  ERR:%+v", string(get.ResponseBody), err)
+		// if err := json.Unmarshal(get.ResponseBody, &e.User); err != nil {
 		// 	return err
 		// }
 	}
 
 	return nil
 }
-

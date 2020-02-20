@@ -69,7 +69,9 @@ func Test_Huobi_TradeHistory(t *testing.T) {
 		log.Printf("%v", err)
 	}
 
-	// log.Printf("TradeHistory: %v, err: %v", opTradeHistory.Data)
+	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
 
+	for _, d := range opTradeHistory.TradeHistory {
+		log.Printf(">> %+v ", d)
+	}
 }
-

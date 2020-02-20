@@ -134,19 +134,18 @@ type OrderStatus struct {
 	Batch            string `json:"batch"`
 }
 
-
 type TradeHistory struct {
 	Status string `json:"status"`
 	Ch     string `json:"ch"`
-	Ts     int64  `json:"ts"`
+	Ts     uint   `json:"ts"`
 	Data   []struct {
-		ID   int64 `json:"id"`
-		Ts   int64 `json:"ts"`
+		ID   uint `json:"id"`
+		Ts   uint `json:"ts"`
 		Data []struct {
-			Amount    float64 `json:"amount"`
-			TradeID   int64   `json:"trade-id"`
-			Ts        int64   `json:"ts"`
-			ID        int64   `json:"id"`
+			Amount  float64 `json:"amount"`
+			TradeID uint    `json:"trade-id"`
+			Ts      uint    `json:"ts"`
+			// ID        uint64  `json:"id"`
 			Price     float64 `json:"price"`
 			Direction string  `json:"direction"`
 		} `json:"data"`
