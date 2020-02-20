@@ -54,3 +54,22 @@ func InitBinance() exchange.Exchange {
 	config = nil
 	return ex
 }
+
+
+
+func Test_Binance_TradeHistory(t *testing.T) {
+	e := InitBinance()
+	p := pair.GetPairByKey("BTC|ETH")
+
+	opTradeHistory := &exchange.PublicOperation{
+		Type:      exchange.TradeHistory,
+		EX:        e.GetName(),
+		Pair:      p,
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+}

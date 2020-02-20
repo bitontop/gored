@@ -240,6 +240,14 @@ func (e *Ibankdigital) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
+func (e *Ibankdigital) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
+ 
+
 /*************** Private API ***************/
 func (e *Ibankdigital) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

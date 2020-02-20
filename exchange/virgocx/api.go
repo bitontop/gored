@@ -232,6 +232,11 @@ func (e *Virgocx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+/*************** Public API ***************/
+func (e *Virgocx) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Virgocx) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

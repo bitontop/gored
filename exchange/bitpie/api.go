@@ -218,6 +218,12 @@ func (e *Bitpie) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+/*************** Public API ***************/
+func (e *Bitpie) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Bitpie) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

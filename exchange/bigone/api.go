@@ -240,10 +240,15 @@ func (e *Bigone) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
 /*************** Private API ***************/
 func (e *Bigone) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Bigone) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 func (e *Bigone) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

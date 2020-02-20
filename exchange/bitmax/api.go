@@ -211,10 +211,15 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
 /*************** Private API ***************/
 func (e *Bitmax) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Bitmax) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 func (e *Bitmax) AccountGroup() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

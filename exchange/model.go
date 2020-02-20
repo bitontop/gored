@@ -165,6 +165,7 @@ const (
 	Balance     OperationType = "Balance"    // balance(s) of different accounts
 	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
 
+	TradeHistory OperationType = "TradeHistory"
 )
 
 type WalletType string
@@ -216,9 +217,42 @@ type AccountOperation struct {
 	Error        error  `json:"error"`
 }
 
+type PublicOperation struct {
+	ID int `json:"id"` //dummy at this moment for
+
+	Type OperationType `json:"type"`
+	EX   ExchangeName  `json:"exchange_name"`
+
+	Coin *coin.Coin `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
+	Pair *pair.Pair `json:"op_pair"`
+
+	TradeHistory []*TradeDetail `json:"history"`
+
+	//#Debug
+	DebugMode    bool   `json:"debug mode"`
+	RequestURI   string `json:"request_uri"`
+	CallResponce string `json:"call_responce"`
+	Error        error  `json:"error"`
+}
+
 type AssetBalance struct {
 	Coin             *coin.Coin `json:"balance_coin"`
 	BalanceAvailable float64    `json:"balance_available"` //the fund able to do trading
 	BalanceFrozen    float64    `json:"balance_frozen"`    // the fund in order or frozen can't do trading         the total amount of fund should be   BalanceAvailable + BalanceFrozen
 
+}
+
+type TradeDirection string
+
+const (
+	Buy  TradeDirection = "b"
+	Sell TradeDirection = "s"
+)
+
+type TradeDetail struct {
+	Quantity  float64        `json:"quantity"`  //amount 	/ Qty
+	TimeStamp uint           `json:"timestamp"` //TS ts
+	Rate      float64        `json:"rate"`      //Price
+	Direction TradeDirection `json:"direction"` //Buy or Sell  /'b' 's'
+	BestMatch bool           `json:"best_match"`
 }

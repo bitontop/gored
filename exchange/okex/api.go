@@ -236,6 +236,11 @@ func (e *Okex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+func (e *Okex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
+
 /*************** Private API ***************/
 func (e *Okex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
