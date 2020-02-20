@@ -6,10 +6,10 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/pair"
-
 	"github.com/bitontop/gored/exchange/okex"
+	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
+	"github.com/bitontop/gored/utils"
 	// "../../exchange/okex"
 	// "../conf"
 )
@@ -44,12 +44,39 @@ func Test_Okex(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
+func Test_OKEX_TradeHistory(t *testing.T) {
+	e := InitOkex()
+	p := pair.GetPairByKey("USDT|LTC")
+
+	opTradeHistory := &exchange.PublicOperation{
+		Type:      exchange.TradeHistory,
+		EX:        e.GetName(),
+		Pair:      p,
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
+
+	for _, d := range opTradeHistory.TradeHistory {
+		log.Printf(">> %+v ", d)
+	}
+}
+
 func InitOkex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
 
+	utils.GetCommonDataFromJSON("https://raw.githubusercontent.com/bitontop/gored/master/data")
+
 	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
+	config.Source = exchange.JSON_FILE
+	config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+
 	conf.Exchange(exchange.OKEX, config)
 
 	ex := okex.CreateOkex(config)
