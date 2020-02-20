@@ -165,60 +165,61 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Coinbase) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
-	orderBook := OrderBook{}
-	symbol := e.GetSymbolByPair(p)
+	// orderBook := OrderBook{}
+	// symbol := e.GetSymbolByPair(p)
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = symbol
-	mapParams["limit"] = "100"
+	// mapParams := make(map[string]string)
+	// mapParams["symbol"] = symbol
+	// mapParams["limit"] = "100"
 
-	strRequestUrl := "/api/v1/depth"
-	strUrl := API_URL + strRequestUrl
+	// strRequestUrl := "/api/v1/depth"
+	// strUrl := API_URL + strRequestUrl
 
-	maker := &exchange.Maker{
-		WorkerIP:        exchange.GetExternalIP(),
-		Source:          exchange.EXCHANGE_API,
-		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
-	}
+	// maker := &exchange.Maker{
+	// 	WorkerIP:        exchange.GetExternalIP(),
+	// 	Source:          exchange.EXCHANGE_API,
+	// 	BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	// }
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
-		return nil, fmt.Errorf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
-	}
+	// jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
+	// if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
+	// 	return nil, fmt.Errorf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
+	// }
 
-	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
-	maker.LastUpdateID = int64(orderBook.LastUpdateID)
+	// maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	// maker.LastUpdateID = int64(orderBook.LastUpdateID)
 
-	var err error
-	for _, bid := range orderBook.Bids {
-		buydata := exchange.Order{}
-		buydata.Quantity, err = strconv.ParseFloat(bid[1].(string), 64)
-		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-		}
+	// var err error
+	// for _, bid := range orderBook.Bids {
+	// 	buydata := exchange.Order{}
+	// 	buydata.Quantity, err = strconv.ParseFloat(bid[1].(string), 64)
+	// 	if err != nil {
+	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+	// 	}
 
-		buydata.Rate, err = strconv.ParseFloat(bid[0].(string), 64)
-		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
-		}
-		maker.Bids = append(maker.Bids, buydata)
-	}
+	// 	buydata.Rate, err = strconv.ParseFloat(bid[0].(string), 64)
+	// 	if err != nil {
+	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+	// 	}
+	// 	maker.Bids = append(maker.Bids, buydata)
+	// }
 
-	for _, ask := range orderBook.Asks {
-		selldata := exchange.Order{}
-		selldata.Quantity, err = strconv.ParseFloat(ask[1].(string), 64)
-		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-		}
+	// for _, ask := range orderBook.Asks {
+	// 	selldata := exchange.Order{}
+	// 	selldata.Quantity, err = strconv.ParseFloat(ask[1].(string), 64)
+	// 	if err != nil {
+	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+	// 	}
 
-		selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
-		if err != nil {
-			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
-		}
-		maker.Asks = append(maker.Asks, selldata)
-	}
+	// 	selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
+	// 	if err != nil {
+	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+	// 	}
+	// 	maker.Asks = append(maker.Asks, selldata)
+	// }
 
-	return maker, err
+	// return maker, err
+	return nil, fmt.Errorf("%s OrderBook not implemented yet", e.GetName())
 }
 
 /*************** Private API ***************/

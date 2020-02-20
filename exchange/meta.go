@@ -197,11 +197,12 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, HIBITEX)    // ID = 60
 	supportList = append(supportList, BGOGO)      // ID = 61
 	// supportList = append(supportList, FTX)        // ID = 62	orderbook not finished
-	supportList = append(supportList, TXBIT)  // ID = 63
-	supportList = append(supportList, PROBIT) // ID = 64
-	supportList = append(supportList, BITPIE) // ID = 65 // api unavailable
-	supportList = append(supportList, TAGZ)   // ID = 66
-	supportList = append(supportList, IDCM)   // ID = 67
-	supportList = append(supportList, HOO)    // ID = 68
-	supportList = append(supportList, HOMIEX) // ID = 69
+	supportList = append(supportList, TXBIT)    // ID = 63
+	supportList = append(supportList, PROBIT)   // ID = 64
+	supportList = append(supportList, BITPIE)   // ID = 65 // api unavailable
+	supportList = append(supportList, TAGZ)     // ID = 66
+	supportList = append(supportList, IDCM)     // ID = 67
+	supportList = append(supportList, HOO)      // ID = 68
+	supportList = append(supportList, HOMIEX)   // ID = 69
+	supportList = append(supportList, COINBASE) // ID = 70
 }

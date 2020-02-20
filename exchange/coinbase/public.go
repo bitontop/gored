@@ -81,6 +81,7 @@ func (e *Coinbase) doGetCoin(operation *exchange.PublicOperation) error {
 	return nil
 }
 
+// precision doesn't match
 func (e *Coinbase) doGetPair(operation *exchange.PublicOperation) error {
 	pairsData := PairsData{}
 
