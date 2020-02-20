@@ -22,14 +22,14 @@ import (
 func Test_Coinbase(t *testing.T) {
 	e := InitCoinbase()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USD|BTC")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
+	Test_Coins(e)
+	Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)

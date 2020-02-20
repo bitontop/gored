@@ -72,6 +72,7 @@ func (e *Binance) doTradeHistory(operation *exchange.PublicOperation) error {
 			}
 
 			td := &exchange.TradeDetail{
+				ID:        fmt.Sprintf("%v", trade.ID),
 				Quantity:  amount,
 				TimeStamp: trade.Time,
 				Rate:      price,

@@ -20,11 +20,6 @@ import (
 	"github.com/bitontop/gored/pair"
 )
 
-/*The Base Endpoint URL*/
-const (
-	API_URL = "https://api.binance.com"
-)
-
 /*API Base Knowledge
 Path: API function. Usually after the base endpoint URL
 Method:
@@ -51,49 +46,49 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Coinbase) GetCoinsData() error {
-	coinsData := CoinsData{}
+	// coinsData := CoinsData{}
 
-	strUrl := "https://www.binance.com/assetWithdraw/getAllAsset.html"
+	// strUrl := "https://www.binance.com/assetWithdraw/getAllAsset.html"
 
-	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	}
+	// jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	// if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
+	// 	return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+	// }
 
-	for _, data := range coinsData {
-		c := &coin.Coin{}
-		switch e.Source {
-		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.AssetCode)
-			if c == nil {
-				c = &coin.Coin{}
-				c.Code = data.AssetCode
-				c.Name = data.AssetName
-				c.Website = data.URL
-				c.Explorer = data.BlockURL
-				coin.AddCoin(c)
-			}
-		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.AssetCode)
-		}
+	// for _, data := range coinsData {
+	// 	c := &coin.Coin{}
+	// 	switch e.Source {
+	// 	case exchange.EXCHANGE_API:
+	// 		c = coin.GetCoin(data.AssetCode)
+	// 		if c == nil {
+	// 			c = &coin.Coin{}
+	// 			c.Code = data.AssetCode
+	// 			c.Name = data.AssetName
+	// 			c.Website = data.URL
+	// 			c.Explorer = data.BlockURL
+	// 			coin.AddCoin(c)
+	// 		}
+	// 	case exchange.JSON_FILE:
+	// 		c = e.GetCoinBySymbol(data.AssetCode)
+	// 	}
 
-		if c != nil {
-			confirmation, _ := strconv.Atoi(data.ConfirmTimes)
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.TransactionFee,
-				Withdraw:     data.EnableWithdraw,
-				Deposit:      data.EnableCharge,
-				Confirmation: confirmation,
-				Listed:       true,
-			}
+	// 	if c != nil {
+	// 		confirmation, _ := strconv.Atoi(data.ConfirmTimes)
+	// 		coinConstraint := &exchange.CoinConstraint{
+	// 			CoinID:       c.ID,
+	// 			Coin:         c,
+	// 			ExSymbol:     data.AssetCode,
+	// 			ChainType:    exchange.MAINNET,
+	// 			TxFee:        data.TransactionFee,
+	// 			Withdraw:     data.EnableWithdraw,
+	// 			Deposit:      data.EnableCharge,
+	// 			Confirmation: confirmation,
+	// 			Listed:       true,
+	// 		}
 
-			e.SetCoinConstraint(coinConstraint)
-		}
-	}
+	// 		e.SetCoinConstraint(coinConstraint)
+	// 	}
+	// }
 	return nil
 }
 
@@ -102,63 +97,63 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Coinbase) GetPairsData() error {
-	pairsData := &PairsData{}
+	// pairsData := &PairsData{}
 
-	strRequestUrl := "/api/v1/exchangeInfo"
-	strUrl := API_URL + strRequestUrl
+	// strRequestUrl := "/api/v1/exchangeInfo"
+	// strUrl := API_URL + strRequestUrl
 
-	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	}
+	// jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
+	// if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
+	// 	return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+	// }
 
-	for _, data := range pairsData.Symbols {
-		if data.Status == "TRADING" {
-			p := &pair.Pair{}
-			switch e.Source {
-			case exchange.EXCHANGE_API:
-				base := coin.GetCoin(data.QuoteAsset)
-				target := coin.GetCoin(data.BaseAsset)
-				if base != nil && target != nil {
-					p = pair.GetPair(base, target)
-				}
-			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(data.Symbol)
-			}
-			if p != nil {
-				var err error
-				lotsize := 0.0
-				priceFilter := 0.0
-				for _, filter := range data.Filters {
-					switch filter.FilterType {
-					case "LOT_SIZE":
-						lotsize, err = strconv.ParseFloat(filter.StepSize, 64)
-						if err != nil {
-							log.Printf("%s Lot Size Err: %v", e.GetName(), err)
-							lotsize = DEFAULT_LOT_SIZE
-						}
-					case "PRICE_FILTER":
-						priceFilter, err = strconv.ParseFloat(filter.TickSize, 64)
-						if err != nil {
-							log.Printf("%s Price Filter Err: %v", e.GetName(), err)
-							priceFilter = DEFAULT_PRICE_FILTER
-						}
-					}
-				}
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     lotsize,
-					PriceFilter: priceFilter,
-					Listed:      true,
-				}
-				e.SetPairConstraint(pairConstraint)
-			}
-		}
-	}
+	// for _, data := range pairsData.Symbols {
+	// 	if data.Status == "TRADING" {
+	// 		p := &pair.Pair{}
+	// 		switch e.Source {
+	// 		case exchange.EXCHANGE_API:
+	// 			base := coin.GetCoin(data.QuoteAsset)
+	// 			target := coin.GetCoin(data.BaseAsset)
+	// 			if base != nil && target != nil {
+	// 				p = pair.GetPair(base, target)
+	// 			}
+	// 		case exchange.JSON_FILE:
+	// 			p = e.GetPairBySymbol(data.Symbol)
+	// 		}
+	// 		if p != nil {
+	// 			var err error
+	// 			lotsize := 0.0
+	// 			priceFilter := 0.0
+	// 			for _, filter := range data.Filters {
+	// 				switch filter.FilterType {
+	// 				case "LOT_SIZE":
+	// 					lotsize, err = strconv.ParseFloat(filter.StepSize, 64)
+	// 					if err != nil {
+	// 						log.Printf("%s Lot Size Err: %v", e.GetName(), err)
+	// 						lotsize = DEFAULT_LOT_SIZE
+	// 					}
+	// 				case "PRICE_FILTER":
+	// 					priceFilter, err = strconv.ParseFloat(filter.TickSize, 64)
+	// 					if err != nil {
+	// 						log.Printf("%s Price Filter Err: %v", e.GetName(), err)
+	// 						priceFilter = DEFAULT_PRICE_FILTER
+	// 					}
+	// 				}
+	// 			}
+	// 			pairConstraint := &exchange.PairConstraint{
+	// 				PairID:      p.ID,
+	// 				Pair:        p,
+	// 				ExSymbol:    data.Symbol,
+	// 				MakerFee:    DEFAULT_MAKER_FEE,
+	// 				TakerFee:    DEFAULT_TAKER_FEE,
+	// 				LotSize:     lotsize,
+	// 				PriceFilter: priceFilter,
+	// 				Listed:      true,
+	// 			}
+	// 			e.SetPairConstraint(pairConstraint)
+	// 		}
+	// 	}
+	// }
 	return nil
 }
 
@@ -225,8 +220,6 @@ func (e *Coinbase) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	return maker, err
 }
-
-
 
 /*************** Private API ***************/
 

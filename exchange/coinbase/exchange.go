@@ -67,10 +67,17 @@ func CreateCoinbase(config *exchange.Config) *Coinbase {
 func (e *Coinbase) InitData() error {
 	switch e.Source {
 	case exchange.EXCHANGE_API:
-		if err := e.GetCoinsData(); err != nil {
+		opGetCoin := &exchange.PublicOperation{
+			Type: exchange.GetCoin,
+		}
+		opGetPair := &exchange.PublicOperation{
+			Type: exchange.GetPair,
+		}
+
+		if err := e.LoadPublicData(opGetCoin); err != nil {
 			return err
 		}
-		if err := e.GetPairsData(); err != nil {
+		if err := e.LoadPublicData(opGetPair); err != nil {
 			return err
 		}
 		break
@@ -246,8 +253,16 @@ func (e *Coinbase) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 }
 
 func (e *Coinbase) UpdateConstraint() {
-	e.GetCoinsData()
-	e.GetPairsData()
+	// e.GetCoinsData()
+	// e.GetPairsData()
+	opGetCoin := &exchange.PublicOperation{
+		Type: exchange.GetCoin,
+	}
+	opGetPair := &exchange.PublicOperation{
+		Type: exchange.GetPair,
+	}
+	e.LoadPublicData(opGetCoin)
+	e.LoadPublicData(opGetPair)
 }
 
 /**************** Coin Constraint ****************/
