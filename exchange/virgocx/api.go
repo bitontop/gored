@@ -266,7 +266,6 @@ func (e *Virgocx) getAllBalance(operation *exchange.AccountOperation) error {
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
-	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn) //====================
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
 		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
@@ -351,7 +350,6 @@ func (e *Virgocx) UpdateAllBalances() {
 	mapParams := make(map[string]string)
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
-	log.Printf("Balance Return: %v", jsonBalanceReturn) // =====================================
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -607,14 +605,6 @@ func (e *Virgocx) ApiKeyGET(strRequestPath string, mapParams map[string]string) 
 }
 
 func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapParams map[string]string) string {
-	// test parameters
-	// mapParams["apiKey"] = "AAAAA"
-	// mapParams["apiSecret"] = "BBBBB"
-	// mapParams["category"] = "1"
-	// mapParams["price"] = "9000.1"
-	// mapParams["qty"] = "1.2"
-	// mapParams["symbol"] = "BTC/CAD"
-	// mapParams["type"] = "1"
 	mapParams["apiKey"] = e.API_KEY
 	mapParams["apiSecret"] = e.API_SECRET
 
@@ -625,14 +615,6 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	}
 	sort.Strings(keySort)
 
-	/* preSign := `{`
-	for _, key := range keySort {
-		preSign += fmt.Sprintf(`"%v",`, mapParams[key])
-	}
-	if 1 < len(preSign) {
-		preSign = string([]rune(preSign)[:len(preSign)-1])
-	}
-	preSign += "}" */
 	preSign := ""
 	for _, key := range keySort {
 		preSign += mapParams[key]
@@ -640,7 +622,10 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 
 	// delete secret from params
 	delete(mapParams, "apiSecret")
-	log.Printf("========preSign: %v", preSign) //=======
+
+	// try
+	signature := exchange.ComputeMD5(preSign)
+	mapParams["sign"] = signature
 
 	var strRequestUrl string
 	if nil == mapParams {
@@ -651,19 +636,11 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 		strRequestUrl = API_URL + strRequestPath + "?" + strParams
 	}
 
-	// try
-	signature := exchange.ComputeMD5(preSign)
-	mapParams["sign"] = signature
-	// log.Printf("========signature: %v", signature) //=======
-
 	jsonParams := ""
 	if nil != mapParams {
 		bytesParams, _ := json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
-	log.Printf("========strMethod: %v", strMethod)         //=======
-	log.Printf("========strRequestUrl: %v", strRequestUrl) //=======
-	log.Printf("========jsonParams: %v", jsonParams)       //=======
 
 	// 构建Request, 并且按官方要求添加Http Header
 	httpClient := &http.Client{}
