@@ -222,6 +222,21 @@ func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) 
 	}
 }
 
+func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
+	opTradeHistory := &exchange.PublicOperation{
+		Type: exchange.TradeHistory,
+		EX:   e.GetName(),
+		Pair: pair,
+	}
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	for _, trade := range opTradeHistory.TradeHistory {
+		log.Printf("TradeHistory: %+v", trade)
+	}
+}
+
 /********************General********************/
 func Test_ConstraintFetch(e exchange.Exchange, p *pair.Pair) {
 	status := e.GetConstraintFetchMethod(p)
