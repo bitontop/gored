@@ -35,3 +35,11 @@ type OrderBook struct {
 	Bids      [][]string `json:"bids"`
 	Asks      [][]string `json:"asks"`
 }
+
+type TradeHistory []struct {
+	Date   string `json:"date"`
+	Tid    string `json:"tid"`
+	Price  string `json:"price"`
+	Type   string `json:"type"`
+	Amount string `json:"amount"`
+}
