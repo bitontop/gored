@@ -10,6 +10,7 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/bitontop/gored/coin"
 	exchange "github.com/bitontop/gored/exchange"
 	utils "github.com/bitontop/gored/utils"
 )
@@ -17,12 +18,62 @@ import (
 /*************** PUBLIC  API ***************/
 func (e *Coinbase) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
-
+	case exchange.GetCoin:
+		return e.doGetCoin(operation)
+	case exchange.GetPair:
+		// return e.doGetPair
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Coinbase) doGetCoin(operation *exchange.PublicOperation) error {
+	coinsData := CoinsData{}
+
+	strUrl := "https://www.binance.com/assetWithdraw/getAllAsset.html"
+
+	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+	}
+
+	for _, data := range coinsData {
+		c := &coin.Coin{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			c = coin.GetCoin(data.AssetCode)
+			if c == nil {
+				c = &coin.Coin{}
+				c.Code = data.AssetCode
+				c.Name = data.AssetName
+				c.Website = data.URL
+				c.Explorer = data.BlockURL
+				coin.AddCoin(c)
+			}
+		case exchange.JSON_FILE:
+			c = e.GetCoinBySymbol(data.AssetCode)
+		}
+
+		if c != nil {
+			confirmation, _ := strconv.Atoi(data.ConfirmTimes)
+			coinConstraint := &exchange.CoinConstraint{
+				CoinID:       c.ID,
+				Coin:         c,
+				ExSymbol:     data.AssetCode,
+				ChainType:    exchange.MAINNET,
+				TxFee:        data.TransactionFee,
+				Withdraw:     data.EnableWithdraw,
+				Deposit:      data.EnableCharge,
+				Confirmation: confirmation,
+				Listed:       true,
+			}
+
+			e.SetCoinConstraint(coinConstraint)
+		}
+	}
+	return nil
 }
 
 func (e *Coinbase) doTradeHistory(operation *exchange.PublicOperation) error {
