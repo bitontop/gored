@@ -242,6 +242,10 @@ func (e *Bitrue) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Bitrue) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Bitrue) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 func (e *Bitrue) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

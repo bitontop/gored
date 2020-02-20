@@ -219,10 +219,16 @@ func (e *Bybit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return nil, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Bybit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Bybit) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 func (e *Bybit) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

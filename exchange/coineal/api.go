@@ -236,10 +236,16 @@ func (e *Coineal) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
 /*************** Private API ***************/
 func (e *Coineal) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Coineal) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 func (e *Coineal) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())

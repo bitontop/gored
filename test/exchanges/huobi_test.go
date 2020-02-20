@@ -10,8 +10,6 @@ import (
 
 	"github.com/bitontop/gored/exchange/huobi"
 	"github.com/bitontop/gored/test/conf"
-	// "../../exchange/huobi"
-	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -53,4 +51,27 @@ func InitHuobi() exchange.Exchange {
 
 	config = nil
 	return ex
+}
+
+func Test_Huobi_TradeHistory(t *testing.T) {
+	e := InitHuobi()
+	p := pair.GetPairByKey("BTC|ETH")
+
+	opTradeHistory := &exchange.PublicOperation{
+		Type:      exchange.TradeHistory,
+		EX:        e.GetName(),
+		Pair:      p,
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
+
+	for _, d := range opTradeHistory.TradeHistory {
+		log.Printf(">> %+v ", d)
+	}
 }

@@ -220,6 +220,12 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+
+
+
+
+
 /*************** Private API ***************/
 func (e *Huobi) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

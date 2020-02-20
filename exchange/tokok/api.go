@@ -225,6 +225,9 @@ func (e *Tokok) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Tokok) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
+func (e *Tokok) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 func (e *Tokok) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {

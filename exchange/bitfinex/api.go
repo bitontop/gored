@@ -283,7 +283,11 @@ func (e *Bitfinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+
 /*************** Private API ***************/
+func (e *Bitfinex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 func (e *Bitfinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Withdraw:

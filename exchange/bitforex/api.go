@@ -231,8 +231,12 @@ func (e *Bitforex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
 /*************** Private API ***************/
 func (e *Bitforex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+	return nil
+}
+func (e *Bitforex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -204,6 +204,10 @@ func (e *Poloniex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+func (e *Poloniex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Poloniex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

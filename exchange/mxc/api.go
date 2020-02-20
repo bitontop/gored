@@ -243,6 +243,11 @@ func (e *Mxc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+/*************** Public API ***************/
+func (e *Mxc) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Mxc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

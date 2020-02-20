@@ -211,6 +211,11 @@ func (e *Bkex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+/*************** Public API ***************/
+func (e *Bkex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Bkex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

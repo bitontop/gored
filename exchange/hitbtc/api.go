@@ -211,6 +211,11 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+/*************** Public API ***************/
+func (e *Hitbtc) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
 /*************** Private API ***************/
 func (e *Hitbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

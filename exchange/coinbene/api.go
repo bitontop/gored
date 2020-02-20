@@ -255,6 +255,13 @@ func (e *Coinbene) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+
+func (e *Coinbene) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
+
+
+
 /*************** Private API ***************/
 func (e *Coinbene) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
