@@ -237,16 +237,16 @@ func (e *Coinbase) DeletePair(pair *pair.Pair) {
 func (e *Coinbase) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod
