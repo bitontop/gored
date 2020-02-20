@@ -239,7 +239,7 @@ func (e *Bigone) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
-	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ConstrainSource = 3
 	return constrainFetchMethod
 }
 

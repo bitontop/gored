@@ -243,7 +243,7 @@ func (e *Huobi) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.Withdraw = true
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
-	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ConstrainSource = 2
 	return constrainFetchMethod
 }
 

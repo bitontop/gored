@@ -240,7 +240,7 @@ func (e *Digifinex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrai
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
-	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ConstrainSource = 3
 	return constrainFetchMethod
 }
 
