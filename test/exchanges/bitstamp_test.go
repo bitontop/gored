@@ -34,6 +34,29 @@ func Test_Bitstamp(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }
 
+func Test_BITSTAMP_TradeHistory(t *testing.T) {
+	e := InitBitstamp()
+	p := pair.GetPairByKey("BTC|ETH")
+
+	opTradeHistory := &exchange.PublicOperation{
+		Type:      exchange.TradeHistory,
+		EX:        e.GetName(),
+		Pair:      p,
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
+
+	for _, d := range opTradeHistory.TradeHistory {
+		log.Printf(">> %+v ", d)
+	}
+}
+
 func InitBitstamp() exchange.Exchange {
 	coin.Init()
 	pair.Init()

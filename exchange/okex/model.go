@@ -134,3 +134,12 @@ type AssetBalance []struct {
 // 	Available string `json:"available"`
 // 	Holds     string `json:"holds"`
 // }
+
+type TradeHistory []struct {
+	Time      time.Time `json:"time"`
+	Timestamp time.Time `json:"timestamp"`
+	TradeID   string    `json:"trade_id"`
+	Price     string    `json:"price"`
+	Size      string    `json:"size"`
+	Side      string    `json:"side"`
+}

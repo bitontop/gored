@@ -251,7 +251,7 @@ const (
 
 type TradeDetail struct {
 	Quantity  float64        `json:"quantity"`  //amount 	/ Qty
-	TimeStamp uint           `json:"timestamp"` //TS ts
+	TimeStamp int64          `json:"timestamp"` //TS ts
 	Rate      float64        `json:"rate"`      //Price
 	Direction TradeDirection `json:"direction"` //Buy or Sell  /'b' 's'
 	BestMatch bool           `json:"best_match"`
