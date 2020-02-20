@@ -637,6 +637,11 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	delete(mapParams, "apiSecret")
 	log.Printf("========preSign: %v", preSign) //=======
 
+	// try
+	signature := exchange.ComputeMD5(preSign)
+	mapParams["sign"] = signature
+	log.Printf("========signature: %v", signature) //=======
+
 	var strRequestUrl string
 	if nil == mapParams {
 		strRequestUrl = API_URL + strRequestPath
@@ -644,11 +649,6 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 		strParams := exchange.Map2UrlQuery(mapParams)
 		strRequestUrl = API_URL + strRequestPath + "?" + strParams
 	}
-
-	// try
-	signature := exchange.ComputeMD5(preSign)
-	mapParams["sign"] = signature
-	log.Printf("========signature: %v", signature) //=======
 
 	jsonParams := ""
 	if nil != mapParams {
