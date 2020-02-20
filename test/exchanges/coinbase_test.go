@@ -12,24 +12,24 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
 
-	"github.com/bitontop/gored/exchange/binance"
+	"github.com/bitontop/gored/exchange/coinbase"
 	"github.com/bitontop/gored/test/conf"
-	// "../../exchange/binance"
+	// "../../exchange/coinbase"
 	// "../conf"
 )
 
 /********************Public API********************/
-func Test_Binance(t *testing.T) {
-	e := InitBinance()
+func Test_Coinbase(t *testing.T) {
+	e := InitCoinbase()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USD|BTC")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
+	Test_Coins(e)
+	Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
@@ -39,7 +39,7 @@ func Test_Binance(t *testing.T) {
 	Test_TradeHistory(e, pair)
 }
 
-func InitBinance() exchange.Exchange {
+func InitCoinbase() exchange.Exchange {
 	coin.Init()
 	pair.Init()
 	config := &exchange.Config{}
@@ -48,17 +48,17 @@ func InitBinance() exchange.Exchange {
 	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
 	// utils.GetCommonDataFromJSON(config.SourceURI)
 
-	conf.Exchange(exchange.BINANCE, config)
+	conf.Exchange(exchange.COINBASE, config)
 
-	ex := binance.CreateBinance(config)
+	ex := coinbase.CreateCoinbase(config)
 	log.Printf("Initial [ %v ] ", ex.GetName())
 
 	config = nil
 	return ex
 }
 
-func Test_Binance_TradeHistory(t *testing.T) {
-	e := InitBinance()
+func Test_Coinbase_TradeHistory(t *testing.T) {
+	e := InitCoinbase()
 	p := pair.GetPairByKey("BTC|ETH")
 
 	opTradeHistory := &exchange.PublicOperation{

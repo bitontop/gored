@@ -165,6 +165,8 @@ const (
 	Balance     OperationType = "Balance"    // balance(s) of different accounts
 	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
 
+	GetCoin      OperationType = "GetCoin"
+	GetPair      OperationType = "GetPair"
 	TradeHistory OperationType = "TradeHistory"
 )
 

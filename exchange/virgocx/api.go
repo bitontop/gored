@@ -631,6 +631,7 @@ func (e *Virgocx) ApiKeyRequest(strMethod string, strRequestPath string, mapPara
 	if nil == mapParams {
 		strRequestUrl = API_URL + strRequestPath
 	} else {
+
 		strParams := exchange.Map2UrlQuery(mapParams)
 		strRequestUrl = API_URL + strRequestPath + "?" + strParams
 	}
