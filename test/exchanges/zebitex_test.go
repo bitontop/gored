@@ -25,17 +25,21 @@ func Test_Zebitex(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	Test_Coins(e)
-	Test_Pairs(e)
+	// Test_Coins(e)
+	// Test_Pairs(e)
 	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Orderbook(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.00000001, 667)
+	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1.5, "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v")
+
+	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
+	// Test_CheckAllBalance(e, exchange.SpotWallet)
 }
 
 func InitZebitex() exchange.Exchange {
