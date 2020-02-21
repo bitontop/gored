@@ -219,13 +219,12 @@ func (e *Bybit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return nil, nil
 }
 
-
+func (e *Bybit) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Bybit) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Bybit) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

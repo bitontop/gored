@@ -24,8 +24,8 @@ func Test_Coinbase(t *testing.T) {
 
 	pair := pair.GetPairByKey("USD|BTC")
 
-	Test_Coins(e)
-	Test_Pairs(e)
+	// Test_Coins(e)
+	// Test_Pairs(e)
 	Test_Pair(e, pair)
 	Test_DoOrderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
