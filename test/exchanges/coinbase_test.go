@@ -12,10 +12,10 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
 
-	// "github.com/bitontop/gored/exchange/coinbase"
-	// "github.com/bitontop/gored/test/conf"
-	"../../exchange/coinbase"
-	"../conf"
+	"github.com/bitontop/gored/exchange/coinbase"
+	"github.com/bitontop/gored/test/conf"
+	// "../../exchange/coinbase"
+	// "../conf"
 )
 
 /********************Public API********************/
