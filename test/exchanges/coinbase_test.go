@@ -24,36 +24,19 @@ func Test_Coinbase(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|XRP")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
-	// Test_Pair(e, pair)
-	// Test_DoOrderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_Coins(e)
+	Test_Pairs(e)
+	Test_Pair(e, pair)
+	Test_DoOrderbook(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
 	Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
-	// Test_TradeHistory(e, pair)
-}
-
-func Test_Coinbase_TradeHistory(t *testing.T) {
-	e := InitCoinbase()
-	p := pair.GetPairByKey("BTC|ETH")
-
-	opTradeHistory := &exchange.PublicOperation{
-		Type:      exchange.TradeHistory,
-		EX:        e.GetName(),
-		Pair:      p,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opTradeHistory)
-	if err != nil {
-		log.Printf("%v", err)
-	}
+	Test_TradeHistory(e, pair)
 }
 
 func InitCoinbase() exchange.Exchange {
