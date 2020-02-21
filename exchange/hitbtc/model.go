@@ -75,3 +75,15 @@ type PlaceOrder struct {
 type Withdraw struct {
 	ID string `json:"id"`
 }
+
+type TradeHistory []struct {
+	ID            int       `json:"id"`
+	ClientOrderID string    `json:"clientOrderId"`
+	OrderID       int       `json:"orderId"`
+	Symbol        string    `json:"symbol"`
+	Side          string    `json:"side"`
+	Quantity      string    `json:"quantity"`
+	Price         string    `json:"price"`
+	Fee           string    `json:"fee"`
+	Timestamp     time.Time `json:"timestamp"`
+}

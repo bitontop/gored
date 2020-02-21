@@ -32,6 +32,7 @@ import (
 	"github.com/bitontop/gored/exchange/blocktrade"
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/bybit"
+	"github.com/bitontop/gored/exchange/coinbase"
 	"github.com/bitontop/gored/exchange/coinbene"
 	"github.com/bitontop/gored/exchange/coindeal"
 	"github.com/bitontop/gored/exchange/coineal"
@@ -203,6 +204,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitIdcm(config)
 	InitHoo(config)
 	InitHomiex(config)
+	InitCoinbase(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -756,6 +758,15 @@ func InitHoo(config *exchange.Config) {
 func InitHomiex(config *exchange.Config) {
 	conf.Exchange(exchange.HOMIEX, config)
 	ex := homiex.CreateHomiex(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitCoinbase(config *exchange.Config) {
+	conf.Exchange(exchange.COINBASE, config)
+	ex := coinbase.CreateCoinbase(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

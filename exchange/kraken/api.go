@@ -232,11 +232,6 @@ func (e *Kraken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-func (e *Kraken) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
-
-
 /*************** Private API ***************/
 func (e *Kraken) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

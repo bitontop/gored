@@ -32,10 +32,12 @@ func Test_Poloniex(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.05, 0.04)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+
+	Test_TradeHistory(e, pair)
 }
 
 func InitPoloniex() exchange.Exchange {

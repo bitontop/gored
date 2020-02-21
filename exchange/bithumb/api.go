@@ -229,13 +229,7 @@ func (e *Bithumb) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
-
-
 /*************** Public API ***************/
-func (e *Bithumb) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
 
 /*************** Private API ***************/
 func (e *Bithumb) DoAccoutOperation(operation *exchange.AccountOperation) error {

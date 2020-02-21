@@ -6,6 +6,7 @@ package kraken
 
 import (
 	"encoding/json"
+	"time"
 )
 
 type JsonResponse struct {
@@ -92,6 +93,14 @@ type Order struct {
 type CancelOrder struct {
 	Count   int  `json:"count"`
 	Pending bool `json:"pending"`
+}
+
+type Trade struct {
+	Symbol    string    `json:"symbol"`
+	Price     string    `json:"price"`
+	Volume    string    `json:"volume"`
+	Direction string    `json:"direction"`
+	TradeTime time.Time `json:"tradeTime"`
 }
 
 /* type AccountBalances struct {

@@ -44,7 +44,7 @@ func CreateCoinbase(config *exchange.Config) *Coinbase {
 		instance = &Coinbase{
 			ID:      DEFAULT_ID,
 			Name:    "Coinbase",
-			Website: "https://www.binance.com/",
+			Website: "https://pro.coinbase.com/",
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
@@ -108,8 +108,8 @@ func (e *Coinbase) GetName() exchange.ExchangeName {
 	return exchange.COINBASE
 }
 
-func (e *Coinbase) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.binance.com/cn/trade/pro/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+func (e *Coinbase) GetTradingWebURL(pair *pair.Pair) string { //BTC-USD
+	return fmt.Sprintf("https://pro.coinbase.com/trade/%s", e.GetSymbolByPair(pair))
 }
 
 func (e *Coinbase) GetBalance(coin *coin.Coin) float64 {
@@ -237,16 +237,16 @@ func (e *Coinbase) DeletePair(pair *pair.Pair) {
 func (e *Coinbase) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = true
+	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
-	constrainFetchMethod.TxFee = true
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
+	constrainFetchMethod.TxFee = false
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod

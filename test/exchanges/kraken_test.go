@@ -24,7 +24,7 @@ import (
 func Test_Kraken(t *testing.T) {
 	e := InitKraken()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USDT|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -33,12 +33,14 @@ func Test_Kraken(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.0001, 100)
 	// Test_Trading_Sell(e, pair, 0.05, 0.04)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
+
+	Test_TradeHistory(e, pair)
 }
 
 func InitKraken() exchange.Exchange {

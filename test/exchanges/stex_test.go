@@ -48,12 +48,35 @@ func Test_Stex(t *testing.T) {
 	// 	log.Printf("%v", err)
 	// }
 	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+}
 
+func Test_STEX_TradeHistory(t *testing.T) {
+	e := InitStex()
+	p := pair.GetPairByKey("USDT|ETH")
+
+	opTradeHistory := &exchange.PublicOperation{
+		Type:      exchange.TradeHistory,
+		EX:        e.GetName(),
+		Pair:      p,
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
+
+	for _, d := range opTradeHistory.TradeHistory {
+		log.Printf(">> %+v ", d)
+	}
 }
 
 func InitStex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
+
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
 	conf.Exchange(exchange.STEX, config)

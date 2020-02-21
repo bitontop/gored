@@ -42,6 +42,7 @@ func Test_Bitmart(t *testing.T) {
 func InitBitmart() exchange.Exchange {
 	coin.Init()
 	pair.Init()
+
 	config := &exchange.Config{}
 	config.Source = exchange.EXCHANGE_API
 	conf.Exchange(exchange.BITMART, config)

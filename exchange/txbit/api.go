@@ -205,13 +205,6 @@ func (e *Txbit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
-
-func (e *Txbit) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
-
-
 /*************** Private API ***************/
 func (e *Txbit) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

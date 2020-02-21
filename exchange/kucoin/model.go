@@ -122,3 +122,11 @@ type AccountID []struct {
 	Available string `json:"available"`
 	Holds     string `json:"holds"`
 }
+
+type TradeHistory []struct {
+	Sequence string `json:"sequence"`
+	Side     string `json:"side"`
+	Size     string `json:"size"`
+	Price    string `json:"price"`
+	Time     int64  `json:"time"`
+}

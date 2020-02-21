@@ -70,3 +70,13 @@ type Withdraw struct {
 	Timestamp  int64  `json:"timestamp"`
 	WithdrawID int    `json:"withdrawId"`
 }
+
+type TradeHistory [][]Trade
+
+type Trade struct {
+	Symbol    string    `json:"symbol"`
+	Price     string    `json:"price"`
+	Volume    string    `json:"volume"`
+	Direction string    `json:"direction"`
+	TradeTime time.Time `json:"tradeTime"`
+}

@@ -310,10 +310,6 @@ func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-func (e *Stex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
-
 /*************** Private API ***************/
 func (e *Stex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

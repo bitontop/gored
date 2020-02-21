@@ -65,3 +65,12 @@ type Withdraw struct {
 	TxFee          string `json:"tx_fee"`
 	TxID           string `json:"tx_id"`
 }
+
+type TradeHistory []struct {
+	ID     int    `json:"id"`
+	Type   string `json:"type"`
+	Price  string `json:"price"`
+	Amount string `json:"amount"`
+	Date   int    `json:"date"`
+	DateMs int64  `json:"date_ms"`
+}

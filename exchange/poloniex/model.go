@@ -77,6 +77,17 @@ type CancelOrder struct {
 	Message       string `json:"message"`
 }
 
+type TradeHistory []struct {
+	GlobalTradeID int    `json:"globalTradeID"`
+	TradeID       int    `json:"tradeID"`
+	Date          string `json:"date"`
+	Type          string `json:"type"`
+	Rate          string `json:"rate"`
+	Amount        string `json:"amount"`
+	Total         string `json:"total"`
+	OrderNumber   int64  `json:"orderNumber"`
+}
+
 // type CancelOrder struct {
 // 	Success int    `json:"success"`
 // 	Amount  string `json:"amount"`
