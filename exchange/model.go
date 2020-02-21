@@ -167,6 +167,7 @@ const (
 
 	GetCoin      OperationType = "GetCoin"
 	GetPair      OperationType = "GetPair"
+	Orderbook    OperationType = "Orderbook"
 	TradeHistory OperationType = "TradeHistory"
 )
 
@@ -225,9 +226,9 @@ type PublicOperation struct {
 	Type OperationType `json:"type"`
 	EX   ExchangeName  `json:"exchange_name"`
 
-	Coin *coin.Coin `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
-	Pair *pair.Pair `json:"op_pair"`
-
+	Coin         *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
+	Pair         *pair.Pair     `json:"op_pair"`
+	Maker        *Maker         `json:"maker"`
 	TradeHistory []*TradeDetail `json:"history"`
 
 	//#Debug
