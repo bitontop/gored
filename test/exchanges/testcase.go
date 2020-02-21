@@ -237,6 +237,19 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 	}
 }
 
+func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
+	opTradeHistory := &exchange.PublicOperation{
+		Type: exchange.Orderbook,
+		EX:   e.GetName(),
+		Pair: pair,
+	}
+	err := e.LoadPublicData(opTradeHistory)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	log.Printf("%s OrderBook %+v", e.GetName(), opTradeHistory.Maker)
+}
+
 /********************General********************/
 func Test_ConstraintFetch(e exchange.Exchange, p *pair.Pair) {
 	status := e.GetConstraintFetchMethod(p)

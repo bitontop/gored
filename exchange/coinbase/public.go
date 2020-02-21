@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 
 	"github.com/bitontop/gored/coin"
 	exchange "github.com/bitontop/gored/exchange"
@@ -28,6 +29,8 @@ func (e *Coinbase) LoadPublicData(operation *exchange.PublicOperation) error {
 		return e.doGetCoin(operation)
 	case exchange.GetPair:
 		return e.doGetPair(operation)
+	case exchange.Orderbook:
+		return e.doOrderbook(operation)
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
 
@@ -137,6 +140,60 @@ func (e *Coinbase) doGetPair(operation *exchange.PublicOperation) error {
 			}
 		}
 	}
+	return nil
+}
+
+// precision doesn't match
+func (e *Coinbase) doOrderbook(operation *exchange.PublicOperation) error {
+	orderbook := OrderBook{}
+	symbol := e.GetSymbolByPair(operation.Pair)
+
+	mapParams := make(map[string]string)
+	mapParams["level"] = "3"
+
+	strRequestUrl := fmt.Sprintf("/products/%s/book", symbol)
+	strUrl := API_URL + strRequestUrl
+
+	operation.Maker = &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	jsonOrderbookReturn := exchange.HttpGetRequest(strUrl, mapParams)
+	if err := json.Unmarshal([]byte(jsonOrderbookReturn), &orderbook); err != nil {
+		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookReturn)
+	}
+
+	operation.Maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	var err error
+	for _, bid := range orderbook.Bids {
+		buydata := exchange.Order{}
+		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		operation.Maker.Bids = append(operation.Maker.Bids, buydata)
+	}
+	for _, ask := range orderbook.Asks {
+		selldata := exchange.Order{}
+		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		operation.Maker.Asks = append(operation.Maker.Asks, selldata)
+	}
+
 	return nil
 }
 

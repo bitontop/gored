@@ -97,7 +97,7 @@ type PlaceOrder struct {
 }
 
 type OrderBook struct {
-	LastUpdateID int             `json:"lastUpdateId"`
-	Bids         [][]interface{} `json:"bids"`
-	Asks         [][]interface{} `json:"asks"`
+	Sequence int64      `json:"sequence"`
+	Bids     [][]string `json:"bids"`
+	Asks     [][]string `json:"asks"`
 }
