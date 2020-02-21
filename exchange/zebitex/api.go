@@ -242,7 +242,7 @@ func (e *Zebitex) DoAccoutOperation(operation *exchange.AccountOperation) error 
 		return e.getAllBalance(operation)
 	case exchange.Balance:
 		return e.getBalance(operation)
-	case exchange.Withdraw: // TODO
+	case exchange.Withdraw: // need test
 		return e.doWithdraw(operation)
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
@@ -346,39 +346,41 @@ func (e *Zebitex) getBalance(operation *exchange.AccountOperation) error {
 	return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
 }
 
-// TODO
+// need test
 func (e *Zebitex) doWithdraw(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	// withdrawResponse := WithdrawResponse{}
-	// strRequest := "/api/v1/withdrawals"
+	currency := e.GetSymbolByCoin(operation.Coin)
 
-	// mapParams := make(map[string]interface{})
-	// mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
-	// mapParams["amount"] = operation.WithdrawAmount
-	// mapParams["destination"] = "4"
-	// mapParams["to_address"] = operation.WithdrawAddress
-	// mapParams["fee"] = e.GetTxFee(operation.Coin)
+	//create one fund source
+	_, source := e.CreateFundSource(currency, "", operation.WithdrawAddress)
 
-	// jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequest, mapParams)
-	// if operation.DebugMode {
-	// 	operation.RequestURI = strRequest
-	// 	operation.MapParams = fmt.Sprintf("%+v", mapParams)
-	// 	operation.CallResponce = jsonSubmitWithdraw
-	// }
+	withdraw := WithdrawResponse{}
+	strRequestPath := "/api/v1/withdrawals"
 
-	// if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdrawResponse); err != nil {
-	// 	operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
-	// 	return operation.Error
-	// } else if !withdrawResponse.Result {
-	// 	operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
-	// 	return operation.Error
-	// } else if withdrawResponse.WithdrawalID == "" {
-	// 	operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
-	// 	return operation.Error
-	// }
+	mapParams := make(map[string]string)
+	mapParams["code"] = currency
+	mapParams["fund_source_id"] = fmt.Sprintf("%d", source.Id)
+	mapParams["sum"] = operation.WithdrawAmount
+	jsonSubmitWithdraw, code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestPath
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonSubmitWithdraw
+	}
+	if code == 204 {
+		return nil
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
+		return operation.Error
+	} else {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
+		return operation.Error
+	}
 
 	// operation.WithdrawID = withdrawResponse.WithdrawalID
 
@@ -517,7 +519,7 @@ func (e *Zebitex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSubmitWithdraw)
 	} else {
-		log.Printf("%s Withdraw fail: %s\n", e.GetName(), withdraw.Error)
+		log.Printf("%s Withdraw fail: %s\n", e.GetName(), jsonSubmitWithdraw)
 	}
 
 	return false
