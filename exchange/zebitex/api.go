@@ -238,14 +238,112 @@ func (e *Zebitex) LoadPublicData(operation *exchange.PublicOperation) error {
 /*************** Private API ***************/
 func (e *Zebitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
-	// case exchange.BalanceList:
-	// 	return e.getAllBalance(operation)
-	// case exchange.Balance:
-	// 	return e.getBalance(operation)
+	case exchange.BalanceList:
+		return e.getAllBalance(operation)
+	case exchange.Balance:
+		return e.getBalance(operation)
 	case exchange.Withdraw: // TODO
 		return e.doWithdraw(operation)
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Zebitex) getAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountID := AccountBalances{}
+	strRequest := "/api/v1/funds"
+
+	jsonAllBalanceReturn := e.ApiKeyGet(strRequest, nil)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s getAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} /* else if jsonResponse.Code != "200000" {
+		operation.Error = fmt.Errorf("%s getAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
+	} */
+	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
+		operation.Error = fmt.Errorf("%s getAllBalance Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	for _, account := range accountID {
+		if account.Balance == "0" {
+			continue
+		}
+		frozen, err := strconv.ParseFloat(account.LockedBalance, 64)
+		allBalance, err := strconv.ParseFloat(account.Balance, 64)
+		if err != nil {
+			return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, account)
+		}
+
+		balance := exchange.AssetBalance{
+			Coin:             e.GetCoinBySymbol(account.Code),
+			BalanceAvailable: allBalance - frozen,
+			BalanceFrozen:    frozen,
+		}
+		operation.BalanceList = append(operation.BalanceList, balance)
+
+	}
+
+	return nil
+	// return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
+}
+
+func (e *Zebitex) getBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountID := AccountBalances{}
+	strRequest := "/api/v1/funds"
+	symbol := e.GetSymbolByCoin(operation.Coin)
+
+	jsonBalanceReturn := e.ApiKeyGet(strRequest, nil)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.MapParams = ""
+		operation.CallResponce = jsonBalanceReturn
+	}
+
+	// log.Printf("jsonBalanceReturn: %v", jsonBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s getBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	} /* else if jsonResponse.Code != "200000" {
+		operation.Error = fmt.Errorf("%s getBalance Failed: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
+	} */
+	if err := json.Unmarshal(jsonResponse.Data, &accountID); err != nil {
+		operation.Error = fmt.Errorf("%s getBalance Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	for _, account := range accountID {
+		if account.Code == symbol {
+			frozen, err := strconv.ParseFloat(account.LockedBalance, 64)
+			allBalance, err := strconv.ParseFloat(account.Balance, 64)
+			if err != nil {
+				return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, account)
+			}
+			operation.BalanceFrozen = frozen
+			operation.BalanceAvailable = allBalance - frozen
+			return nil
+		}
+	}
+
+	return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
 }
 
 // TODO
@@ -296,6 +394,7 @@ func (e *Zebitex) UpdateAllBalances() {
 	accountBalance := AccountBalances{}
 	strRequestPath := "/api/v1/funds"
 	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, nil)
+	// log.Printf("Balance Return: %v", jsonBalanceReturn) // =====================
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -424,6 +523,7 @@ func (e *Zebitex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 	return false
 }
 
+// need to test parameter values
 func (e *Zebitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
@@ -492,6 +592,7 @@ func (e *Zebitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	return order, nil
 }
 
+// need test to get struct
 func (e *Zebitex) OrderStatus(order *exchange.Order) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
@@ -505,6 +606,7 @@ func (e *Zebitex) OrderStatus(order *exchange.Order) error {
 	mapParams["per"] = "100"
 
 	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
+	// log.Printf("Order Return: %v", jsonOrderStatus) // ==========================
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orders); err != nil {
 		return fmt.Errorf("%s OrdersPage Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonOrderStatus)
 	} else if strings.Contains(jsonOrderStatus, "error") {
