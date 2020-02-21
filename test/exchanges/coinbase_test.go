@@ -12,27 +12,27 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
 
-	"github.com/bitontop/gored/exchange/coinbase"
-	"github.com/bitontop/gored/test/conf"
-	// "../../exchange/coinbase"
-	// "../conf"
+	// "github.com/bitontop/gored/exchange/coinbase"
+	// "github.com/bitontop/gored/test/conf"
+	"../../exchange/coinbase"
+	"../conf"
 )
 
 /********************Public API********************/
 func Test_Coinbase(t *testing.T) {
 	e := InitCoinbase()
 
-	pair := pair.GetPairByKey("USD|BTC")
+	pair := pair.GetPairByKey("BTC|XRP")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
+	Test_Coins(e)
+	Test_Pairs(e)
 	Test_Pair(e, pair)
 	Test_DoOrderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	Test_Balance(e, pair)
+	Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
@@ -55,21 +55,4 @@ func InitCoinbase() exchange.Exchange {
 
 	config = nil
 	return ex
-}
-
-func Test_Coinbase_TradeHistory(t *testing.T) {
-	e := InitCoinbase()
-	p := pair.GetPairByKey("BTC|ETH")
-
-	opTradeHistory := &exchange.PublicOperation{
-		Type:      exchange.TradeHistory,
-		EX:        e.GetName(),
-		Pair:      p,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opTradeHistory)
-	if err != nil {
-		log.Printf("%v", err)
-	}
 }

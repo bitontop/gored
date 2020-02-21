@@ -339,6 +339,6 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 	case exchange.COINBASE:
 		config.API_KEY = ""
 		config.API_SECRET = ""
-
+		config.Passphrase = ""
 	}
 }
