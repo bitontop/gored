@@ -266,7 +266,7 @@ func (e *Coinbase) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	cancelOrder := PlaceOrder{}
+	cancelOrder := ""
 	strRequest := fmt.Sprintf("/orders/%s", order.OrderID)
 
 	jsonCancelOrder := e.ApiKeyRequest("DELETE", nil, strRequest)
