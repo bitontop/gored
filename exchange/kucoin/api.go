@@ -226,10 +226,6 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	return maker, err
 }
-func (e *Kucoin) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
-
 
 /*************** Private API ***************/
 func (e *Kucoin) DoAccoutOperation(operation *exchange.AccountOperation) error {

@@ -195,12 +195,6 @@ func (e *Bittrex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-func (e *Bittrex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
-
-
-
 /*************** Private API ***************/
 func (e *Bittrex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

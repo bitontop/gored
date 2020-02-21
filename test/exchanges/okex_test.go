@@ -9,7 +9,6 @@ import (
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
-	"github.com/bitontop/gored/utils"
 	// "../../exchange/okex"
 	// "../conf"
 )
@@ -71,11 +70,12 @@ func InitOkex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
 
-	utils.GetCommonDataFromJSON("https://raw.githubusercontent.com/bitontop/gored/master/data")
+	// utils.GetCommonDataFromJSON("https://raw.githubusercontent.com/bitontop/gored/master/data")
 
 	config := &exchange.Config{}
-	config.Source = exchange.JSON_FILE
-	config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	config.Source = exchange.EXCHANGE_API
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
 
 	conf.Exchange(exchange.OKEX, config)
 

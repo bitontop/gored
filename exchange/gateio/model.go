@@ -141,3 +141,17 @@ type WithdrawResponse struct {
 	Result  string `json:"result"`
 	Message string `json:"message"`
 }
+
+type TradeHistory struct {
+	Elapsed string `json:"elapsed"`
+	Result  string `json:"result"`
+	Data    []struct {
+		TradeID   string `json:"tradeID"`
+		Total     string `json:"total"`
+		Date      string `json:"date"`
+		Rate      string `json:"rate"`
+		Amount    string `json:"amount"`
+		Timestamp string `json:"timestamp"`
+		Type      string `json:"type"`
+	} `json:"data"`
+}

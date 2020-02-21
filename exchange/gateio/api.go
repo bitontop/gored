@@ -266,11 +266,6 @@ func (e *Gateio) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-/*************** Public API ***************/
-func (e *Gateio) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
-
 /*************** Private API ***************/
 func (e *Gateio) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
