@@ -29,7 +29,7 @@ func Test_Txbit(t *testing.T) {
 	// Test_Coins(e)
 	// Test_Pairs(e)
 	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
+	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
@@ -55,6 +55,7 @@ func Test_Txbit(t *testing.T) {
 	// }
 	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
+	Test_TradeHistory(e, pair)
 }
 
 func InitTxbit() exchange.Exchange {

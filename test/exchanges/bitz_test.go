@@ -32,7 +32,7 @@ func Test_Bitz(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
@@ -49,6 +49,8 @@ func Test_Bitz(t *testing.T) {
 	// 	log.Printf("%v", err)
 	// }
 	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+
+	Test_TradeHistory(e, pair)
 }
 
 func InitBitz() exchange.Exchange {

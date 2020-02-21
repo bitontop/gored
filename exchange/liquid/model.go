@@ -133,3 +133,15 @@ type Withdraw struct {
 	UpdatedAt     int         `json:"updated_at"`
 	PaymentID     interface{} `json:"payment_id"`
 }
+
+type TradeHistory struct {
+	CurrentPage int `json:"current_page"`
+	TotalPages  int `json:"total_pages"`
+	Models      []struct {
+		ID        int     `json:"id"`
+		Quantity  float64 `json:"quantity"`
+		Price     float64 `json:"price"`
+		TakerSide string  `json:"taker_side"`
+		CreatedAt int64   `json:"created_at"`
+	} `json:"models"`
+}

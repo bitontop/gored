@@ -111,3 +111,20 @@ type Withdraw struct {
 	NetworkFee string `json:"network_fee"`
 	Eid        int    `json:"eid"`
 }
+
+type TradeHistory struct {
+	Status int    `json:"status"`
+	Msg    string `json:"msg"`
+	Data   []struct {
+		ID int64 `json:"id"`
+		// t  string `json:"t"`
+		T0 string `json:"t"`
+		T  int64  `json:"T"`
+		P  string `json:"p"`
+		N  string `json:"n"`
+		S  string `json:"s"`
+	} `json:"data"`
+	Time      int    `json:"time"`
+	Microtime string `json:"microtime"`
+	Source    string `json:"source"`
+}

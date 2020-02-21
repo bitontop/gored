@@ -40,10 +40,12 @@ func Test_Bithumb(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
 
-	Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
-	Test_CheckAllBalance(e, exchange.SpotWallet)
+	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
+	// Test_CheckAllBalance(e, exchange.SpotWallet)
 	// Test_DoTransfer(e, pair.Target, "0.1", exchange.SpotWallet, exchange.AssetWallet)
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
+
+	Test_TradeHistory(e, pair)
 }
 
 func InitBithumb() exchange.Exchange {

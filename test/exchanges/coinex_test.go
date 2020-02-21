@@ -46,6 +46,7 @@ func Test_Coinex(t *testing.T) {
 	// Test_DoTransfer(e, pair.Target, "1", exchange.AssetWallet, exchange.SpotWallet)
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
+	// Test_TradeHistory(e, pair)
 }
 
 func InitCoinex() exchange.Exchange {

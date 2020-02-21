@@ -73,3 +73,16 @@ type OrderStatus struct {
 	CreateTime int64  `json:"createTime"`
 	TradeTotal string `json:"tradeTotal"`
 }
+
+type TradeHistory struct {
+	Data []struct {
+		P   string `json:"p"`
+		Ver string `json:"ver"`
+		S   string `json:"s"`
+		T   string `json:"t"`
+		V   string `json:"v"`
+	} `json:"data"`
+	Code      string `json:"code"`
+	Msg       string `json:"msg"`
+	Timestamp int64  `json:"timestamp"`
+}
