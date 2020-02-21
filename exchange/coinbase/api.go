@@ -251,6 +251,7 @@ func (e *Coinbase) OrderStatus(order *exchange.Order) error {
 		order.Status = exchange.Other
 	}
 
+	order.JsonResponse = jsonOrderStatus
 	order.DealRate, _ = strconv.ParseFloat(orderStatus.ExecutedValue, 64)
 	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.Size, 64)
 
