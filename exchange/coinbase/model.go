@@ -56,44 +56,42 @@ type TradeHistory []struct {
 
 // ====================================
 
-type AccountBalances struct {
-	MakerCommission  int  `json:"makerCommission"`
-	TakerCommission  int  `json:"takerCommission"`
-	BuyerCommission  int  `json:"buyerCommission"`
-	SellerCommission int  `json:"sellerCommission"`
-	CanTrade         bool `json:"canTrade"`
-	CanWithdraw      bool `json:"canWithdraw"`
-	CanDeposit       bool `json:"canDeposit"`
-	Balances         []struct {
-		Asset  string `json:"asset"`
-		Free   string `json:"free"`
-		Locked string `json:"locked"`
-	} `json:"balances"`
+type AccountBalances []struct {
+	ID        string `json:"id"`
+	Currency  string `json:"currency"`
+	Balance   string `json:"balance"`
+	Available string `json:"available"`
+	Hold      string `json:"hold"`
+	ProfileID string `json:"profile_id"`
 }
 
 type WithdrawResponse struct {
-	Msg     string `json:"msg"`
-	Success bool   `json:"success"`
-	ID      string `json:"id"`
+	ID       string    `json:"id"`
+	Amount   string    `json:"amount"`
+	Currency string    `json:"currency"`
+	PayoutAt time.Time `json:"payout_at"`
 }
 
 type PlaceOrder struct {
-	Symbol        string `json:"symbol"`
-	OrderID       int    `json:"orderId"`
-	ClientOrderID string `json:"clientOrderId"`
-	TransactTime  int64  `json:"transactTime"`
-	Price         string `json:"price"`
-	OrigQty       string `json:"origQty"`
-	ExecutedQty   string `json:"executedQty"`
-	Status        string `json:"status"`
-	TimeInForce   string `json:"timeInForce"`
-	Type          string `json:"type"`
-	Side          string `json:"side"`
-	StopPrice     string `json:"stopPrice"`
-	IcebergQty    string `json:"icebergQty"`
-	Time          int64  `json:"time"`
-	Code          int    `json:"code"`
-	Msg           string `json:"msg"`
+	ID             string    `json:"id"`
+	Price          string    `json:"price"`
+	Size           string    `json:"size"`
+	ProductID      string    `json:"product_id"`
+	Side           string    `json:"side"`
+	Stp            string    `json:"stp"`
+	Funds          string    `json:"funds"`
+	SpecifiedFunds string    `json:"specified_funds"`
+	Type           string    `json:"type"`
+	TimeInForce    string    `json:"time_in_force"`
+	PostOnly       bool      `json:"post_only"`
+	CreatedAt      time.Time `json:"created_at"`
+	DoneAt         time.Time `json:"done_at"`
+	DoneReason     string    `json:"done_reason"`
+	FillFees       string    `json:"fill_fees"`
+	FilledSize     string    `json:"filled_size"`
+	ExecutedValue  string    `json:"executed_value"`
+	Status         string    `json:"status"`
+	Settled        bool      `json:"settled"`
 }
 
 type OrderBook struct {

@@ -26,6 +26,7 @@ type Coinbase struct {
 
 	API_KEY    string
 	API_SECRET string
+	Passphrase string
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -48,6 +49,7 @@ func CreateCoinbase(config *exchange.Config) *Coinbase {
 
 			API_KEY:    config.API_KEY,
 			API_SECRET: config.API_SECRET,
+			Passphrase: config.Passphrase,
 			Source:     config.Source,
 			SourceURI:  config.SourceURI,
 		}

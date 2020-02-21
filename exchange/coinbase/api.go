@@ -46,49 +46,6 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Coinbase) GetCoinsData() error {
-	// coinsData := CoinsData{}
-
-	// strUrl := "https://www.binance.com/assetWithdraw/getAllAsset.html"
-
-	// jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	// if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-	// 	return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	// }
-
-	// for _, data := range coinsData {
-	// 	c := &coin.Coin{}
-	// 	switch e.Source {
-	// 	case exchange.EXCHANGE_API:
-	// 		c = coin.GetCoin(data.AssetCode)
-	// 		if c == nil {
-	// 			c = &coin.Coin{}
-	// 			c.Code = data.AssetCode
-	// 			c.Name = data.AssetName
-	// 			c.Website = data.URL
-	// 			c.Explorer = data.BlockURL
-	// 			coin.AddCoin(c)
-	// 		}
-	// 	case exchange.JSON_FILE:
-	// 		c = e.GetCoinBySymbol(data.AssetCode)
-	// 	}
-
-	// 	if c != nil {
-	// 		confirmation, _ := strconv.Atoi(data.ConfirmTimes)
-	// 		coinConstraint := &exchange.CoinConstraint{
-	// 			CoinID:       c.ID,
-	// 			Coin:         c,
-	// 			ExSymbol:     data.AssetCode,
-	// 			ChainType:    exchange.MAINNET,
-	// 			TxFee:        data.TransactionFee,
-	// 			Withdraw:     data.EnableWithdraw,
-	// 			Deposit:      data.EnableCharge,
-	// 			Confirmation: confirmation,
-	// 			Listed:       true,
-	// 		}
-
-	// 		e.SetCoinConstraint(coinConstraint)
-	// 	}
-	// }
 	return nil
 }
 
@@ -97,63 +54,6 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Coinbase) GetPairsData() error {
-	// pairsData := &PairsData{}
-
-	// strRequestUrl := "/api/v1/exchangeInfo"
-	// strUrl := API_URL + strRequestUrl
-
-	// jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
-	// if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
-	// 	return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	// }
-
-	// for _, data := range pairsData.Symbols {
-	// 	if data.Status == "TRADING" {
-	// 		p := &pair.Pair{}
-	// 		switch e.Source {
-	// 		case exchange.EXCHANGE_API:
-	// 			base := coin.GetCoin(data.QuoteAsset)
-	// 			target := coin.GetCoin(data.BaseAsset)
-	// 			if base != nil && target != nil {
-	// 				p = pair.GetPair(base, target)
-	// 			}
-	// 		case exchange.JSON_FILE:
-	// 			p = e.GetPairBySymbol(data.Symbol)
-	// 		}
-	// 		if p != nil {
-	// 			var err error
-	// 			lotsize := 0.0
-	// 			priceFilter := 0.0
-	// 			for _, filter := range data.Filters {
-	// 				switch filter.FilterType {
-	// 				case "LOT_SIZE":
-	// 					lotsize, err = strconv.ParseFloat(filter.StepSize, 64)
-	// 					if err != nil {
-	// 						log.Printf("%s Lot Size Err: %v", e.GetName(), err)
-	// 						lotsize = DEFAULT_LOT_SIZE
-	// 					}
-	// 				case "PRICE_FILTER":
-	// 					priceFilter, err = strconv.ParseFloat(filter.TickSize, 64)
-	// 					if err != nil {
-	// 						log.Printf("%s Price Filter Err: %v", e.GetName(), err)
-	// 						priceFilter = DEFAULT_PRICE_FILTER
-	// 					}
-	// 				}
-	// 			}
-	// 			pairConstraint := &exchange.PairConstraint{
-	// 				PairID:      p.ID,
-	// 				Pair:        p,
-	// 				ExSymbol:    data.Symbol,
-	// 				MakerFee:    DEFAULT_MAKER_FEE,
-	// 				TakerFee:    DEFAULT_TAKER_FEE,
-	// 				LotSize:     lotsize,
-	// 				PriceFilter: priceFilter,
-	// 				Listed:      true,
-	// 			}
-	// 			e.SetPairConstraint(pairConstraint)
-	// 		}
-	// 	}
-	// }
 	return nil
 }
 
@@ -165,60 +65,6 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Coinbase) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
-	// orderBook := OrderBook{}
-	// symbol := e.GetSymbolByPair(p)
-
-	// mapParams := make(map[string]string)
-	// mapParams["symbol"] = symbol
-	// mapParams["limit"] = "100"
-
-	// strRequestUrl := "/api/v1/depth"
-	// strUrl := API_URL + strRequestUrl
-
-	// maker := &exchange.Maker{
-	// 	WorkerIP:        exchange.GetExternalIP(),
-	// 	Source:          exchange.EXCHANGE_API,
-	// 	BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
-	// }
-
-	// jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	// if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
-	// 	return nil, fmt.Errorf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
-	// }
-
-	// maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
-	// maker.LastUpdateID = int64(orderBook.LastUpdateID)
-
-	// var err error
-	// for _, bid := range orderBook.Bids {
-	// 	buydata := exchange.Order{}
-	// 	buydata.Quantity, err = strconv.ParseFloat(bid[1].(string), 64)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-	// 	}
-
-	// 	buydata.Rate, err = strconv.ParseFloat(bid[0].(string), 64)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
-	// 	}
-	// 	maker.Bids = append(maker.Bids, buydata)
-	// }
-
-	// for _, ask := range orderBook.Asks {
-	// 	selldata := exchange.Order{}
-	// 	selldata.Quantity, err = strconv.ParseFloat(ask[1].(string), 64)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
-	// 	}
-
-	// 	selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
-	// 	}
-	// 	maker.Asks = append(maker.Asks, selldata)
-	// }
-
-	// return maker, err
 	return nil, fmt.Errorf("%s OrderBook not implemented yet", e.GetName())
 }
 
@@ -243,60 +89,31 @@ func (e *Coinbase) doWithdraw(operation *exchange.AccountOperation) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	withdraw := WithdrawResponse{}
-	strRequest := "/wapi/v3/withdraw.html"
-
-	mapParams := make(map[string]string)
-	mapParams["asset"] = e.GetSymbolByCoin(operation.Coin)
-	mapParams["address"] = operation.WithdrawAddress
-	if operation.WithdrawTag != "" { //this part is not working yet
-		mapParams["addressTag"] = operation.WithdrawTag
-	}
-	mapParams["amount"] = operation.WithdrawAmount
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
-
-	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
-	if operation.DebugMode {
-		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
-		operation.CallResponce = jsonSubmitWithdraw
-	}
-
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
-		return operation.Error
-	}
-	if !withdraw.Success {
-		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
-		return operation.Error
-	}
-
-	operation.WithdrawID = withdraw.ID
-
 	return nil
 }
 
 func (e *Coinbase) UpdateAllBalances() {
-	if e.API_KEY == "" || e.API_SECRET == "" {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return
 	}
 
 	accountBalance := AccountBalances{}
-	strRequest := "/api/v3/account"
+	strRequest := "/accounts"
 
-	jsonBalanceReturn := e.ApiKeyGet(make(map[string]string), strRequest)
+	jsonBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
+	// log.Printf("%s", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances json Unmarshal error: %v %s", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else {
-		for _, balance := range accountBalance.Balances {
-			freeamount, err := strconv.ParseFloat(balance.Free, 64)
+		for _, balance := range accountBalance {
+			freeamount, err := strconv.ParseFloat(balance.Available, 64)
 			if err != nil {
 				log.Printf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
 				return
 			} else {
-				c := e.GetCoinBySymbol(balance.Asset)
+				c := e.GetCoinBySymbol(balance.Currency)
 				if c != nil {
 					balanceMap.Set(c.Code, freeamount)
 				}
@@ -307,30 +124,25 @@ func (e *Coinbase) UpdateAllBalances() {
 
 /* Withdraw(coin *coin.Coin, quantity float64, addr, tag string) */
 func (e *Coinbase) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
-	if e.API_KEY == "" || e.API_SECRET == "" {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		log.Printf("%s API Key or Secret Key are nil.", e.GetName())
 		return false
 	}
 
 	withdraw := WithdrawResponse{}
-	strRequest := "/wapi/v3/withdraw.html"
+	strRequest := "/withdrawals/crypto"
 
-	mapParams := make(map[string]string)
-	mapParams["asset"] = e.GetSymbolByCoin(coin)
-	mapParams["address"] = addr
-	if tag != "" { //this part is not working yet
-		mapParams["addressTag"] = tag
+	mapParams := make(map[string]interface{})
+	mapParams["amount"] = quantity
+	mapParams["currency"] = e.GetSymbolByCoin(coin)
+	mapParams["crypto_address"] = addr
+	if tag != "" {
+		mapParams["destination_tag"] = tag
 	}
-	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
-	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
-	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
-		log.Printf("%s Withdraw Json Unmarshal Error: %v %v", e.GetName(), err, jsonSubmitWithdraw)
-		return false
-	}
-	if !withdraw.Success {
-		log.Printf("%s Withdraw Failed: %s", e.GetName(), withdraw.Msg)
+	jsonWithdrawReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
+		err = fmt.Errorf("%s Withdraw Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawReturn)
 		return false
 	}
 
@@ -338,29 +150,25 @@ func (e *Coinbase) Withdraw(coin *coin.Coin, quantity float64, addr, tag string)
 }
 
 func (e *Coinbase) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
-	if e.API_KEY == "" || e.API_SECRET == "" {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
 	placeOrder := PlaceOrder{}
-	strRequest := "/api/v3/order"
+	strRequest := "/orders"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["side"] = "SELL"
-	mapParams["type"] = "LIMIT"
-	mapParams["timeInForce"] = "GTC"
+	mapParams := make(map[string]interface{})
+	mapParams["product_id"] = e.GetSymbolByPair(pair)
+	mapParams["side"] = "sell"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
-
 	order := &exchange.Order{
-		Pair: pair,
-		// OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
+		Pair:         pair,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Sell",
@@ -372,41 +180,33 @@ func (e *Coinbase) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 		err = fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 		order.Error = err
 		return nil, err
-	} else if placeOrder.Code != 0 {
-		err = fmt.Errorf("%s LimitSell failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
-		order.Error = err
-		return nil, err
 	}
 
-	order.OrderID = fmt.Sprintf("%d", placeOrder.OrderID)
+	order.OrderID = placeOrder.ID
 
 	return order, nil
 }
 
 func (e *Coinbase) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
-	if e.API_KEY == "" || e.API_SECRET == "" {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
 	placeOrder := PlaceOrder{}
-	strRequest := "/api/v3/order"
+	strRequest := "/orders"
 
 	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
 	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(pair)
-	mapParams["side"] = "BUY"
-	mapParams["type"] = "LIMIT"
-	mapParams["timeInForce"] = "GTC"
+	mapParams := make(map[string]interface{})
+	mapParams["product_id"] = e.GetSymbolByPair(pair)
+	mapParams["side"] = "buy"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
-
 	order := &exchange.Order{
-		Pair: pair,
-		// OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
+		Pair:         pair,
 		Rate:         rate,
 		Quantity:     quantity,
 		Side:         "Buy",
@@ -418,54 +218,41 @@ func (e *Coinbase) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 		err = fmt.Errorf("%s LimitBuy Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 		order.Error = err
 		return nil, err
-	} else if placeOrder.Code != 0 {
-		err = fmt.Errorf("%s LimitBuy failed:%v Message:%v", e.GetName(), placeOrder.Code, placeOrder.Msg)
-		order.Error = err
-		return nil, err
 	}
 
-	order.OrderID = fmt.Sprintf("%d", placeOrder.OrderID)
+	order.OrderID = placeOrder.ID
 
 	return order, nil
 }
 
 func (e *Coinbase) OrderStatus(order *exchange.Order) error {
-	if e.API_KEY == "" || e.API_SECRET == "" {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
 	orderStatus := PlaceOrder{}
-	strRequest := "/api/v3/order"
+	strRequest := fmt.Sprintf("/orders/%s", order.OrderID)
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
-
-	jsonOrderStatus := e.ApiKeyGet(mapParams, strRequest)
-	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
-		return fmt.Errorf("%s OrderStatus Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if orderStatus.Code != 0 {
-		return fmt.Errorf("%s Get OrderStatus Error: %v %s", e.GetName(), orderStatus.Code, orderStatus.Msg)
+	jsonOrderStatus := e.ApiKeyRequest("GET", nil, strRequest)
+	if jsonOrderStatus == "The order is cancelled." {
+		order.Status = exchange.Cancelled
+		return nil
 	}
 
-	if orderStatus.Status == "CANCELED" {
-		order.Status = exchange.Cancelled
-	} else if orderStatus.Status == "FILLED" {
+	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
+		return fmt.Errorf("%s OrderStatus Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
+	}
+
+	if orderStatus.Status == "done" {
 		order.Status = exchange.Filled
-	} else if orderStatus.Status == "PARTIALLY_FILLED" {
-		order.Status = exchange.Partial
-	} else if orderStatus.Status == "REJECTED" {
-		order.Status = exchange.Rejected
-	} else if orderStatus.Status == "Expired" {
-		order.Status = exchange.Expired
-	} else if orderStatus.Status == "NEW" {
+	} else if orderStatus.Status == "open" || orderStatus.Status == "pending" || orderStatus.Status == "active" {
 		order.Status = exchange.New
 	} else {
 		order.Status = exchange.Other
 	}
 
-	order.DealRate, _ = strconv.ParseFloat(orderStatus.Price, 64)
-	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.ExecutedQty, 64)
+	order.DealRate, _ = strconv.ParseFloat(orderStatus.ExecutedValue, 64)
+	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.Size, 64)
 
 	return nil
 }
@@ -475,22 +262,16 @@ func (e *Coinbase) ListOrders() ([]*exchange.Order, error) {
 }
 
 func (e *Coinbase) CancelOrder(order *exchange.Order) error {
-	if e.API_KEY == "" || e.API_SECRET == "" {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
 	cancelOrder := PlaceOrder{}
-	strRequest := "/api/v3/order"
+	strRequest := fmt.Sprintf("/orders/%s", order.OrderID)
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
-
-	jsonCancelOrder := e.ApiKeyRequest("DELETE", mapParams, strRequest)
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", nil, strRequest)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if cancelOrder.Code != 0 {
-		return fmt.Errorf("%s CancelOrder Error: %v %s", e.GetName(), cancelOrder.Code, cancelOrder.Msg)
 	}
 
 	order.Status = exchange.Canceling
@@ -508,54 +289,28 @@ func (e *Coinbase) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Coinbase) ApiKeyGet(mapParams map[string]string, strRequestPath string) string {
-	mapParams["recvWindow"] = "50000" //"50000000"
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
-	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+func (e *Coinbase) ApiKeyRequest(strMethod string, mapParams map[string]interface{}, strRequestPath string) string {
+	timestamp := fmt.Sprintf("%d", time.Now().Unix())
 
-	payload := exchange.Map2UrlQuery(mapParams)
-	strUrl := API_URL + strRequestPath + "?" + payload
-
-	request, err := http.NewRequest("GET", strUrl, nil)
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
-
-	httpClient := &http.Client{}
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
+	var bytesParams []byte
+	if mapParams != nil {
+		bytesParams, _ = json.Marshal(mapParams)
 	}
 
-	return string(body)
-}
+	payload := fmt.Sprintf("%s%s%s%s", timestamp, strMethod, strRequestPath, string(bytesParams))
+	signature := exchange.ComputeBase64Hmac256(payload, e.API_SECRET)
 
-/*Method: API Request and Signature is required
-Step 1: Change Instance Name    (e *<exchange Instance Name>)
-Step 2: Create mapParams Depend on API Signature request
-Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Coinbase) ApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
-	mapParams["recvWindow"] = "50000" //"50000000"
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
-	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
-
-	payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath
-
-	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
+	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer(bytesParams))
 	if nil != err {
 		return err.Error()
 	}
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+	request.Header.Add("User-Agent", "Go Coinbase Pro Client 1.0")
+	request.Header.Add("CB-ACCESS-KEY", e.API_KEY)
+	request.Header.Add("CB-ACCESS-SIGN", signature)
+	request.Header.Add("CB-ACCESS-TIMESTAMP", timestamp)
+	request.Header.Add("CB-ACCESS-PASSPHRASE", e.Passphrase)
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
@@ -564,39 +319,9 @@ func (e *Coinbase) ApiKeyRequest(strMethod string, mapParams map[string]string, 
 	}
 	defer response.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return err.Error()
+	if response.StatusCode == 404 {
+		return "The order is cancelled."
 	}
-
-	return string(body)
-}
-
-/*Method: API Request and Signature is required
-Step 1: Change Instance Name    (e *<exchange Instance Name>)
-Step 2: Create mapParams Depend on API Signature request
-Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Coinbase) WApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
-	mapParams["recvWindow"] = "50000" //"50000000"
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
-	signature := exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
-
-	payload := fmt.Sprintf("%s&signature=%s", exchange.Map2UrlQuery(mapParams), signature)
-	strUrl := API_URL + strRequestPath
-
-	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
-	if nil != err {
-		return err.Error()
-	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
-
-	httpClient := &http.Client{}
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return err.Error()
-	}
-	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if nil != err {
