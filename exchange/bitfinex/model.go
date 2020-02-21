@@ -71,3 +71,5 @@ type Withdraw []struct {
 	Message      string `json:"message"`
 	WithdrawalID int    `json:"withdrawal_id"`
 }
+
+type TradeHistory [][]float64

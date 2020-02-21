@@ -172,3 +172,11 @@ type WalletDetails []struct {
 	FrozenBalance   string `json:"frozen_balance"`
 	BonusBalance    string `json:"bonus_balance"`
 }
+
+type TradeHistory []struct {
+	ID        int    `json:"id"`
+	Price     string `json:"price"`
+	Amount    string `json:"amount"`
+	Type      string `json:"type"`
+	Timestamp string `json:"timestamp"`
+}

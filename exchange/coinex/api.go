@@ -247,14 +247,6 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
-
-
-func (e *Coinex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
-
-
-
 /*************** Private API ***************/
 func (e *Coinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {

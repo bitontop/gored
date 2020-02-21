@@ -86,3 +86,14 @@ type OrderBook struct {
 	Buy  []exchange.Order `json:"buy"`
 	Sell []exchange.Order `json:"sell"`
 }
+
+type TradeHistory []struct {
+	ID        int     `json:"Id"`
+	TimeStamp string  `json:"TimeStamp"`
+	Quantity  float64 `json:"Quantity"`
+	Price     float64 `json:"Price"`
+	Total     float64 `json:"Total"`
+	FillType  string  `json:"FillType"`
+	OrderType string  `json:"OrderType"`
+	UUID      string  `json:"Uuid"`
+}
