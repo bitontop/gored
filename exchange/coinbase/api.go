@@ -232,6 +232,9 @@ func (e *Coinbase) OrderStatus(order *exchange.Order) error {
 
 	orderStatus := PlaceOrder{}
 	strRequest := fmt.Sprintf("/orders/%s", order.OrderID)
+	if order.OrderID == "" {
+		return fmt.Errorf("%s Order ID is null.", e.GetName())
+	}
 
 	jsonOrderStatus := e.ApiKeyRequest("GET", nil, strRequest)
 	if jsonOrderStatus == "The order is cancelled." {
@@ -269,6 +272,9 @@ func (e *Coinbase) CancelOrder(order *exchange.Order) error {
 
 	cancelOrder := ""
 	strRequest := fmt.Sprintf("/orders/%s", order.OrderID)
+	if order.OrderID == "" {
+		return fmt.Errorf("%s Order ID is null.", e.GetName())
+	}
 
 	jsonCancelOrder := e.ApiKeyRequest("DELETE", nil, strRequest)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
