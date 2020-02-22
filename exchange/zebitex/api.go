@@ -600,6 +600,10 @@ func (e *Zebitex) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.\n", e.GetName())
 	}
 
+	if order == nil {
+		return fmt.Errorf("%s OrderStatus failed, nil order input", e.GetName())
+	}
+
 	orders := OrdersPage{}
 	strRequestPath := "/api/v1/orders/current"
 
