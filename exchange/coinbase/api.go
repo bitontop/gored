@@ -229,6 +229,10 @@ func (e *Coinbase) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 		err = fmt.Errorf("%s LimitSell Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 		order.Error = err
 		return nil, err
+	} else if placeOrder.Message != "" {
+		err = fmt.Errorf("%s LimitSell is failed: %s", e.GetName(), placeOrder.Message)
+		order.Error = err
+		return nil, err
 	}
 
 	order.OrderID = placeOrder.ID
@@ -265,6 +269,10 @@ func (e *Coinbase) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		err = fmt.Errorf("%s LimitBuy Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
+		order.Error = err
+		return nil, err
+	} else if placeOrder.Message != "" {
+		err = fmt.Errorf("%s LimitBuy is failed: %s", e.GetName(), placeOrder.Message)
 		order.Error = err
 		return nil, err
 	}

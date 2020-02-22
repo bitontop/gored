@@ -92,6 +92,7 @@ type PlaceOrder struct {
 	ExecutedValue  string    `json:"executed_value"`
 	Status         string    `json:"status"`
 	Settled        bool      `json:"settled"`
+	Message        string    `json:"message"`
 }
 
 type OrderBook struct {
