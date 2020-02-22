@@ -65,7 +65,56 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 func (e *Coinbase) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
-	return nil, fmt.Errorf("%s OrderBook not implemented yet", e.GetName())
+	orderbook := OrderBook{}
+	symbol := e.GetSymbolByPair(p)
+
+	mapParams := make(map[string]string)
+	mapParams["level"] = "3"
+
+	strRequestUrl := fmt.Sprintf("/products/%s/book", symbol)
+	strUrl := API_URL + strRequestUrl
+
+	maker := &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	jsonOrderbookReturn := exchange.HttpGetRequest(strUrl, mapParams)
+	if err := json.Unmarshal([]byte(jsonOrderbookReturn), &orderbook); err != nil {
+		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookReturn)
+	}
+
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	var err error
+	for _, bid := range orderbook.Bids {
+		buydata := exchange.Order{}
+		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		maker.Bids = append(maker.Bids, buydata)
+	}
+	for _, ask := range orderbook.Asks {
+		selldata := exchange.Order{}
+		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		maker.Asks = append(maker.Asks, selldata)
+	}
+
+	return maker, nil
 }
 
 /*************** Private API ***************/
