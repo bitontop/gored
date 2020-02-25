@@ -352,15 +352,27 @@ func (e *Zebitex) doWithdraw(operation *exchange.AccountOperation) error {
 
 	currency := e.GetSymbolByCoin(operation.Coin)
 
-	//create one fund source
-	_, source := e.CreateFundSource(currency, "", operation.WithdrawAddress)
+	// create one fund source
+	// _, source := e.CreateFundSource(currency, "", addr)
+	// select an existing fund source
+	sources := e.getFundSource(currency)
+	sourceID := ""
+	for _, source := range sources {
+		if source.Address == operation.WithdrawAddress {
+			sourceID = fmt.Sprintf("%v", source.Id)
+		}
+	}
+	if sourceID == "" {
+		log.Printf("%s Withdraw fail, addr not found\n", e.GetName())
+		return operation.Error
+	}
 
 	withdraw := WithdrawResponse{}
 	strRequestPath := "/api/v1/withdrawals"
 
 	mapParams := make(map[string]string)
 	mapParams["code"] = currency
-	mapParams["fund_source_id"] = fmt.Sprintf("%d", source.Id)
+	mapParams["fund_source_id"] = sourceID // fmt.Sprintf("%d", source.Id)
 	mapParams["sum"] = operation.WithdrawAmount
 	jsonSubmitWithdraw, code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if operation.DebugMode {
@@ -373,16 +385,12 @@ func (e *Zebitex) doWithdraw(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonSubmitWithdraw), &withdraw); err != nil {
-		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubmitWithdraw)
-		return operation.Error
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v %v\n", e.GetName(), err, jsonSubmitWithdraw)
 	} else {
-		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonSubmitWithdraw)
-		return operation.Error
+		operation.Error = fmt.Errorf("%s Withdraw fail: %s\n", e.GetName(), jsonSubmitWithdraw)
 	}
 
-	// operation.WithdrawID = withdrawResponse.WithdrawalID
-
-	return nil
+	return operation.Error
 }
 
 func (e *Zebitex) UpdateAllBalances() {
@@ -415,12 +423,6 @@ func (e *Zebitex) UpdateAllBalances() {
 		}
 	}
 
-	// =========================
-	// strRequestPath = "/api/v1/fund_sources"
-	// mapParams := make(map[string]string)
-	// mapParams["currency"] = "eth"
-	// jsonSourceReturn := e.ApiKeyGet(strRequestPath, mapParams)
-	// log.Printf("=========jsonSourceReturn: %v", jsonSourceReturn)
 }
 
 /* FundSources(currency string) */
@@ -468,6 +470,7 @@ func (e *Zebitex) delFundSource(sources []FundSource) bool {
 	return false
 }
 
+// don't use this for withdraw
 /* CreateFundSource(currency, label, addr string) */
 func (e *Zebitex) CreateFundSource(currency, label, addr string) (bool, FundSource) {
 	source := FundSource{}
@@ -483,9 +486,9 @@ func (e *Zebitex) CreateFundSource(currency, label, addr string) (bool, FundSour
 	strRequestPath := "/api/v1/fund_sources"
 
 	mapParams := make(map[string]string)
-	mapParams["currency"] = strings.ToUpper(currency)
-	mapParams["extra"] = label
-	mapParams["uid"] = addr
+	mapParams["currency"] = strings.ToLower(currency)
+	mapParams["extra"] = label // "0xaC05f7b683b14e5997d288a8C031c5143533F9e3" // kraken eth
+	mapParams["uid"] = addr    // "0xaC05f7b683b14e5997d288a8C031c5143533F9e3"
 
 	jsonSource, code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	log.Printf("============Source json: %v", jsonSource) // ==================
@@ -508,17 +511,27 @@ func (e *Zebitex) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) 
 
 	currency := e.GetSymbolByCoin(coin)
 
-	//create one fund source
-	_, source := e.CreateFundSource(currency, "", addr)
+	// create one fund source
+	// _, source := e.CreateFundSource(currency, "", addr)
+	// select an existing fund source
+	sources := e.getFundSource(currency)
+	sourceID := ""
+	for _, source := range sources {
+		if source.Address == addr {
+			sourceID = fmt.Sprintf("%v", source.Id)
+		}
+	}
+	if sourceID == "" {
+		log.Printf("%s Withdraw fail, addr not found\n", e.GetName())
+		return false
+	}
 
 	withdraw := WithdrawResponse{}
 	strRequestPath := "/api/v1/withdrawals"
 
-	log.Printf("=====source: %+v", source)
-
 	mapParams := make(map[string]string)
 	mapParams["code"] = currency
-	mapParams["fund_source_id"] = fmt.Sprintf("%d", source.Id)
+	mapParams["fund_source_id"] = sourceID // fmt.Sprintf("%d", source.Id)
 	mapParams["sum"] = strconv.FormatFloat(quantity, 'f', 6, 64)
 	jsonSubmitWithdraw, code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if code == 204 {
