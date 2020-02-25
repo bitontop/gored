@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/utils"
@@ -22,6 +23,7 @@ func (e *Bitfinex) LoadPublicData(operation *exchange.PublicOperation) error {
 // Symbol that is not same as API.
 func (e *Bitfinex) doTradeHistory(operation *exchange.PublicOperation) error {
 	symbol := e.GetSymbolByPair(operation.Pair)
+	symbol = fmt.Sprintf("t%v", strings.ToUpper(symbol))
 	log.Printf("Symbol: %s", symbol)
 
 	get := &utils.HttpGet{
