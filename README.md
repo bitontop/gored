@@ -14,32 +14,7 @@ Join our telegram to discuss all things related to GoRed! [GoRed Telegram](https
 
 ## Exchange Support Table
 
-|   Exchange   | Public API | Private API | goCAD |
-|--------------|------------|-------------|-------|
-| BiBox| Yes  | Yes  | NA  |
-| BigONE | Yes | Yes  | NA|
-| Binance| Yes  | Yes  | NA  |
-| BitFinex | Yes | Yes  | NA|
-| BitForex | Yes | No  | NA|
-| BitMAX | Yes  | Yes  | NA  |
-| BitMEX | Yes | Yes  | NA |
-| BitStamp | Yes  | No  | NA  |
-| Bittrex | Yes | Yes  | NA |
-| BitZ | Yes | Yes  | NA |
-| CoinEX | Yes | Yes  | NA |
-| DargonEX | Yes | No  | NA |
-| GateIO | Yes | Yes  | NA |
-| HitBTC | Yes | Yes  | NA |
-| Huobi PRO | Yes | Yes  | NA |
-| Huobi OTC | Yes | No  | NA |
-| IDEX | Yes | No  | NA |
-| KuCoin | Yes | Yes  | NA |
-| Liquid | Yes | Yes  | NA |
-| MXC | Yes | No  | NA |
-| OKEX | Yes | Yes  | NA |
-| OTCBTC | Yes | Yes  | NA |
-| Stex | Yes | Yes  | NA |
-| TOKOK | Yes | Yes  | NA |
+LIST ON https://www.coindatapage.com
 
 We are aiming to support the top 100 highest volume exchanges based off the [CoinMarketCap exchange data](https://coinmarketcap.com/exchanges/volume/24-hour/).
 
@@ -92,8 +67,6 @@ go build
 
 ```
 
-+ Run the `gored` binary file inside your GOPATH bin folder.
-
 ## Donations
 
 <img src="" hspace="70">
@@ -101,15 +74,13 @@ go build
 If this framework helped you in any way, or you would like to support the developers working on it, please donate Bitcoin to:
 
 ***Bitcoin Address***
-3BMEXqK2hMJx2N2j6B4b5MsJMXQ9kAC3t8
+16sXCkKN5KegwvC53xvsahtCpPsernzQoC
 
 ***AIB Address***
 ALVNJC94McFjN7enZsY2XaR6fY3GWDY3Wh
 
 
-## Binaries
 
-Binaries will be published once the codebase reaches a stable condition.
 
 ## Contributor List
 
@@ -122,7 +93,6 @@ Binaries will be published once the codebase reaches a stable condition.
 | 9cat | https://github.com/9cat 
 | botemple | https://github.com/botemple 
 | iobond | https://github.com/iobond 
-
 
 ## Who used GoRED
 [CoinDataPage](https://www.coindatapage.com)
