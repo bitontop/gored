@@ -362,7 +362,9 @@ func (e *Coinbene) Withdraw(coin *coin.Coin, quantity float64, addr, tag string)
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["asset"] = e.GetSymbolByCoin(coin)
 	mapParams["address"] = addr
-	mapParams["tag"] = tag
+	if coin.Name == "XRP" || coin.Name == "EOS" {
+		mapParams["tag"] = tag
+	}
 
 	jsonWithdrawReturn := e.ApiKeyWithdraw(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
