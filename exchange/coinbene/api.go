@@ -299,12 +299,12 @@ func (e *Coinbene) doWithdraw(operation *exchange.AccountOperation) error {
 	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
 		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonWithdrawReturn)
 		return operation.Error
-	} else if withdraw.Status != "ok" {
+	} else if withdraw.Code != 200 {
 		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonWithdrawReturn)
 		return operation.Error
 	}
 
-	operation.WithdrawID = fmt.Sprintf("%v", withdraw.WithdrawID)
+	operation.WithdrawID = fmt.Sprintf("%v", withdraw.Data.ID)
 
 	return nil
 }
@@ -368,7 +368,7 @@ func (e *Coinbene) Withdraw(coin *coin.Coin, quantity float64, addr, tag string)
 	if err := json.Unmarshal([]byte(jsonWithdrawReturn), &withdraw); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonWithdrawReturn)
 		return false
-	} else if withdraw.Status != "ok" {
+	} else if withdraw.Code != 200 {
 		log.Printf("%s Withdraw Failed: %v", e.GetName(), jsonWithdrawReturn)
 		return false
 	}
