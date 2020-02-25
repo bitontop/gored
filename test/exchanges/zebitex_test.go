@@ -32,13 +32,14 @@ func Test_Zebitex(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.00000001, 100)
-	// Test_Trading_Sell(e, pair, 0.00000001, 667)
-	// Test_OrderStatus(e, pair, "1234567890")
-	// Test_Withdraw(e, pair.Base, 1.5, "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v")
+	Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.001, 100)
+	// Test_Trading_Sell(e, pair, 0.05, 0.001)
+	// Test_OrderStatus(e, pair, "88410563")
+	// Test_CancelOrder(e, pair, "88408135")
+	// Test_Withdraw(e, pair.Base, 0.001, "0xaC05f7b683b14e5997d288a8C031c5143533F9e3")
 
-	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
+	Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)
 }
 
