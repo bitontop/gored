@@ -28,7 +28,7 @@ func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 	get := &utils.HttpGet{
 		URI: fmt.Sprintf("https://api.huobi.pro/market/history/trade?symbol=%s&size=%d",
 			e.GetSymbolByPair(operation.Pair),
-			100, //TRADE_HISTORY_MAX_LIMIT,
+			1000, //TRADE_HISTORY_MAX_LIMIT,
 		),
 	}
 
