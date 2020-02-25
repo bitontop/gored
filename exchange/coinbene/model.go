@@ -63,13 +63,25 @@ type OrderStatus struct {
 	TotalFee       string    `json:"totalFee"`
 }
 
+type Withdraw struct {
+	Code int `json:"Code"`
+	Data struct {
+		ID      string `json:"Id"`
+		Amount  string `json:"Amount"`
+		Asset   string `json:"Asset"`
+		Address string `json:"Address"`
+		Tag     string `json:"Tag"`
+		Chain   string `json:"Chain"`
+	} `json:"Data"`
+}
+
 // TODO
 
-type Withdraw struct {
-	Status     string `json:"status"`
-	Timestamp  int64  `json:"timestamp"`
-	WithdrawID int    `json:"withdrawId"`
-}
+// type Withdraw struct {
+// 	Status     string `json:"status"`
+// 	Timestamp  int64  `json:"timestamp"`
+// 	WithdrawID int    `json:"withdrawId"`
+// }
 
 type TradeHistory [][]Trade
 
