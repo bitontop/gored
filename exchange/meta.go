@@ -135,33 +135,33 @@ const (
 )
 
 func (e *ExchangeManager) initExchangeNames() {
-	supportList = append(supportList, BINANCE)      // ID = 1
-	supportList = append(supportList, BITTREX)      // ID = 2
-	supportList = append(supportList, COINEX)       // ID = 3
-	supportList = append(supportList, STEX)         // ID = 4
-	supportList = append(supportList, BITMEX)       // ID = 5
-	supportList = append(supportList, KUCOIN)       // ID = 6
-	supportList = append(supportList, BITMAX)       // ID = 7
-	supportList = append(supportList, HUOBIOTC)     // ID = 8
-	supportList = append(supportList, BITSTAMP)     // ID = 9
-	supportList = append(supportList, OTCBTC)       // ID = 10
-	supportList = append(supportList, HUOBI)        // ID = 11
-	supportList = append(supportList, BIBOX)        // ID = 12
-	supportList = append(supportList, OKEX)         // ID = 13
-	supportList = append(supportList, BITZ)         // ID = 14
-	supportList = append(supportList, HITBTC)       // ID = 15
-	supportList = append(supportList, DRAGONEX)     // ID = 16
-	supportList = append(supportList, BIGONE)       // ID = 17
-	supportList = append(supportList, BITFINEX)     // ID = 18
-	supportList = append(supportList, GATEIO)       // ID = 19
-	supportList = append(supportList, IDEX)         // ID = 20
-	supportList = append(supportList, LIQUID)       // ID = 21
-	supportList = append(supportList, BITFOREX)     // ID = 22
-	supportList = append(supportList, TOKOK)        // ID = 23
-	supportList = append(supportList, MXC)          // ID = 24
-	supportList = append(supportList, BITRUE)       // ID = 25
-	supportList = append(supportList, BITATM)       // ID = 26	// not work
-	supportList = append(supportList, TRADESATOSHI) // ID = 27
+	supportList = append(supportList, BINANCE)  // ID = 1
+	supportList = append(supportList, BITTREX)  // ID = 2
+	supportList = append(supportList, COINEX)   // ID = 3
+	supportList = append(supportList, STEX)     // ID = 4
+	supportList = append(supportList, BITMEX)   // ID = 5
+	supportList = append(supportList, KUCOIN)   // ID = 6
+	supportList = append(supportList, BITMAX)   // ID = 7
+	supportList = append(supportList, HUOBIOTC) // ID = 8
+	supportList = append(supportList, BITSTAMP) // ID = 9
+	supportList = append(supportList, OTCBTC)   // ID = 10
+	supportList = append(supportList, HUOBI)    // ID = 11
+	supportList = append(supportList, BIBOX)    // ID = 12
+	supportList = append(supportList, OKEX)     // ID = 13
+	supportList = append(supportList, BITZ)     // ID = 14
+	supportList = append(supportList, HITBTC)   // ID = 15
+	supportList = append(supportList, DRAGONEX) // ID = 16
+	supportList = append(supportList, BIGONE)   // ID = 17
+	supportList = append(supportList, BITFINEX) // ID = 18
+	supportList = append(supportList, GATEIO)   // ID = 19
+	supportList = append(supportList, IDEX)     // ID = 20
+	supportList = append(supportList, LIQUID)   // ID = 21
+	supportList = append(supportList, BITFOREX) // ID = 22
+	supportList = append(supportList, TOKOK)    // ID = 23
+	supportList = append(supportList, MXC)      // ID = 24
+	supportList = append(supportList, BITRUE)   // ID = 25
+	supportList = append(supportList, BITATM)   // ID = 26	// not work
+	// supportList = append(supportList, TRADESATOSHI) // ID = 27
 	supportList = append(supportList, KRAKEN)       // ID = 28
 	supportList = append(supportList, POLONIEX)     // ID = 29
 	supportList = append(supportList, COINEAL)      // ID = 30
