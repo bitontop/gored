@@ -230,11 +230,16 @@ func (e *Liquid) doWithdraw(operation *exchange.AccountOperation) error {
 	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["amount"] = operation.WithdrawAmount
 	mapParams["address"] = operation.WithdrawAddress
-	if operation.Coin.Code == "XRP" {
-		mapParams["payment_id"] = operation.WithdrawTag
-	} else if operation.Coin.Code == "XLM" {
-		mapParams["memo_type"] = "text"
-		mapParams["memo_value"] = operation.WithdrawTag
+	if operation.WithdrawTag != "" {
+		if operation.Coin.Code == "XRP" {
+			mapParams["payment_id"] = operation.WithdrawTag
+		} else if operation.Coin.Code == "XLM" {
+			mapParams["memo_type"] = "text"
+			mapParams["memo_value"] = operation.WithdrawTag
+		} else {
+			operation.Error = fmt.Errorf("%s Withdraw Failed, got tag: %v, for coin: %v", e.GetName(), operation.WithdrawTag, operation.Coin.Code)
+			return operation.Error
+		}
 	}
 
 	// log.Printf("test param: %+v", mapParams)
