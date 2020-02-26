@@ -6,9 +6,12 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/bitstamp"
 	"github.com/bitontop/gored/test/conf"
+	// "../../exchange/bitstamp"
+	// "../conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -21,6 +24,8 @@ func Test_Bitstamp(t *testing.T) {
 	e := InitBitstamp()
 
 	pair := pair.GetPairByKey("BTC|ETH")
+
+	Test_TradeHistory(e, pair)
 
 	Test_Coins(e)
 	Test_Pairs(e)

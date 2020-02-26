@@ -3,7 +3,6 @@ package bitfinex
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/bitontop/gored/exchange"
@@ -24,7 +23,7 @@ func (e *Bitfinex) LoadPublicData(operation *exchange.PublicOperation) error {
 func (e *Bitfinex) doTradeHistory(operation *exchange.PublicOperation) error {
 	symbol := e.GetSymbolByPair(operation.Pair)
 	symbol = fmt.Sprintf("t%v", strings.ToUpper(symbol))
-	log.Printf("Symbol: %s", symbol)
+	// log.Printf("Symbol: %s", symbol)
 
 	get := &utils.HttpGet{
 		URI: fmt.Sprintf("%s/v2/trades/%s/hist", API_URL, symbol),
