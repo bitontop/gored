@@ -121,7 +121,8 @@ func (e *ExchangeManager) Add(exchange Exchange) {
 
 	id := fmt.Sprintf("%d", exchange.GetID())
 	if exIDMap.Has(id) {
-		log.Fatal("%s ID: %d is exist. Please check.", exchange.GetName(), exchange.GetID())
+		// log.Fatal("%s ID: %d is exist. Please check.", exchange.GetName(), exchange.GetID())
+		log.Printf("%s ID: %d is exist. Please check.", exchange.GetName(), exchange.GetID())
 	} else {
 		exIDMap.Set(id, exchange)
 	}
