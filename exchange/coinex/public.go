@@ -33,7 +33,7 @@ func (e *Coinex) doTradeHistory(operation *exchange.PublicOperation) error {
 
 	} else {
 		jsonResponse := JsonResponse{}
-		tradeHistory := &TradeHistory{}
+		tradeHistory := TradeHistory{}
 		if err := json.Unmarshal(get.ResponseBody, &jsonResponse); err != nil {
 			return err
 		}
@@ -43,7 +43,9 @@ func (e *Coinex) doTradeHistory(operation *exchange.PublicOperation) error {
 		}
 
 		operation.TradeHistory = []*exchange.TradeDetail{}
-		for _, d := range *tradeHistory {
+		// for _, d := range tradeHistory {
+		for i := len(tradeHistory) - 1; i > 0; i-- {
+			d := tradeHistory[i]
 			td := &exchange.TradeDetail{}
 
 			td.ID = fmt.Sprintf("%d", d.ID)

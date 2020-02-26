@@ -58,7 +58,9 @@ func (e *Bitz) doTradeHistory(operation *exchange.PublicOperation) error {
 		}
 
 		operation.TradeHistory = []*exchange.TradeDetail{}
-		for _, trade := range tradeHistory.Data {
+		// for _, trade := range tradeHistory.Data {
+		for i := len(tradeHistory.Data) - 1; i > 0; i-- {
+			trade := tradeHistory.Data[i]
 			price, err := strconv.ParseFloat(trade.P, 64)
 			if err != nil {
 				log.Printf("%s price parse Err: %v %v", e.GetName(), err, trade.P)

@@ -56,7 +56,9 @@ func (e *Txbit) doTradeHistory(operation *exchange.PublicOperation) error {
 		}
 
 		operation.TradeHistory = []*exchange.TradeDetail{}
-		for _, trade := range tradeHistory.Result {
+		// for _, trade := range tradeHistory.Result {
+		for i := len(tradeHistory.Result) - 1; i > 0; i-- {
+			trade := tradeHistory.Result[i]
 
 			td := &exchange.TradeDetail{
 				ID:        fmt.Sprintf("%v", trade.ID),

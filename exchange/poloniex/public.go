@@ -59,7 +59,9 @@ func (e *Poloniex) doTradeHistory(operation *exchange.PublicOperation) error {
 		}
 
 		operation.TradeHistory = []*exchange.TradeDetail{}
-		for _, trade := range tradeHistory {
+		// for _, trade := range tradeHistory {
+		for i := len(tradeHistory) - 1; i > 0; i-- {
+			trade := tradeHistory[i]
 			price, err := strconv.ParseFloat(trade.Rate, 64)
 			if err != nil {
 				log.Printf("%s price parse Err: %v %v", e.GetName(), err, trade.Rate)

@@ -35,13 +35,15 @@ func (e *Bitfinex) doTradeHistory(operation *exchange.PublicOperation) error {
 		return err
 
 	} else {
-		tradeHistory := &TradeHistory{}
+		tradeHistory := TradeHistory{}
 		if err := json.Unmarshal(get.ResponseBody, &tradeHistory); err != nil {
 			return err
 		}
 
 		operation.TradeHistory = []*exchange.TradeDetail{}
-		for _, d := range *tradeHistory {
+		// for _, d := range tradeHistory {
+		for i := len(tradeHistory) - 1; i > 0; i-- {
+			d := tradeHistory[i]
 			td := &exchange.TradeDetail{}
 
 			td.ID = fmt.Sprintf("%.0f", d[0])

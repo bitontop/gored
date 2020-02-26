@@ -57,7 +57,9 @@ func (e *Liquid) doTradeHistory(operation *exchange.PublicOperation) error {
 		}
 
 		operation.TradeHistory = []*exchange.TradeDetail{}
-		for _, trade := range tradeHistory.Models {
+		// for _, trade := range tradeHistory.Models {
+		for i := len(tradeHistory.Models) - 1; i > 0; i-- {
+			trade := tradeHistory.Models[i]
 
 			td := &exchange.TradeDetail{
 				ID:        fmt.Sprintf("%v", trade.ID),
