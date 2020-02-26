@@ -7,7 +7,6 @@ package huobi
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 
 	exchange "github.com/bitontop/gored/exchange"
 	utils "github.com/bitontop/gored/utils"
@@ -54,7 +53,7 @@ func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 		for i := len(tradeHistory.Data) - 1; i > 0; i-- {
 			for _, d2 := range tradeHistory.Data[i].Data {
 				// d2 := d1.Data[i]
-				log.Printf("d2:%+v", d2)
+				// log.Printf("d2:%+v", d2)
 				td := &exchange.TradeDetail{
 					ID:       fmt.Sprintf("%d", d2.TradeID),
 					Quantity: d2.Amount,
