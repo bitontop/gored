@@ -12,11 +12,15 @@ type UpdateMethod string
 
 const (
 	MAINNET ChainType = "MAINNET"
-	BEP2    ChainType = "BEP2"
+	BEP2    ChainType = "BEP2" //TODO //
 	ERC20   ChainType = "ERC20"
-	NEP5    ChainType = "NEP5"
+	NEP5    ChainType = "NEP5" //NEO //
 	OMNI    ChainType = "OMNI"
 	TRC20   ChainType = "TRC20"
+	BNB     ChainType = "BNB" //
+	CET     ChainType = "CET" //
+	NXT     ChainType = "NXT" //
+	OTHER   ChainType = "OTHER"
 
 	EXCHANGE_API     DataSource = "EXCHANGE_API"
 	WEBSOCKET        DataSource = "WEBSOCKET"
