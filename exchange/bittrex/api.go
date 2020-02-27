@@ -89,15 +89,16 @@ func (e *Bittrex) GetCoinsData() error {
 					ExSymbol:     data.Currency,
 					ChainType:    exchange.MAINNET,
 					TxFee:        data.TxFee,
-					Withdraw:     data.IsActive,
-					Deposit:      DEFAULT_DEPOSIT, //data.IsActive, // IsActive==true if deposit==false & withdraw==true
+					Withdraw:     data.IsActive && !data.IsRestricted,
+					Deposit:      data.IsActive && !data.IsRestricted, //data.IsActive, // IsActive==true if deposit==false & withdraw==true
 					Confirmation: data.MinConfirmation,
 					Listed:       true,
 				}
 			} else {
 				coinConstraint.ExSymbol = data.Currency
 				coinConstraint.TxFee = data.TxFee
-				coinConstraint.Withdraw = data.IsActive
+				coinConstraint.Withdraw = data.IsActive && !data.IsRestricted
+				coinConstraint.Deposit = data.IsActive && !data.IsRestricted
 				coinConstraint.Confirmation = data.MinConfirmation
 			}
 			e.SetCoinConstraint(coinConstraint)
