@@ -11,9 +11,10 @@ import (
 
 func (e *Coinex) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
-
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
+	case exchange.CoinChainType:
+		return e.getCoinChainType(operation)
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
@@ -68,9 +69,9 @@ func (e *Coinex) doTradeHistory(operation *exchange.PublicOperation) error {
 }
 
 func (e *Coinex) getCoinChainType(operation *exchange.PublicOperation) error {
-	operation.ChainType =[]exchange.ChainType
+	operation.CoinChainType = []exchange.ChainType{}
 	request := &exchange.ChainTypeRequest{
-		Exchange: string(operation.ExchangeName),
+		Exchange: string(operation.EX),
 		CoinID:   operation.Coin.ID,
 	}
 
@@ -94,17 +95,17 @@ func (e *Coinex) getCoinChainType(operation *exchange.PublicOperation) error {
 			for _, ct := range data.ChainType {
 				switch ct {
 				case "MAINNET":
-					operation.ChainType = append(operation.ChainType, exchange.MAINNET)
+					operation.CoinChainType = append(operation.CoinChainType, exchange.MAINNET)
 				case "BEP2":
-					operation.ChainType = append(operation.ChainType, exchange.BEP2)
+					operation.CoinChainType = append(operation.CoinChainType, exchange.BEP2)
 				case "ERC20":
-					operation.ChainType = append(operation.ChainType, exchange.ERC20)
+					operation.CoinChainType = append(operation.CoinChainType, exchange.ERC20)
 				case "NEP5":
-					operation.ChainType = append(operation.ChainType, exchange.NEP5)
+					operation.CoinChainType = append(operation.CoinChainType, exchange.NEP5)
 				case "OMNI":
-					operation.ChainType = append(operation.ChainType, exchange.OMNI)
+					operation.CoinChainType = append(operation.CoinChainType, exchange.OMNI)
 				case "TRC20":
-					operation.ChainType = append(operation.ChainType, exchange.TRC20)
+					operation.CoinChainType = append(operation.CoinChainType, exchange.TRC20)
 				}
 			}
 		}
