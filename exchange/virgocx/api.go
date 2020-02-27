@@ -567,9 +567,7 @@ func (e *Virgocx) CancelOrder(order *exchange.Order) error {
 	jsonCancelOrder := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
-	} else if cancelOrder.Code != 0 {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
-	} else if !strings.Contains(cancelOrder.Data, "successfulCancel") {
+	} else if cancelOrder.Code != 0 || !cancelOrder.Success {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
 
