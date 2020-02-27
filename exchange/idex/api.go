@@ -76,15 +76,20 @@ func (e *Idex) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Address,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Address,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Address
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -126,15 +131,20 @@ func (e *Idex) GetPairsData() error {
 		}
 
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: DEFAULT_PRICE_FILTER,
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = symbol
 			}
 
 			e.SetPairConstraint(pairConstraint)
@@ -211,11 +221,12 @@ func (e *Idex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-/*************** Private API ***************/
-func (e *Idex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Idex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
-func (e *Idex) LoadPublicData(operation *exchange.PublicOperation) error {
+
+/*************** Private API ***************/
+func (e *Idex) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

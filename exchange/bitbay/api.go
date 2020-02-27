@@ -88,31 +88,41 @@ func (e *Bitbay) GetCoinsData() error {
 		}
 
 		if base != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.Market.Second.Currency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     data.Market.Second.Currency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Market.Second.Currency
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 
 		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.Market.First.Currency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     data.Market.First.Currency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Market.First.Currency
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -152,15 +162,22 @@ func (e *Bitbay) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Market.Code)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Market.Code,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * data.Market.First.Scale),
-				PriceFilter: math.Pow10(-1 * data.Market.Second.Scale),
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Market.Code,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(-1 * data.Market.First.Scale),
+					PriceFilter: math.Pow10(-1 * data.Market.Second.Scale),
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Market.Code
+				pairConstraint.LotSize = math.Pow10(-1 * data.Market.First.Scale)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.Market.Second.Scale)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -226,12 +243,12 @@ func (e *Bitbay) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+func (e *Bitbay) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Bitbay) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Bitbay) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

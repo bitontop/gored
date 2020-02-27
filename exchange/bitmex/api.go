@@ -84,32 +84,42 @@ func (e *Bitmex) GetCoinsData() error {
 		}
 
 		if base != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.QuoteCurrency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     data.QuoteCurrency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.QuoteCurrency
 			}
 
 			e.SetCoinConstraint(coinConstraint)
 		}
 
 		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.RootSymbol,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     data.RootSymbol,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.RootSymbol
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -148,15 +158,24 @@ func (e *Bitmex) GetPairsData() error {
 			}
 
 			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    data.MakerFee,
-					TakerFee:    data.TakerFee,
-					LotSize:     data.LotSize,
-					PriceFilter: data.TickSize,
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.Symbol,
+						MakerFee:    data.MakerFee,
+						TakerFee:    data.TakerFee,
+						LotSize:     data.LotSize,
+						PriceFilter: data.TickSize,
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.Symbol
+					pairConstraint.MakerFee = data.MakerFee
+					pairConstraint.TakerFee = data.TakerFee
+					pairConstraint.LotSize = data.LotSize
+					pairConstraint.PriceFilter = data.TickSize
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -224,13 +243,12 @@ func (e *Bitmex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
+func (e *Bitmex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Bitmex) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Bitmex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

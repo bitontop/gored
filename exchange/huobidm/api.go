@@ -85,18 +85,22 @@ func (e *Huobidm) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     strings.ToLower(data.Symbol),
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     strings.ToLower(data.Symbol),
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = strings.ToLower(data.Symbol)
 			}
-
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
@@ -163,16 +167,23 @@ func (e *Huobidm) GetPairsData() error {
 				p = e.GetPairBySymbol(data.Symbol + "_" + data.ContractType)
 			}
 			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol + "_" + data.ContractType,
-					ExID:        strings.ToLower(data.Symbol),
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     data.ContractSize,
-					PriceFilter: data.PriceTick,
-					Listed:      DEFAULT_LISTED,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.Symbol + "_" + data.ContractType,
+						ExID:        strings.ToLower(data.Symbol),
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     data.ContractSize,
+						PriceFilter: data.PriceTick,
+						Listed:      DEFAULT_LISTED,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.Symbol + "_" + data.ContractType
+					pairConstraint.LotSize = data.ContractSize
+					pairConstraint.PriceFilter = data.PriceTick
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -235,11 +246,12 @@ func (e *Huobidm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
-/*************** Private API ***************/
-func (e *Huobidm) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Huobidm) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
-func (e *Huobidm) LoadPublicData(operation *exchange.PublicOperation) error {
+
+/*************** Private API ***************/
+func (e *Huobidm) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

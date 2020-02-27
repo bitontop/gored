@@ -77,16 +77,22 @@ func (e *Latoken) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Symbol,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.Fee,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Symbol,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.Fee,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Symbol
+				coinConstraint.TxFee = data.Fee
 			}
 			// update ChainType
 			switch strings.ToUpper(data.Type) {
@@ -142,15 +148,24 @@ func (e *Latoken) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    data.MakerFee,
-				TakerFee:    data.TakerFee,
-				LotSize:     math.Pow10(-1 * data.AmountPrecision),
-				PriceFilter: math.Pow10(-1 * data.PricePrecision),
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    data.MakerFee,
+					TakerFee:    data.TakerFee,
+					LotSize:     math.Pow10(-1 * data.AmountPrecision),
+					PriceFilter: math.Pow10(-1 * data.PricePrecision),
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.MakerFee = data.MakerFee
+				pairConstraint.TakerFee = data.TakerFee
+				pairConstraint.LotSize = math.Pow10(-1 * data.AmountPrecision)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.PricePrecision)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

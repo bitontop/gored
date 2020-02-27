@@ -82,16 +82,21 @@ func (e *Bitz) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     coinName,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     coinName,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = coinName
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -135,15 +140,22 @@ func (e *Bitz) GetPairsData() error {
 		if p != nil {
 			lotSize, _ := strconv.Atoi(data.NumberFloat)
 			priceFilter, _ := strconv.Atoi(data.PriceFloat)
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Name,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(lotSize * -1),
-				PriceFilter: math.Pow10(priceFilter * -1),
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Name,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(lotSize * -1),
+					PriceFilter: math.Pow10(priceFilter * -1),
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Name
+				pairConstraint.LotSize = math.Pow10(lotSize * -1)
+				pairConstraint.PriceFilter = math.Pow10(priceFilter * -1)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

@@ -86,37 +86,51 @@ func (e *Bitstamp) GetCoinsData() error {
 			target = e.GetCoinBySymbol(coinStrs[0])
 		}
 
-		trading := true
-		if data.Trading != "Enabled" {
-			trading = false
-		}
+		// trading := true
+		// if data.Trading != "Enabled" {
+		// 	trading = false
+		// }
 
 		if base != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     coinStrs[1],
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     trading,
-				Deposit:      trading,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     coinStrs[1],
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = coinStrs[1]
+				// coinConstraint.Withdraw = trading
+				// coinConstraint.Deposit = trading
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 
 		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     coinStrs[0],
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     trading,
-				Deposit:      trading,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     coinStrs[0],
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = coinStrs[0]
+				// coinConstraint.Withdraw = trading
+				// coinConstraint.Deposit = trading
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -153,15 +167,22 @@ func (e *Bitstamp) GetPairsData() error {
 			p = e.GetPairBySymbol(data.URLSymbol)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.URLSymbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * data.BaseDecimals),
-				PriceFilter: math.Pow10(-1 * data.CounterDecimals),
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.URLSymbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(-1 * data.BaseDecimals),
+					PriceFilter: math.Pow10(-1 * data.CounterDecimals),
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.URLSymbol
+				pairConstraint.LotSize = math.Pow10(-1 * data.BaseDecimals)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.CounterDecimals)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

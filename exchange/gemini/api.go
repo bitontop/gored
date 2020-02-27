@@ -88,31 +88,41 @@ func (e *Gemini) GetCoinsData() error {
 		}
 
 		if base != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.Base,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     data.Base,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Base
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 
 		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.Quote,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     data.Quote,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Quote
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -151,15 +161,22 @@ func (e *Gemini) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     data.MinOrderIncre,
-				PriceFilter: data.MinPriceIncre,
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     data.MinOrderIncre,
+					PriceFilter: data.MinPriceIncre,
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.LotSize = data.MinOrderIncre
+				pairConstraint.PriceFilter = data.MinPriceIncre
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -230,11 +247,12 @@ func (e *Gemini) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-/*************** Private API ***************/
-func (e *Gemini) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Gemini) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
-func (e *Gemini) LoadPublicData(operation *exchange.PublicOperation) error {
+
+/*************** Private API ***************/
+func (e *Gemini) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

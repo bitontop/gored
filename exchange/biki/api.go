@@ -91,31 +91,41 @@ func (e *Biki) GetCoinsData() error {
 		}
 
 		if base != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     strings.ToLower(data.CountCoin),
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     strings.ToLower(data.CountCoin),
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = strings.ToLower(data.CountCoin)
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 
 		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     strings.ToLower(data.BaseCoin),
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     strings.ToLower(data.BaseCoin),
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = strings.ToLower(data.BaseCoin)
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -157,15 +167,22 @@ func (e *Biki) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * data.AmountPrecision),
-				PriceFilter: math.Pow10(-1 * data.PricePrecision),
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(-1 * data.AmountPrecision),
+					PriceFilter: math.Pow10(-1 * data.PricePrecision),
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.LotSize = math.Pow10(-1 * data.AmountPrecision)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.PricePrecision)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -243,13 +260,12 @@ func (e *Biki) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
+func (e *Biki) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Biki) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Biki) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -78,16 +78,21 @@ func (e *Blocktrade) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     symbol,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     symbol,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = symbol
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -136,15 +141,22 @@ func (e *Blocktrade) GetPairsData() error {
 					priceFilter = DEFAULT_LOT_SIZE
 				}
 
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    symbol,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     lotSize,
-					PriceFilter: priceFilter,
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    symbol,
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     lotSize,
+						PriceFilter: priceFilter,
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = symbol
+					pairConstraint.LotSize = lotSize
+					pairConstraint.PriceFilter = priceFilter
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -214,13 +226,12 @@ func (e *Blocktrade) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
-
+func (e *Blocktrade) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Blocktrade) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Blocktrade) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

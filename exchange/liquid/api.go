@@ -76,16 +76,24 @@ func (e *Liquid) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.WithdrawalFee,
-				Withdraw:     data.Withdrawable,
-				Deposit:      data.Depositable,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Currency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.WithdrawalFee,
+					Withdraw:     data.Withdrawable,
+					Deposit:      data.Depositable,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Currency
+				coinConstraint.TxFee = data.WithdrawalFee
+				coinConstraint.Withdraw = data.Withdrawable
+				coinConstraint.Deposit = data.Depositable
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -123,16 +131,25 @@ func (e *Liquid) GetPairsData() error {
 		if p != nil && !data.Disabled {
 			makerfee, _ := strconv.ParseFloat(data.MakerFee, 64)
 			takerfee, _ := strconv.ParseFloat(data.TakerFee, 64)
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.ID,
-				ExID:        strings.ToLower(data.CurrencyPairCode),
-				MakerFee:    makerfee,
-				TakerFee:    takerfee,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      !data.Disabled,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.ID,
+					ExID:        strings.ToLower(data.CurrencyPairCode),
+					MakerFee:    makerfee,
+					TakerFee:    takerfee,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: DEFAULT_PRICE_FILTER,
+					Listed:      !data.Disabled,
+				}
+			} else {
+				pairConstraint.ExID = strings.ToLower(data.CurrencyPairCode)
+				pairConstraint.ExSymbol = data.ID
+				pairConstraint.MakerFee = makerfee
+				pairConstraint.TakerFee = takerfee
+				pairConstraint.Listed = !data.Disabled
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

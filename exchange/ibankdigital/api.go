@@ -81,16 +81,21 @@ func (e *Ibankdigital) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -134,15 +139,23 @@ func (e *Ibankdigital) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil && data.State == "online" {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * data.AmountPrecision),
-				PriceFilter: math.Pow10(-1 * data.PricePrecision),
-				Listed:      data.State == "online",
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(-1 * data.AmountPrecision),
+					PriceFilter: math.Pow10(-1 * data.PricePrecision),
+					Listed:      data.State == "online",
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.LotSize = math.Pow10(-1 * data.AmountPrecision)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.PricePrecision)
+				pairConstraint.Listed = data.State == "online"
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -240,13 +253,9 @@ func (e *Ibankdigital) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
-
 func (e *Ibankdigital) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
-
- 
 
 /*************** Private API ***************/
 func (e *Ibankdigital) DoAccoutOperation(operation *exchange.AccountOperation) error {

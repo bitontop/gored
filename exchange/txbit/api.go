@@ -83,16 +83,26 @@ func (e *Txbit) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.TxFee,
-				Withdraw:     data.IsActive,
-				Deposit:      data.IsActive,
-				Confirmation: data.MinConfirmation,
-				Listed:       data.IsActive,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Currency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.TxFee,
+					Withdraw:     data.IsActive,
+					Deposit:      data.IsActive,
+					Confirmation: data.MinConfirmation,
+					Listed:       data.IsActive,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Currency
+				coinConstraint.TxFee = data.TxFee
+				coinConstraint.Withdraw = data.IsActive
+				coinConstraint.Deposit = data.IsActive
+				coinConstraint.Confirmation = data.MinConfirmation
+				coinConstraint.Listed = data.IsActive
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -134,15 +144,20 @@ func (e *Txbit) GetPairsData() error {
 			p = e.GetPairBySymbol(data.MarketName)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.MarketName, // eg. ETH/BTC
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      data.IsActive,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.MarketName, // eg. ETH/BTC
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: DEFAULT_PRICE_FILTER,
+					Listed:      data.IsActive,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.MarketName
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

@@ -89,31 +89,41 @@ func (e *Coinbene) GetCoinsData() error {
 		}
 
 		if base != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.QuoteAsset, // ETH/BTC
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     data.QuoteAsset, // ETH/BTC
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.QuoteAsset
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 
 		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.BaseAsset,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     data.BaseAsset,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.BaseAsset
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -171,15 +181,24 @@ func (e *Coinbene) GetPairsData() error {
 			if err != nil {
 				return fmt.Errorf("%s price size parse error: %v, %v", e.GetName(), err, data.PricePrecision)
 			}
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    makerFee,
-				TakerFee:    takerFee,
-				LotSize:     math.Pow10(-1 * lotSize),
-				PriceFilter: math.Pow10(-1 * priceSize),
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    makerFee,
+					TakerFee:    takerFee,
+					LotSize:     math.Pow10(-1 * lotSize),
+					PriceFilter: math.Pow10(-1 * priceSize),
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.MakerFee = makerFee
+				pairConstraint.TakerFee = takerFee
+				pairConstraint.LotSize = math.Pow10(-1 * lotSize)
+				pairConstraint.PriceFilter = math.Pow10(-1 * priceSize)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

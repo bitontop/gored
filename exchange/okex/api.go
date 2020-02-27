@@ -78,12 +78,17 @@ func (e *Okex) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
-				ChainType:    exchange.MAINNET,
-				Confirmation: DEFAULT_CONFIRMATION,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Currency,
+					ChainType:    exchange.MAINNET,
+					Confirmation: DEFAULT_CONFIRMATION,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Currency
 			}
 
 			if data.CanDeposit == "1" {
@@ -177,15 +182,22 @@ func (e *Okex) GetPairsData() error {
 		}
 
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.InstrumentID,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     lotSize,
-				PriceFilter: priceFilter,
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.InstrumentID,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     lotSize,
+					PriceFilter: priceFilter,
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.InstrumentID
+				pairConstraint.LotSize = lotSize
+				pairConstraint.PriceFilter = priceFilter
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

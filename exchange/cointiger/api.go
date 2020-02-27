@@ -94,34 +94,43 @@ func (e *Cointiger) GetCoinsData() error {
 			// data contain target's txfee only
 			if base != nil {
 				if e.GetCoinConstraint(base) == nil {
-					coinConstraint := &exchange.CoinConstraint{
-						CoinID:       base.ID,
-						Coin:         base,
-						ExSymbol:     details.QuoteCurrency,
-						ChainType:    exchange.MAINNET,
-						TxFee:        DEFAULT_TXFEE,
-						Withdraw:     DEFAULT_WITHDRAW,
-						Deposit:      DEFAULT_DEPOSIT,
-						Confirmation: DEFAULT_CONFIRMATION,
-						Listed:       DEFAULT_LISTED,
+					coinConstraint := e.GetCoinConstraint(base)
+					if coinConstraint == nil {
+						coinConstraint = &exchange.CoinConstraint{
+							CoinID:       base.ID,
+							Coin:         base,
+							ExSymbol:     details.QuoteCurrency,
+							ChainType:    exchange.MAINNET,
+							TxFee:        DEFAULT_TXFEE,
+							Withdraw:     DEFAULT_WITHDRAW,
+							Deposit:      DEFAULT_DEPOSIT,
+							Confirmation: DEFAULT_CONFIRMATION,
+							Listed:       DEFAULT_LISTED,
+						}
+					} else {
+						coinConstraint.ExSymbol = details.QuoteCurrency
 					}
 					e.SetCoinConstraint(coinConstraint)
 				}
 			}
 
 			if target != nil {
-				coinConstraint := &exchange.CoinConstraint{
-					CoinID:       target.ID,
-					Coin:         target,
-					ExSymbol:     details.BaseCurrency,
-					ChainType:    exchange.MAINNET,
-					TxFee:        details.WithdrawFeeMin,
-					Withdraw:     DEFAULT_WITHDRAW,
-					Deposit:      DEFAULT_DEPOSIT,
-					Confirmation: DEFAULT_CONFIRMATION,
-					Listed:       DEFAULT_LISTED,
+				coinConstraint := e.GetCoinConstraint(target)
+				if coinConstraint == nil {
+					coinConstraint = &exchange.CoinConstraint{
+						CoinID:       target.ID,
+						Coin:         target,
+						ExSymbol:     details.BaseCurrency,
+						ChainType:    exchange.MAINNET,
+						TxFee:        details.WithdrawFeeMin,
+						Withdraw:     DEFAULT_WITHDRAW,
+						Deposit:      DEFAULT_DEPOSIT,
+						Confirmation: DEFAULT_CONFIRMATION,
+						Listed:       DEFAULT_LISTED,
+					}
+				} else {
+					coinConstraint.ExSymbol = details.BaseCurrency
 				}
-
 				e.SetCoinConstraint(coinConstraint)
 			}
 		}
@@ -169,15 +178,22 @@ func (e *Cointiger) GetPairsData() error {
 				if err != nil {
 					log.Printf("%s priceFilter parse error: %v, %v", e.GetBalance, err, data.DepthSelect.Step0)
 				}
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.BaseCurrency + data.QuoteCurrency,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     math.Pow10(-1 * data.AmountPrecision),
-					PriceFilter: priceFilter, //math.Pow10(-1 * data.PricePrecision),  // orderbook precision
-					Listed:      DEFAULT_LISTED,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.BaseCurrency + data.QuoteCurrency,
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     math.Pow10(-1 * data.AmountPrecision),
+						PriceFilter: priceFilter, //math.Pow10(-1 * data.PricePrecision),  // orderbook precision
+						Listed:      DEFAULT_LISTED,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.BaseCurrency + data.QuoteCurrency
+					pairConstraint.LotSize = math.Pow10(-1 * data.AmountPrecision)
+					pairConstraint.PriceFilter = priceFilter
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -253,12 +269,12 @@ func (e *Cointiger) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+func (e *Cointiger) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Cointiger) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Cointiger) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

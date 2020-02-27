@@ -90,17 +90,23 @@ func (e *Bcex) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     key,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     key,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = key
 			}
+
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
@@ -159,16 +165,24 @@ func (e *Bcex) GetPairsData() error {
 			}
 
 			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    pairSymbol,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     math.Pow10(-1 * lotsize),
-					PriceFilter: math.Pow10(-1 * ticksize),
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    pairSymbol,
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     math.Pow10(-1 * lotsize),
+						PriceFilter: math.Pow10(-1 * ticksize),
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = pairSymbol
+					pairConstraint.LotSize = math.Pow10(-1 * lotsize)
+					pairConstraint.PriceFilter = math.Pow10(-1 * ticksize)
 				}
+
 				e.SetPairConstraint(pairConstraint)
 			}
 		}
@@ -248,13 +262,12 @@ func (e *Bcex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
+func (e *Bcex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Bcex) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Bcex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -79,16 +79,25 @@ func (e *Binance) GetCoinsData() error {
 
 		if c != nil {
 			confirmation, _ := strconv.Atoi(data.ConfirmTimes)
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.TransactionFee,
-				Withdraw:     data.EnableWithdraw,
-				Deposit:      data.EnableCharge,
-				Confirmation: confirmation,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.AssetCode,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.TransactionFee,
+					Withdraw:     data.EnableWithdraw,
+					Deposit:      data.EnableCharge,
+					Confirmation: confirmation,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.AssetCode
+				coinConstraint.TxFee = data.TransactionFee
+				coinConstraint.Withdraw = data.EnableWithdraw
+				coinConstraint.Deposit = data.EnableCharge
+				coinConstraint.Confirmation = confirmation
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -145,15 +154,22 @@ func (e *Binance) GetPairsData() error {
 						}
 					}
 				}
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     lotsize,
-					PriceFilter: priceFilter,
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.Symbol,
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     lotsize,
+						PriceFilter: priceFilter,
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.Symbol
+					pairConstraint.LotSize = lotsize
+					pairConstraint.PriceFilter = priceFilter
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -225,8 +241,6 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	return maker, err
 }
-
-
 
 /*************** Private API ***************/
 

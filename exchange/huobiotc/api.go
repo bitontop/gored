@@ -66,16 +66,21 @@ func (e *HuobiOTC) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     id,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     id,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = id
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -109,15 +114,20 @@ func (e *HuobiOTC) GetPairsData() error {
 			}
 
 			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    fmt.Sprintf("%s_%s", currency, c),
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     DEFAULT_LOT_SIZE,
-					PriceFilter: DEFAULT_PRICE_FILTER,
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    fmt.Sprintf("%s_%s", currency, c),
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     DEFAULT_LOT_SIZE,
+						PriceFilter: DEFAULT_PRICE_FILTER,
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = fmt.Sprintf("%s_%s", currency, c)
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -204,12 +214,12 @@ func (e *HuobiOTC) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+func (e *HuobiOTC) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *HuobiOTC) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *HuobiOTC) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

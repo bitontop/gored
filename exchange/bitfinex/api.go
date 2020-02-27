@@ -125,17 +125,23 @@ func (e *Bitfinex) GetCoinsData() error {
 				}
 
 				if c != nil && e.GetCoinConstraint(c) == nil {
-					coinConstraint := &exchange.CoinConstraint{
-						CoinID:       c.ID,
-						Coin:         c,
-						ExSymbol:     strings.ToLower(symbol[0]),
-						ChainType:    exchange.MAINNET,
-						TxFee:        DEFAULT_TXFEE,
-						Withdraw:     DEFAULT_WITHDRAW,
-						Deposit:      DEFAULT_DEPOSIT,
-						Confirmation: DEFAULT_CONFIRMATION,
-						Listed:       true,
+					coinConstraint := e.GetCoinConstraint(c)
+					if coinConstraint == nil {
+						coinConstraint = &exchange.CoinConstraint{
+							CoinID:       c.ID,
+							Coin:         c,
+							ExSymbol:     strings.ToLower(symbol[0]),
+							ChainType:    exchange.MAINNET,
+							TxFee:        DEFAULT_TXFEE,
+							Withdraw:     DEFAULT_WITHDRAW,
+							Deposit:      DEFAULT_DEPOSIT,
+							Confirmation: DEFAULT_CONFIRMATION,
+							Listed:       true,
+						}
+					} else {
+						coinConstraint.ExSymbol = strings.ToLower(symbol[0])
 					}
+
 					e.SetCoinConstraint(coinConstraint)
 				}
 			}
@@ -205,16 +211,21 @@ func (e *Bitfinex) GetPairsData() error {
 				}
 
 				if p != nil {
-					pairConstraint := &exchange.PairConstraint{
-						PairID:   p.ID,
-						Pair:     p,
-						ExSymbol: data.Pair,
-						MakerFee: DEFAULT_MAKER_FEE,
-						TakerFee: DEFAULT_TAKER_FEE,
-						LotSize:  DEFAULT_LOT_SIZE,
-						// api gives wrong precision value
-						PriceFilter: DEFAULT_PRICE_FILTER, //math.Pow10(data.PricePrecision * -1),
-						Listed:      true,
+					pairConstraint := e.GetPairConstraint(p)
+					if pairConstraint == nil {
+						pairConstraint = &exchange.PairConstraint{
+							PairID:   p.ID,
+							Pair:     p,
+							ExSymbol: data.Pair,
+							MakerFee: DEFAULT_MAKER_FEE,
+							TakerFee: DEFAULT_TAKER_FEE,
+							LotSize:  DEFAULT_LOT_SIZE,
+							// api gives wrong precision value
+							PriceFilter: DEFAULT_PRICE_FILTER, //math.Pow10(data.PricePrecision * -1),
+							Listed:      true,
+						}
+					} else {
+						pairConstraint.ExSymbol = data.Pair
 					}
 					e.SetPairConstraint(pairConstraint)
 				}

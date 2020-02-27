@@ -87,16 +87,21 @@ func (e *Kraken) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     key,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     key,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = key
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -140,14 +145,22 @@ func (e *Kraken) GetPairsData() error {
 				p = e.GetPairBySymbol(key)
 			}
 			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    key,
-					ExID:        data.Wsname,
-					LotSize:     math.Pow10(-1 * data.LotDecimals),
-					PriceFilter: math.Pow10(-1 * data.PairDecimals),
-					Listed:      DEFAULT_LISTED,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    key,
+						ExID:        data.Wsname,
+						LotSize:     math.Pow10(-1 * data.LotDecimals),
+						PriceFilter: math.Pow10(-1 * data.PairDecimals),
+						Listed:      DEFAULT_LISTED,
+					}
+				} else {
+					pairConstraint.ExID = data.Wsname
+					pairConstraint.ExSymbol = key
+					pairConstraint.LotSize = math.Pow10(-1 * data.LotDecimals)
+					pairConstraint.PriceFilter = math.Pow10(-1 * data.PairDecimals)
 				}
 				if len(data.FeesMaker) >= 1 {
 					pairConstraint.MakerFee = data.FeesMaker[0][1]

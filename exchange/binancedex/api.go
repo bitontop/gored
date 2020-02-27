@@ -80,16 +80,21 @@ func (e *BinanceDex) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Symbol,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Symbol,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Symbol
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -133,15 +138,24 @@ func (e *BinanceDex) GetPairsData() error {
 				p = e.GetPairBySymbol(data.Symbol)
 			}
 			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    data.MakerFee,
-					TakerFee:    data.TakerFee,
-					LotSize:     data.LotSize,
-					PriceFilter: data.PriceFilter,
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.Symbol,
+						MakerFee:    data.MakerFee,
+						TakerFee:    data.TakerFee,
+						LotSize:     data.LotSize,
+						PriceFilter: data.PriceFilter,
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.Symbol
+					pairConstraint.MakerFee = data.MakerFee
+					pairConstraint.TakerFee = data.TakerFee
+					pairConstraint.LotSize = data.LotSize
+					pairConstraint.PriceFilter = data.PriceFilter
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -205,13 +219,12 @@ func (e *BinanceDex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
-
+func (e *BinanceDex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *BinanceDex) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *BinanceDex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

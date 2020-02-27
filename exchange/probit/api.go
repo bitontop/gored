@@ -83,16 +83,25 @@ func (e *Probit) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.ID,
-				ChainType:    exchange.MAINNET,
-				TxFee:        txFee,
-				Withdraw:     !data.WithdrawalSuspended,
-				Deposit:      !data.DepositSuspended,
-				Confirmation: data.MinConfirmationCount,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.ID,
+					ChainType:    exchange.MAINNET,
+					TxFee:        txFee,
+					Withdraw:     !data.WithdrawalSuspended,
+					Deposit:      !data.DepositSuspended,
+					Confirmation: data.MinConfirmationCount,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.ID
+				coinConstraint.TxFee = txFee
+				coinConstraint.Withdraw = !data.WithdrawalSuspended
+				coinConstraint.Deposit = !data.DepositSuspended
+				coinConstraint.Confirmation = data.MinConfirmationCount
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -132,15 +141,25 @@ func (e *Probit) GetPairsData() error {
 		if p != nil && !data.Closed {
 			makerFee, _ := strconv.ParseFloat(data.MakerFeeRate, 64)
 			takerFee, _ := strconv.ParseFloat(data.TakerFeeRate, 64)
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.ID,
-				MakerFee:    makerFee,
-				TakerFee:    takerFee,
-				LotSize:     math.Pow10(-1 * data.QuantityPrecision),
-				PriceFilter: math.Pow10(-1 * data.CostPrecision),
-				Listed:      !data.Closed,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.ID,
+					MakerFee:    makerFee,
+					TakerFee:    takerFee,
+					LotSize:     math.Pow10(-1 * data.QuantityPrecision),
+					PriceFilter: math.Pow10(-1 * data.CostPrecision),
+					Listed:      !data.Closed,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.ID
+				pairConstraint.MakerFee = makerFee
+				pairConstraint.TakerFee = takerFee
+				pairConstraint.LotSize = math.Pow10(-1 * data.QuantityPrecision)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.CostPrecision)
+				pairConstraint.Listed = !data.Closed
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -223,13 +242,12 @@ func Sort(slice interface{}, less func(i, j int) bool) {
 	sort.Slice(slice, less)
 }
 
-
+func (e *Probit) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Probit) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Probit) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

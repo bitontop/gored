@@ -76,16 +76,26 @@ func (e *Hitbtc) GetCoinsData() error {
 
 		if c != nil {
 			txFee, _ := strconv.ParseFloat(data.PayoutFee, 64)
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.ID,
-				ChainType:    exchange.MAINNET,
-				TxFee:        txFee,
-				Withdraw:     data.PayoutEnabled,
-				Deposit:      data.PayinEnabled,
-				Confirmation: data.PayinConfirmations,
-				Listed:       !data.Delisted,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.ID,
+					ChainType:    exchange.MAINNET,
+					TxFee:        txFee,
+					Withdraw:     data.PayoutEnabled,
+					Deposit:      data.PayinEnabled,
+					Confirmation: data.PayinConfirmations,
+					Listed:       !data.Delisted,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.ID
+				coinConstraint.TxFee = txFee
+				coinConstraint.Withdraw = data.PayoutEnabled
+				coinConstraint.Deposit = data.PayinEnabled
+				coinConstraint.Confirmation = data.PayinConfirmations
+				coinConstraint.Listed = !data.Delisted
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -137,15 +147,24 @@ func (e *Hitbtc) GetPairsData() error {
 			if err != nil {
 				log.Printf("%s Taker Fee Err: %s", e.GetName(), err)
 			}
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.ID,
-				MakerFee:    makerFee,
-				TakerFee:    takerFee,
-				LotSize:     lotSize,
-				PriceFilter: priceFilter,
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.ID,
+					MakerFee:    makerFee,
+					TakerFee:    takerFee,
+					LotSize:     lotSize,
+					PriceFilter: priceFilter,
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.ID
+				pairConstraint.MakerFee = makerFee
+				pairConstraint.TakerFee = takerFee
+				pairConstraint.LotSize = lotSize
+				pairConstraint.PriceFilter = priceFilter
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

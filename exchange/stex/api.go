@@ -86,16 +86,26 @@ func (e *Stex) GetCoinsData() error {
 
 		if c != nil {
 			txFee, _ := strconv.ParseFloat(data.WithdrawalFeeConst, 64)
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     fmt.Sprintf("%d", data.ID),
-				ChainType:    exchange.MAINNET,
-				TxFee:        txFee,
-				Withdraw:     data.Active,
-				Deposit:      data.Active,
-				Confirmation: data.MinimumTxConfirmations,
-				Listed:       !(data.Delisted),
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     fmt.Sprintf("%d", data.ID),
+					ChainType:    exchange.MAINNET,
+					TxFee:        txFee,
+					Withdraw:     data.Active,
+					Deposit:      data.Active,
+					Confirmation: data.MinimumTxConfirmations,
+					Listed:       !(data.Delisted),
+				}
+			} else {
+				coinConstraint.ExSymbol = fmt.Sprintf("%d", data.ID)
+				coinConstraint.TxFee = txFee
+				coinConstraint.Withdraw = data.Active
+				coinConstraint.Deposit = data.Active
+				coinConstraint.Confirmation = data.MinimumTxConfirmations
+				coinConstraint.Listed = !data.Delisted
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -139,16 +149,27 @@ func (e *Stex) GetPairsData() error {
 		if p != nil && !data.Delisted {
 			makerFee, _ := strconv.ParseFloat(data.BuyFeePercent, 64)
 			takerFee, _ := strconv.ParseFloat(data.SellFeePercent, 64)
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExID:        fmt.Sprintf("%d", data.ID),
-				ExSymbol:    data.Symbol,
-				MakerFee:    makerFee / 100,
-				TakerFee:    takerFee / 100,
-				LotSize:     math.Pow10(data.CurrencyPrecision * -1),
-				PriceFilter: math.Pow10(data.MarketPrecision * -1),
-				Listed:      !data.Delisted,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExID:        fmt.Sprintf("%d", data.ID),
+					ExSymbol:    data.Symbol,
+					MakerFee:    makerFee / 100,
+					TakerFee:    takerFee / 100,
+					LotSize:     math.Pow10(data.CurrencyPrecision * -1),
+					PriceFilter: math.Pow10(data.MarketPrecision * -1),
+					Listed:      !data.Delisted,
+				}
+			} else {
+				pairConstraint.ExID = fmt.Sprintf("%d", data.ID)
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.MakerFee = makerFee / 100
+				pairConstraint.TakerFee = takerFee / 100
+				pairConstraint.LotSize = math.Pow10(data.CurrencyPrecision * -1)
+				pairConstraint.PriceFilter = math.Pow10(data.MarketPrecision * -1)
+				pairConstraint.Listed = !data.Delisted
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

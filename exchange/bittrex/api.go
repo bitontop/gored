@@ -81,16 +81,24 @@ func (e *Bittrex) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.TxFee,
-				Withdraw:     data.IsActive,
-				Deposit:      DEFAULT_DEPOSIT, //data.IsActive, // IsActive==true if deposit==false & withdraw==true
-				Confirmation: data.MinConfirmation,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Currency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.TxFee,
+					Withdraw:     data.IsActive,
+					Deposit:      DEFAULT_DEPOSIT, //data.IsActive, // IsActive==true if deposit==false & withdraw==true
+					Confirmation: data.MinConfirmation,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Currency
+				coinConstraint.TxFee = data.TxFee
+				coinConstraint.Withdraw = data.IsActive
+				coinConstraint.Confirmation = data.MinConfirmation
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -134,15 +142,20 @@ func (e *Bittrex) GetPairsData() error {
 			p = e.GetPairBySymbol(data.MarketName)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.MarketName,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.MarketName,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: DEFAULT_PRICE_FILTER,
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.MarketName
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

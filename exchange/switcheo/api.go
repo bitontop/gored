@@ -93,16 +93,23 @@ func (e *Switcheo) GetCoinsData() error {
 					}
 				}
 
-				coinConstraint := &exchange.CoinConstraint{
-					CoinID:       c.ID,
-					Coin:         c,
-					ExSymbol:     data.Symbol,
-					ChainType:    exchange.MAINNET,
-					TxFee:        DEFAULT_TXFEE,
-					Withdraw:     withdraw,
-					Deposit:      deposit,
-					Confirmation: DEFAULT_CONFIRMATION,
-					Listed:       DEFAULT_LISTED,
+				coinConstraint := e.GetCoinConstraint(c)
+				if coinConstraint == nil {
+					coinConstraint = &exchange.CoinConstraint{
+						CoinID:       c.ID,
+						Coin:         c,
+						ExSymbol:     data.Symbol,
+						ChainType:    exchange.MAINNET,
+						TxFee:        DEFAULT_TXFEE,
+						Withdraw:     withdraw,
+						Deposit:      deposit,
+						Confirmation: DEFAULT_CONFIRMATION,
+						Listed:       DEFAULT_LISTED,
+					}
+				} else {
+					coinConstraint.ExSymbol = data.Symbol
+					coinConstraint.Withdraw = withdraw
+					coinConstraint.Deposit = deposit
 				}
 				e.SetCoinConstraint(coinConstraint)
 			}
@@ -143,15 +150,21 @@ func (e *Switcheo) GetPairsData() error {
 		}
 		if p != nil {
 			priceFilter := math.Pow10(-1 * data.Precision)
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Name,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: priceFilter,
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Name,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: priceFilter,
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Name
+				pairConstraint.PriceFilter = priceFilter
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -223,13 +236,12 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
-
+func (e *Switcheo) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Switcheo) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Switcheo) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

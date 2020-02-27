@@ -86,16 +86,32 @@ func (e *Bithumb) GetCoinsData() error {
 			if err != nil {
 				return fmt.Errorf("%s Get Coins txFee parse Err: %v %s", e.GetName(), err, data.WithdrawFee)
 			}
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Name,
-				ChainType:    exchange.MAINNET,
-				TxFee:        txFee,
-				Withdraw:     data.WithdrawStatus == "1",
-				Deposit:      data.DepositStatus == "1",
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Name,
+					ChainType:    exchange.MAINNET,
+					TxFee:        txFee,
+					Withdraw:     data.WithdrawStatus == "1",
+					Deposit:      data.DepositStatus == "1",
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Name
+				coinConstraint.TxFee = txFee
+				if data.WithdrawStatus == "1" {
+					coinConstraint.Withdraw = true
+				} else {
+					coinConstraint.Withdraw = false
+				}
+				if data.DepositStatus == "1" {
+					coinConstraint.Deposit = true
+				} else {
+					coinConstraint.Deposit = false
+				}
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -147,15 +163,22 @@ func (e *Bithumb) GetPairsData() error {
 			if err != nil {
 				return fmt.Errorf("%s Get Pairs amount precision parse Err: %v %s", e.GetName(), err, data.Accuracy[1])
 			}
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * logSize),
-				PriceFilter: math.Pow10(-1 * priceSize),
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(-1 * logSize),
+					PriceFilter: math.Pow10(-1 * priceSize),
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.LotSize = math.Pow10(-1 * logSize)
+				pairConstraint.PriceFilter = math.Pow10(-1 * priceSize)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

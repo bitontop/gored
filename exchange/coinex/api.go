@@ -90,31 +90,41 @@ func (e *Coinex) GetCoinsData() error {
 		}
 
 		if base != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       base.ID,
-				Coin:         base,
-				ExSymbol:     data.PricingName,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     data.PricingName,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.PricingName
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
 
 		if target != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       target.ID,
-				Coin:         target,
-				ExSymbol:     data.TradingName,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     data.TradingName,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.TradingName
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -159,15 +169,24 @@ func (e *Coinex) GetPairsData() error {
 		if p != nil {
 			makerFee, _ := strconv.ParseFloat(data.MakerFeeRate, 64)
 			takerFee, _ := strconv.ParseFloat(data.TakerFeeRate, 64)
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    makerFee,
-				TakerFee:    takerFee,
-				LotSize:     math.Pow10(-1 * data.TradingDecimal),
-				PriceFilter: math.Pow10(-1 * data.PricingDecimal),
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    makerFee,
+					TakerFee:    takerFee,
+					LotSize:     math.Pow10(-1 * data.TradingDecimal),
+					PriceFilter: math.Pow10(-1 * data.PricingDecimal),
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.MakerFee = makerFee
+				pairConstraint.TakerFee = takerFee
+				pairConstraint.LotSize = math.Pow10(-1 * data.TradingDecimal)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.PricingDecimal)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

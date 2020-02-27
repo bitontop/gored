@@ -82,18 +82,22 @@ func (e *Deribit) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.InstrumentName,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       data.IsActive,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.InstrumentName,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       data.IsActive,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.InstrumentName
 			}
-
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
@@ -133,15 +137,22 @@ func (e *Deribit) GetPairsData() error {
 				p = e.GetPairBySymbol(data.InstrumentName)
 			}
 			if p != nil && data.IsActive {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.InstrumentName,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     data.MinTradeAmount,
-					PriceFilter: data.TickSize,
-					Listed:      data.IsActive,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.InstrumentName,
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     data.MinTradeAmount,
+						PriceFilter: data.TickSize,
+						Listed:      data.IsActive,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.InstrumentName
+					pairConstraint.LotSize = data.MinTradeAmount
+					pairConstraint.PriceFilter = data.TickSize
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -204,12 +215,12 @@ func (e *Deribit) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
+func (e *Deribit) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Deribit) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Deribit) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -81,16 +81,21 @@ func (e *Dragonex) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     fmt.Sprintf("%v", data.CoinID),
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     fmt.Sprintf("%v", data.CoinID),
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = fmt.Sprintf("%v", data.CoinID)
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -135,16 +140,24 @@ func (e *Dragonex) GetPairsData() error {
 
 		if p != nil {
 
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExID:        strconv.FormatFloat(list[0].(float64), 'f', 0, 64),
-				ExSymbol:    list[1].(string),
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * int(list[7].(float64))),
-				PriceFilter: math.Pow10(-1 * int(list[5].(float64))),
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExID:        strconv.FormatFloat(list[0].(float64), 'f', 0, 64),
+					ExSymbol:    list[1].(string),
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(-1 * int(list[7].(float64))),
+					PriceFilter: math.Pow10(-1 * int(list[5].(float64))),
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExID = strconv.FormatFloat(list[0].(float64), 'f', 0, 64)
+				pairConstraint.ExSymbol = list[1].(string)
+				pairConstraint.LotSize = math.Pow10(-1 * int(list[7].(float64)))
+				pairConstraint.PriceFilter = math.Pow10(-1 * int(list[5].(float64)))
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -221,12 +234,12 @@ func (e *Dragonex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+func (e *Dragonex) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Dragonex) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Dragonex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

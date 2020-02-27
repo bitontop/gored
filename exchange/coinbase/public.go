@@ -66,16 +66,27 @@ func (e *Coinbase) doGetCoin(operation *exchange.PublicOperation) error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.ID,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: data.Details.NetworkConfirmations,
-				Listed:       data.Status == "online",
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.ID,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: data.Details.NetworkConfirmations,
+					Listed:       data.Status == "online",
+				}
+			} else {
+				coinConstraint.ExSymbol = data.ID
+				coinConstraint.Confirmation = data.Details.NetworkConfirmations
+				if data.Status == "online" {
+					coinConstraint.Listed = true
+				} else {
+					coinConstraint.Listed = false
+				}
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -126,15 +137,22 @@ func (e *Coinbase) doGetPair(operation *exchange.PublicOperation) error {
 					priceFilter = DEFAULT_PRICE_FILTER
 				}
 
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.ID,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     lotsize,
-					PriceFilter: priceFilter,
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.ID,
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     lotsize,
+						PriceFilter: priceFilter,
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.ID
+					pairConstraint.LotSize = lotsize
+					pairConstraint.PriceFilter = priceFilter
 				}
 				e.SetPairConstraint(pairConstraint)
 			}

@@ -89,16 +89,24 @@ func (e *Bitmax) GetCoinsData() error {
 			} else if data.Status == "NoDeposit" {
 				deposit = false
 			}
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.WithdrawalFee,
-				Withdraw:     withdraw,
-				Deposit:      deposit,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.AssetCode,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.WithdrawalFee,
+					Withdraw:     withdraw,
+					Deposit:      deposit,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.AssetCode
+				coinConstraint.TxFee = data.WithdrawalFee
+				coinConstraint.Withdraw = withdraw
+				coinConstraint.Deposit = deposit
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -134,15 +142,22 @@ func (e *Bitmax) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil && data.Status != "NoTrading" {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(-1 * data.QtyScale),
-				PriceFilter: math.Pow10(-1 * data.PriceScale),
-				Listed:      data.Status != "NoTrading",
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(-1 * data.QtyScale),
+					PriceFilter: math.Pow10(-1 * data.PriceScale),
+					Listed:      data.Status != "NoTrading",
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.LotSize = math.Pow10(-1 * data.QtyScale)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.PriceScale)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -211,12 +226,12 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
+func (e *Bitmax) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Bitmax) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Bitmax) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	API_URL string = "https://www.lbkex.net"//"https://api.lbkex.com"
+	API_URL string = "https://www.lbkex.net" //"https://api.lbkex.com"
 )
 
 /*API Base Knowledge
@@ -88,16 +88,23 @@ func (e *Lbank) GetCoinsData() error {
 
 		if c != nil {
 			txFee, _ := strconv.ParseFloat(data.Fee, 64)
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
-				ChainType:    exchange.MAINNET,
-				TxFee:        txFee,
-				Withdraw:     data.CanWithDraw,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.AssetCode,
+					ChainType:    exchange.MAINNET,
+					TxFee:        txFee,
+					Withdraw:     data.CanWithDraw,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.AssetCode
+				coinConstraint.TxFee = txFee
+				coinConstraint.Withdraw = data.CanWithDraw
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -136,15 +143,22 @@ func (e *Lbank) GetPairsData() error {
 		if p != nil {
 			lotsize, _ := strconv.Atoi(data.QuantityAccuracy)
 			ticksize, _ := strconv.Atoi(data.PriceAccuracy)
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(lotsize * -1),
-				PriceFilter: math.Pow10(ticksize * -1),
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(lotsize * -1),
+					PriceFilter: math.Pow10(ticksize * -1),
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.LotSize = math.Pow10(lotsize * -1)
+				pairConstraint.PriceFilter = math.Pow10(ticksize * -1)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -201,11 +215,9 @@ func (e *Lbank) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
 func (e *Lbank) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
-
 
 /*************** Private API ***************/
 func (e *Lbank) DoAccoutOperation(operation *exchange.AccountOperation) error {

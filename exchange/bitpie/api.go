@@ -101,16 +101,21 @@ func (e *Bitpie) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     symbol,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     DEFAULT_WITHDRAW,
-				Deposit:      DEFAULT_DEPOSIT,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     symbol,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = symbol
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -157,15 +162,24 @@ func (e *Bitpie) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Name)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Name,
-				MakerFee:    float64(data.MakerFeeRate),
-				TakerFee:    float64(data.TakerFeeRate),
-				LotSize:     math.Pow10(-1 * data.StockPrecision),
-				PriceFilter: math.Pow10(-1 * data.MoneyPrecision),
-				Listed:      data.Enabled,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Name,
+					MakerFee:    float64(data.MakerFeeRate),
+					TakerFee:    float64(data.TakerFeeRate),
+					LotSize:     math.Pow10(-1 * data.StockPrecision),
+					PriceFilter: math.Pow10(-1 * data.MoneyPrecision),
+					Listed:      data.Enabled,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Name
+				pairConstraint.MakerFee = float64(data.MakerFeeRate)
+				pairConstraint.TakerFee = float64(data.TakerFeeRate)
+				pairConstraint.LotSize = math.Pow10(-1 * data.StockPrecision)
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.MoneyPrecision)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -217,7 +231,6 @@ func (e *Bitpie) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	}
 	return maker, nil
 }
-
 
 /*************** Public API ***************/
 func (e *Bitpie) LoadPublicData(operation *exchange.PublicOperation) error {

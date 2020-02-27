@@ -76,16 +76,23 @@ func (e *Bitmart) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.ID,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     data.WithdrawEnabled,
-				Deposit:      data.DepositEnabled,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       DEFAULT_LISTED,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.ID,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     data.WithdrawEnabled,
+					Deposit:      data.DepositEnabled,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       DEFAULT_LISTED,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.ID
+				coinConstraint.Withdraw = data.WithdrawEnabled
+				coinConstraint.Deposit = data.DepositEnabled
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -127,15 +134,22 @@ func (e *Bitmart) GetPairsData() error {
 			if err != nil {
 				return fmt.Errorf("%s lotSize parse error: %v, %v", e.GetName(), err, data.QuoteIncrement)
 			}
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.ID,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     lotSize,
-				PriceFilter: math.Pow10(-1 * data.PriceMaxPrecision),
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.ID,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     lotSize,
+					PriceFilter: math.Pow10(-1 * data.PriceMaxPrecision),
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.ID
+				pairConstraint.LotSize = lotSize
+				pairConstraint.PriceFilter = math.Pow10(-1 * data.PriceMaxPrecision)
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

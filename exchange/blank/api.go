@@ -85,16 +85,26 @@ func (e *Blank) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.AssetCode,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.TransactionFee,
-				Withdraw:     data.EnableWithdraw,
-				Deposit:      data.EnableCharge,
-				Confirmation: data.Confirmations,
-				Listed:       !data.Delisted,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.AssetCode,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.TransactionFee,
+					Withdraw:     data.EnableWithdraw,
+					Deposit:      data.EnableCharge,
+					Confirmation: data.Confirmations,
+					Listed:       !data.Delisted,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.AssetCode
+				coinConstraint.TxFee = data.TransactionFee
+				coinConstraint.Withdraw = data.EnableWithdraw
+				coinConstraint.Deposit = data.EnableCharge
+				coinConstraint.Confirmation = data.Confirmations
+				coinConstraint.Listed = !data.Delisted
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -138,15 +148,24 @@ func (e *Blank) GetPairsData() error {
 				p = e.GetPairBySymbol(data.Symbol)
 			}
 			if p != nil {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    data.MakerFee,
-					TakerFee:    data.TakerFee,
-					LotSize:     data.LotSize,
-					PriceFilter: data.PriceFilter,
-					Listed:      true,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.Symbol,
+						MakerFee:    data.MakerFee,
+						TakerFee:    data.TakerFee,
+						LotSize:     data.LotSize,
+						PriceFilter: data.PriceFilter,
+						Listed:      true,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.Symbol
+					pairConstraint.MakerFee = data.MakerFee
+					pairConstraint.TakerFee = data.TakerFee
+					pairConstraint.LotSize = data.LotSize
+					pairConstraint.PriceFilter = data.PriceFilter
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -210,13 +229,12 @@ func (e *Blank) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
-
+func (e *Blank) LoadPublicData(operation *exchange.PublicOperation) error {
+	return nil
+}
 
 /*************** Private API ***************/
 func (e *Blank) DoAccoutOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
-func (e *Blank) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 

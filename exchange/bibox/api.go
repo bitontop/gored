@@ -89,14 +89,21 @@ func (e *Bibox) GetCoinsData() error {
 			}
 
 			if c != nil {
-				coinConstraint := &exchange.CoinConstraint{
-					CoinID:       c.ID,
-					Coin:         c,
-					ExSymbol:     data.CoinSymbol,
-					ChainType:    exchange.MAINNET,
-					TxFee:        data.WithdrawFee,
-					Confirmation: DEFAULT_CONFIRMATION,
+				coinConstraint := e.GetCoinConstraint(c)
+				if coinConstraint == nil {
+					coinConstraint = &exchange.CoinConstraint{
+						CoinID:       c.ID,
+						Coin:         c,
+						ExSymbol:     data.CoinSymbol,
+						ChainType:    exchange.MAINNET,
+						TxFee:        data.WithdrawFee,
+						Confirmation: DEFAULT_CONFIRMATION,
+					}
+				} else {
+					coinConstraint.ExSymbol = data.CoinSymbol
+					coinConstraint.TxFee = data.WithdrawFee
 				}
+
 				if data.EnableDeposit == 1 {
 					coinConstraint.Deposit = true
 				} else {
@@ -161,15 +168,20 @@ func (e *Bibox) GetPairsData() error {
 		}
 
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Pair,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      true,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Pair,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: DEFAULT_PRICE_FILTER,
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Pair
 			}
 
 			if pairStrs[1] == "USDT" || pairStrs[1] == "DAI" {
@@ -250,13 +262,11 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
-
-/*************** Private API ***************/
 func (e *Bibox) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
 
+/*************** Private API ***************/
 func (e *Bibox) DoAccoutOperation(operation *exchange.AccountOperation) error {
 
 	switch operation.Type {

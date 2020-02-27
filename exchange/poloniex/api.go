@@ -83,16 +83,26 @@ func (e *Poloniex) GetCoinsData() error {
 			if err != nil {
 				return fmt.Errorf("%s txFee parse error: %v", e.GetName, err)
 			}
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     key,
-				ChainType:    exchange.MAINNET,
-				TxFee:        txFee,
-				Withdraw:     data.Disabled == 0,
-				Deposit:      data.Disabled == 0,
-				Confirmation: data.MinConf,
-				Listed:       data.Delisted == 0,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     key,
+					ChainType:    exchange.MAINNET,
+					TxFee:        txFee,
+					Withdraw:     data.Disabled == 0,
+					Deposit:      data.Disabled == 0,
+					Confirmation: data.MinConf,
+					Listed:       data.Delisted == 0,
+				}
+			} else {
+				coinConstraint.ExSymbol = key
+				coinConstraint.TxFee = txFee
+				coinConstraint.Withdraw = data.Disabled == 0
+				coinConstraint.Deposit = data.Disabled == 0
+				coinConstraint.Confirmation = data.MinConf
+				coinConstraint.Listed = data.Delisted == 0
 			}
 			e.SetCoinConstraint(coinConstraint)
 		}
@@ -129,15 +139,20 @@ func (e *Poloniex) GetPairsData() error {
 			p = e.GetPairBySymbol(key)
 		}
 		if p != nil {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    key,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     DEFAULT_LOT_SIZE,
-				PriceFilter: DEFAULT_PRICE_FILTER,
-				Listed:      DEFAULT_LISTED,
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    key,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: DEFAULT_PRICE_FILTER,
+					Listed:      DEFAULT_LISTED,
+				}
+			} else {
+				pairConstraint.ExSymbol = key
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

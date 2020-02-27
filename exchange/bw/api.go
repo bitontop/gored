@@ -85,16 +85,37 @@ func (e *Bw) GetCoinsData() error {
 		}
 
 		if c != nil {
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.CurrencyID,
-				ChainType:    exchange.MAINNET,
-				TxFee:        data.DrawFee,
-				Withdraw:     data.DrawFlag == 1,
-				Deposit:      data.RechargeFlag == 1,
-				Confirmation: DEFAULT_CONFIRMATION,
-				Listed:       data.State == 1,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.CurrencyID,
+					ChainType:    exchange.MAINNET,
+					TxFee:        data.DrawFee,
+					Withdraw:     data.DrawFlag == 1,
+					Deposit:      data.RechargeFlag == 1,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       data.State == 1,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.CurrencyID
+				coinConstraint.TxFee = data.DrawFee
+				if data.DrawFlag == 1 {
+					coinConstraint.Withdraw = true
+				} else {
+					coinConstraint.Withdraw = false
+				}
+				if data.RechargeFlag == 1 {
+					coinConstraint.Deposit = true
+				} else {
+					coinConstraint.Deposit = false
+				}
+				if data.State == 1 {
+					coinConstraint.Listed = true
+				} else {
+					coinConstraint.Listed = false
+				}
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -138,15 +159,27 @@ func (e *Bw) GetPairsData() error {
 				p = e.GetPairBySymbol(data.Name)
 			}
 			if p != nil && data.State == 1 {
-				pairConstraint := &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Name,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     math.Pow10(-1 * data.AmountDecimal),
-					PriceFilter: math.Pow10(-1 * data.PriceDecimal),
-					Listed:      data.State == 1,
+				pairConstraint := e.GetPairConstraint(p)
+				if pairConstraint == nil {
+					pairConstraint = &exchange.PairConstraint{
+						PairID:      p.ID,
+						Pair:        p,
+						ExSymbol:    data.Name,
+						MakerFee:    DEFAULT_MAKER_FEE,
+						TakerFee:    DEFAULT_TAKER_FEE,
+						LotSize:     math.Pow10(-1 * data.AmountDecimal),
+						PriceFilter: math.Pow10(-1 * data.PriceDecimal),
+						Listed:      data.State == 1,
+					}
+				} else {
+					pairConstraint.ExSymbol = data.Name
+					pairConstraint.LotSize = math.Pow10(-1 * data.AmountDecimal)
+					pairConstraint.PriceFilter = math.Pow10(-1 * data.PriceDecimal)
+					if data.State == 1 {
+						pairConstraint.Listed = true
+					} else {
+						pairConstraint.Listed = false
+					}
 				}
 				e.SetPairConstraint(pairConstraint)
 			}
@@ -210,11 +243,12 @@ func (e *Bw) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	return maker, err
 }
 
-/*************** Private API ***************/
-func (e *Bw) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bw) LoadPublicData(operation *exchange.PublicOperation) error {
 	return nil
 }
-func (e *Bw) LoadPublicData(operation *exchange.PublicOperation) error {
+
+/*************** Private API ***************/
+func (e *Bw) DoAccoutOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

@@ -236,8 +236,8 @@ func (e *Bitstamp) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.LotSize = true
 	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = true
-	constrainFetchMethod.Deposit = true
+	constrainFetchMethod.Withdraw = false
+	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
 	return constrainFetchMethod

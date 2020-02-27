@@ -91,18 +91,26 @@ func (e *Huobi) GetCoinsData() error {
 				depositStatus = data.Chains[0].DepositStatus == "allowed"
 				confirmation = data.Chains[0].NumOfConfirmations
 			}
-
-			coinConstraint := &exchange.CoinConstraint{
-				CoinID:       c.ID,
-				Coin:         c,
-				ExSymbol:     data.Currency,
-				ChainType:    exchange.MAINNET,
-				TxFee:        DEFAULT_TXFEE,
-				Withdraw:     withdrawStatus,
-				Deposit:      depositStatus,
-				Confirmation: confirmation,
-				Listed:       true,
+			coinConstraint := e.GetCoinConstraint(c)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Currency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     withdrawStatus,
+					Deposit:      depositStatus,
+					Confirmation: confirmation,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.Currency
+				coinConstraint.Withdraw = withdrawStatus
+				coinConstraint.Deposit = depositStatus
+				coinConstraint.Confirmation = confirmation
 			}
+
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
@@ -143,16 +151,27 @@ func (e *Huobi) GetPairsData() error {
 			p = e.GetPairBySymbol(data.Symbol)
 		}
 		if p != nil && data.State == "online" {
-			pairConstraint := &exchange.PairConstraint{
-				PairID:      p.ID,
-				Pair:        p,
-				ExSymbol:    data.Symbol,
-				MakerFee:    DEFAULT_MAKER_FEE,
-				TakerFee:    DEFAULT_TAKER_FEE,
-				LotSize:     math.Pow10(data.AmountPrecision * -1),
-				PriceFilter: math.Pow10(data.PricePrecision * -1),
-				Listed:      data.State == "online",
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    data.Symbol,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
+					LotSize:     math.Pow10(data.AmountPrecision * -1),
+					PriceFilter: math.Pow10(data.PricePrecision * -1),
+					Listed:      true,
+				}
+			} else {
+				pairConstraint.ExSymbol = data.Symbol
+				pairConstraint.LotSize = math.Pow10(data.AmountPrecision * -1)
+				pairConstraint.PriceFilter = math.Pow10(data.PricePrecision * -1)
+				if data.State == "online" {
+					pairConstraint.Listed = true
+				}
 			}
+
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
@@ -219,12 +238,6 @@ func (e *Huobi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	return maker, nil
 }
-
-
-
-
-
-
 
 /*************** Private API ***************/
 func (e *Huobi) DoAccoutOperation(operation *exchange.AccountOperation) error {
