@@ -60,16 +60,15 @@ type CancelOrder struct {
 	Success bool   `json:"success"`
 }
 
-type OrderStatus struct {
-	Order []SingleOrder `json:"data"`
-}
+type OrderStatus []SingleOrder
 
 type SingleOrder struct {
-	Price     float64 `json:"price"`
-	Qty       float64 `json:"qty"`
-	TradeQty  float64 `json:"tradeQty"`
-	ID        int     `json:"id"`
-	Type      int     `json:"type"`
-	Direction int     `json:"direction"`
-	Status    int     `json:"status"`
+	CreateTime int64   `json:"createTime"`
+	Price      float64 `json:"price"`
+	Qty        float64 `json:"qty"`
+	TradeQty   float64 `json:"tradeQty"`
+	ID         int     `json:"id"`
+	Type       int     `json:"type"`
+	Direction  int     `json:"direction"`
+	Status     int     `json:"status"`
 }

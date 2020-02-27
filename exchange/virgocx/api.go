@@ -522,7 +522,7 @@ func (e *Virgocx) OrderStatus(order *exchange.Order) error {
 
 	requiredOrder := SingleOrder{}
 	found := false
-	for _, tempOrder := range orderStatus.Order {
+	for _, tempOrder := range orderStatus {
 		if fmt.Sprintf("%v", tempOrder.ID) == order.OrderID {
 			requiredOrder = tempOrder
 			found = true
@@ -533,8 +533,10 @@ func (e *Virgocx) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus order not found: %v", e.GetName(), jsonOrderStatus)
 	}
 
+	// log.Printf("======requiredOrder: %+v", requiredOrder) // ================
+
 	order.StatusMessage = jsonOrderStatus
-	if requiredOrder.Status == 0 {
+	if requiredOrder.Status == 0 || requiredOrder.Status == 1 {
 		order.Status = exchange.New
 	} else if requiredOrder.Status == -1 {
 		order.Status = exchange.Cancelled

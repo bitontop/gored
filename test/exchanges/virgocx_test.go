@@ -34,6 +34,7 @@ func Test_Virgocx(t *testing.T) {
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
+	Test_Trading_Sell(e, pair, 13000, 0.001)
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
