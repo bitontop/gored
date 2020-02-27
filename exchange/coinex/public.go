@@ -66,3 +66,49 @@ func (e *Coinex) doTradeHistory(operation *exchange.PublicOperation) error {
 
 	return nil
 }
+
+func (e *Coinex) getCoinChainType(operation *exchange.PublicOperation) error {
+	operation.ChainType =[]exchange.ChainType
+	request := &exchange.ChainTypeRequest{
+		Exchange: string(operation.ExchangeName),
+		CoinID:   operation.Coin.ID,
+	}
+
+	byteJson, err := json.Marshal(request)
+	post := &utils.HttpPost{
+		URI:         "http://127.0.0.1:52020/getchaintype",
+		RequestBody: byteJson,
+	}
+
+	err = utils.HttpPostRequest(post)
+	if err != nil {
+		return err
+
+	} else {
+		chainType := []*exchange.ChainTypeRequest{}
+		if err := json.Unmarshal(post.ResponseBody, &chainType); err != nil {
+			return err
+		}
+
+		for _, data := range chainType {
+			for _, ct := range data.ChainType {
+				switch ct {
+				case "MAINNET":
+					operation.ChainType = append(operation.ChainType, exchange.MAINNET)
+				case "BEP2":
+					operation.ChainType = append(operation.ChainType, exchange.BEP2)
+				case "ERC20":
+					operation.ChainType = append(operation.ChainType, exchange.ERC20)
+				case "NEP5":
+					operation.ChainType = append(operation.ChainType, exchange.NEP5)
+				case "OMNI":
+					operation.ChainType = append(operation.ChainType, exchange.OMNI)
+				case "TRC20":
+					operation.ChainType = append(operation.ChainType, exchange.TRC20)
+				}
+			}
+		}
+	}
+
+	return nil
+}

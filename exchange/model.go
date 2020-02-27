@@ -260,3 +260,11 @@ type TradeDetail struct {
 	Direction TradeDirection `json:"direction"` //Buy or Sell  /'b' 's'
 	BestMatch bool           `json:"best_match"`
 }
+
+type ChainTypeRequest struct {
+	Exchange  string   `json:"exchange, omitempty"`
+	CoinID    int      `json:"coin_id, omitempty"`
+	ExSymbol  string   `json:"ex_symbol, omitempty"`
+	ChainType []string `json:"chain_type, omitempty"`
+	CTSource  string   `json:"ct_source, omitempty"`
+}
