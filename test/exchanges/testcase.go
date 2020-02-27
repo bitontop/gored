@@ -237,6 +237,22 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 	}
 }
 
+func Test_CoinChainType(e exchange.Exchange, coin *coin.Coin) {
+	opCoinChainType := &exchange.PublicOperation{
+		Type:      exchange.CoinChainType,
+		EX:        e.GetName(),
+		Coin:      coin,
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opCoinChainType)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("%s %s Chain Type: %s", opCoinChainType.EX, opCoinChainType.Coin.Code, opCoinChainType.CoinChainType)
+}
+
 func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
 	opTradeHistory := &exchange.PublicOperation{
 		Type: exchange.Orderbook,

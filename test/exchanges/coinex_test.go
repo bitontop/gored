@@ -7,6 +7,7 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
+	"github.com/bitontop/gored/utils"
 
 	"github.com/bitontop/gored/exchange/coinex"
 	"github.com/bitontop/gored/test/conf"
@@ -47,29 +48,7 @@ func Test_Coinex(t *testing.T) {
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
 	// Test_TradeHistory(e, pair)
-}
-
-func Test_COINEX_TradeHistory(t *testing.T) {
-	e := InitCoinex()
-	p := pair.GetPairByKey("BTC|ETH")
-
-	opTradeHistory := &exchange.PublicOperation{
-		Type:      exchange.TradeHistory,
-		EX:        e.GetName(),
-		Pair:      p,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opTradeHistory)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-
-	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
-
-	for _, d := range opTradeHistory.TradeHistory {
-		log.Printf(">> %+v ", d)
-	}
+	Test_CoinChainType(e, pair.Base)
 }
 
 func InitCoinex() exchange.Exchange {
@@ -77,10 +56,10 @@ func InitCoinex() exchange.Exchange {
 	pair.Init()
 
 	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
+	// config.Source = exchange.EXCHANGE_API
+	config.Source = exchange.JSON_FILE
+	config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	utils.GetCommonDataFromJSON(config.SourceURI)
 
 	conf.Exchange(exchange.COINEX, config)
 
