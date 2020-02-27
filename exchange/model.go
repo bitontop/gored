@@ -165,10 +165,11 @@ const (
 	Balance     OperationType = "Balance"    // balance(s) of different accounts
 	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
 
-	GetCoin      OperationType = "GetCoin"
-	GetPair      OperationType = "GetPair"
-	Orderbook    OperationType = "Orderbook"
-	TradeHistory OperationType = "TradeHistory"
+	GetCoin       OperationType = "GetCoin"
+	GetPair       OperationType = "GetPair"
+	Orderbook     OperationType = "Orderbook"
+	TradeHistory  OperationType = "TradeHistory"
+	CoinChainType OperationType = "CoinChainType"
 )
 
 type WalletType string
@@ -226,10 +227,11 @@ type PublicOperation struct {
 	Type OperationType `json:"type"`
 	EX   ExchangeName  `json:"exchange_name"`
 
-	Coin         *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
-	Pair         *pair.Pair     `json:"op_pair"`
-	Maker        *Maker         `json:"maker"`
-	TradeHistory []*TradeDetail `json:"history"`
+	Coin          *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
+	Pair          *pair.Pair     `json:"op_pair"`
+	Maker         *Maker         `json:"maker"`
+	TradeHistory  []*TradeDetail `json:"history"`
+	CoinChainType []ChainType    `json:"chain_type"`
 
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`
