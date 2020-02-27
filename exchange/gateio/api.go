@@ -310,9 +310,9 @@ func (e *Gateio) doWithdraw(operation *exchange.AccountOperation) error {
 	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["amount"] = operation.WithdrawAmount
 	mapParams["address"] = operation.WithdrawAddress
-	/* if operation.WithdrawTag != "" {
+	if operation.WithdrawTag != "" {
 		mapParams["address"] += fmt.Sprintf(" %v", operation.WithdrawTag)
-	} */
+	}
 
 	log.Printf("mapParams: %v", mapParams) //=================
 

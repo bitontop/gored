@@ -354,6 +354,11 @@ func (e *Stex) doWithdraw(operation *exchange.AccountOperation) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	if operation.WithdrawTag != "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed, got tag: %v, for coin: %v", e.GetName(), operation.WithdrawTag, operation.Coin.Code)
+		return operation.Error
+	}
+
 	jsonResponse := JsonResponseV3{}
 	withdraw := WithdrawResult{}
 	strRequestUrl := "/profile/withdraw"

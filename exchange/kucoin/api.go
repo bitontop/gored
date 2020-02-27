@@ -262,6 +262,11 @@ func (e *Kucoin) doWithdraw(operation *exchange.AccountOperation) error {
 		return fmt.Errorf("Kucoin API Key or Secret Key or passphrase are nil.")
 	}
 
+	if operation.WithdrawTag != "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed, got tag: %v, for coin: %v", e.GetName(), operation.WithdrawTag, operation.Coin.Code)
+		return operation.Error
+	}
+
 	// need to use inner transfer before withdraw
 
 	jsonResponse := JsonResponse{}

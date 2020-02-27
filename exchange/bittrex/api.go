@@ -231,6 +231,11 @@ func (e *Bittrex) doWithdraw(operation *exchange.AccountOperation) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	if operation.WithdrawTag != "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed, got tag: %v, for coin: %v", e.GetName(), operation.WithdrawTag, operation.Coin.Code)
+		return operation.Error
+	}
+
 	mapParams := make(map[string]string)
 	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["quantity"] = operation.WithdrawAmount
