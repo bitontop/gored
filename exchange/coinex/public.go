@@ -106,6 +106,8 @@ func (e *Coinex) getCoinChainType(operation *exchange.PublicOperation) error {
 					operation.CoinChainType = append(operation.CoinChainType, exchange.OMNI)
 				case "TRC20":
 					operation.CoinChainType = append(operation.CoinChainType, exchange.TRC20)
+				default:
+					operation.CoinChainType = append(operation.CoinChainType, exchange.OTHER)
 				}
 			}
 		}
