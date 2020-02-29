@@ -23,6 +23,7 @@ func Test_Bittrex(t *testing.T) {
 	e := InitBittrex()
 
 	pair := pair.GetPairByKey("BTC|ETH")
+	Test_CoinChainType(e, pair.Base)
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -31,23 +32,23 @@ func Test_Bittrex(t *testing.T) {
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	// Test Withdraw
-	opWithdraw := &exchange.AccountOperation{
-		Type:            exchange.Withdraw,
-		Coin:            pair.Target,
-		WithdrawAmount:  "1",
-		WithdrawAddress: "addr",
-		DebugMode:       true,
-	}
-	err := e.DoAccoutOperation(opWithdraw)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
+	// // Test Withdraw
+	// opWithdraw := &exchange.AccountOperation{
+	// 	Type:            exchange.Withdraw,
+	// 	Coin:            pair.Target,
+	// 	WithdrawAmount:  "1",
+	// 	WithdrawAddress: "addr",
+	// 	DebugMode:       true,
+	// }
+	// err := e.DoAccoutOperation(opWithdraw)
+	// if err != nil {
+	// 	log.Printf("%v", err)
+	// }
+	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
 }
 

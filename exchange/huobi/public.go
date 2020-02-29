@@ -18,6 +18,8 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
+	case exchange.CoinChainType:
+		return e.getCoinChainType(operation)
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
@@ -77,4 +79,52 @@ func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 
 	return nil
 
+}
+
+func (e *Huobi) getCoinChainType(operation *exchange.PublicOperation) error {
+	operation.CoinChainType = []exchange.ChainType{}
+	request := &exchange.ChainTypeRequest{
+		Exchange: string(operation.EX),
+		CoinID:   operation.Coin.ID,
+	}
+
+	byteJson, err := json.Marshal(request)
+	post := &utils.HttpPost{
+		URI:         "http://127.0.0.1:52020/getchaintype",
+		RequestBody: byteJson,
+	}
+
+	err = utils.HttpPostRequest(post)
+	if err != nil {
+		return err
+
+	} else {
+		chainType := []*exchange.ChainTypeRequest{}
+		if err := json.Unmarshal(post.ResponseBody, &chainType); err != nil {
+			return err
+		}
+
+		for _, data := range chainType {
+			for _, ct := range data.ChainType {
+				switch ct {
+				case "MAINNET":
+					operation.CoinChainType = append(operation.CoinChainType, exchange.MAINNET)
+				case "BEP2":
+					operation.CoinChainType = append(operation.CoinChainType, exchange.BEP2)
+				case "ERC20":
+					operation.CoinChainType = append(operation.CoinChainType, exchange.ERC20)
+				case "NEP5":
+					operation.CoinChainType = append(operation.CoinChainType, exchange.NEP5)
+				case "OMNI":
+					operation.CoinChainType = append(operation.CoinChainType, exchange.OMNI)
+				case "TRC20":
+					operation.CoinChainType = append(operation.CoinChainType, exchange.TRC20)
+				default:
+					operation.CoinChainType = append(operation.CoinChainType, exchange.OTHER)
+				}
+			}
+		}
+	}
+
+	return nil
 }
