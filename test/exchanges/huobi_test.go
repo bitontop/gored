@@ -25,6 +25,7 @@ func Test_Huobi(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
+	Test_CoinChainType(e, pair.Base)
 	// Test_TradeHistory(e, pair)
 
 	// Test_Coins(e)
