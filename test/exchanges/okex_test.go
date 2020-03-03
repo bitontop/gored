@@ -6,8 +6,9 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/pair"
+
+	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/okex"
 	// "../conf"
@@ -32,8 +33,8 @@ func Test_Okex(t *testing.T) {
 	// Test_Constraint(e, pair)
 
 	// new interface methods
-	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
-	Test_DoTransfer(e, pair.Target, "10", exchange.AssetWallet, exchange.SpotWallet)
+	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
+	// Test_DoTransfer(e, pair.Target, "10", exchange.AssetWallet, exchange.SpotWallet)
 	Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	Test_CheckAllBalance(e, exchange.AssetWallet)
 
