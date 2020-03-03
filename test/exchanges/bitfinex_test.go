@@ -22,21 +22,21 @@ import (
 func Test_Bitfinex(t *testing.T) {
 	e := InitBitfinex()
 
-	pair := pair.GetPairByKey("BTC|EOS")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.0001000123, 100)
 	// Test_Trading_Sell(e, pair, 0.04123456789, 0.02010123456789)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Printf("Url: %v", e.GetTradingWebURL(pair))
-	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
+	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 }
 
 func Test_BITFINEX_TradeHistory(t *testing.T) {
