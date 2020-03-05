@@ -243,7 +243,6 @@ func (e *Bitfinex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
 	constrainFetchMethod.ApiRestrictIP = false
-	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 
