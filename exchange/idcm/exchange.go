@@ -240,6 +240,7 @@ func (e *Idcm) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

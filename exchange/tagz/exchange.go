@@ -246,6 +246,7 @@ func (e *Tagz) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 2
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

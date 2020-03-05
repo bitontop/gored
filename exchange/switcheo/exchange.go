@@ -242,6 +242,7 @@ func (e *Switcheo) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constrain
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

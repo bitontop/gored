@@ -242,6 +242,7 @@ func (e *Bw) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchM
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

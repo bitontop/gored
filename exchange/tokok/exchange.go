@@ -240,6 +240,7 @@ func (e *Tokok) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

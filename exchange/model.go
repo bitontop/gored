@@ -72,6 +72,7 @@ type ConstrainFetchMethod struct {
 	Deposit         bool
 	Confirmation    bool
 	ConstrainSource int // 1）API   2)WEB 3）Manual
+	ApiRestrictIP   bool
 }
 
 type OrderStatus string

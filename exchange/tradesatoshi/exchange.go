@@ -240,6 +240,7 @@ func (e *TradeSatoshi) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Const
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

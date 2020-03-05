@@ -242,6 +242,7 @@ func (e *Newcapital) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constra
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

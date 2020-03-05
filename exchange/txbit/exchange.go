@@ -240,6 +240,7 @@ func (e *Txbit) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

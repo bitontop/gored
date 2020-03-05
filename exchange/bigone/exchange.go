@@ -240,6 +240,7 @@ func (e *Bigone) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 3
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

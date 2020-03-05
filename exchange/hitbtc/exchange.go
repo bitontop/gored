@@ -240,6 +240,7 @@ func (e *Hitbtc) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

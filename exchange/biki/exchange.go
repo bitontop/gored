@@ -241,6 +241,7 @@ func (e *Biki) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 3
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

@@ -242,6 +242,7 @@ func (e *Bitmart) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 2
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 

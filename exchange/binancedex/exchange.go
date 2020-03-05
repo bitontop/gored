@@ -261,6 +261,7 @@ func (e *BinanceDex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.Constra
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 1
+	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod
 }
 
