@@ -258,7 +258,7 @@ func (e *Stex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetc
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
-	constrainFetchMethod.ApiRestrictIP = false
+	constrainFetchMethod.ApiRestrictIP = true
 	return constrainFetchMethod
 }
 

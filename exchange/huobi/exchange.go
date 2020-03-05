@@ -244,7 +244,7 @@ func (e *Huobi) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFet
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 2
-	constrainFetchMethod.ApiRestrictIP = false
+	constrainFetchMethod.ApiRestrictIP = true
 	return constrainFetchMethod
 }
 

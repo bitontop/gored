@@ -242,7 +242,7 @@ func (e *Coinex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFe
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 2
-	constrainFetchMethod.ApiRestrictIP = false
+	constrainFetchMethod.ApiRestrictIP = true
 	return constrainFetchMethod
 }
 
