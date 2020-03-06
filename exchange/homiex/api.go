@@ -269,9 +269,6 @@ func (e *Homiex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Public API ***************/
-func (e *Homiex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
-}
 
 /*************** Private API ***************/
 func (e *Homiex) DoAccoutOperation(operation *exchange.AccountOperation) error {

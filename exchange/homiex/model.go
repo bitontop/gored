@@ -137,6 +137,13 @@ type CancelOrder struct {
 	Status        string `json:"status"`
 }
 
+type TradeHistory []struct {
+	Price        string `json:"price"`
+	Time         int64  `json:"time"`
+	Qty          string `json:"qty"`
+	IsBuyerMaker bool   `json:"isBuyerMaker"`
+}
+
 type Withdraw struct {
 	Ret int `json:"ret"`
 }

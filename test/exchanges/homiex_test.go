@@ -25,6 +25,8 @@ func Test_Homiex(t *testing.T) {
 
 	pair := pair.GetPairByKey("BTC|ETH") // USDT|VBCC
 
+	// Test_TradeHistory(e, pair)
+
 	// Test_Coins(e)
 	// Test_Pairs(e)
 	Test_Pair(e, pair)
@@ -33,7 +35,7 @@ func Test_Homiex(t *testing.T) {
 	// Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
-	// Test_Trading_Sell(e, pair, 0.03, 0.01)
+	// Test_Trading_Sell(e, pair, 0.06, 0.01)
 	// Test_Trading(e, pair, 0.0001, 0.1)
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_CancelOrder(e, pair, "539389524336195328")
