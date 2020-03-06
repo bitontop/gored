@@ -18,7 +18,7 @@ func (e *Homiex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
-// no trade ID
+// using timeStamp as tradeID
 func (e *Homiex) doTradeHistory(operation *exchange.PublicOperation) error {
 	symbol := e.GetSymbolByPair(operation.Pair)
 
@@ -43,7 +43,7 @@ func (e *Homiex) doTradeHistory(operation *exchange.PublicOperation) error {
 		for _, trade := range tradeHistory {
 			td := &exchange.TradeDetail{}
 
-			// td.ID = fmt.Sprintf("%d", trade.ID)
+			td.ID = fmt.Sprintf("%d", trade.Time)
 			if trade.IsBuyerMaker {
 				td.Direction = exchange.Buy
 			} else {
