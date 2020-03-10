@@ -176,17 +176,19 @@ const (
 type WalletType string
 
 const (
-	AssetWallet   WalletType = "AssetWallet"
-	SpotWallet    WalletType = "SpotWallet"
-	FiatOTCWallet WalletType = "FiatOTCWallet"
-	MarginWallet  WalletType = "MarginWallet"
+	AssetWallet    WalletType = "AssetWallet"
+	SpotWallet     WalletType = "SpotWallet"
+	FiatOTCWallet  WalletType = "FiatOTCWallet"
+	MarginWallet   WalletType = "MarginWallet"
+	ContractWallet WalletType = "ContractWallet"
 )
 
 type AccountOperation struct {
 	ID int `json:"id"` //dummy at this moment for
 
-	Type OperationType `json:"type"`
-	Ex   ExchangeName  `json:"exchange_name"`
+	Type          OperationType `json:"type"`
+	OperationType WalletType    `json:"operation_type"` // Contract/Spot operation. Default spot if empty
+	Ex            ExchangeName  `json:"exchange_name"`
 
 	//#Transfer,Balance,Withdraw
 	Coin *coin.Coin `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
