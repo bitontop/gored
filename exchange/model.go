@@ -180,6 +180,8 @@ const (
 	SpotWallet    WalletType = "SpotWallet"
 	FiatOTCWallet WalletType = "FiatOTCWallet"
 	MarginWallet  WalletType = "MarginWallet"
+	// ##### New - Contract
+	ContractWallet WalletType = "ContractWallet"
 )
 
 type AccountOperation struct {
