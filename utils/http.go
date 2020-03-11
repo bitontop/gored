@@ -10,11 +10,13 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"net/url"
 )
 
 type HttpPost struct {
 	URI         string `json:"uri"`
-	RequestBody []byte
+	RequestBody []byte `json:"body"`
+	Proxy       string `json:"proxy"`
 
 	//Reference....
 	Request  *http.Request
@@ -27,7 +29,8 @@ type HttpPost struct {
 }
 
 type HttpGet struct {
-	URI string `json:"uri"`
+	URI   string `json:"uri"`
+	Proxy string `json:"proxy"`
 
 	//Reference....
 	Request  *http.Request
@@ -41,6 +44,16 @@ type HttpGet struct {
 
 func HttpPostRequest(httpPost *HttpPost) error {
 	httpClient := &http.Client{}
+
+	if httpPost.Proxy != "" {
+		proxyUrl, err := url.Parse(httpPost.Proxy)
+		if err == nil {
+			httpClient = &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+		} else {
+			// log.Printf("%+v", err)
+			return err
+		}
+	}
 
 	httpPost.Request, httpPost.Error = http.NewRequest("POST", httpPost.URI, bytes.NewBuffer(httpPost.RequestBody))
 	if nil != httpPost.Error {
@@ -106,6 +119,16 @@ func GetInternalIP() (string, error) {
 
 func HttpGetRequest(httpGet *HttpGet) error {
 	httpClient := &http.Client{}
+
+	if httpGet.Proxy != "" {
+		proxyUrl, err := url.Parse(httpGet.Proxy)
+		if err == nil {
+			httpClient = &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+		} else {
+			// log.Printf("%+v", err)
+			return err
+		}
+	}
 
 	httpGet.Request, httpGet.Error = http.NewRequest("GET", httpGet.URI, nil)
 	if nil != httpGet.Error {
