@@ -171,24 +171,29 @@ const (
 	Orderbook     OperationType = "Orderbook"
 	TradeHistory  OperationType = "TradeHistory"
 	CoinChainType OperationType = "CoinChainType"
+
+	// ##### New - Contract
+	PlaceOrder    OperationType = "PlaceOrder"
+	OrderStatusOp OperationType = "OrderStatus"
+	CancelOrder   OperationType = "CancelOrder"
 )
 
 type WalletType string
 
 const (
-	AssetWallet    WalletType = "AssetWallet"
-	SpotWallet     WalletType = "SpotWallet"
-	FiatOTCWallet  WalletType = "FiatOTCWallet"
-	MarginWallet   WalletType = "MarginWallet"
+	AssetWallet   WalletType = "AssetWallet"
+	SpotWallet    WalletType = "SpotWallet"
+	FiatOTCWallet WalletType = "FiatOTCWallet"
+	MarginWallet  WalletType = "MarginWallet"
+	// ##### New - Contract
 	ContractWallet WalletType = "ContractWallet"
 )
 
 type AccountOperation struct {
 	ID int `json:"id"` //dummy at this moment for
 
-	Type          OperationType `json:"type"`
-	OperationType WalletType    `json:"operation_type"` // Contract/Spot operation. Default spot if empty
-	Ex            ExchangeName  `json:"exchange_name"`
+	Type OperationType `json:"type"`
+	Ex   ExchangeName  `json:"exchange_name"`
 
 	//#Transfer,Balance,Withdraw
 	Coin *coin.Coin `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
@@ -222,6 +227,14 @@ type AccountOperation struct {
 	MapParams    string `json:"map_params"`
 	CallResponce string `json:"call_responce"`
 	Error        error  `json:"error"`
+
+	// ##### New Changes - Contract
+	OperationType  WalletType `json:"operation_type"` // Contract/Spot operation. Default spot if empty
+	Pair           *pair.Pair `json:"pair"`
+	Rate           float64
+	Quantity       float64
+	Order          *Order
+	OrderDirection TradeDirection
 }
 
 type PublicOperation struct {
@@ -241,6 +254,9 @@ type PublicOperation struct {
 	RequestURI   string `json:"request_uri"`
 	CallResponce string `json:"call_responce"`
 	Error        error  `json:"error"`
+
+	// ##### New Changes - Contract
+	OperationType WalletType `json:"operation_type"` // Contract/Spot operation. Default spot if empty
 }
 
 type AssetBalance struct {

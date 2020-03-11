@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 
 	exchange "github.com/bitontop/gored/exchange"
 	utils "github.com/bitontop/gored/utils"
@@ -20,7 +21,10 @@ func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {
 
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
-
+	case exchange.Orderbook:
+		if operation.OperationType == exchange.ContractWallet {
+			return e.doContractOrderBook(operation)
+		}
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
@@ -87,5 +91,57 @@ func (e *Binance) doTradeHistory(operation *exchange.PublicOperation) error {
 		}
 	}
 
+	return nil
+}
+
+func (e *Binance) doContractOrderBook(operation *exchange.PublicOperation) error {
+	orderbook := ContractOrderBook{}
+	symbol := e.GetSymbolByPair(operation.Pair)
+
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = symbol
+
+	strRequestUrl := "/fapi/v1/depth"
+	strUrl := CONTRACT_URL + strRequestUrl
+
+	operation.Maker = &exchange.Maker{
+		WorkerIP:        exchange.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	jsonOrderbookReturn := exchange.HttpGetRequest(strUrl, mapParams)
+	if err := json.Unmarshal([]byte(jsonOrderbookReturn), &orderbook); err != nil {
+		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookReturn)
+	}
+
+	operation.Maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	var err error
+	for _, bid := range orderbook.Bids {
+		buydata := exchange.Order{}
+		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		operation.Maker.Bids = append(operation.Maker.Bids, buydata)
+	}
+	for _, ask := range orderbook.Asks {
+		selldata := exchange.Order{}
+		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+		}
+
+		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
+		if err != nil {
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+		}
+		operation.Maker.Asks = append(operation.Maker.Asks, selldata)
+	}
 	return nil
 }
