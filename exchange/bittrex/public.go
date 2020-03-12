@@ -91,7 +91,7 @@ func (e *Bittrex) getCoinChainType(operation *exchange.PublicOperation) error {
 
 	byteJson, err := json.Marshal(request)
 	post := &utils.HttpPost{
-		URI:         "http://127.0.0.1:52020/getchaintype",
+		URI:         operation.RequestURI,
 		RequestBody: byteJson,
 	}
 
@@ -104,6 +104,7 @@ func (e *Bittrex) getCoinChainType(operation *exchange.PublicOperation) error {
 		if err := json.Unmarshal(post.ResponseBody, &chainType); err != nil {
 			return err
 		}
+		// log.Printf("========post.ResponseBody: %v", string(post.ResponseBody))
 
 		for _, data := range chainType {
 			for _, ct := range data.ChainType {

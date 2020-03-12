@@ -237,12 +237,13 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 	}
 }
 
-func Test_CoinChainType(e exchange.Exchange, coin *coin.Coin) {
+func Test_CoinChainType(e exchange.Exchange, coin *coin.Coin, uri string) {
 	opCoinChainType := &exchange.PublicOperation{
-		Type:      exchange.CoinChainType,
-		EX:        e.GetName(),
-		Coin:      coin,
-		DebugMode: true,
+		Type:       exchange.CoinChainType,
+		EX:         e.GetName(),
+		RequestURI: uri,
+		Coin:       coin,
+		DebugMode:  true,
 	}
 
 	err := e.LoadPublicData(opCoinChainType)

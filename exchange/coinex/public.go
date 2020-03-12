@@ -77,7 +77,7 @@ func (e *Coinex) getCoinChainType(operation *exchange.PublicOperation) error {
 
 	byteJson, err := json.Marshal(request)
 	post := &utils.HttpPost{
-		URI:         "http://127.0.0.1:52020/getchaintype",
+		URI:         operation.RequestURI,
 		RequestBody: byteJson,
 	}
 
