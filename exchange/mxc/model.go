@@ -64,3 +64,10 @@ type OrderStatus struct {
 	CreateTime     string `json:"createTime"`
 	Type           int    `json:"type"`
 }
+
+type TradeHistory []struct {
+	TradeTime     string `json:"tradeTime"`
+	TradePrice    string `json:"tradePrice"`
+	TradeQuantity string `json:"tradeQuantity"`
+	TradeType     string `json:"tradeType"`
+}
