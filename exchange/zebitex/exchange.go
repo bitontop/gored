@@ -233,7 +233,7 @@ func (e *Zebitex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = true
 	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = false
+	constrainFetchMethod.HasWithdraw = true // need test, add addr before use
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = true
 	constrainFetchMethod.LotSize = false
