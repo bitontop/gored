@@ -89,6 +89,7 @@ const (
 )
 
 type Order struct {
+	EX            ExchangeName
 	Pair          *pair.Pair
 	OrderID       string
 	FilledOrders  []int64
