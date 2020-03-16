@@ -63,21 +63,21 @@ func Test_Trading(e exchange.Exchange, p *pair.Pair, rate, quantity float64) {
 
 		err = e.OrderStatus(order)
 		if err == nil {
-			log.Printf("%s Order Status: %v", e.GetName(), order)
+			log.Printf("%s Order Status: %+v", e.GetName(), order)
 		} else {
 			log.Printf("%s Order Status Err: %s", e.GetName(), err)
 		}
 
 		err = e.CancelOrder(order)
 		if err == nil {
-			log.Printf("%s Cancel Order: %v", e.GetName(), order)
+			log.Printf("%s Cancel Order: %+v", e.GetName(), order)
 		} else {
 			log.Printf("%s Cancel Err: %s", e.GetName(), err)
 		}
 
 		err = e.OrderStatus(order)
 		if err == nil {
-			log.Printf("%s Order Status: %v", e.GetName(), order)
+			log.Printf("%s Order Status: %+v", e.GetName(), order)
 		} else {
 			log.Printf("%s Order Status Err: %s", e.GetName(), err)
 		}
