@@ -22,7 +22,8 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://api.binance.com"
+	API_URL      = "https://api.binance.com"
+	CONTRACT_URL = "https://fapi.binance.com"
 )
 
 /*API Base Knowledge
@@ -248,13 +249,37 @@ func (e *Binance) DoAccoutOperation(operation *exchange.AccountOperation) error 
 	switch operation.Type {
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
-		// case exchange.Transfer:
-		// 	return e.transfer(operation)
-		// case exchange.BalanceList:
-		// 	return e.getAllBalance(operation)
+	// case exchange.Transfer:
+	// 	return e.transfer(operation)
+	// case exchange.BalanceList:
+	// 	return e.getAllBalance(operation)
+	// case exchange.Balance:
+	// 	return e.getBalance(operation)
+
+	// Contract operation
+	case exchange.PlaceOrder:
+		if operation.OperationType == exchange.ContractWallet {
+			return e.doContractPlaceOrder(operation)
+		}
+	case exchange.OrderStatusOp:
+		if operation.OperationType == exchange.ContractWallet {
+			return e.doContractOrderStatus(operation)
+		}
+	case exchange.CancelOrder:
+		if operation.OperationType == exchange.ContractWallet {
+			return e.doContractCancelOrder(operation)
+		}
+	case exchange.BalanceList:
+		if operation.OperationType == exchange.ContractWallet {
+			return e.doContractAllBalance(operation)
+		}
 		// case exchange.Balance:
-		// 	return e.getBalance(operation)
+		// 	if operation.OperationType == exchange.ContractWallet {
+		// 		return e.doContractBalance(operation)
+		// 	}
+
 	}
+
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
 
