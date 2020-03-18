@@ -10,6 +10,12 @@ type ExchangeName string
 type MarginAction string
 type UpdateMethod string
 
+// from goredmergin
+type ContractAction string
+type ContractTransDir string
+type OffSetType string
+type OrderPriceType string
+
 const (
 	MAINNET ChainType = "MAINNET"
 	BEP2    ChainType = "BEP2" //TODO //
@@ -38,6 +44,33 @@ const (
 	LIMIT_SELL   MarginAction = "LIMIT_SELL"
 	MARKET_BUY   MarginAction = "MARKET_BUY"
 	MARKET_SELL  MarginAction = "MARKET_SELL"
+
+	// ************ from goredmergin ************
+	CONTRACT_MARKET_BUY   ContractAction = "CONTRACT_MARKET_BUY"
+	CONTRACT_MARKET_SELL  ContractAction = "CONTRACT_MARKET_SELL"
+	CONTRACT_LIMIT_BUY    ContractAction = "CONTRACT_LIMIT_BUY"
+	CONTRACT_LIMIT_SELL   ContractAction = "CONTRACT_LIMIT_SELL"
+	GET_ADDR              ContractAction = "GET_ADDR"
+	LIQUIDATION           ContractAction = "LIQUIDATION"
+	CONTRACT_TRANSFER     ContractAction = "CONTRACT_TRANSFER"
+	CONTRACT_ORDER_STATUS ContractAction = "CONTRACT_ORDER_STATUS"
+	CONTRACT_BALANCE      ContractAction = "CONTRACT_BALANCE"
+
+	OPEN  OffSetType = "open"
+	CLOSE OffSetType = "close"
+
+	LIMIT          OrderPriceType = "limit"
+	OPTIMAL_5_FOK  OrderPriceType = "optimal_5_fok"
+	OPTIMAL_5      OrderPriceType = "optimal_5"
+	OPTIMAL_10     OrderPriceType = "optimal_10"
+	OPTIMAL_20     OrderPriceType = "optimal_20"
+	OPTIMAL_20_FOK OrderPriceType = "optimal_20_fok"
+	BBO            OrderPriceType = "opponent"
+	BBO_FOK        OrderPriceType = "opponent_fok"
+
+	FUTURE_TO_SPOT ContractTransDir = "futures-to-pro"
+	SPOT_TO_FUTURE ContractTransDir = "pro-to-futures"
+	// *****************************************
 
 	API_TIGGER  UpdateMethod = "API_TIGGER"
 	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
