@@ -253,6 +253,7 @@ type PublicOperation struct {
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`
 	RequestURI   string `json:"request_uri"`
+	Proxy        string `json:"proxy"`
 	CallResponce string `json:"call_responce"`
 	Error        error  `json:"error"`
 
