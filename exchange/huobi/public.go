@@ -32,6 +32,7 @@ func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 			e.GetSymbolByPair(operation.Pair),
 			1000, //TRADE_HISTORY_MAX_LIMIT,
 		),
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

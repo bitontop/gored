@@ -30,7 +30,8 @@ func (e *Bitz) doTradeHistory(operation *exchange.PublicOperation) error {
 	strUrl := API_URL + strRequestUrl
 
 	get := &utils.HttpGet{
-		URI: strUrl,
+		URI:   strUrl,
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

@@ -25,6 +25,7 @@ func (e *Coinex) doTradeHistory(operation *exchange.PublicOperation) error {
 
 	get := &utils.HttpGet{
 		URI: fmt.Sprintf("%s/v1/market/deals?market=%s", API_URL, symbol),
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

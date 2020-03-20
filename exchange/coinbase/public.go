@@ -222,6 +222,7 @@ func (e *Coinbase) doTradeHistory(operation *exchange.PublicOperation) error {
 
 	get := &utils.HttpGet{
 		URI: strUrl,
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

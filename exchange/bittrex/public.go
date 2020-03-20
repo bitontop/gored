@@ -25,7 +25,8 @@ func (e *Bittrex) doTradeHistory(operation *exchange.PublicOperation) error {
 	symbol := e.GetSymbolByPair(operation.Pair)
 
 	get := &utils.HttpGet{
-		URI: fmt.Sprintf("%s/v1.1/public/getmarkethistory?market=%s", API_URL, symbol),
+		URI:   fmt.Sprintf("%s/v1.1/public/getmarkethistory?market=%s", API_URL, symbol),
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

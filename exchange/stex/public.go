@@ -21,7 +21,8 @@ func (e *Stex) LoadPublicData(operation *exchange.PublicOperation) error {
 
 func (e *Stex) doTradeHistory(operation *exchange.PublicOperation) error {
 	get := &utils.HttpGet{
-		URI: fmt.Sprintf("%s/public/trades/%s", API3_URL, e.GetIDByPair(operation.Pair)),
+		URI:   fmt.Sprintf("%s/public/trades/%s", API3_URL, e.GetIDByPair(operation.Pair)),
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

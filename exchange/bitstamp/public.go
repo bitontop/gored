@@ -24,6 +24,7 @@ func (e *Bitstamp) doTradeHistory(operation *exchange.PublicOperation) error {
 
 	get := &utils.HttpGet{
 		URI: fmt.Sprintf("%s/transactions/%s", API_URL, symbol),
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

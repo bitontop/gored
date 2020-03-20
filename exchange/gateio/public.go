@@ -23,7 +23,8 @@ func (e *Gateio) doTradeHistory(operation *exchange.PublicOperation) error {
 	symbol := e.GetSymbolByPair(operation.Pair)
 
 	get := &utils.HttpGet{
-		URI: fmt.Sprintf("%s/api2/1/tradeHistory/%s", API_URL, symbol),
+		URI:   fmt.Sprintf("%s/api2/1/tradeHistory/%s", API_URL, symbol),
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)
