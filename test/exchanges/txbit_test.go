@@ -79,7 +79,8 @@ func Test_TXBIT_OrderBook(t *testing.T) {
 	}
 
 	log.Printf("OrderBook: %s::%s", opSpotOrderBook.EX, opSpotOrderBook.Pair.Name)
-	log.Printf("%+v", opSpotOrderBook.Maker)
+	log.Printf("Bids:%+v", opSpotOrderBook.Maker.Bids)
+	log.Printf("Asks:%+v", opSpotOrderBook.Maker.Asks)
 }
 
 func InitTxbit() exchange.Exchange {

@@ -17,12 +17,14 @@ import (
 	"runtime"
 	"sort"
 	"strings"
+	"time"
 )
 
 type HttpPost struct {
 	URI         string `json:"uri"`
 	RequestBody []byte `json:"body"`
 	Proxy       string `json:"proxy"`
+	Timeout     int    `json:"timeout"`
 
 	//Reference....
 	Request  *http.Request
@@ -36,8 +38,9 @@ type HttpPost struct {
 }
 
 type HttpGet struct {
-	URI   string `json:"uri"`
-	Proxy string `json:"proxy"`
+	URI     string `json:"uri"`
+	Proxy   string `json:"proxy"`
+	Timeout int    `json:"timeout"`
 
 	//Reference....
 	Request  *http.Request
@@ -65,7 +68,9 @@ func HttpPostRequest(httpPost *HttpPost) error {
 			return err
 		}
 	}
-
+	if httpPost.Timeout > 0 {
+		httpClient.Timeout = time.Duration(httpPost.Timeout) * time.Second
+	}
 	httpPost.Request, httpPost.Error = http.NewRequest("POST", httpPost.URI, bytes.NewBuffer(httpPost.RequestBody))
 	if nil != httpPost.Error {
 		return httpPost.Error
@@ -203,6 +208,9 @@ func HttpGetRequest(httpGet *HttpGet) error {
 			// log.Printf("%+v", err)
 			return err
 		}
+	}
+	if httpPost.Timeout > 0 {
+		httpClient.Timeout = time.Duration(httpPost.Timeout) * time.Second
 	}
 
 	httpGet.Request, httpGet.Error = http.NewRequest("GET", httpGet.URI, nil)
