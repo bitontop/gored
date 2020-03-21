@@ -70,6 +70,7 @@ func Test_TXBIT_OrderBook(t *testing.T) {
 		Pair: p,
 
 		Proxy:     "http://207.180.236.225:3128",
+		Timeout:   3,
 		DebugMode: true,
 	}
 
@@ -80,6 +81,7 @@ func Test_TXBIT_OrderBook(t *testing.T) {
 
 	log.Printf("OrderBook: %s::%s", opSpotOrderBook.EX, opSpotOrderBook.Pair.Name)
 	log.Printf("Bids:%+v", opSpotOrderBook.Maker.Bids)
+	log.Printf("-----------------------------------------------------------------------------")
 	log.Printf("Asks:%+v", opSpotOrderBook.Maker.Asks)
 }
 

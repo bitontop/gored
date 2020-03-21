@@ -253,9 +253,13 @@ type PublicOperation struct {
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`
 	RequestURI   string `json:"request_uri"`
-	Proxy        string `json:"proxy"`
 	CallResponce string `json:"call_responce"`
-	Error        error  `json:"error"`
+
+	//#Network
+	Proxy   string `json:"proxy"`
+	Timeout int    `json:"timeout"`
+
+	Error error `json:"error"`
 
 	// ##### New Changes - Contract
 	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty

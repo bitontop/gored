@@ -209,8 +209,8 @@ func HttpGetRequest(httpGet *HttpGet) error {
 			return err
 		}
 	}
-	if httpPost.Timeout > 0 {
-		httpClient.Timeout = time.Duration(httpPost.Timeout) * time.Second
+	if httpGet.Timeout > 0 {
+		httpClient.Timeout = time.Duration(httpGet.Timeout) * time.Second
 	}
 
 	httpGet.Request, httpGet.Error = http.NewRequest("GET", httpGet.URI, nil)

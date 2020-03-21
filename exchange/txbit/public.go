@@ -56,6 +56,7 @@ func (e *Txbit) doSpotOrderBook(op *exchange.PublicOperation) error {
 	get := &utils.HttpGet{
 		URI:       fmt.Sprintf("%s/public/getorderbook?%s", API_URL, utils.Map2UrlQuery(mapParams)),
 		Proxy:     op.Proxy,
+		Timeout:   op.Timeout,
 		DebugMode: op.DebugMode,
 	}
 	if err := utils.HttpGetRequest(get); err != nil {
