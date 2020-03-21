@@ -212,7 +212,7 @@ type AccountOperation struct {
 	WithdrawID      string `json:"withdraw_id"`
 
 	// #Balance
-	BalanceType WalletType `json:"balance_type"`
+	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
 
 	//#Single Balance
 	BalanceAvailable float64 `json:"balance_available"` //the fund able to do trading
@@ -230,7 +230,7 @@ type AccountOperation struct {
 	Error        error  `json:"error"`
 
 	// ##### New Changes - Contract
-	OperationType  WalletType `json:"operation_type"` // Contract/Spot operation. Default spot if empty
+	// OperationType  WalletType `json:"operation_type"`  // replace by walelt!!!
 	Pair           *pair.Pair `json:"pair"`
 	Rate           float64
 	Quantity       float64
@@ -258,7 +258,7 @@ type PublicOperation struct {
 	Error        error  `json:"error"`
 
 	// ##### New Changes - Contract
-	OperationType WalletType `json:"operation_type"` // Contract/Spot operation. Default spot if empty
+	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
 }
 
 type AssetBalance struct {

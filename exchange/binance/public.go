@@ -22,7 +22,7 @@ func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
 	case exchange.Orderbook:
-		if operation.OperationType == exchange.ContractWallet {
+		if operation.Wallet == exchange.SpotWallet {
 			return e.doContractOrderBook(operation)
 		}
 	}

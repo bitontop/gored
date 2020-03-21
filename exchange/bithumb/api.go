@@ -279,12 +279,12 @@ func (e *Bithumb) getAllBalance(operation *exchange.AccountOperation) error {
 	strRequest := "/spot/assetList"
 
 	mapParams := make(map[string]string)
-	if operation.BalanceType == exchange.AssetWallet {
+	if operation.Wallet == exchange.AssetWallet {
 		mapParams["assetType"] = "wallet"
-	} else if operation.BalanceType == exchange.SpotWallet {
+	} else if operation.Wallet == exchange.SpotWallet {
 		mapParams["assetType"] = "spot"
 	} else {
-		return fmt.Errorf("%s getAllBalance unexpected BalanceType: %s", e.GetName(), operation.BalanceType)
+		return fmt.Errorf("%s getAllBalance unexpected Wallet: %s", e.GetName(), operation.Wallet)
 	}
 
 	jsonAllBalanceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
@@ -340,12 +340,12 @@ func (e *Bithumb) getBalance(operation *exchange.AccountOperation) error {
 	symbol := e.GetSymbolByCoin(operation.Coin)
 
 	mapParams := make(map[string]string)
-	if operation.BalanceType == exchange.AssetWallet {
+	if operation.Wallet == exchange.AssetWallet {
 		mapParams["assetType"] = "wallet"
-	} else if operation.BalanceType == exchange.SpotWallet {
+	} else if operation.Wallet == exchange.SpotWallet {
 		mapParams["assetType"] = "spot"
 	} else {
-		return fmt.Errorf("%s getAllBalance unexpected BalanceType: %s", e.GetName(), operation.BalanceType)
+		return fmt.Errorf("%s getAllBalance unexpected Wallet: %s", e.GetName(), operation.Wallet)
 	}
 
 	jsonBalanceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)

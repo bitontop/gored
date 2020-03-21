@@ -196,7 +196,7 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 	opBalance := &exchange.AccountOperation{
 		Type:        exchange.Balance,
 		Coin:        c,
-		BalanceType: balanceType,
+		Wallet: balanceType,
 	}
 	err := e.DoAccoutOperation(opBalance)
 	if err != nil {
@@ -208,7 +208,7 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) {
 	opAllBalance := &exchange.AccountOperation{
 		Type:        exchange.BalanceList,
-		BalanceType: balanceType,
+		Wallet: balanceType,
 	}
 	err := e.DoAccoutOperation(opAllBalance)
 	if err != nil {

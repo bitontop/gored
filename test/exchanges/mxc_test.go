@@ -37,7 +37,7 @@ func Test_Mxc(t *testing.T) {
 	op2 := &exchange.AccountOperation{
 		Type:        exchange.Balance,
 		Coin:        pair.Target,
-		BalanceType: exchange.AssetWallet,
+		Wallet: exchange.AssetWallet,
 	}
 	err = e.DoAccoutOperation(op2)
 	if err != nil {
@@ -48,7 +48,7 @@ func Test_Mxc(t *testing.T) {
 	// Test AllBalance
 	op3 := &exchange.AccountOperation{
 		Type:        exchange.BalanceList,
-		BalanceType: exchange.SpotWallet,
+		Wallet: exchange.SpotWallet,
 	}
 	err = e.DoAccoutOperation(op3)
 	if err != nil {
