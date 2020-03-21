@@ -68,12 +68,12 @@ func (e *Txbit) doSpotOrderBook(op *exchange.PublicOperation) error {
 	//! ###
 
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
+		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %s %s", e.GetName(), err, jsonOrderbook)
 	} else if !jsonResponse.Success {
 		return fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderBook); err != nil {
-		return fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %s %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)

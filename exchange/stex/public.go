@@ -151,17 +151,17 @@ func (e *Stex) doWebOrderBook(op *exchange.PublicOperation) (*exchange.Maker, er
 	// jsonOrderbookBuy := exchange.HttpGetRequest(strUrlBuy, nil)
 	jsonOrderbookBuy := getBuy.ResponseBody
 	if err := json.Unmarshal([]byte(jsonOrderbookBuy), &orderBookBuy); err != nil {
-		return nil, fmt.Errorf("%s Get WebOrderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookBuy)
+		return nil, fmt.Errorf("%s Get WebOrderbook Json Unmarshal Err: %v %s", e.GetName(), err, jsonOrderbookBuy)
 	} else if len(orderBookBuy) == 0 {
-		return nil, fmt.Errorf("Got empty WebOrderbook: %v", jsonOrderbookBuy)
+		return nil, fmt.Errorf("Got empty WebOrderbook: %s", jsonOrderbookBuy)
 	}
 
 	// jsonOrderbookSell := exchange.HttpGetRequest(strUrlSell, nil)
 	jsonOrderbookSell := getSell.ResponseBody
 	if err := json.Unmarshal([]byte(jsonOrderbookSell), &orderBookSell); err != nil {
-		return nil, fmt.Errorf("%s Get WebOrderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookSell)
+		return nil, fmt.Errorf("%s Get WebOrderbook Json Unmarshal Err: %v %s", e.GetName(), err, jsonOrderbookSell)
 	} else if len(orderBookSell) == 0 {
-		return nil, fmt.Errorf("Got empty WebOrderbook: %v", jsonOrderbookSell)
+		return nil, fmt.Errorf("Got empty WebOrderbook: %s", jsonOrderbookSell)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
@@ -186,11 +186,11 @@ func (e *Stex) doWebOrderBook(op *exchange.PublicOperation) (*exchange.Maker, er
 
 		selldata.Rate, err = strconv.ParseFloat(ask.Price, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Rate error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Rate error:%s", e.GetName(), err)
 		}
 		selldata.Quantity, err = strconv.ParseFloat(ask.Amount, 64)
 		if err != nil {
-			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Quantity error:%v", e.GetName(), err)
+			return nil, fmt.Errorf("%s WebOrderbook strconv.ParseFloat Quantity error:%s", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)

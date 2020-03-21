@@ -70,7 +70,7 @@ func Test_TXBIT_OrderBook(t *testing.T) {
 		Pair: p,
 
 		Proxy:     "http://207.180.236.225:3128",
-		Timeout:   3,
+		Timeout:   5,
 		DebugMode: true,
 	}
 
