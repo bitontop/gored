@@ -74,6 +74,29 @@ func Test_STEX_TradeHistory(t *testing.T) {
 	}
 }
 
+func Test_STEX_OrderBook(t *testing.T) {
+	e := InitStex()
+	p := pair.GetPairByKey("USDT|ETH")
+
+	opSpotOrderBook := &exchange.PublicOperation{
+		Type:          exchange.OrderBook,
+		OperationType: exchange.SpotWallet,
+
+		EX:   e.GetName(),
+		Pair: p,
+
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opSpotOrderBook)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("OrderBook: %s::%s", opSpotOrderBook.EX, opSpotOrderBook.Pair.Name)
+
+}
+
 func InitStex() exchange.Exchange {
 	coin.Init()
 	pair.Init()
