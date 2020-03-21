@@ -9,9 +9,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net"
 	"net/http"
 	"net/url"
+	"os/exec"
+	"runtime"
+	"sort"
+	"strings"
 )
 
 type HttpPost struct {
@@ -83,28 +88,89 @@ func HttpPostRequest(httpPost *HttpPost) error {
 	return nil
 }
 
-func GetExternalIP() (string, error) {
-	httpClient := &http.Client{}
+func WebOutboundIP() string {
+	uris := []string{
+		"4.ifcfg.me",
+		"alma.ch/myip.cgi",
+		"api.infoip.io/ip",
+		"api.ipify.org",
+		"bot.whatismyipaddress.com",
+		"canhazip.com",
+		"checkip.amazonaws.com",
+		"eth0.me",
+		"icanhazip.com",
+		"ident.me",
+		"ipecho.net/plain",
+		"ipinfo.io/ip",
+		"ipof.in/txt",
+		"ip.tyk.nu",
+		"l2.io/ip",
+		"smart-ip.net/myip",
+		"tnx.nl/ip",
+		"wgetip.com",
+		"whatismyip.akamai.com",
+	}
+	num := len(uris)
 
-	strRequestUrl := "http://myexternalip.com/raw"
+	for i := 0; i < 10; i++ {
+		x := int(rand.Float64() * float64(num))
+		strRequestUrl := fmt.Sprintf("http://%s", uris[x])
+		log.Printf("Use %s", strRequestUrl)
 
-	request, err := http.NewRequest("GET", strRequestUrl, nil)
-	if nil != err {
-		return "", err
+		get := &HttpGet{
+			URI: strRequestUrl,
+			// DebugMode: true,
+		}
+		if err := HttpGetRequest(get); err != nil {
+			// log.Printf("ERROR %s", err)
+			continue
+		}
+
+		ipv4 := string(get.ResponseBody)
+		// log.Printf("ipv4 %s", ipv4)
+		if net.ParseIP(ipv4) == nil {
+			continue
+		}
+		return ipv4
 	}
 
-	response, err := httpClient.Do(request)
-	if nil != err {
-		return "", err
-	}
-	defer response.Body.Close()
+	return "0.0.0.0"
 
-	body, err := ioutil.ReadAll(response.Body)
-	if nil != err {
-		return "", err
+}
+
+func GetExternalIP() string {
+
+	// httpClient := &http.Client{}
+
+	// strRequestUrl := "http://myexternalip.com/raw"
+
+	// request, err := http.NewRequest("GET", strRequestUrl, nil)
+	// if nil != err {
+	// 	return "", err
+	// }
+
+	// response, err := httpClient.Do(request)
+	// if nil != err {
+	// 	return "", err
+	// }
+	// defer response.Body.Close()
+
+	// body, err := ioutil.ReadAll(response.Body)
+	// if nil != err {
+	// 	return "", err
+	// }
+	// return string(body), nil
+	ip, err := DigOutboundIP()
+	if err != nil {
+		ip, err := GetOutboundIP()
+		if err != nil {
+			// return fmt.Sprintf("ERROR: %s", err.Error())
+			return WebOutboundIP()
+		}
+		return fmt.Sprintf("%s", ip)
 	}
 
-	return string(body), nil
+	return ip
 }
 
 func GetInternalIP() (string, error) {
@@ -158,4 +224,130 @@ func HttpGetRequest(httpGet *HttpGet) error {
 	}
 
 	return nil
+}
+
+func GetOutboundIP() (net.IP, error) {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP, nil
+}
+
+type OSType string
+
+const (
+	Windows OSType = "windows"
+	Linux   OSType = "linux"
+)
+
+func GetOS() OSType {
+	if runtime.GOOS == "windows" {
+		return Windows
+	} else if runtime.GOOS == "linux" {
+		return Linux
+	}
+	return Linux
+}
+
+func DigOutboundIP() (string, error) {
+	os := GetOS()
+
+	switch os {
+	case Windows:
+		// nslookup myip.opendns.com. resolver1.opendns.com
+		cmd := "nslookup"
+		args := []string{"myip.opendns.com.", "resolver1.opendns.com"}
+		out, err := exec.Command(cmd, args...).Output()
+		words := strings.Fields(string(out))
+		if err == nil {
+			return words[len(words)-1], nil
+		} else {
+			return "", err
+		}
+
+	case Linux:
+
+		cmd := "/usr/bin/dig"
+		// arg1:="@208.67.222.222"
+		// arg2:="ANY"
+		// arg3:="myip.opendns.com"
+		// arg4:="+short"
+
+		// dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com
+		// dig -6 TXT +short o-o.myaddr.l.google.com @ns1.google.com //for ipv6
+		args := []string{"-4", "TXT", "+short", "o-o.myaddr.l.google.com", "@ns1.google.com"}
+		out, err := exec.Command(cmd, args...).Output()
+		if err == nil {
+			return string(out), nil
+		} else {
+			return "", err
+		}
+	}
+
+	return "", fmt.Errorf("Not support system")
+}
+
+// 将map格式的请求参数转换为字符串格式的
+// mapParams: map格式的参数键值对
+// return: 查询字符串
+func Map2UrlQuery(mapParams map[string]string) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + "=" + mapParams[key] + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
+}
+
+func Map2UrlQueryUrl(mapParams map[string]string) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + "=" + url.QueryEscape(mapParams[key]) + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
+}
+
+func Map2UrlQueryInterface(mapParams map[string]interface{}) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + "=" + fmt.Sprintf("%v", mapParams[key]) + "&")
+	}
+
+	if 0 < len(strParams) {
+		strParams = string([]rune(strParams)[:len(strParams)-1])
+	}
+
+	return strParams
 }

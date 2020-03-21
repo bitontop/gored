@@ -58,6 +58,30 @@ func Test_Txbit(t *testing.T) {
 	Test_TradeHistory(e, pair)
 }
 
+func Test_TXBIT_OrderBook(t *testing.T) {
+	e := InitTxbit()
+	p := pair.GetPairByKey("ETH|AIB")
+
+	opSpotOrderBook := &exchange.PublicOperation{
+		Type:   exchange.Orderbook,
+		Wallet: exchange.SpotWallet,
+
+		EX:   e.GetName(),
+		Pair: p,
+
+		Proxy:     "http://207.180.236.225:3128",
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opSpotOrderBook)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("OrderBook: %s::%s", opSpotOrderBook.EX, opSpotOrderBook.Pair.Name)
+	log.Printf("%+v", opSpotOrderBook.Maker)
+}
+
 func InitTxbit() exchange.Exchange {
 	coin.Init()
 	pair.Init()
