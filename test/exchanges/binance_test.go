@@ -36,7 +36,7 @@ func Test_Binance(t *testing.T) {
 
 	// contract orderbook
 	// opOrderBook := &exchange.PublicOperation{
-	// 	OperationType: exchange.ContractWallet,
+	// 	Wallet: exchange.ContractWallet,
 	// 	Type:          exchange.Orderbook,
 	// 	EX:            e.GetName(),
 	// 	Pair:          pair,
@@ -52,7 +52,7 @@ func Test_Binance(t *testing.T) {
 
 	// contract PlaceOrder
 	opPlaceOrder := &exchange.AccountOperation{
-		OperationType:  exchange.ContractWallet,
+		Wallet:  exchange.ContractWallet,
 		Type:           exchange.PlaceOrder,
 		Ex:             e.GetName(),
 		Pair:           pair,
@@ -73,12 +73,12 @@ func Test_Binance(t *testing.T) {
 		OrderID: "1573346959",
 	}
 	opOrderStatus := &exchange.AccountOperation{
-		OperationType: exchange.ContractWallet,
-		Type:          exchange.OrderStatusOp,
-		Ex:            e.GetName(),
-		Pair:          pair,
-		Order:         order,
-		DebugMode:     true,
+		Wallet:    exchange.ContractWallet,
+		Type:      exchange.OrderStatusOp,
+		Ex:        e.GetName(),
+		Pair:      pair,
+		Order:     order,
+		DebugMode: true,
 	}
 	err = e.DoAccoutOperation(opOrderStatus)
 	if err != nil {
@@ -92,12 +92,12 @@ func Test_Binance(t *testing.T) {
 		OrderID: "1573346959",
 	}
 	opCancelOrder := &exchange.AccountOperation{
-		OperationType: exchange.ContractWallet,
-		Type:          exchange.CancelOrder,
-		Ex:            e.GetName(),
-		Pair:          pair,
-		Order:         order,
-		DebugMode:     true,
+		Wallet:    exchange.ContractWallet,
+		Type:      exchange.CancelOrder,
+		Ex:        e.GetName(),
+		Pair:      pair,
+		Order:     order,
+		DebugMode: true,
 	}
 	err = e.DoAccoutOperation(opCancelOrder)
 	if err != nil {
@@ -107,10 +107,10 @@ func Test_Binance(t *testing.T) {
 
 	// contract AllBalance
 	opAllBalance := &exchange.AccountOperation{
-		OperationType: exchange.ContractWallet,
-		Type:          exchange.BalanceList,
-		Ex:            e.GetName(),
-		DebugMode:     true,
+		Wallet:    exchange.ContractWallet,
+		Type:      exchange.BalanceList,
+		Ex:        e.GetName(),
+		DebugMode: true,
 	}
 	err = e.DoAccoutOperation(opAllBalance)
 	if err != nil {

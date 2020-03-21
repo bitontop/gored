@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -25,6 +26,7 @@ type HttpPost struct {
 
 	//Output
 	ResponseBody []byte
+	DebugMode    bool `json:"debug mode"`
 	Error        error
 }
 
@@ -38,6 +40,7 @@ type HttpGet struct {
 	//........................
 
 	//Output
+	DebugMode    bool `json:"debug mode"`
 	ResponseBody []byte
 	Error        error
 }
@@ -49,6 +52,9 @@ func HttpPostRequest(httpPost *HttpPost) error {
 		proxyUrl, err := url.Parse(httpPost.Proxy)
 		if err == nil {
 			httpClient = &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+			if httpPost.DebugMode {
+				log.Printf("Apply Proxy @ %s", proxyUrl)
+			}
 		} else {
 			// log.Printf("%+v", err)
 			return err
@@ -124,6 +130,9 @@ func HttpGetRequest(httpGet *HttpGet) error {
 		proxyUrl, err := url.Parse(httpGet.Proxy)
 		if err == nil {
 			httpClient = &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+			if httpGet.DebugMode {
+				log.Printf("Apply Proxy @ %s", proxyUrl)
+			}
 		} else {
 			// log.Printf("%+v", err)
 			return err

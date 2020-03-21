@@ -57,6 +57,7 @@ func Test_STEX_TradeHistory(t *testing.T) {
 
 	opTradeHistory := &exchange.PublicOperation{
 		Type:      exchange.TradeHistory,
+		Wallet:    exchange.SpotWallet,
 		EX:        e.GetName(),
 		Pair:      p,
 		DebugMode: true,
@@ -72,6 +73,30 @@ func Test_STEX_TradeHistory(t *testing.T) {
 	for _, d := range opTradeHistory.TradeHistory {
 		log.Printf(">> %+v ", d)
 	}
+}
+
+func Test_STEX_OrderBook(t *testing.T) {
+	e := InitStex()
+	p := pair.GetPairByKey("USDT|ETH")
+
+	opSpotOrderBook := &exchange.PublicOperation{
+		Type:   exchange.Orderbook,
+		Wallet: exchange.SpotWallet,
+
+		EX:   e.GetName(),
+		Pair: p,
+
+		Proxy:     "http://207.180.236.225:3128",
+		DebugMode: true,
+	}
+
+	err := e.LoadPublicData(opSpotOrderBook)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("OrderBook: %s::%s", opSpotOrderBook.EX, opSpotOrderBook.Pair.Name)
+	log.Printf("%+v", opSpotOrderBook.Maker)
 }
 
 func InitStex() exchange.Exchange {

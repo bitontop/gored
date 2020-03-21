@@ -258,23 +258,23 @@ func (e *Binance) DoAccoutOperation(operation *exchange.AccountOperation) error 
 
 	// Contract operation
 	case exchange.PlaceOrder:
-		if operation.OperationType == exchange.ContractWallet {
+		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractPlaceOrder(operation)
 		}
 	case exchange.OrderStatusOp:
-		if operation.OperationType == exchange.ContractWallet {
+		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractOrderStatus(operation)
 		}
 	case exchange.CancelOrder:
-		if operation.OperationType == exchange.ContractWallet {
+		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractCancelOrder(operation)
 		}
 	case exchange.BalanceList:
-		if operation.OperationType == exchange.ContractWallet {
+		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractAllBalance(operation)
 		}
 		// case exchange.Balance:
-		// 	if operation.OperationType == exchange.ContractWallet {
+		// 	if operation.Wallet == exchange.ContractWallet {
 		// 		return e.doContractBalance(operation)
 		// 	}
 
