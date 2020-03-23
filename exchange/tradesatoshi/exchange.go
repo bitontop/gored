@@ -227,10 +227,10 @@ func (e *TradeSatoshi) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *TradeSatoshi) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = true
-	constrainFetchMethod.HealthAPI = true
-	constrainFetchMethod.HasWithdraw = true
+	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PrivateAPI = false
+	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
 	constrainFetchMethod.LotSize = false
