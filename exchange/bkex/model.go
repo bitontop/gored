@@ -52,6 +52,18 @@ type OrderBook struct {
 	Bids []OrderItem `json:"bids"`
 }
 
+type TradeHistory struct {
+	Code int `json:"code"`
+	Data []struct {
+		CreatedTime        int64   `json:"createdTime"`
+		DealAmount         float64 `json:"dealAmount"`
+		Pair               string  `json:"pair"`
+		Price              float64 `json:"price"`
+		TradeDealDirection string  `json:"tradeDealDirection"`
+	} `json:"data"`
+	Msg string `json:"msg"`
+}
+
 /********** Private API Structure**********/
 // type Balance struct {
 // 	Available float64 `json:"available"`

@@ -17,8 +17,8 @@ import (
 func (e *Bkex) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
 
-	// case exchange.TradeHistory:
-	// 	return e.doTradeHistory(operation)
+	case exchange.TradeHistory:
+		return e.doTradeHistory(operation)
 	case exchange.Orderbook:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSpotOrderBook(operation)
@@ -88,60 +88,59 @@ func (e *Bkex) doSpotOrderBook(op *exchange.PublicOperation) error {
 	return nil
 }
 
-// TODO
-// func (e *Bkex) doTradeHistory(operation *exchange.PublicOperation) error {
+// No trade ID, using timestamp as id
+func (e *Bkex) doTradeHistory(operation *exchange.PublicOperation) error {
+	symbol := e.GetSymbolByPair(operation.Pair)
 
-// 	get := &utils.HttpGet{
-// 		URI: fmt.Sprintf("https://api.huobi.pro/market/history/trade?symbol=%s&size=%d",
-// 			e.GetSymbolByPair(operation.Pair),
-// 			1000, //TRADE_HISTORY_MAX_LIMIT,
-// 		),
-// 		Proxy: operation.Proxy,
-// 	}
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/v1/q/deals?pair=%s", API_URL, symbol),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
 
-// 	err := utils.HttpGetRequest(get)
+	err := utils.HttpGetRequest(get)
 
-// 	if err != nil {
-// 		// log.Printf("%+v", err)
-// 		return err
+	if err != nil {
+		// log.Printf("%+v", err)
+		return err
 
-// 	} else {
-// 		// log.Printf("%+v  ERR:%+v", string(get.ResponseBody), err)
-// 		tradeHistory := &TradeHistory{}
-// 		if err := json.Unmarshal(get.ResponseBody, &tradeHistory); err != nil {
-// 			return err
-// 		} else {
-// 			// log.Printf("%+v ", tradeHistory)
-// 		}
+	} else {
+		// log.Printf("%+v  ERR:%+v", string(get.ResponseBody), err)
+		tradeHistory := &TradeHistory{}
+		if err := json.Unmarshal(get.ResponseBody, &tradeHistory); err != nil {
+			return err
+		} else {
+			// log.Printf("%+v ", tradeHistory)
+		}
 
-// 		// log.Printf("%s", get.ResponseBody)
+		// log.Printf("%s", get.ResponseBody)
 
-// 		operation.TradeHistory = []*exchange.TradeDetail{}
-// 		for i := len(tradeHistory.Data) - 1; i > 0; i-- {
-// 			for _, d2 := range tradeHistory.Data[i].Data {
-// 				// d2 := d1.Data[i]
-// 				// log.Printf("d2:%+v", d2)
-// 				td := &exchange.TradeDetail{
-// 					ID:       fmt.Sprintf("%d", d2.TradeID),
-// 					Quantity: d2.Amount,
+		operation.TradeHistory = []*exchange.TradeDetail{}
+		for i := len(tradeHistory.Data) - 1; i > 0; i-- {
+			d2 := tradeHistory.Data[i]
+			// d2 := d1.Data[i]
+			// log.Printf("d2:%+v", d2)
+			td := &exchange.TradeDetail{
+				ID:       fmt.Sprintf("%d", d2.CreatedTime),
+				Quantity: d2.DealAmount,
 
-// 					TimeStamp: d2.Ts,
-// 					Rate:      d2.Price,
-// 				}
+				TimeStamp: d2.CreatedTime,
+				Rate:      d2.Price,
+			}
 
-// 				if d2.Direction == "buy" {
-// 					td.Direction = exchange.Buy
-// 				} else if d2.Direction == "sell" {
-// 					td.Direction = exchange.Sell
-// 				}
-// 				// log.Printf("d2: %+v ", d2)
-// 				// log.Printf("TD: %+v ", td)
+			if d2.TradeDealDirection == "B" {
+				td.Direction = exchange.Buy
+			} else if d2.TradeDealDirection == "S" {
+				td.Direction = exchange.Sell
+			}
+			// log.Printf("d2: %+v ", d2)
+			// log.Printf("TD: %+v ", td)
 
-// 				operation.TradeHistory = append(operation.TradeHistory, td)
-// 			}
-// 		}
-// 	}
+			operation.TradeHistory = append(operation.TradeHistory, td)
 
-// 	return nil
+		}
+	}
 
-// }
+	return nil
+
+}
