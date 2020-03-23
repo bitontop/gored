@@ -194,8 +194,8 @@ func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to 
 
 func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.WalletType) {
 	opBalance := &exchange.AccountOperation{
-		Type:        exchange.Balance,
-		Coin:        c,
+		Type:   exchange.Balance,
+		Coin:   c,
 		Wallet: balanceType,
 	}
 	err := e.DoAccoutOperation(opBalance)
@@ -207,7 +207,7 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 
 func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) {
 	opAllBalance := &exchange.AccountOperation{
-		Type:        exchange.BalanceList,
+		Type:   exchange.BalanceList,
 		Wallet: balanceType,
 	}
 	err := e.DoAccoutOperation(opAllBalance)
@@ -235,6 +235,20 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 	for _, trade := range opTradeHistory.TradeHistory {
 		log.Printf("TradeHistory: %+v", trade)
 	}
+}
+
+func Test_NewOrderBook(e exchange.Exchange, pair *pair.Pair) {
+	opOrderBook := &exchange.PublicOperation{
+		Type: exchange.Orderbook,
+		EX:   e.GetName(),
+		Pair: pair,
+	}
+	err := e.LoadPublicData(opOrderBook)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	log.Printf("%s OrderBook %+v   error:%v", e.GetName(), opOrderBook.Maker, opOrderBook.Error)
 }
 
 func Test_CoinChainType(e exchange.Exchange, coin *coin.Coin) {
