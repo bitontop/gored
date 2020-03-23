@@ -23,7 +23,7 @@ import (
 func Test_Abcc(t *testing.T) {
 	e := InitAbcc()
 
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USDT|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
