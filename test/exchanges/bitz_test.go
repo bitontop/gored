@@ -19,12 +19,13 @@ func Test_Bitz(t *testing.T) {
 	e := InitEx(exchange.BITZ)
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
+	Test_Coins(e)
+	Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_NewOrderBook(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
@@ -44,5 +45,5 @@ func Test_Bitz(t *testing.T) {
 	// }
 	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
-	Test_TradeHistory(e, pair)
+	// Test_TradeHistory(e, pair)
 }

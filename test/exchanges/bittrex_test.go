@@ -17,12 +17,13 @@ import (
 func Test_Bittrex(t *testing.T) {
 	e := InitEx(exchange.BITTREX)
 	pair := pair.GetPairByKey("BTC|ETH")
-	Test_CoinChainType(e, pair.Base)
+	// Test_CoinChainType(e, pair.Base)
 
 	Test_Coins(e)
 	Test_Pairs(e)
 	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
+	// Test_Orderbook(e, pair)
+	Test_NewOrderBook(e, pair)
 	Test_ConstraintFetch(e, pair)
 	Test_Constraint(e, pair)
 
@@ -30,7 +31,7 @@ func Test_Bittrex(t *testing.T) {
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	Test_TradeHistory(e, pair)
+	// Test_TradeHistory(e, pair)
 
 	// // Test Withdraw
 	// opWithdraw := &exchange.AccountOperation{
