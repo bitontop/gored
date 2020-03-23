@@ -30,7 +30,10 @@ func (e *Coinbase) LoadPublicData(operation *exchange.PublicOperation) error {
 	case exchange.GetPair:
 		return e.doGetPair(operation)
 	case exchange.Orderbook:
-		return e.doOrderbook(operation)
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doSpotOrderBook(operation)
+		}
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
 
@@ -162,30 +165,33 @@ func (e *Coinbase) doGetPair(operation *exchange.PublicOperation) error {
 }
 
 // precision doesn't match
-func (e *Coinbase) doOrderbook(operation *exchange.PublicOperation) error {
-	orderbook := OrderBook{}
-	symbol := e.GetSymbolByPair(operation.Pair)
+func (e *Coinbase) doSpotOrderBook(op *exchange.PublicOperation) error {
+	orderBook := OrderBook{}
+	symbol := e.GetSymbolByPair(op.Pair)
 
-	mapParams := make(map[string]string)
-	mapParams["level"] = "3"
-
-	strRequestUrl := fmt.Sprintf("/products/%s/book", symbol)
-	strUrl := API_URL + strRequestUrl
-
-	operation.Maker = &exchange.Maker{
-		WorkerIP:        exchange.GetExternalIP(),
+	op.Maker = &exchange.Maker{
 		Source:          exchange.EXCHANGE_API,
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
-	jsonOrderbookReturn := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbookReturn), &orderbook); err != nil {
-		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookReturn)
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/products/%s/book?level=3", API_URL, symbol),
+		Proxy:     op.Proxy,
+		DebugMode: op.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		op.Error = err
+		return op.Error
 	}
 
-	operation.Maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	jsonOrderbook := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
+		return fmt.Errorf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
+	}
+
+	op.Maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 	var err error
-	for _, bid := range orderbook.Bids {
+	for _, bid := range orderBook.Bids {
 		buydata := exchange.Order{}
 		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
 		if err != nil {
@@ -196,9 +202,9 @@ func (e *Coinbase) doOrderbook(operation *exchange.PublicOperation) error {
 		if err != nil {
 			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
-		operation.Maker.Bids = append(operation.Maker.Bids, buydata)
+		op.Maker.Bids = append(op.Maker.Bids, buydata)
 	}
-	for _, ask := range orderbook.Asks {
+	for _, ask := range orderBook.Asks {
 		selldata := exchange.Order{}
 		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
 		if err != nil {
@@ -209,7 +215,7 @@ func (e *Coinbase) doOrderbook(operation *exchange.PublicOperation) error {
 		if err != nil {
 			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v", e.GetName(), err)
 		}
-		operation.Maker.Asks = append(operation.Maker.Asks, selldata)
+		op.Maker.Asks = append(op.Maker.Asks, selldata)
 	}
 
 	return nil
@@ -221,7 +227,7 @@ func (e *Coinbase) doTradeHistory(operation *exchange.PublicOperation) error {
 	strUrl := API_URL + strRequestUrl
 
 	get := &utils.HttpGet{
-		URI: strUrl,
+		URI:   strUrl,
 		Proxy: operation.Proxy,
 	}
 

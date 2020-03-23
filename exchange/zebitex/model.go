@@ -1,6 +1,9 @@
 package zebitex
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
@@ -47,6 +50,17 @@ type PairsData map[string]Tick
 type OrderBook struct {
 	Bids [][]interface{} `json:"bids"`
 	Asks [][]interface{} `json:"asks"`
+}
+
+type TradeHistory []struct {
+	Tid               int       `json:"tid"`
+	Type              string    `json:"type"`
+	Date              time.Time `json:"date"`
+	Price             string    `json:"price"`
+	Amount            string    `json:"amount"`
+	VisualPrice       string    `json:"visualPrice"`
+	VisualAmount      string    `json:"visualAmount"`
+	VisualQuoteAmount string    `json:"visualQuoteAmount"`
 }
 
 /********** Private API Structure**********/
