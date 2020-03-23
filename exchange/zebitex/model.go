@@ -2,7 +2,6 @@ package zebitex
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -53,14 +52,14 @@ type OrderBook struct {
 }
 
 type TradeHistory []struct {
-	Tid               int       `json:"tid"`
-	Type              string    `json:"type"`
-	Date              time.Time `json:"date"`
-	Price             string    `json:"price"`
-	Amount            string    `json:"amount"`
-	VisualPrice       string    `json:"visualPrice"`
-	VisualAmount      string    `json:"visualAmount"`
-	VisualQuoteAmount string    `json:"visualQuoteAmount"`
+	Tid               int    `json:"tid"`
+	Type              string `json:"type"`
+	Date              string `json:"date"`
+	Price             string `json:"price"`
+	Amount            string `json:"amount"`
+	VisualPrice       string `json:"visualPrice"`
+	VisualAmount      string `json:"visualAmount"`
+	VisualQuoteAmount string `json:"visualQuoteAmount"`
 }
 
 /********** Private API Structure**********/

@@ -58,7 +58,13 @@ func (e *Zebitex) doTradeHistory(operation *exchange.PublicOperation) error {
 			td.Quantity, err = strconv.ParseFloat(d.Amount, 64)
 			td.Rate, err = strconv.ParseFloat(d.Price, 64)
 
-			td.TimeStamp = d.Date.Unix() * 1000
+			layout := "2006-01-02 15:04:05"
+			t, err := time.Parse(layout, d.Date)
+			if err != nil {
+				return err
+			}
+
+			td.TimeStamp = t.Unix() * 1000
 
 			operation.TradeHistory = append(operation.TradeHistory, td)
 		}

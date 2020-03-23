@@ -9,9 +9,30 @@ import (
 
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
+	"github.com/bitontop/gored/initial"
 	"github.com/bitontop/gored/pair"
+	"github.com/bitontop/gored/test/conf"
 	"github.com/davecgh/go-spew/spew"
 )
+
+func InitEx(exName exchange.ExchangeName) exchange.Exchange {
+	coin.Init()
+	pair.Init()
+	config := &exchange.Config{}
+	config.Source = exchange.EXCHANGE_API
+	// config.Source = exchange.JSON_FILE
+	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	// utils.GetCommonDataFromJSON(config.SourceURI)
+	conf.Exchange(exName, config)
+
+	inMan := initial.CreateInitManager()
+	e := inMan.Init(config)
+	log.Printf("Initial [ %v ] ", e.GetName())
+
+	config = nil
+
+	return e
+}
 
 /********************Public API********************/
 func Test_Coins(e exchange.Exchange) {
@@ -239,9 +260,10 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_NewOrderBook(e exchange.Exchange, pair *pair.Pair) {
 	opOrderBook := &exchange.PublicOperation{
-		Type: exchange.Orderbook,
-		EX:   e.GetName(),
-		Pair: pair,
+		Type:   exchange.Orderbook,
+		Wallet: exchange.SpotWallet,
+		EX:     e.GetName(),
+		Pair:   pair,
 	}
 	err := e.LoadPublicData(opOrderBook)
 	if err != nil {

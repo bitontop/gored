@@ -80,7 +80,7 @@ func (e *Kucoin) doSpotOrderBook(op *exchange.PublicOperation) error {
 	}
 
 	get := &utils.HttpGet{
-		URI:       fmt.Sprintf("%s/api/v1/market/orderbook/level2?%s", API_URL, symbol),
+		URI:       fmt.Sprintf("%s/api/v1/market/orderbook/level2?symbol=%s", API_URL, symbol),
 		Proxy:     op.Proxy,
 		DebugMode: op.DebugMode,
 	}
