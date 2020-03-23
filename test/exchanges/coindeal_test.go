@@ -5,25 +5,18 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"fmt"
 	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/coindeal"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/coindeal"
 	// "./conf"
 )
 
 /********************Public API********************/
 func Test_Coindeal(t *testing.T) {
-	e := InitCoindeal()
-
-	//"BTC|ETH" 即 ETH_BTC
+	e := InitEx(exchange.COINDEAL)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -38,19 +31,4 @@ func Test_Coindeal(t *testing.T) {
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.00000001, 667)
 	// Test_Withdraw(e, pair.Base, 1.5, "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v")
-}
-
-func InitCoindeal() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.COINDEAL, config)
-	fmt.Printf("%+v\n", config)
-
-	ex := coindeal.CreateCoindeal(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

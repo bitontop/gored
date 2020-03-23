@@ -4,12 +4,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/mxc"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/mxc"
 	// "../conf"
 )
@@ -21,7 +17,7 @@ import (
 /********************Public API********************/
 
 func Test_Mxc(t *testing.T) {
-	e := InitMxc()
+	e := InitEx(exchange.MXC)
 	// api only accept usdt based pair
 	pair := pair.GetPairByKey("USDT|ETH") //"USDT|EOS"
 
@@ -35,8 +31,8 @@ func Test_Mxc(t *testing.T) {
 	var err error
 	// Test Balance
 	op2 := &exchange.AccountOperation{
-		Type:        exchange.Balance,
-		Coin:        pair.Target,
+		Type:   exchange.Balance,
+		Coin:   pair.Target,
 		Wallet: exchange.AssetWallet,
 	}
 	err = e.DoAccoutOperation(op2)
@@ -47,7 +43,7 @@ func Test_Mxc(t *testing.T) {
 
 	// Test AllBalance
 	op3 := &exchange.AccountOperation{
-		Type:        exchange.BalanceList,
+		Type:   exchange.BalanceList,
 		Wallet: exchange.SpotWallet,
 	}
 	err = e.DoAccoutOperation(op3)
@@ -62,36 +58,4 @@ func Test_Mxc(t *testing.T) {
 	// Test_Trading(e, pair, 0.00001, 100)
 	// Test_Trading_Sell(e, pair, 220, 0.05)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-// test url and signature
-func Test_MxcOrder(t *testing.T) {
-	e := InitMxc()
-
-	var order *exchange.Order
-	err := e.OrderStatus(order)
-	if err == nil {
-		log.Printf("%s Order Status: %v", e.GetName(), order)
-	} else {
-		log.Printf("%s Order Status Err: %s", e.GetName(), err)
-	}
-}
-
-func InitMxc() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.MXC, config)
-
-	ex := mxc.CreateMxc(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

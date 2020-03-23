@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/tokok"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/tokok"
 	// "./conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Tokok(t *testing.T) {
-	e := InitTokok()
-
+	e := InitEx(exchange.TOKOK)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -38,21 +32,4 @@ func Test_Tokok(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// Test_CancelOrder(e, pair, "1907200026337682229018")
 	// Test_Balance(e, pair)
-}
-
-func InitTokok() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-	conf.Exchange(exchange.TOKOK, config)
-
-	ex := tokok.CreateTokok(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

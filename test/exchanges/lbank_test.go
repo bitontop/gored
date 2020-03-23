@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/lbank"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/lbank"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Lbank(t *testing.T) {
-	e := InitLbank()
-
+	e := InitEx(exchange.LBANK)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
@@ -37,18 +31,4 @@ func Test_Lbank(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
 	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
-}
-
-func InitLbank() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.LBANK, config)
-
-	ex := lbank.CreateLbank(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

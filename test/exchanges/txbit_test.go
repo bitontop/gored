@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/txbit"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/txbit"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Txbit(t *testing.T) {
-	e := InitTxbit()
-
+	e := InitEx(exchange.TXBIT)
 	pair := pair.GetPairByKey("BTC|AIB")
 
 	// log.Printf("coin.LastID: %v", coin.LastID)
@@ -56,50 +50,5 @@ func Test_Txbit(t *testing.T) {
 	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
 	Test_TradeHistory(e, pair)
-}
-
-func Test_TXBIT_OrderBook(t *testing.T) {
-	e := InitTxbit()
-	p := pair.GetPairByKey("ETH|AIB")
-
-	opSpotOrderBook := &exchange.PublicOperation{
-		Type:   exchange.Orderbook,
-		Wallet: exchange.SpotWallet,
-
-		EX:   e.GetName(),
-		Pair: p,
-
-		Proxy:     "http://207.180.236.225:3128",
-		Timeout:   5,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opSpotOrderBook)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-
-	log.Printf("OrderBook: %s::%s", opSpotOrderBook.EX, opSpotOrderBook.Pair.Name)
-	log.Printf("Bids:%+v", opSpotOrderBook.Maker.Bids)
-	log.Printf("-----------------------------------------------------------------------------")
-	log.Printf("Asks:%+v", opSpotOrderBook.Maker.Asks)
-}
-
-func InitTxbit() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.TXBIT, config)
-
-	ex := txbit.CreateTxbit(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
+	Test_NewOrderBook(e, pair)
 }

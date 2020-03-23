@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/homiex"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/homiex"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Homiex(t *testing.T) {
-	e := InitHomiex()
-
+	e := InitEx(exchange.HOMIEX)
 	pair := pair.GetPairByKey("BTC|ETH") // USDT|VBCC
 
 	// Test_TradeHistory(e, pair)
@@ -45,23 +39,4 @@ func Test_Homiex(t *testing.T) {
 	Test_CheckAllBalance(e, exchange.SpotWallet)
 	// Test_DoWithdraw(e, pair.Target, "0.075", "0xd3ceb35d6fa3dcc11cf7ea70f2d3bdf141b1e82f", "tag")
 
-}
-
-func InitHomiex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.HOMIEX, config)
-
-	ex := homiex.CreateHomiex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bcex"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/bcex"
 	// "./conf"
 )
@@ -21,7 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Bcex(t *testing.T) {
-	e := InitBcex()
+	e := InitEx(exchange.BCEX)
 
 	pair := pair.GetPairByKey("BTC|ETH")
 
@@ -37,23 +32,4 @@ func Test_Bcex(t *testing.T) {
 	// Test_OrderStatus(e, pair, "2637263726372637263726372637")
 	// Test_CancelOrder(e, pair, "2637263726372637263726372637")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitBcex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.BCEX, config)
-
-	ex := bcex.CreateBcex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

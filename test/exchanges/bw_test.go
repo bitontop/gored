@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bw"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/bw"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Bw(t *testing.T) {
-	e := InitBw()
-
+	e := InitEx(exchange.BW)
 	pair := pair.GetPairByKey("USDT|QTUM")
 
 	Test_Coins(e)
@@ -35,18 +29,4 @@ func Test_Bw(t *testing.T) {
 	//Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitBw() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BW, config)
-
-	ex := bw.CreateBw(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

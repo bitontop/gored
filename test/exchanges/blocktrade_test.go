@@ -5,24 +5,17 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"fmt"
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/blocktrade"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/blocktrade"
 	// "./conf"
 )
 
 /********************Public API********************/
 func Test_Blocktrade(t *testing.T) {
-	e := InitBlocktrade()
-
+	e := InitEx(exchange.BLOCKTRADE)
 	pair := pair.GetPairByKey("EUR|BTC")
 
 	Test_Coins(e)
@@ -36,19 +29,4 @@ func Test_Blocktrade(t *testing.T) {
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.00000001, 667)
 	// Test_Withdraw(e, pair.Base, 1, "address")
-}
-
-func InitBlocktrade() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.ZEBITEX, config)
-	fmt.Printf("%+v\n", config)
-
-	ex := blocktrade.CreateBlocktrade(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

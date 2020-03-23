@@ -5,23 +5,17 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bitfinex"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/bitfinex"
 	// "../conf"
 )
 
 /********************Public API********************/
 func Test_Bitfinex(t *testing.T) {
-	e := InitBitfinex()
-
+	e := InitEx(exchange.BITFINEX)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
@@ -39,45 +33,6 @@ func Test_Bitfinex(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Printf("Url: %v", e.GetTradingWebURL(pair))
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
-}
 
-func Test_BITFINEX_TradeHistory(t *testing.T) {
-	e := InitBitfinex()
-	p := pair.GetPairByKey("BTC|ETH")
-
-	opTradeHistory := &exchange.PublicOperation{
-		Type:      exchange.TradeHistory,
-		EX:        e.GetName(),
-		Pair:      p,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opTradeHistory)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-
-	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
-
-	for _, d := range opTradeHistory.TradeHistory {
-		log.Printf(">> %+v ", d)
-	}
-}
-
-func InitBitfinex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	// utils.GetCommonDataFromJSON("https://raw.githubusercontent.com/bitontop/gored/master/data")
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	conf.Exchange(exchange.BITFINEX, config)
-
-	ex := bitfinex.CreateBitfinex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
+	Test_TradeHistory(e, pair)
 }

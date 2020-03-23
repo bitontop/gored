@@ -16,7 +16,6 @@ import (
 /********************Public API********************/
 func Test_Coinbase(t *testing.T) {
 	e := InitEx(exchange.COINBASE)
-
 	pair := pair.GetPairByKey("BTC|XRP")
 
 	Test_NewOrderBook(e, pair)

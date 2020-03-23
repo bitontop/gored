@@ -5,16 +5,10 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"fmt"
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/zebitex"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/zebitex"
 	// "../conf"
 )
@@ -45,19 +39,4 @@ func Test_Zebitex(t *testing.T) {
 
 	Test_TradeHistory(e, pair)
 	Test_NewOrderBook(e, pair)
-}
-
-func InitZebitex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.ZEBITEX, config)
-	fmt.Printf("%+v\n", config)
-
-	ex := zebitex.CreateZebitex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

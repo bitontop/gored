@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bitmart"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/bitmart"
 	// "./conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Bitmart(t *testing.T) {
-	e := InitBitmart()
-
+	e := InitEx(exchange.BITMART)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -37,19 +31,4 @@ func Test_Bitmart(t *testing.T) {
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_CancelOrder(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitBitmart() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BITMART, config)
-
-	ex := bitmart.CreateBitmart(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

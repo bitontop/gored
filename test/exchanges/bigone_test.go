@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bigone"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/bigone"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Bigone(t *testing.T) {
-	e := InitBigone()
-
+	e := InitEx(exchange.BIGONE)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -35,18 +29,4 @@ func Test_Bigone(t *testing.T) {
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.01, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitBigone() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BIGONE, config)
-
-	ex := bigone.CreateBigone(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }
