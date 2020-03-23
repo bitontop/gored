@@ -1,4 +1,4 @@
-package bitstamp
+package zebitex
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"github.com/bitontop/gored/utils"
 )
 
-func (e *Bitstamp) LoadPublicData(operation *exchange.PublicOperation) error {
+func (e *Zebitex) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
@@ -23,11 +23,11 @@ func (e *Bitstamp) LoadPublicData(operation *exchange.PublicOperation) error {
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
-func (e *Bitstamp) doTradeHistory(operation *exchange.PublicOperation) error {
+func (e *Zebitex) doTradeHistory(operation *exchange.PublicOperation) error {
 	symbol := e.GetSymbolByPair(operation.Pair)
 
 	get := &utils.HttpGet{
-		URI:   fmt.Sprintf("%s/transactions/%s", API_URL, symbol),
+		URI:   fmt.Sprintf("%s/api/v1/orders/trade_history?market=%s", API_URL, symbol),
 		Proxy: operation.Proxy,
 	}
 
@@ -48,21 +48,17 @@ func (e *Bitstamp) doTradeHistory(operation *exchange.PublicOperation) error {
 			// for _, d := range tradeHistory {
 			td := &exchange.TradeDetail{}
 
-			td.ID = d.Tid
-			if d.Type == "0" {
+			td.ID = fmt.Sprintf("%d", d.Tid)
+			if d.Type == "buy" {
 				td.Direction = exchange.Buy
-			} else if d.Type == "1" {
+			} else if d.Type == "sell" {
 				td.Direction = exchange.Sell
 			}
 
 			td.Quantity, err = strconv.ParseFloat(d.Amount, 64)
 			td.Rate, err = strconv.ParseFloat(d.Price, 64)
 
-			t, err := strconv.ParseInt(d.Date, 10, 64)
-			if err != nil {
-				return err
-			}
-			td.TimeStamp = t * 1000
+			td.TimeStamp = d.Date.Unix() * 1000
 
 			operation.TradeHistory = append(operation.TradeHistory, td)
 		}
@@ -71,9 +67,12 @@ func (e *Bitstamp) doTradeHistory(operation *exchange.PublicOperation) error {
 	return nil
 }
 
-func (e *Bitstamp) doSpotOrderBook(op *exchange.PublicOperation) error {
+func (e *Zebitex) doSpotOrderBook(op *exchange.PublicOperation) error {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(op.Pair)
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = symbol
 
 	maker := &exchange.Maker{
 		Source:          exchange.EXCHANGE_API,
@@ -81,7 +80,7 @@ func (e *Bitstamp) doSpotOrderBook(op *exchange.PublicOperation) error {
 	}
 
 	get := &utils.HttpGet{
-		URI:       fmt.Sprintf("%s/order_book/%s", API_URL, symbol),
+		URI:       fmt.Sprintf("%s/api/v1/orders/orderbook?%s", API_URL, exchange.Map2UrlQuery(mapParams)),
 		Proxy:     op.Proxy,
 		DebugMode: op.DebugMode,
 	}
@@ -100,30 +99,28 @@ func (e *Bitstamp) doSpotOrderBook(op *exchange.PublicOperation) error {
 	var err error
 	for _, bid := range orderBook.Bids {
 		buydata := exchange.Order{}
-
-		//Modify according to type and structure
-		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
+		buydata.Quantity, err = strconv.ParseFloat(bid[1].(string), 64)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
-		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
+
+		buydata.Rate, err = strconv.ParseFloat(bid[0].(string), 64)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v\n", e.GetName(), err)
 		}
 
 		maker.Bids = append(maker.Bids, buydata)
 	}
 	for _, ask := range orderBook.Asks {
 		selldata := exchange.Order{}
-
-		//Modify according to type and structure
-		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
+		selldata.Quantity, err = strconv.ParseFloat(ask[1].(string), 64)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Quantity error:%v\n", e.GetName(), err)
 		}
-		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
+
+		selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s OrderBook strconv.ParseFloat Rate error:%v\n", e.GetName(), err)
 		}
 
 		maker.Asks = append(maker.Asks, selldata)
