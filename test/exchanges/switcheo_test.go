@@ -1,14 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/switcheo"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -18,8 +14,7 @@ import (
 /********************Public API********************/
 
 func Test_Switcheo(t *testing.T) {
-	e := InitSwitcheo()
-
+	e := InitEx(exchange.SWITCHEO)
 	pair := pair.GetPairByKey("NEO|SWTH")
 
 	Test_Coins(e)
@@ -32,18 +27,4 @@ func Test_Switcheo(t *testing.T) {
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitSwitcheo() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BLANK, config)
-
-	ex := switcheo.CreateSwitcheo(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

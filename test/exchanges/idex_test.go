@@ -1,14 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/idex"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -18,8 +14,7 @@ import (
 /********************Public API********************/
 
 func Test_Idex(t *testing.T) {
-	e := InitIdex()
-
+	e := InitEx(exchange.IDEX)
 	pair := pair.GetPairByKey("ETH|IDEX")
 
 	Test_Coins(e)
@@ -32,18 +27,4 @@ func Test_Idex(t *testing.T) {
 	Test_Balance(e, pair)
 	Test_Trading(e, pair, 0.0001, 1500)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitIdex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.IDEX, config)
-
-	ex := idex.CreateIdex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

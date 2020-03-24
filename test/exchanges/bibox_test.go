@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bibox"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/bibox"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Bibox(t *testing.T) {
-	e := InitBibox()
-
+	e := InitEx(exchange.BIBOX)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
@@ -39,18 +33,4 @@ func Test_Bibox(t *testing.T) {
 
 	Test_DoTransfer(e, pair.Target, "1", exchange.AssetWallet, exchange.SpotWallet)
 	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
-}
-
-func InitBibox() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BIBOX, config)
-
-	ex := bibox.CreateBibox(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

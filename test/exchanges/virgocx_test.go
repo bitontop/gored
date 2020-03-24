@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/virgocx"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/virgocx"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Virgocx(t *testing.T) {
-	e := InitVirgocx()
-
+	e := InitEx(exchange.VIRGOCX)
 	pair := pair.GetPairByKey("CAD|BTC")
 
 	// Test_Coins(e)
@@ -41,23 +35,4 @@ func Test_Virgocx(t *testing.T) {
 
 	Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	Test_CheckAllBalance(e, exchange.SpotWallet)
-}
-
-func InitVirgocx() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.VIRGOCX, config)
-
-	ex := virgocx.CreateVirgocx(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

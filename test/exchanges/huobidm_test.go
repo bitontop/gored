@@ -1,16 +1,13 @@
 package test
 
 import (
-	"log"
 	"testing"
 
 	//"../exchange/huobidm"
 	//"./conf"
-	"github.com/bitontop/gored/coin"
+
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/huobidm"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -20,8 +17,7 @@ import (
 /********************Public API********************/
 
 func Test_Huobidm(t *testing.T) {
-	e := InitHuobidm()
-
+	e := InitEx(exchange.HUOBIDM)
 	//CW FOR THIS WEEK, NW FOR NEXT WEEK, CQ FOR QUARTER
 	//BASE IS ALWAYS USD
 	pair := pair.GetPairByKey("USD|NWTRX")
@@ -36,19 +32,4 @@ func Test_Huobidm(t *testing.T) {
 	//Test_Balance(e, pair)
 	//Test_Trading(e, pair, 0.0001, 100)
 	//Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitHuobidm() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.HUOBIDM, config)
-
-	ex := huobidm.CreateHuobidm(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

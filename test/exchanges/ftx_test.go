@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/ftx"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/ftx"
 	// "./conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Ftx(t *testing.T) {
-	e := InitFtx()
-
+	e := InitEx(exchange.FTX)
 	pair := pair.GetPairByKey("USD|ETHMOON")
 
 	Test_Coins(e)
@@ -37,23 +31,4 @@ func Test_Ftx(t *testing.T) {
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
-}
-
-func InitFtx() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.FTX, config)
-
-	ex := ftx.CreateFtx(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bitforex"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/bitforex"
 	// "./conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Bitforex(t *testing.T) {
-	e := InitBitforex()
-
+	e := InitEx(exchange.BITFOREX)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -36,18 +30,4 @@ func Test_Bitforex(t *testing.T) {
 	// Test_Trading_Sell(e, pair, 0.04, 0.01)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitBitforex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BITFOREX, config)
-
-	ex := bitforex.CreateBitforex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

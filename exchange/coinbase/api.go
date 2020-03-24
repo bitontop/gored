@@ -138,6 +138,43 @@ func (e *Coinbase) doWithdraw(operation *exchange.AccountOperation) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
+	symbol := e.GetSymbolByCoin(operation.Coin)
+
+	if operation.WithdrawTag == "" && (symbol == "XRP" || symbol == "XLM" || symbol == "EOS" || symbol == "ATOM") {
+		operation.Error = fmt.Errorf("%s Withdraw Failed, got empty tag: %v, for coin: %v", e.GetName(), operation.WithdrawTag, symbol)
+		return operation.Error
+	}
+
+	withdraw := WithdrawResponse{}
+	strRequestUrl := "/withdrawals/crypto"
+
+	mapParams := make(map[string]interface{})
+	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["currency"] = symbol
+	mapParams["crypto_address"] = operation.WithdrawAddress
+	if operation.WithdrawTag != "" {
+		mapParams["destination_tag"] = operation.WithdrawTag
+	} else {
+		mapParams["no_destination_tag"] = true
+	}
+
+	jsonCreateWithdraw := e.ApiKeyRequest("POST", mapParams, strRequestUrl)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonCreateWithdraw
+	}
+
+	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &withdraw); err != nil {
+		operation.Error = fmt.Errorf("%s Withdraw Json Unmarshal Err: %v, %s", e.GetName(), err, jsonCreateWithdraw)
+		return operation.Error
+	} else if withdraw.ID == "" {
+		operation.Error = fmt.Errorf("%s Withdraw Failed: %v", e.GetName(), jsonCreateWithdraw)
+		return operation.Error
+	}
+
+	operation.WithdrawID = withdraw.ID
+
 	return nil
 }
 
@@ -303,10 +340,12 @@ func (e *Coinbase) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	}
 
-	if orderStatus.Status == "done" {
+	if orderStatus.Status == "done" && orderStatus.DoneReason == "filled" {
 		order.Status = exchange.Filled
 	} else if orderStatus.Status == "open" || orderStatus.Status == "pending" || orderStatus.Status == "active" {
 		order.Status = exchange.New
+	} else if orderStatus.Status == "done" {
+		order.Status = exchange.Cancelled
 	} else {
 		order.Status = exchange.Other
 	}

@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/gateio"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/gateio"
 	// "../conf"
 )
@@ -21,58 +16,23 @@ import (
 /********************Public API********************/
 
 func Test_Gateio(t *testing.T) {
-	e := InitGateio()
-
+	e := InitEx(exchange.GATEIO)
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
+	Test_Coins(e)
+	Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
-	log.Println(e.GetTradingWebURL(pair))
+	Test_NewOrderBook(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
+	// log.Println(e.GetTradingWebURL(pair))
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
 	// Test_DoWithdraw(e, pair.Target, "0.2", "0x2d1a6a1d65ae08502a5e0ddda0be8df9874f7c14", "tag")
-}
 
-func Test_GATEIO_TradeHistory(t *testing.T) {
-	e := InitGateio()
-	p := pair.GetPairByKey("USDT|LTC")
-
-	opTradeHistory := &exchange.PublicOperation{
-		Type:      exchange.TradeHistory,
-		EX:        e.GetName(),
-		Pair:      p,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opTradeHistory)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-
-	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
-
-	for _, d := range opTradeHistory.TradeHistory {
-		log.Printf(">> %+v ", d)
-	}
-}
-
-func InitGateio() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.GATEIO, config)
-
-	ex := gateio.CreateGateio(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
+	// Test_TradeHistory(e, pair)
 }

@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bitz"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/bitz"
 	// "../conf"
 )
@@ -21,16 +16,16 @@ import (
 /********************Public API********************/
 
 func Test_Bitz(t *testing.T) {
-	e := InitBitz()
-
+	e := InitEx(exchange.BITZ)
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
+	Test_Coins(e)
+	Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_NewOrderBook(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
@@ -50,22 +45,5 @@ func Test_Bitz(t *testing.T) {
 	// }
 	// log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 
-	Test_TradeHistory(e, pair)
-}
-
-func InitBitz() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-	conf.Exchange(exchange.BITZ, config)
-
-	ex := bitz.CreateBitz(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
+	// Test_TradeHistory(e, pair)
 }

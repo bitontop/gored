@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strconv"
+	"time"
 
 	exchange "github.com/bitontop/gored/exchange"
 	utils "github.com/bitontop/gored/utils"
@@ -18,8 +20,83 @@ func (e *Liquid) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
+	case exchange.Orderbook:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSpotOrderBook(operation)
+		}
+
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Liquid) doSpotOrderBook(op *exchange.PublicOperation) error {
+	orderBook := OrderBook{}
+	symbol := e.GetSymbolByPair(op.Pair)
+
+	maker := &exchange.Maker{
+		WorkerIP:        utils.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	/******
+		// strRequestUrl := fmt.Sprintf("/public/orderbook/%s", e.GetIDByPair(pair))
+		// strUrl := API3_URL + strRequestUrl
+		// jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	********/
+	//!------
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/products/%s/price_levels", API_URL, symbol),
+		Proxy:     op.Proxy,
+		DebugMode: op.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		op.Error = err
+		return op.Error
+	}
+
+	jsonOrderbook := get.ResponseBody
+	//! ###
+
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
+		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %s %s", e.GetName(), err, jsonOrderbook)
+	}
+
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	var err error
+	for _, bid := range orderBook.BuyPriceLevels {
+		var buydata exchange.Order
+
+		//Modify according to type and structure
+		buydata.Rate, err = strconv.ParseFloat(bid[0], 64)
+		if err != nil {
+			return err
+		}
+		buydata.Quantity, err = strconv.ParseFloat(bid[1], 64)
+		if err != nil {
+			return err
+		}
+
+		maker.Bids = append(maker.Bids, buydata)
+	}
+	for _, ask := range orderBook.SellPriceLevels {
+		var selldata exchange.Order
+
+		//Modify according to type and structure
+		selldata.Rate, err = strconv.ParseFloat(ask[0], 64)
+		if err != nil {
+			return err
+		}
+		selldata.Quantity, err = strconv.ParseFloat(ask[1], 64)
+		if err != nil {
+			return err
+		}
+
+		maker.Asks = append(maker.Asks, selldata)
+	}
+
+	op.Maker = maker
+	return nil
 }
 
 // timestamp 10 digit precision

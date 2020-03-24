@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/hitbtc"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/hitbtc"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Hitbtc(t *testing.T) {
-	e := InitHitbtc()
-
+	e := InitEx(exchange.HITBTC)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
@@ -39,18 +33,4 @@ func Test_Hitbtc(t *testing.T) {
 	Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	Test_CheckAllBalance(e, exchange.SpotWallet)
 	Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
-}
-
-func InitHitbtc() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.HITBTC, config)
-
-	ex := hitbtc.CreateHitbtc(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

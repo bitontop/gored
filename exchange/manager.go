@@ -76,7 +76,7 @@ type Exchange interface {
 	GetLotSize(pair *pair.Pair) float64
 	GetPriceFilter(pair *pair.Pair) float64
 
-	/***** Ver 2.0  Account Operation *****/
+	/***** Ver 2.0  Operation Base Interface *****/
 	LoadPublicData(operation *PublicOperation) error
 	DoAccoutOperation(operation *AccountOperation) error
 }

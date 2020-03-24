@@ -5,24 +5,17 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"fmt"
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/newcapital"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/newcapital"
 	// "./conf"
 )
 
 /********************Public API********************/
 func Test_Newcapital(t *testing.T) {
-	e := InitNewcapital()
-
+	e := InitEx(exchange.NEWCAPITAL)
 	//"TWINS|BTC"即BTC_TWINS
 	pair := pair.GetPairByKey("TWINS|BTC")
 
@@ -37,19 +30,4 @@ func Test_Newcapital(t *testing.T) {
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.00000001, 667)
 	// Test_Withdraw(e, pair.Base, 1.5, "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v")
-}
-
-func InitNewcapital() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.NEWCAPITAL, config)
-	fmt.Printf("%+v\n", config)
-
-	ex := newcapital.CreateNewcapital(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

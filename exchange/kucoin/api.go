@@ -197,7 +197,7 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Code != "200000" {
-		return nil, fmt.Errorf("%s Get Pairs Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s Get Pairs Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -364,10 +364,10 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 	// balanceList := []exchange.AssetBalance{}
 
 	mapParams := make(map[string]string)
-	if operation.BalanceType == exchange.AssetWallet {
+	if operation.Wallet == exchange.AssetWallet {
 		mapParams["type"] = "main" // "trade"
 		accountType = "main"
-	} else if operation.BalanceType == exchange.SpotWallet {
+	} else if operation.Wallet == exchange.SpotWallet {
 		mapParams["type"] = "trade"
 		accountType = "trade"
 	}
@@ -428,10 +428,10 @@ func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
 
 	mapParams := make(map[string]string)
 	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
-	if operation.BalanceType == exchange.AssetWallet {
+	if operation.Wallet == exchange.AssetWallet {
 		mapParams["type"] = "main" // "trade"
 		accountType = "main"
-	} else if operation.BalanceType == exchange.SpotWallet {
+	} else if operation.Wallet == exchange.SpotWallet {
 		mapParams["type"] = "trade"
 		accountType = "trade"
 	}

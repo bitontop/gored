@@ -5,22 +5,17 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 
-	"github.com/bitontop/gored/exchange/bitatm"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/bitatm"
 )
 
 /********************Public API********************/
 func Test_BitATM(t *testing.T) {
-	e := InitBitATM()
-
+	e := InitEx(exchange.BITATM)
 	pair := pair.GetPairByKey("BHD|BTC")
 
 	// Test_Coins(e)
@@ -33,40 +28,4 @@ func Test_BitATM(t *testing.T) {
 	Test_Balance(e, pair)
 	Test_Trading(e, pair, 0.001, 100)
 	//Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func Test_BitatmOrder(t *testing.T) {
-	e := InitBitATM()
-
-	pair := pair.GetPairByKey("BHD|BTC")
-
-	order := &exchange.Order{
-		Pair:     pair,
-		OrderID:  "123456",
-		Rate:     0.001,
-		Quantity: 100,
-		Side:     "Buy",
-		Status:   exchange.New,
-	}
-
-	err := e.OrderStatus(order)
-	if err == nil {
-		log.Printf("%s Order Status: %v", e.GetName(), order)
-	} else {
-		log.Printf("%s Order Status Err: %s", e.GetName(), err)
-	}
-}
-
-func InitBitATM() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BITATM, config)
-
-	ex := bitatm.CreateBitATM(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

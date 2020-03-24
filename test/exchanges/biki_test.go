@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/biki"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/biki"
 	// "./conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Biki(t *testing.T) {
-	e := InitBiki()
-
+	e := InitEx(exchange.BIKI)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -36,18 +30,4 @@ func Test_Biki(t *testing.T) {
 	// Test_Trading(e, pair, 0.01234567, 0.12345678)
 	// Test_Trading_Sell(e, pair, 0.02642640, 0.05700000)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitBiki() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BIKI, config)
-
-	ex := biki.CreateBiki(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

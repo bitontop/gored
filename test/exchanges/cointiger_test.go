@@ -5,23 +5,17 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/cointiger"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/cointiger"
 	// "./conf"
 )
 
 /********************Public API********************/
 func Test_Cointiger(t *testing.T) {
-	e := InitCointiger()
-
+	e := InitEx(exchange.COINTIGER)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -35,18 +29,4 @@ func Test_Cointiger(t *testing.T) {
 	//Test_Trading(e, pair, 0.02, 0.01)
 	// Test_Trading_Sell(e, pair, 0.04, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitCointiger() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.COINTIGER, config)
-
-	ex := cointiger.CreateCointiger(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

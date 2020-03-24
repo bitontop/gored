@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/liquid"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/liquid"
 	// "../conf"
 )
@@ -21,16 +16,16 @@ import (
 /********************Public API********************/
 
 func Test_Liquid(t *testing.T) {
-	e := InitLiquid()
-
+	e := InitEx(exchange.LIQUID)
 	pair := pair.GetPairByKey("BTC|ETH")
 
-	// Test_Coins(e)
-	// Test_Pairs(e)
+	Test_Coins(e)
+	Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_NewOrderBook(e, pair)
+	Test_ConstraintFetch(e, pair)
+	Test_Constraint(e, pair)
 
 	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
@@ -40,19 +35,5 @@ func Test_Liquid(t *testing.T) {
 
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
-	Test_TradeHistory(e, pair)
-}
-
-func InitLiquid() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.LIQUID, config)
-
-	ex := liquid.CreateLiquid(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
+	// Test_TradeHistory(e, pair)
 }

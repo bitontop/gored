@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/bitstamp"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/bitstamp"
 	// "../conf"
 )
@@ -21,11 +16,11 @@ import (
 /********************Public API********************/
 
 func Test_Bitstamp(t *testing.T) {
-	e := InitBitstamp()
-
+	e := InitEx(exchange.BITSTAMP)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_TradeHistory(e, pair)
+	Test_NewOrderBook(e, pair)
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -37,41 +32,4 @@ func Test_Bitstamp(t *testing.T) {
 	//Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func Test_BITSTAMP_TradeHistory(t *testing.T) {
-	e := InitBitstamp()
-	p := pair.GetPairByKey("BTC|ETH")
-
-	opTradeHistory := &exchange.PublicOperation{
-		Type:      exchange.TradeHistory,
-		EX:        e.GetName(),
-		Pair:      p,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opTradeHistory)
-	if err != nil {
-		log.Printf("%v", err)
-	}
-
-	log.Printf("TradeHistory: %s::%s", opTradeHistory.EX, opTradeHistory.Pair.Name)
-
-	for _, d := range opTradeHistory.TradeHistory {
-		log.Printf(">> %+v ", d)
-	}
-}
-
-func InitBitstamp() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BITSTAMP, config)
-
-	ex := bitstamp.CreateBitstamp(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

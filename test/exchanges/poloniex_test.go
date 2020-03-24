@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/poloniex"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/poloniex"
 	// "../conf"
 )
@@ -21,8 +16,7 @@ import (
 /********************Public API********************/
 
 func Test_Poloniex(t *testing.T) {
-	e := InitPoloniex()
-
+	e := InitEx(exchange.POLONIEX)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
@@ -38,18 +32,5 @@ func Test_Poloniex(t *testing.T) {
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
 	Test_TradeHistory(e, pair)
-}
-
-func InitPoloniex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.POLONIEX, config)
-
-	ex := poloniex.CreatePoloniex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
+	Test_NewOrderBook(e, pair)
 }

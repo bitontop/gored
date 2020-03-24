@@ -1,16 +1,13 @@
 package test
 
 import (
-	"log"
 	"testing"
 
 	// "../exchange/gemini"
 	// "./conf"
-	"github.com/bitontop/gored/coin"
+
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/gemini"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -20,8 +17,7 @@ import (
 /********************Public API********************/
 
 func Test_Gemini(t *testing.T) {
-	e := InitGemini()
-
+	e := InitEx(exchange.GEMINI)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -34,23 +30,4 @@ func Test_Gemini(t *testing.T) {
 	Test_Balance(e, pair)
 	Test_Trading(e, pair, 0.0001, 100)
 	//Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitGemini() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.GEMINI, config)
-
-	ex := gemini.CreateGemini(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

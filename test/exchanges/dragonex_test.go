@@ -1,14 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/dragonex"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -18,8 +14,7 @@ import (
 /********************Public API********************/
 
 func Test_Dragonex(t *testing.T) {
-	e := InitDragonex()
-
+	e := InitEx(exchange.DRAGONEX)
 	pair := pair.GetPairByKey("ETH|WAN")
 
 	Test_Coins(e)
@@ -33,18 +28,4 @@ func Test_Dragonex(t *testing.T) {
 	// Test_Trading(e, pair, 0.0015, 1)
 	// Test_Trading_Sell(e, pair, 0.0022, 1)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitDragonex() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.DRAGONEX, config)
-
-	ex := dragonex.CreateDragonex(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

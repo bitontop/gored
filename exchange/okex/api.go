@@ -364,7 +364,7 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 	balance := AssetBalance{}
 
 	strRequest := ""
-	switch operation.BalanceType {
+	switch operation.Wallet {
 	case exchange.AssetWallet:
 		strRequest = "/api/account/v3/wallet" // asset api
 	case exchange.SpotWallet:

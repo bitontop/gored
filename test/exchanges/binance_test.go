@@ -8,20 +8,15 @@ import (
 	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/binance"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/binance"
 	// "../conf"
 )
 
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
-	e := InitBinance()
-
+	e := InitEx(exchange.BINANCE)
 	pair := pair.GetPairByKey("USDT|BTC")
 
 	// Test_Coins(e)
@@ -31,12 +26,13 @@ func Test_Binance(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	var err error
+	Test_NewOrderBook(e, pair)
+	// var err error
 	// ==============================================
 
 	// contract orderbook
 	// opOrderBook := &exchange.PublicOperation{
-	// 	OperationType: exchange.ContractWallet,
+	// 	Wallet: exchange.ContractWallet,
 	// 	Type:          exchange.Orderbook,
 	// 	EX:            e.GetName(),
 	// 	Pair:          pair,
@@ -51,8 +47,8 @@ func Test_Binance(t *testing.T) {
 	// ==============================================
 
 	// contract PlaceOrder
-	opPlaceOrder := &exchange.AccountOperation{
-		OperationType:  exchange.ContractWallet,
+	/*opPlaceOrder := &exchange.AccountOperation{
+		Wallet:         exchange.ContractWallet,
 		Type:           exchange.PlaceOrder,
 		Ex:             e.GetName(),
 		Pair:           pair,
@@ -73,12 +69,12 @@ func Test_Binance(t *testing.T) {
 		OrderID: "1573346959",
 	}
 	opOrderStatus := &exchange.AccountOperation{
-		OperationType: exchange.ContractWallet,
-		Type:          exchange.OrderStatusOp,
-		Ex:            e.GetName(),
-		Pair:          pair,
-		Order:         order,
-		DebugMode:     true,
+		Wallet:    exchange.ContractWallet,
+		Type:      exchange.OrderStatusOp,
+		Ex:        e.GetName(),
+		Pair:      pair,
+		Order:     order,
+		DebugMode: true,
 	}
 	err = e.DoAccoutOperation(opOrderStatus)
 	if err != nil {
@@ -92,12 +88,12 @@ func Test_Binance(t *testing.T) {
 		OrderID: "1573346959",
 	}
 	opCancelOrder := &exchange.AccountOperation{
-		OperationType: exchange.ContractWallet,
-		Type:          exchange.CancelOrder,
-		Ex:            e.GetName(),
-		Pair:          pair,
-		Order:         order,
-		DebugMode:     true,
+		Wallet:    exchange.ContractWallet,
+		Type:      exchange.CancelOrder,
+		Ex:        e.GetName(),
+		Pair:      pair,
+		Order:     order,
+		DebugMode: true,
 	}
 	err = e.DoAccoutOperation(opCancelOrder)
 	if err != nil {
@@ -107,10 +103,10 @@ func Test_Binance(t *testing.T) {
 
 	// contract AllBalance
 	opAllBalance := &exchange.AccountOperation{
-		OperationType: exchange.ContractWallet,
-		Type:          exchange.BalanceList,
-		Ex:            e.GetName(),
-		DebugMode:     true,
+		Wallet:    exchange.ContractWallet,
+		Type:      exchange.BalanceList,
+		Ex:        e.GetName(),
+		DebugMode: true,
 	}
 	err = e.DoAccoutOperation(opAllBalance)
 	if err != nil {
@@ -121,7 +117,7 @@ func Test_Binance(t *testing.T) {
 	}
 	if len(opAllBalance.BalanceList) == 0 {
 		log.Println("AllAccount 0 balance")
-	}
+	}*/
 	// ==============================================
 
 	Test_Balance(e, pair)
@@ -132,26 +128,8 @@ func Test_Binance(t *testing.T) {
 	// Test_TradeHistory(e, pair)
 }
 
-func InitBinance() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.BINANCE, config)
-
-	ex := binance.CreateBinance(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
-}
-
 func Test_Binance_TradeHistory(t *testing.T) {
-	e := InitBinance()
+	e := InitEx(exchange.BINANCE)
 	p := pair.GetPairByKey("BTC|ETH")
 
 	opTradeHistory := &exchange.PublicOperation{

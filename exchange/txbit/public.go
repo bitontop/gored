@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	exchange "github.com/bitontop/gored/exchange"
 	utils "github.com/bitontop/gored/utils"
@@ -18,8 +19,82 @@ func (e *Txbit) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
+
+	case exchange.Orderbook:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSpotOrderBook(operation)
+		}
+
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Txbit) doSpotOrderBook(op *exchange.PublicOperation) error {
+	pair := op.Pair
+
+	// }func (e *Txbit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
+
+	jsonResponse := &JsonResponse{}
+	orderBook := OrderBook{}
+	symbol := e.GetSymbolByPair(pair)
+
+	mapParams := make(map[string]string)
+	mapParams["market"] = symbol
+	mapParams["type"] = "both"
+
+	maker := &exchange.Maker{
+		WorkerIP:        utils.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	// strRequestUrl := "/public/getorderbook"
+	// strUrl := API_URL + strRequestUrl
+	// jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
+
+	//!------
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/public/getorderbook?%s", API_URL, utils.Map2UrlQuery(mapParams)),
+		Proxy:     op.Proxy,
+		Timeout:   op.Timeout,
+		DebugMode: op.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		op.Error = err
+		return op.Error
+	}
+
+	jsonOrderbook := get.ResponseBody
+	//! ###
+
+	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
+		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %s %s", e.GetName(), err, jsonOrderbook)
+	} else if !jsonResponse.Success {
+		return fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &orderBook); err != nil {
+		return fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %s %s", e.GetName(), err, jsonResponse.Result)
+	}
+
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	for _, bid := range orderBook.Buy {
+		var buydata exchange.Order
+		buydata.Rate = bid.Rate
+		buydata.Quantity = bid.Quantity
+
+		maker.Bids = append(maker.Bids, buydata)
+	}
+	for i := len(orderBook.Sell) - 1; i >= 0; i-- {
+		var selldata exchange.Order
+
+		selldata.Rate = orderBook.Sell[i].Rate
+		selldata.Quantity = orderBook.Sell[i].Quantity
+
+		maker.Asks = append(maker.Asks, selldata)
+	}
+
+	op.Maker = maker
+	return nil
 }
 
 func (e *Txbit) doTradeHistory(operation *exchange.PublicOperation) error {

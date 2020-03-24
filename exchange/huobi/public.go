@@ -7,6 +7,7 @@ package huobi
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	exchange "github.com/bitontop/gored/exchange"
 	utils "github.com/bitontop/gored/utils"
@@ -20,9 +21,77 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 		return e.doTradeHistory(operation)
 	case exchange.CoinChainType:
 		return e.getCoinChainType(operation)
-
+	case exchange.Orderbook:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSpotOrderBook(operation)
+		}
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Huobi) doSpotOrderBook(op *exchange.PublicOperation) error {
+	jsonResponse := &JsonResponse{}
+	orderBook := OrderBook{}
+	symbol := e.GetSymbolByPair(op.Pair)
+
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = symbol
+	mapParams["type"] = "step0"
+
+	maker := &exchange.Maker{
+		WorkerIP:        utils.GetExternalIP(),
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	/******
+		// strRequestUrl := fmt.Sprintf("/public/orderbook/%s", e.GetIDByPair(pair))
+		// strUrl := API3_URL + strRequestUrl
+		// jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
+	********/
+	//!------
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/market/depth?%s", API_URL, utils.Map2UrlQuery(mapParams)),
+		Proxy:     op.Proxy,
+		DebugMode: op.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		op.Error = err
+		return op.Error
+	}
+
+	jsonOrderbook := get.ResponseBody
+	//! ###
+
+	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
+		return fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %s %s", e.GetName(), err, jsonOrderbook)
+	} else if jsonResponse.Status != "ok" {
+		return fmt.Errorf("%s Get Orderbook Failed: %s", e.GetName(), jsonOrderbook)
+	}
+	if err := json.Unmarshal(jsonResponse.Tick, &orderBook); err != nil {
+		return fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %s %s", e.GetName(), err, jsonResponse.Tick)
+	}
+
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+	for _, bid := range orderBook.Bids {
+		var buydata exchange.Order
+
+		buydata.Rate = bid[0]
+		buydata.Quantity = bid[1]
+
+		maker.Bids = append(maker.Bids, buydata)
+	}
+	for _, ask := range orderBook.Asks {
+		var selldata exchange.Order
+
+		selldata.Rate = ask[0]
+		selldata.Quantity = ask[1]
+
+		maker.Asks = append(maker.Asks, selldata)
+	}
+
+	op.Maker = maker
+	return nil
 }
 
 func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
@@ -32,6 +101,7 @@ func (e *Huobi) doTradeHistory(operation *exchange.PublicOperation) error {
 			e.GetSymbolByPair(operation.Pair),
 			1000, //TRADE_HISTORY_MAX_LIMIT,
 		),
+		Proxy: operation.Proxy,
 	}
 
 	err := utils.HttpGetRequest(get)

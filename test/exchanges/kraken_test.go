@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/kraken"
-	"github.com/bitontop/gored/test/conf"
 	// "../../exchange/kraken"
 	// "../../utils"
 	// "../conf"
@@ -22,8 +17,7 @@ import (
 /********************Public API********************/
 
 func Test_Kraken(t *testing.T) {
-	e := InitKraken()
-
+	e := InitEx(exchange.KRAKEN)
 	pair := pair.GetPairByKey("USDT|ETH")
 
 	// Test_Coins(e)
@@ -41,23 +35,5 @@ func Test_Kraken(t *testing.T) {
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
 	Test_TradeHistory(e, pair)
-}
-
-func InitKraken() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.KRAKEN, config)
-
-	ex := kraken.CreateKraken(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
+	Test_NewOrderBook(e, pair)
 }

@@ -1,16 +1,13 @@
 package test
 
 import (
-	"log"
 	"testing"
 
 	// "../exchange/deribit"
 	// "./conf"
-	"github.com/bitontop/gored/coin"
+
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/deribit"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -20,8 +17,7 @@ import (
 /********************Public API********************/
 
 func Test_Deribit(t *testing.T) {
-	e := InitDeribit()
-
+	e := InitEx(exchange.DERIBIT)
 	pair := pair.GetPairByKey("USD|CQBTC")
 
 	Test_Coins(e)
@@ -34,18 +30,4 @@ func Test_Deribit(t *testing.T) {
 	//Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitDeribit() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.DERIBIT, config)
-
-	ex := deribit.CreateDeribit(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

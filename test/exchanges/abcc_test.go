@@ -1,15 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-
-	"github.com/bitontop/gored/exchange/abcc"
-	"github.com/bitontop/gored/test/conf"
 	// "../exchange/abcc"
 	// "./conf"
 )
@@ -21,9 +16,8 @@ import (
 /********************Public API********************/
 
 func Test_Abcc(t *testing.T) {
-	e := InitAbcc()
-
-	pair := pair.GetPairByKey("BTC|ETH")
+	e := InitEx(exchange.ABCC)
+	pair := pair.GetPairByKey("USDT|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -37,23 +31,4 @@ func Test_Abcc(t *testing.T) {
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
-}
-
-func InitAbcc() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	// config.Source = exchange.JSON_FILE
-	// config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
-	// utils.GetCommonDataFromJSON(config.SourceURI)
-
-	conf.Exchange(exchange.ABCC, config)
-
-	ex := abcc.CreateAbcc(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

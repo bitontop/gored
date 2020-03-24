@@ -1,14 +1,10 @@
 package test
 
 import (
-	"log"
 	"testing"
 
-	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/blank"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -18,8 +14,7 @@ import (
 /********************Public API********************/
 
 func Test_Blank(t *testing.T) {
-	e := InitBlank()
-
+	e := InitEx(exchange.BLANK)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	Test_Coins(e)
@@ -32,18 +27,4 @@ func Test_Blank(t *testing.T) {
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitBlank() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.BLANK, config)
-
-	ex := blank.CreateBlank(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

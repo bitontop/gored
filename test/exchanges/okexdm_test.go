@@ -1,16 +1,13 @@
 package test
 
 import (
-	"log"
 	"testing"
 
 	//"../exchange/okexdm"
 	//"./conf"
-	"github.com/bitontop/gored/coin"
+
 	"github.com/bitontop/gored/exchange"
-	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/test/conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -20,8 +17,7 @@ import (
 /********************Public API********************/
 
 func Test_Okexdm(t *testing.T) {
-	e := InitOkexdm()
-
+	e := InitEx(exchange.OKEXDM)
 	pair := pair.GetPairByKey("USD|CQETH")
 
 	Test_Coins(e)
@@ -34,19 +30,4 @@ func Test_Okexdm(t *testing.T) {
 	//Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-}
-
-func InitOkexdm() exchange.Exchange {
-	coin.Init()
-	pair.Init()
-
-	config := &exchange.Config{}
-	config.Source = exchange.EXCHANGE_API
-	conf.Exchange(exchange.OKEXDM, config)
-
-	ex := okexdm.CreateOkexdm(config)
-	log.Printf("Initial [ %v ] ", ex.GetName())
-
-	config = nil
-	return ex
 }

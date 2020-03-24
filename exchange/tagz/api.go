@@ -382,10 +382,10 @@ func (e *Tagz) getAllBalance(operation *exchange.AccountOperation) error {
 	// balanceList := []exchange.AssetBalance{}
 
 	mapParams := make(map[string]string)
-	if operation.BalanceType == exchange.AssetWallet {
+	if operation.Wallet == exchange.AssetWallet {
 		mapParams["type"] = "main" // "trade"
 		accountType = "main"
-	} else if operation.BalanceType == exchange.SpotWallet {
+	} else if operation.Wallet == exchange.SpotWallet {
 		mapParams["type"] = "trade"
 		accountType = "trade"
 	}
@@ -443,10 +443,10 @@ func (e *Tagz) getBalance(operation *exchange.AccountOperation) error {
 
 	mapParams := make(map[string]string)
 	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
-	if operation.BalanceType == exchange.AssetWallet {
+	if operation.Wallet == exchange.AssetWallet {
 		mapParams["type"] = "main" // "trade"
 		accountType = "main"
-	} else if operation.BalanceType == exchange.SpotWallet {
+	} else if operation.Wallet == exchange.SpotWallet {
 		mapParams["type"] = "trade"
 		accountType = "trade"
 	}

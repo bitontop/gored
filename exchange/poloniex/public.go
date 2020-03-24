@@ -20,6 +20,11 @@ func (e *Poloniex) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
+	case exchange.Orderbook:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doSpotOrderBook(operation)
+		}
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
@@ -94,5 +99,66 @@ func (e *Poloniex) doTradeHistory(operation *exchange.PublicOperation) error {
 		}
 	}
 
+	return nil
+}
+
+func (e *Poloniex) doSpotOrderBook(op *exchange.PublicOperation) error {
+	orderBook := OrderBook{}
+	symbol := e.GetSymbolByPair(op.Pair)
+
+	mapParams := make(map[string]string)
+	mapParams["command"] = "returnOrderBook"
+	mapParams["currencyPair"] = symbol
+
+	maker := &exchange.Maker{
+		Source:          exchange.EXCHANGE_API,
+		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
+	}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/public?%s", API_URL, exchange.Map2UrlQuery(mapParams)),
+		Proxy:     op.Proxy,
+		DebugMode: op.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		op.Error = err
+		return op.Error
+	}
+
+	jsonOrderbook := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
+		return fmt.Errorf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
+	}
+
+	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
+
+	var err error
+	for _, bid := range orderBook.Bids {
+		var buydata exchange.Order
+
+		//Modify according to type and structure
+		buydata.Rate, err = strconv.ParseFloat(bid[0].(string), 64)
+		if err != nil {
+			return fmt.Errorf("Poloniex Bids Rate ParseFloat error:%v", err)
+		}
+		buydata.Quantity = bid[1].(float64)
+
+		maker.Bids = append(maker.Bids, buydata)
+	}
+	for _, ask := range orderBook.Asks {
+		var selldata exchange.Order
+
+		//Modify according to type and structure
+		selldata.Rate, err = strconv.ParseFloat(ask[0].(string), 64)
+		if err != nil {
+			return fmt.Errorf("Poloniex Asks Rate ParseFloat error:%v", err)
+		}
+		selldata.Quantity = ask[1].(float64)
+
+		maker.Asks = append(maker.Asks, selldata)
+	}
+	maker.LastUpdateID = orderBook.Seq
+
+	op.Maker = maker
 	return nil
 }
