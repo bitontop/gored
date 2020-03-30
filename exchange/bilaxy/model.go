@@ -13,33 +13,36 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData []struct {
-	ID             string  `json:"id"`
-	AssetCode      string  `json:"assetCode"`
-	AssetName      string  `json:"assetName"`
-	Website        string  `json:"website"`
-	BlockURL       string  `json:"blockUrl"`
-	TransactionFee float64 `json:"transactionFee"`
-	EnableCharge   bool    `json:"enableCharge"`
-	EnableWithdraw bool    `json:"enableWithdraw"`
-	Confirmations  int     `json:"confirmations"`
-	Delisted       bool    `json:"delisted"`
+type CoinsData struct {
+	Currency                string `json:"currency"`
+	FullName                string `json:"fullname"`
+	MinWithdraw             string `json:"min_withdraw"`
+	MaxWithdraw             string `json:"max_withdraw"`
+	FixedWithdrawFee        string `json:"fixed_withdraw_fee"`
+	PercentWithdrawFee      string `json:"percent_withdraw_fee"`
+	WithdrawFeeCurrencyId   int    `json:"withdraw_fee_currency_id"`
+	WithdrawFeeCurrencyName string `json:"withdraw_fee_currency_name"`
+	WithdrawEnabled         bool   `json:"withdraw_enabled"`
+	DepositEnabled          bool   `json:"deposit_enabled"`
 }
 
-type PairsData []struct {
-	Symbol      string  `json:"symbol"`
-	Status      string  `json:"status"`
-	BaseAsset   string  `json:"baseAsset"`
-	QuoteAsset  string  `json:"quoteAsset"`
-	MakerFee    float64 `json:"makerFee"`
-	TakerFee    float64 `json:"takerFee"`
-	PriceFilter float64 `json:"priceFilter"`
-	LotSize     float64 `json:"lotSize"`
+type PairsData struct {
+	PairId          int    `json:"pair_id"`
+	Base            string `json:"base"`
+	Quote           string `json:"quote"`
+	PricePrecision  int    `json:"price_precision"`
+	AmountPrecision int    `json:"amount_precision"`
+	MinAmount       string `json:"min_amount"`
+	MaxAmount       string `json:"max_amount"`
+	MinTotal        string `json:"min_total"`
+	MaxTotal        string `json:"max_total"`
+	TradeEnabled    bool   `json:"trade_enabled"`
+	Closed          bool   `json:"closed"`
 }
 
 type OrderBook struct {
-	Bids [][]float64 `json:"bids"`
-	Asks [][]float64 `json:"asks"`
+	Bids [][]string `json:"bids"`
+	Asks [][]string `json:"asks"`
 }
 
 /********** Private API Structure**********/

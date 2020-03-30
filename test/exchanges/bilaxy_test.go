@@ -15,11 +15,12 @@ import (
 
 func Test_Bilaxy(t *testing.T) {
 	e := InitEx(exchange.BILAXY)
-	pair := pair.GetPairByKey("BTC|USDT")
+	pair := pair.GetPairByKey("USDT|ETH")
 
-	//Test_Coins(e)
-	//Test_Pairs(e)
-	//Test_Pair(e, pair)
+	Test_Coins(e)
+	Test_Pairs(e)
+	Test_Pair(e, pair)
+
 	Test_Orderbook(e, pair)
 	//Test_ConstraintFetch(e, pair)
 	//Test_Constraint(e, pair)

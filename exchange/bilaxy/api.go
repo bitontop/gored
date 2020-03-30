@@ -21,7 +21,7 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://api.bilaxy.com"
+	API_URL = "https://newapi.bilaxy.com"
 )
 
 /*API Base Knowledge
@@ -50,61 +50,55 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestPath)*/
 func (e *Bilaxy) GetCoinsData() error {
-	jsonResponse := &JsonResponse{}
-	coinsData := CoinsData{}
-
-	strRequestPath := "/API Path"
-	strUrl := API_URL + strRequestPath
+	//coinsData := CoinsData{}
+	coinsData := make(map[string]*CoinsData)
+	strRequestUrl := "/v1/currencies"
+	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
-		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range coinsData {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.AssetCode)
+			c = coin.GetCoin(data.Currency)
 			if c == nil {
-				c = &coin.Coin{
-					Code:     data.AssetCode,
-					Name:     data.AssetName,
-					Website:  data.Website,
-					Explorer: data.BlockURL,
-				}
+				c = &coin.Coin{}
+				c.Code = data.Currency
+				c.Name = data.FullName
+				//c.Website = data.URL
+				//c.Explorer = data.BlockURL
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.AssetCode)
+			c = e.GetCoinBySymbol(data.Currency)
 		}
 
 		if c != nil {
+			//confirmation, _ := strconv.Atoi(data.ConfirmTimes)
 			coinConstraint := e.GetCoinConstraint(c)
+			txFee, _ := strconv.ParseFloat(data.FixedWithdrawFee, 64)
 			if coinConstraint == nil {
 				coinConstraint = &exchange.CoinConstraint{
-					CoinID:       c.ID,
-					Coin:         c,
-					ExSymbol:     data.AssetCode,
-					ChainType:    exchange.MAINNET,
-					TxFee:        data.TransactionFee,
-					Withdraw:     data.EnableWithdraw,
-					Deposit:      data.EnableCharge,
-					Confirmation: data.Confirmations,
-					Listed:       !data.Delisted,
+					CoinID:    c.ID,
+					Coin:      c,
+					ExSymbol:  data.Currency,
+					ChainType: exchange.MAINNET,
+					TxFee:     txFee,
+					Withdraw:  data.WithdrawEnabled,
+					Deposit:   data.DepositEnabled,
+					//Confirmation: confirmation,
+					Listed: true,
 				}
 			} else {
-				coinConstraint.ExSymbol = data.AssetCode
-				coinConstraint.TxFee = data.TransactionFee
-				coinConstraint.Withdraw = data.EnableWithdraw
-				coinConstraint.Deposit = data.EnableCharge
-				coinConstraint.Confirmation = data.Confirmations
-				coinConstraint.Listed = !data.Delisted
+				coinConstraint.ExSymbol = data.Currency
+				coinConstraint.TxFee = txFee
+				coinConstraint.Withdraw = data.WithdrawEnabled
+				coinConstraint.Deposit = data.DepositEnabled
+				//coinConstraint.Confirmation = confirmation
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -118,57 +112,49 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Bilaxy) GetPairsData() error {
-	jsonResponse := &JsonResponse{}
-	pairsData := PairsData{}
-
-	strRequestPath := "/API Path"
-	strUrl := API_URL + strRequestPath
+	//pairsData := PairsData{}
+	pairsData := make(map[string]*PairsData)
+	strRequestUrl := "/v1/pairs"
+	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
-	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
-	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
-		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range pairsData {
-		if data.Status == "TRADING" {
-			p := &pair.Pair{}
-			switch e.Source {
-			case exchange.EXCHANGE_API:
-				base := coin.GetCoin(data.QuoteAsset)
-				target := coin.GetCoin(data.BaseAsset)
-				if base != nil && target != nil {
-					p = pair.GetPair(base, target)
-				}
-			case exchange.JSON_FILE:
-				p = e.GetPairBySymbol(data.Symbol)
+		p := &pair.Pair{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			base := coin.GetCoin(data.Quote)
+			target := coin.GetCoin(data.Base)
+			if base != nil && target != nil {
+				p = pair.GetPair(base, target)
 			}
-			if p != nil {
-				pairConstraint := e.GetPairConstraint(p)
-				if pairConstraint == nil {
-					pairConstraint = &exchange.PairConstraint{
-						PairID:      p.ID,
-						Pair:        p,
-						ExSymbol:    data.Symbol,
-						MakerFee:    data.MakerFee,
-						TakerFee:    data.TakerFee,
-						LotSize:     data.LotSize,
-						PriceFilter: data.PriceFilter,
-						Listed:      true,
-					}
-				} else {
-					pairConstraint.ExSymbol = data.Symbol
-					pairConstraint.MakerFee = data.MakerFee
-					pairConstraint.TakerFee = data.TakerFee
-					pairConstraint.LotSize = data.LotSize
-					pairConstraint.PriceFilter = data.PriceFilter
+		case exchange.JSON_FILE:
+			p = e.GetPairBySymbol(fmt.Sprintf("%s_%s", data.Base, data.Quote))
+		}
+		//fmt.Println("%s",p)
+		if p != nil {
+			pairConstraint := e.GetPairConstraint(p)
+			if pairConstraint == nil {
+				pairConstraint = &exchange.PairConstraint{
+					PairID:   p.ID,
+					Pair:     p,
+					ExSymbol: fmt.Sprintf("%s_%s", data.Base, data.Quote),
+					//MakerFee:    data.AskFee,
+					//TakerFee:    data.BidFee,
+					LotSize:     DEFAULT_LOT_SIZE,
+					PriceFilter: DEFAULT_PRICE_FILTER,
+					Listed:      true,
 				}
-				e.SetPairConstraint(pairConstraint)
+			} else {
+				pairConstraint.ExSymbol = fmt.Sprintf("%s_%s", data.Base, data.Quote)
+				//pairConstraint.MakerFee = data.AskFee
+				//pairConstraint.TakerFee = data.BidFee
 			}
+			//fmt.Println("%s",pairConstraint)
+			e.SetPairConstraint(pairConstraint)
 		}
 	}
 	return nil
@@ -187,10 +173,9 @@ func (e *Bilaxy) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	symbol := e.GetSymbolByPair(p)
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = symbol
-	mapParams["merge"] = "100"
+	mapParams["pair"] = symbol
 
-	strRequestPath := "/v1/depth"
+	strRequestPath := "/v1/orderbook"
 	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{
@@ -200,12 +185,8 @@ func (e *Bilaxy) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	}
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
+
+	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
@@ -214,15 +195,19 @@ func (e *Bilaxy) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	var err error
 	for _, bid := range orderBook.Bids {
 		buydata := exchange.Order{}
-		buydata.Quantity = bid[1]
-		buydata.Rate = bid[0]
+		bid0, _ := strconv.ParseFloat(bid[0], 64)
+		bid1, _ := strconv.ParseFloat(bid[1], 64)
+		buydata.Quantity = bid1
+		buydata.Rate = bid0
 		maker.Bids = append(maker.Bids, buydata)
 	}
 
 	for _, ask := range orderBook.Asks {
 		selldata := exchange.Order{}
-		selldata.Quantity = ask[1]
-		selldata.Rate = ask[0]
+		ask0, _ := strconv.ParseFloat(ask[0], 64)
+		ask1, _ := strconv.ParseFloat(ask[1], 64)
+		selldata.Quantity = ask1
+		selldata.Rate = ask0
 		maker.Asks = append(maker.Asks, selldata)
 	}
 
