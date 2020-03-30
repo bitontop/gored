@@ -257,7 +257,7 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Hibitex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/

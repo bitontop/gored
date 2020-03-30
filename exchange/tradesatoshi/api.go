@@ -218,7 +218,7 @@ func (e *TradeSatoshi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 
 func (e *TradeSatoshi) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 

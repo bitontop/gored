@@ -244,7 +244,7 @@ func (e *Bitbay) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bitbay) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/

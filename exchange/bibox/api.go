@@ -263,7 +263,7 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bibox) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/

@@ -259,7 +259,7 @@ func (e *Digifinex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Digifinex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/

@@ -218,7 +218,7 @@ func (e *Bitmart) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bitmart) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/

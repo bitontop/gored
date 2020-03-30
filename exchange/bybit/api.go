@@ -237,7 +237,7 @@ func (e *Bybit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bybit) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
