@@ -83,22 +83,22 @@ func (e *Bilaxy) GetCoinsData() error {
 			txFee, _ := strconv.ParseFloat(data.FixedWithdrawFee, 64)
 			if coinConstraint == nil {
 				coinConstraint = &exchange.CoinConstraint{
-					CoinID:    c.ID,
-					Coin:      c,
-					ExSymbol:  data.Currency,
-					ChainType: exchange.MAINNET,
-					TxFee:     txFee,
-					Withdraw:  data.WithdrawEnabled,
-					Deposit:   data.DepositEnabled,
-					//Confirmation: confirmation,
-					Listed: true,
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Currency,
+					ChainType:    exchange.MAINNET,
+					TxFee:        txFee,
+					Withdraw:     data.WithdrawEnabled,
+					Deposit:      data.DepositEnabled,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
 				}
 			} else {
 				coinConstraint.ExSymbol = data.Currency
 				coinConstraint.TxFee = txFee
 				coinConstraint.Withdraw = data.WithdrawEnabled
 				coinConstraint.Deposit = data.DepositEnabled
-				//coinConstraint.Confirmation = confirmation
+				coinConstraint.Confirmation = DEFAULT_CONFIRMATION
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -122,7 +122,7 @@ func (e *Bilaxy) GetPairsData() error {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
-	for _, data := range pairsData {
+	for key, data := range pairsData {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
@@ -132,28 +132,27 @@ func (e *Bilaxy) GetPairsData() error {
 				p = pair.GetPair(base, target)
 			}
 		case exchange.JSON_FILE:
-			p = e.GetPairBySymbol(fmt.Sprintf("%s_%s", data.Base, data.Quote))
+			p = e.GetPairBySymbol(key)
 		}
-		//fmt.Println("%s",p)
+
 		if p != nil {
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
 				pairConstraint = &exchange.PairConstraint{
-					PairID:   p.ID,
-					Pair:     p,
-					ExSymbol: fmt.Sprintf("%s_%s", data.Base, data.Quote),
-					//MakerFee:    data.AskFee,
-					//TakerFee:    data.BidFee,
+					PairID:      p.ID,
+					Pair:        p,
+					ExSymbol:    key,
+					MakerFee:    DEFAULT_MAKER_FEE,
+					TakerFee:    DEFAULT_TAKER_FEE,
 					LotSize:     DEFAULT_LOT_SIZE,
 					PriceFilter: DEFAULT_PRICE_FILTER,
 					Listed:      true,
 				}
 			} else {
-				pairConstraint.ExSymbol = fmt.Sprintf("%s_%s", data.Base, data.Quote)
-				//pairConstraint.MakerFee = data.AskFee
-				//pairConstraint.TakerFee = data.BidFee
+				pairConstraint.ExSymbol = key
+				pairConstraint.MakerFee = DEFAULT_MAKER_FEE
+				pairConstraint.TakerFee = DEFAULT_TAKER_FEE
 			}
-			//fmt.Println("%s",pairConstraint)
 			e.SetPairConstraint(pairConstraint)
 		}
 	}
@@ -189,7 +188,7 @@ func (e *Bilaxy) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
-
+	fmt.Println("%s", orderBook)
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
