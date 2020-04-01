@@ -9,7 +9,7 @@ import (
 	"github.com/bitontop/gored/exchange"
 )
 
-func (e *Binance) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)

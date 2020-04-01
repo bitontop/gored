@@ -271,7 +271,7 @@ func (e *Homiex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 /*************** Public API ***************/
 
 /*************** Private API ***************/
-func (e *Homiex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Homiex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -312,7 +312,6 @@ func (e *Homiex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 
@@ -350,7 +349,6 @@ func (e *Homiex) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -394,7 +392,6 @@ func (e *Homiex) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonBalanceReturn
 	}
 

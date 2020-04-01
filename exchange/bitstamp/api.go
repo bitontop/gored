@@ -252,7 +252,7 @@ func (e *Bitstamp) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitstamp) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitstamp) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

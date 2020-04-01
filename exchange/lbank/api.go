@@ -220,7 +220,7 @@ func (e *Lbank) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Lbank) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Lbank) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -257,7 +257,6 @@ func (e *Lbank) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonWithdrawReturn := e.ApiKeyPost(strRequest, make(map[string]string))
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonWithdrawReturn
 	}
 

@@ -57,7 +57,7 @@ func Test_Binance(t *testing.T) {
 		Quantity:       0.01,
 		DebugMode:      true,
 	}
-	err = e.DoAccoutOperation(opPlaceOrder)
+	err = e.DoAccountOperation(opPlaceOrder)
 	if err != nil {
 		log.Printf("==%v", err)
 	}
@@ -76,7 +76,7 @@ func Test_Binance(t *testing.T) {
 		Order:     order,
 		DebugMode: true,
 	}
-	err = e.DoAccoutOperation(opOrderStatus)
+	err = e.DoAccountOperation(opOrderStatus)
 	if err != nil {
 		log.Printf("==%v", err)
 	}
@@ -95,7 +95,7 @@ func Test_Binance(t *testing.T) {
 		Order:     order,
 		DebugMode: true,
 	}
-	err = e.DoAccoutOperation(opCancelOrder)
+	err = e.DoAccountOperation(opCancelOrder)
 	if err != nil {
 		log.Printf("==%v", err)
 	}
@@ -108,7 +108,7 @@ func Test_Binance(t *testing.T) {
 		Ex:        e.GetName(),
 		DebugMode: true,
 	}
-	err = e.DoAccoutOperation(opAllBalance)
+	err = e.DoAccountOperation(opAllBalance)
 	if err != nil {
 		log.Printf("==%v", err)
 	}

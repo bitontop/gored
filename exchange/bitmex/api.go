@@ -248,7 +248,7 @@ func (e *Bitmex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bitmex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitmex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

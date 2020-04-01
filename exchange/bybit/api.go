@@ -241,7 +241,7 @@ func (e *Bybit) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bybit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bybit) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

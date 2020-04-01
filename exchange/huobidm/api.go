@@ -251,7 +251,7 @@ func (e *Huobidm) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Huobidm) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Huobidm) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

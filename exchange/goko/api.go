@@ -249,7 +249,7 @@ func (e *Goko) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Goko) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Goko) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

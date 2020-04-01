@@ -230,7 +230,7 @@ func (e *Bkex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 /*************** Public API ***************/
 
 /*************** Private API ***************/
-func (e *Bkex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bkex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.BalanceList:
 		return e.getAllBalance(operation)
@@ -255,7 +255,6 @@ func (e *Bkex) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
 	if operation.DebugMode {
 		operation.RequestURI = strRequestPath
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -301,7 +300,6 @@ func (e *Bkex) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
 	if operation.DebugMode {
 		operation.RequestURI = strRequestPath
-		operation.MapParams = ""
 		operation.CallResponce = jsonBalanceReturn
 	}
 
@@ -355,7 +353,6 @@ func (e *Bkex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyGet(strRequestPath, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestPath
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

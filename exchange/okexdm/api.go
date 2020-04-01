@@ -201,7 +201,7 @@ func (e *Okexdm) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Okexdm) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Okexdm) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

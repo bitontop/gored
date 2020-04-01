@@ -243,7 +243,7 @@ func (e *Tokok) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Tokok) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Tokok) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

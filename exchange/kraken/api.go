@@ -246,7 +246,7 @@ func (e *Kraken) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Kraken) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Kraken) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -286,7 +286,6 @@ func (e *Kraken) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequestPath, values, &WithdrawResponse{})
 	if operation.DebugMode {
 		operation.RequestURI = strRequestPath
-		operation.MapParams = fmt.Sprintf("%+v", values)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

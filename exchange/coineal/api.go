@@ -258,7 +258,7 @@ func (e *Coineal) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Coineal) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Coineal) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

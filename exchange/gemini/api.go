@@ -252,7 +252,7 @@ func (e *Gemini) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Gemini) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Gemini) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 
