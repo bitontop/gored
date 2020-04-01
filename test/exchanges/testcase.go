@@ -332,12 +332,11 @@ func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
 	}
 }
 
-func Test_AODepositAddress(e exchange.Exchange, pair *pair.Pair) {
+func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
 	op := &exchange.AccountOperation{
 		Type: exchange.GetOpenOrder,
 		Ex:   e.GetName(),
-		Coin: pair.Base,
-		Pair: pair,
+		Coin: coin,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -364,7 +363,7 @@ func Test_AODepositHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type: exchange.GetOpenOrder,
+		Type: exchange.GetWithdrawalHistory,
 		Ex:   e.GetName(),
 		Coin: pair.Base,
 		Pair: pair,
