@@ -102,7 +102,7 @@ func (e *Bilaxy) GetName() exchange.ExchangeName {
 }
 
 func (e *Bilaxy) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.bilaxy.com/marker/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	return fmt.Sprintf("https://bilaxy.com/trade/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
 }
 
 func (e *Bilaxy) GetBalance(coin *coin.Coin) float64 {
@@ -229,18 +229,18 @@ func (e *Bilaxy) DeletePair(pair *pair.Pair) {
 /**************** Exchange Constraint ****************/
 func (e *Bilaxy) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
-	constrainFetchMethod.PublicAPI = false
+	constrainFetchMethod.PublicAPI = true
 	constrainFetchMethod.PrivateAPI = false
 	constrainFetchMethod.HealthAPI = false
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
-	constrainFetchMethod.TxFee = false
-	constrainFetchMethod.Withdraw = false
-	constrainFetchMethod.Deposit = false
-	constrainFetchMethod.Confirmation = false
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
+	constrainFetchMethod.TxFee = true
+	constrainFetchMethod.Withdraw = true
+	constrainFetchMethod.Deposit = true
+	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 1
 	constrainFetchMethod.ApiRestrictIP = false
 	return constrainFetchMethod

@@ -98,7 +98,7 @@ func (e *Bilaxy) GetCoinsData() error {
 				coinConstraint.TxFee = txFee
 				coinConstraint.Withdraw = data.WithdrawEnabled
 				coinConstraint.Deposit = data.DepositEnabled
-				coinConstraint.Confirmation = DEFAULT_CONFIRMATION
+				//coinConstraint.Confirmation = DEFAULT_CONFIRMATION
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -144,14 +144,14 @@ func (e *Bilaxy) GetPairsData() error {
 					ExSymbol:    key,
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     DEFAULT_LOT_SIZE,
-					PriceFilter: DEFAULT_PRICE_FILTER,
+					LotSize:     float64(data.AmountPrecision),
+					PriceFilter: float64(data.PricePrecision),
 					Listed:      true,
 				}
 			} else {
 				pairConstraint.ExSymbol = key
-				pairConstraint.MakerFee = DEFAULT_MAKER_FEE
-				pairConstraint.TakerFee = DEFAULT_TAKER_FEE
+				//pairConstraint.MakerFee = DEFAULT_MAKER_FEE
+				//pairConstraint.TakerFee = DEFAULT_TAKER_FEE
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
