@@ -261,7 +261,7 @@ func (e *Binance) DoAccoutOperation(operation *exchange.AccountOperation) error 
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractPlaceOrder(operation)
 		}
-	case exchange.OrderStatusOp:
+	case exchange.GetOrderStatus:
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractOrderStatus(operation)
 		}

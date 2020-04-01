@@ -167,16 +167,24 @@ const (
 	Balance     OperationType = "Balance"    // balance(s) of different accounts
 	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
 
-	GetCoin       OperationType = "GetCoin"
-	GetPair       OperationType = "GetPair"
-	Orderbook     OperationType = "Orderbook"
+	//Public Query
+	GetCoin OperationType = "GetCoin"
+	GetPair OperationType = "GetPair"
+
 	TradeHistory  OperationType = "TradeHistory"
+	Orderbook     OperationType = "Orderbook"
 	CoinChainType OperationType = "CoinChainType"
 
-	// ##### New - Contract
-	PlaceOrder    OperationType = "PlaceOrder"
-	OrderStatusOp OperationType = "OrderStatus"
-	CancelOrder   OperationType = "CancelOrder"
+	//Trade (Private Action)
+	PlaceOrder  OperationType = "PlaceOrder"
+	CancelOrder OperationType = "CancelOrder"
+
+	//User (Private Action)
+	GetOpenOrder         OperationType = "GetOpenOrder"
+	GetOrderHistory      OperationType = "GetOrderStatus"
+	GetDepositHistory    OperationType = "GetDepositHistory"
+	GetWithdrawalHistory OperationType = "GetWithdrawalHistory"
+	GetDepositAddress    OperationType = "GetDepositAddress"
 )
 
 type WalletType string
@@ -223,9 +231,10 @@ type AccountOperation struct {
 	BalanceList []AssetBalance `json:"balance_list"`
 
 	//#Debug
-	DebugMode    bool   `json:"debug mode"`
-	RequestURI   string `json:"request_uri"`
-	MapParams    string `json:"map_params"`
+	DebugMode  bool   `json:"debug_mode"`
+	RequestURI string `json:"request_uri"`
+
+	// MapParams    string `json:"map_params"`
 	CallResponce string `json:"call_responce"`
 	Error        error  `json:"error"`
 

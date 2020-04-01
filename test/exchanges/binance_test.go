@@ -70,7 +70,7 @@ func Test_Binance(t *testing.T) {
 	}
 	opOrderStatus := &exchange.AccountOperation{
 		Wallet:    exchange.ContractWallet,
-		Type:      exchange.OrderStatusOp,
+		Type:      exchange.GetOrderStatus,
 		Ex:        e.GetName(),
 		Pair:      pair,
 		Order:     order,
