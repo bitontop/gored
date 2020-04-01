@@ -44,7 +44,7 @@ func Test_Huobi(t *testing.T) {
 	// time.Sleep(time.Second * 5)
 	// Test_AOOrderHistory(e, pair)
 	// time.Sleep(time.Second * 5)
-	Test_AODepositAddress(e, pair)
+	Test_AODepositAddress(e, pair.Base)
 	time.Sleep(time.Second * 5)
 	Test_AODepositHistory(e, pair)
 	time.Sleep(time.Second * 5)
