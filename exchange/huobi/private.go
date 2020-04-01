@@ -238,6 +238,7 @@ func (e *Huobi) getDepositAddress(op *exchange.AccountOperation) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
+	op.DepositAddresses = make(map[exchange.ChainType]*exchange.DepositAddr)
 	jsonResponse := &JsonResponse{}
 	address := []*DepositAddress{}
 	strRequest := "/v2/account/deposit/address"
@@ -254,7 +255,7 @@ func (e *Huobi) getDepositAddress(op *exchange.AccountOperation) error {
 	if err := json.Unmarshal([]byte(jsonDepositAddress), &jsonResponse); err != nil {
 		op.Error = fmt.Errorf("%s Get Deposit Address Json Unmarshal Err: %v, %s", e.GetName(), err, jsonDepositAddress)
 		return op.Error
-	} else if jsonResponse.Status != "ok" {
+	} else if jsonResponse.Code != 200 {
 		op.Error = fmt.Errorf("%s Get Deposit Address Failed: %v", e.GetName(), jsonDepositAddress)
 		return op.Error
 	}
@@ -268,7 +269,11 @@ func (e *Huobi) getDepositAddress(op *exchange.AccountOperation) error {
 			Coin:    op.Coin,
 			Address: data.Address,
 			Tag:     data.AddressTag,
-			Chain:   exchange.MAINNET,
+		}
+		if data.Currency == data.Chain {
+			addr.Chain = exchange.MAINNET
+		} else {
+			addr.Chain = exchange.ERC20
 		}
 		op.DepositAddresses[addr.Chain] = addr
 	}
@@ -318,7 +323,7 @@ func (e *Huobi) getDepositHistory(op *exchange.AccountOperation) error {
 		}
 		result = append(result, history)
 	}
-	op.WithdrawalHistory = result
+	op.DepositHistory = result
 
 	return nil
 }
