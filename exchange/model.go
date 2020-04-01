@@ -293,6 +293,8 @@ type WDHistory struct {
 	Tag       string     `json:"tag"`
 	Address   string     `json:"address"`
 	TxHash    string     `json:"txhash"`
+	ChainType ChainType  `json:"chain_type"`
+	Status    string     `json:"status"`
 	TimeStamp int64      `json:"timestamp"`
 }
 
