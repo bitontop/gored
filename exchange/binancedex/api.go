@@ -224,7 +224,7 @@ func (e *BinanceDex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *BinanceDex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *BinanceDex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

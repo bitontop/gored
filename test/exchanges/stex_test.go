@@ -41,7 +41,7 @@ func Test_Stex(t *testing.T) {
 	// 	WithdrawAddress: "addr",
 	// 	DebugMode:       true,
 	// }
-	// err := e.DoAccoutOperation(opWithdraw)
+	// err := e.DoAccountOperation(opWithdraw)
 	// if err != nil {
 	// 	log.Printf("%v", err)
 	// }

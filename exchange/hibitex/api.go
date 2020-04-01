@@ -261,7 +261,7 @@ func (e *Hibitex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Hibitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Hibitex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

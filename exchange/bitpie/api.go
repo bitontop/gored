@@ -238,7 +238,7 @@ func (e *Bitpie) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bitpie) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitpie) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -272,7 +272,6 @@ func (e *Bitpie) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

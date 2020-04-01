@@ -265,7 +265,7 @@ func (e *Mxc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 /*************** Public API ***************/
 
 /*************** Private API ***************/
-func (e *Mxc) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Mxc) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.BalanceList:
 		return e.getAllBalance(operation)

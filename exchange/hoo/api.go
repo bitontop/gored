@@ -272,7 +272,7 @@ func (e *Hoo) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Hoo) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Hoo) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -304,7 +304,6 @@ func (e *Hoo) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -359,7 +358,6 @@ func (e *Hoo) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonBalanceReturn
 	}
 

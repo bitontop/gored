@@ -216,7 +216,7 @@ func (e *BitATM) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *BitATM) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *BitATM) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

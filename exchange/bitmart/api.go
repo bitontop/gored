@@ -222,7 +222,7 @@ func (e *Bitmart) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bitmart) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitmart) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

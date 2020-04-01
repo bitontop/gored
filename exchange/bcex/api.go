@@ -267,7 +267,7 @@ func (e *Bcex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bcex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bcex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

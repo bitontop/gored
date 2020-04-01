@@ -8,7 +8,7 @@ import (
 	"github.com/bitontop/gored/exchange"
 )
 
-func (e *Huobi) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:

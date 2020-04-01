@@ -28,7 +28,6 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -95,7 +94,6 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	jsonCreatePlaceOrder := e.ContractApiKeyRequest("POST", mapParams, strRequestUrl)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonCreatePlaceOrder
 	}
 
@@ -142,7 +140,6 @@ func (e *Binance) doContractOrderStatus(operation *exchange.AccountOperation) er
 	jsonCreateOrderStatus := e.ContractApiKeyRequest("GET", mapParams, strRequestUrl)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonCreateOrderStatus
 	}
 
@@ -194,7 +191,6 @@ func (e *Binance) doContractCancelOrder(operation *exchange.AccountOperation) er
 	jsonCreateCancelOrder := e.ContractApiKeyRequest("DELETE", mapParams, strRequestUrl)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonCreateCancelOrder
 	}
 

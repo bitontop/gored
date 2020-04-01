@@ -176,12 +176,13 @@ const (
 	CoinChainType OperationType = "CoinChainType"
 
 	//Trade (Private Action)
-	PlaceOrder  OperationType = "PlaceOrder"
-	CancelOrder OperationType = "CancelOrder"
+	PlaceOrder     OperationType = "PlaceOrder"
+	CancelOrder    OperationType = "CancelOrder"
+	GetOrderStatus OperationType = "GetOrderStatus"
 
 	//User (Private Action)
-	GetOpenOrder         OperationType = "GetOpenOrder"   // New and Partial Orders
-	GetOrderHistory      OperationType = "GetOrderStatus" // All Orders other than open orders
+	GetOpenOrder         OperationType = "GetOpenOrder"    // New and Partial Orders
+	GetOrderHistory      OperationType = "GetOrderHistory" // All Orders other than open orders
 	GetDepositHistory    OperationType = "GetDepositHistory"
 	GetWithdrawalHistory OperationType = "GetWithdrawalHistory"
 	GetDepositAddress    OperationType = "GetDepositAddress" // Get address for one coin

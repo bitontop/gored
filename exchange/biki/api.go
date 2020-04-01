@@ -265,7 +265,7 @@ func (e *Biki) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Biki) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Biki) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

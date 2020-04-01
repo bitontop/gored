@@ -245,7 +245,7 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Private API ***************/
 
-func (e *Binance) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
@@ -303,7 +303,6 @@ func (e *Binance) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

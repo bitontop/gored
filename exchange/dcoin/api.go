@@ -253,7 +253,7 @@ func (e *Dcoin) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Dcoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Dcoin) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

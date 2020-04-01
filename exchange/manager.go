@@ -78,7 +78,7 @@ type Exchange interface {
 
 	/***** Ver 2.0  Operation Base Interface *****/
 	LoadPublicData(operation *PublicOperation) error
-	DoAccoutOperation(operation *AccountOperation) error
+	DoAccountOperation(operation *AccountOperation) error
 }
 
 type ExchangeManager struct {

@@ -231,7 +231,7 @@ func (e *Bitmax) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bitmax) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitmax) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

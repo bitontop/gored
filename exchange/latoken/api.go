@@ -225,7 +225,7 @@ func (e *Latoken) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Latoken) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Latoken) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	// case exchange.Transfer:
 	// 	return e.transfer(operation)
@@ -256,7 +256,6 @@ func (e *Latoken) doWithdraw(operation *exchange.AccountOperation) error { // TO
 	jsonSubmitWithdraw := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

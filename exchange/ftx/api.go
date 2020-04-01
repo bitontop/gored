@@ -212,7 +212,7 @@ func (e *Ftx) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Ftx) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Ftx) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

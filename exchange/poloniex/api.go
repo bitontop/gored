@@ -220,7 +220,7 @@ func (e *Poloniex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Poloniex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Poloniex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -259,7 +259,6 @@ func (e *Poloniex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

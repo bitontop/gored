@@ -280,7 +280,7 @@ func (e *Newcapital) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Newcapital) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Newcapital) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

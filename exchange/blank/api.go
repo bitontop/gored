@@ -234,7 +234,7 @@ func (e *Blank) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Blank) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Blank) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

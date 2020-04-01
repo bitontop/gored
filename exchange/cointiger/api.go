@@ -274,7 +274,7 @@ func (e *Cointiger) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Cointiger) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Cointiger) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

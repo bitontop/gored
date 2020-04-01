@@ -210,7 +210,7 @@ func (e *Bittrex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bittrex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bittrex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -249,7 +249,6 @@ func (e *Bittrex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

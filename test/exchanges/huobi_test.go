@@ -38,4 +38,10 @@ func Test_Huobi(t *testing.T) {
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
 	// Test_TradeHistory(e, pair)
+
+	Test_AOOpenOrder(e, pair)
+	Test_AOOrderHistory(e, pair)
+	Test_AODepositAddress(e, pair)
+	Test_AODepositHistory(e, pair)
+	Test_AOWithdrawalHistory(e, pair)
 }

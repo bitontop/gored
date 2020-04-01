@@ -226,7 +226,7 @@ func (e *Idex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Idex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Idex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 
