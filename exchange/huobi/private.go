@@ -265,17 +265,15 @@ func (e *Huobi) getDepositAddress(op *exchange.AccountOperation) error {
 	}
 
 	for _, data := range address {
-		addr := &exchange.DepositAddr{
-			Coin:    op.Coin,
-			Address: data.Address,
-			Tag:     data.AddressTag,
-		}
 		if data.Currency == data.Chain {
-			addr.Chain = exchange.MAINNET
-		} else {
-			addr.Chain = exchange.ERC20
+			addr := &exchange.DepositAddr{
+				Coin:    op.Coin,
+				Address: data.Address,
+				Tag:     data.AddressTag,
+				Chain:   exchange.MAINNET,
+			}
+			op.DepositAddresses[addr.Chain] = addr
 		}
-		op.DepositAddresses[addr.Chain] = addr
 	}
 
 	return nil
