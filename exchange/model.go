@@ -180,11 +180,11 @@ const (
 	CancelOrder OperationType = "CancelOrder"
 
 	//User (Private Action)
-	GetOpenOrder         OperationType = "GetOpenOrder"
-	GetOrderHistory      OperationType = "GetOrderStatus"
+	GetOpenOrder         OperationType = "GetOpenOrder"   // New and Partial Orders
+	GetOrderHistory      OperationType = "GetOrderStatus" // All Orders other than open orders
 	GetDepositHistory    OperationType = "GetDepositHistory"
 	GetWithdrawalHistory OperationType = "GetWithdrawalHistory"
-	GetDepositAddress    OperationType = "GetDepositAddress"
+	GetDepositAddress    OperationType = "GetDepositAddress" // Get address for one coin
 )
 
 type WalletType string
@@ -230,6 +230,18 @@ type AccountOperation struct {
 	//Coin = nil
 	BalanceList []AssetBalance `json:"balance_list"`
 
+	// #OpenOrder, OrderHistory
+	OpenOrders   []*Order
+	OrderHistory []*Order
+
+	// #GetWithdrawal/DepositHistory
+	WithdrawalHistory []*WDHistory
+	DepositHistory    []*WDHistory
+
+	// #GetDepositAddress
+	// Input: Coin. Get addresses for mainnet and erc20.
+	DepositAddresses map[string]*DepositAddr // key: chainType
+
 	//#Debug
 	DebugMode  bool   `json:"debug_mode"`
 	RequestURI string `json:"request_uri"`
@@ -272,6 +284,22 @@ type PublicOperation struct {
 
 	// ##### New Changes - Contract
 	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
+}
+
+type WDHistory struct {
+	ID        string     `json:"id"`
+	Coin      *coin.Coin `json:"wd_history_coin"`
+	Quantity  float64    `json:"quantity"`
+	Tag       string     `json:"tag"`
+	Address   string     `json:"address"`
+	TimeStamp int64      `json:"timestamp"`
+}
+
+type DepositAddr struct {
+	Coin    *coin.Coin `json:"wd_history_coin"`
+	Address string     `json:"address"`
+	Tag     string     `json:"tag"`
+	Chain   ChainType  `json:"chain_type"`
 }
 
 type AssetBalance struct {
