@@ -84,7 +84,7 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 
-	jsonGetOpenOrder := e.WApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetOpenOrder := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
@@ -158,7 +158,7 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 
-	jsonGetOpenOrder := e.WApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetOpenOrder := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
@@ -288,71 +288,76 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
 	}
 
-	withdrawHistory := WithdrawHistory{}
+	depositHistory := DepositHistory{}
 	strRequest := "/sapi/v1/capital/deposit/hisrec"
 
 	mapParams := make(map[string]string)
 
-	jsonGetWithdrawalHistory := e.WApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetDepositHistory := e.WApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
-		operation.CallResponce = jsonGetWithdrawalHistory
+		operation.CallResponce = jsonGetDepositHistory
 	}
 
-	if err := json.Unmarshal([]byte(jsonGetWithdrawalHistory), &withdrawHistory); err != nil {
-		operation.Error = fmt.Errorf("%s doGetWithdrawalHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetWithdrawalHistory)
+	if err := json.Unmarshal([]byte(jsonGetDepositHistory), &depositHistory); err != nil {
+		operation.Error = fmt.Errorf("%s doGetDepositHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetDepositHistory)
 		return operation.Error
 	}
 
 	// store info into orders
-	for _, withdrawRecord := range withdrawHistory {
-		c := e.GetCoinBySymbol(withdrawRecord.Coin)
-		quantity, err := strconv.ParseFloat(withdrawRecord.Amount, 64)
+	for _, depositRecord := range depositHistory {
+		c := e.GetCoinBySymbol(depositRecord.Coin)
+		quantity, err := strconv.ParseFloat(depositRecord.Amount, 64)
 		if err != nil {
-			operation.Error = fmt.Errorf("%s doGetWithdrawalHistory parse quantity Err: %v, %v", e.GetName(), err, withdrawRecord.Amount)
+			operation.Error = fmt.Errorf("%s doGetDepositHistory parse quantity Err: %v, %v", e.GetName(), err, depositRecord.Amount)
 			return operation.Error
 		}
 		var chainType exchange.ChainType
-		if withdrawRecord.Network == "BTC" {
+		if depositRecord.Network == "BTC" {
 			chainType = exchange.MAINNET
-		} else if withdrawRecord.Network == "ETH" {
+		} else if depositRecord.Network == "ETH" {
 			chainType = exchange.ERC20
 		} else {
 			chainType = exchange.OTHER
 		}
 
 		statusMsg := ""
-		if withdrawRecord.Status == 0 {
+		if depositRecord.Status == 0 {
 			statusMsg = "Confirm email sent"
-		} else if withdrawRecord.Status == 1 {
+		} else if depositRecord.Status == 1 {
 			statusMsg = "Canceled by user"
-		} else if withdrawRecord.Status == 2 {
+		} else if depositRecord.Status == 2 {
 			statusMsg = "Waiting for Confirmation"
-		} else if withdrawRecord.Status == 3 {
+		} else if depositRecord.Status == 3 {
 			statusMsg = "Rejected"
-		} else if withdrawRecord.Status == 4 {
+		} else if depositRecord.Status == 4 {
 			statusMsg = "Processing"
-		} else if withdrawRecord.Status == 5 {
+		} else if depositRecord.Status == 5 {
 			statusMsg = "Failed"
-		} else if withdrawRecord.Status == 6 {
+		} else if depositRecord.Status == 6 {
 			statusMsg = "Completed"
 		}
 
 		record := &exchange.WDHistory{
-			ID:        withdrawRecord.ID,
+			// ID:        depositRecord.ID,
 			Coin:      c,
 			Quantity:  quantity,
-			Tag:       "",
-			Address:   withdrawRecord.Address,
-			TxHash:    withdrawRecord.TxID,
+			Tag:       depositRecord.AddressTag,
+			Address:   depositRecord.Address,
+			TxHash:    depositRecord.TxID,
 			ChainType: chainType,
 			Status:    statusMsg,
 			// TimeStamp :  ,
 		}
 
-		operation.WithdrawalHistory = append(operation.WithdrawalHistory, record)
+		operation.DepositHistory = append(operation.DepositHistory, record)
 	}
+
+	return nil
+}
+
+func (e *Binance) getCoinChains(symbol string) []string {
 
 	return nil
 }
@@ -361,6 +366,45 @@ func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) erro
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
 	}
+
+	depositAddress := DepositAddress{}
+	strRequest := "/sapi/v1/capital/deposit/address"
+	operation.DepositAddresses = make(map[exchange.ChainType]*exchange.DepositAddr)
+
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["network"] = "BTC" // TODO 2 chain
+
+	jsonGetDepositAddress := e.ApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonGetDepositAddress
+	}
+
+	if err := json.Unmarshal([]byte(jsonGetDepositAddress), &depositAddress); err != nil {
+		operation.Error = fmt.Errorf("%s doGetDepositAddress Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetDepositAddress)
+		return operation.Error
+	}
+
+	var chain exchange.ChainType
+	if mapParams["network"] == "BTC" {
+		chain = exchange.MAINNET
+	} else if mapParams["network"] == "ETH" {
+		chain = exchange.ERC20
+	} else {
+		chain = exchange.OTHER
+	}
+
+	// store info into orders
+	depoAddr := &exchange.DepositAddr{
+		Coin:    operation.Coin,
+		Address: depositAddress.Address,
+		Tag:     depositAddress.Tag,
+		Chain:   chain,
+	}
+
+	operation.DepositAddresses[chain] = depoAddr
 
 	return nil
 }

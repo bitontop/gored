@@ -304,3 +304,21 @@ type WithdrawHistory []struct {
 	Status          int    `json:"status"`
 	TxID            string `json:"txId"`
 }
+
+type DepositHistory []struct {
+	Address    string `json:"address"`
+	AddressTag string `json:"addressTag"`
+	Amount     string `json:"amount"`
+	Coin       string `json:"coin"`
+	InsertTime int64  `json:"insertTime"`
+	Network    string `json:"network"`
+	Status     int    `json:"status"`
+	TxID       string `json:"txId"`
+}
+
+type DepositAddress struct {
+	Address string `json:"address"`
+	Coin    string `json:"coin"`
+	Tag     string `json:"tag"`
+	URL     string `json:"url"`
+}
