@@ -240,7 +240,7 @@ type AccountOperation struct {
 
 	// #GetDepositAddress
 	// Input: Coin. Get addresses for mainnet and erc20.
-	DepositAddresses map[string]*DepositAddr // key: chainType
+	DepositAddresses map[ChainType]*DepositAddr // key: chainType
 
 	//#Debug
 	DebugMode  bool   `json:"debug_mode"`
@@ -292,6 +292,7 @@ type WDHistory struct {
 	Quantity  float64    `json:"quantity"`
 	Tag       string     `json:"tag"`
 	Address   string     `json:"address"`
+	TxHash    string     `json:"txhash"`
 	TimeStamp int64      `json:"timestamp"`
 }
 
