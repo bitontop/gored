@@ -209,7 +209,7 @@ func (e *Binance) doGetWithdrawalHistory(operation *exchange.AccountOperation) e
 
 	mapParams := make(map[string]string)
 
-	jsonGetWithdrawalHistory := e.WApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetWithdrawalHistory := e.ApiKeyGet(mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
@@ -283,7 +283,7 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 
 	mapParams := make(map[string]string)
 
-	jsonGetDepositHistory := e.WApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetDepositHistory := e.ApiKeyGet(mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
@@ -365,7 +365,7 @@ func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) erro
 	mapParams["symbol"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["network"] = "BTC" // TODO 2 chain
 
-	jsonGetDepositAddress := e.ApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetDepositAddress := e.ApiKeyGet(mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
