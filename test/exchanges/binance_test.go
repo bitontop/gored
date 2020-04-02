@@ -17,7 +17,7 @@ import (
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
 	e := InitEx(exchange.BINANCE)
-	pair := pair.GetPairByKey("USDT|BTC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -26,9 +26,15 @@ func Test_Binance(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	Test_NewOrderBook(e, pair)
+	// Test_NewOrderBook(e, pair)
 	// var err error
 	// ==============================================
+
+	Test_AOOpenOrder(e, pair)
+	// Test_AOOrderHistory(e, pair)
+	// Test_AODepositAddress(e, pair.Base)
+	// Test_AODepositHistory(e, pair)
+	// Test_AOWithdrawalHistory(e, pair)
 
 	// contract orderbook
 	// opOrderBook := &exchange.PublicOperation{

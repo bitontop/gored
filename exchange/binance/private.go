@@ -74,7 +74,7 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 
-	jsonGetOpenOrder := e.ApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetOpenOrder := e.ApiKeyGet("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
@@ -148,7 +148,7 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 
-	jsonGetOpenOrder := e.ApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetOpenOrder := e.ApiKeyGet("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
