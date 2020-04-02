@@ -267,7 +267,7 @@ func (e *Coinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Coinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Coinex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -308,7 +308,6 @@ func (e *Coinex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonWithdraw := e.ApiKeyPost(strRequestUrl, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonWithdraw
 	}
 

@@ -215,17 +215,12 @@ func (e *TradeSatoshi) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	return maker, nil
 }
 
-
-
 func (e *TradeSatoshi) LoadPublicData(operation *exchange.PublicOperation) error {
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
-
-
-
 /*************** Private API ***************/
-func (e *TradeSatoshi) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *TradeSatoshi) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -259,7 +254,6 @@ func (e *TradeSatoshi) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

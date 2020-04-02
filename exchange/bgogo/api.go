@@ -265,7 +265,7 @@ func (e *Bgogo) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bgogo) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bgogo) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

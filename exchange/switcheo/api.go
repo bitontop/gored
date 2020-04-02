@@ -241,7 +241,7 @@ func (e *Switcheo) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Switcheo) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Switcheo) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

@@ -167,16 +167,25 @@ const (
 	Balance     OperationType = "Balance"    // balance(s) of different accounts
 	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
 
-	GetCoin       OperationType = "GetCoin"
-	GetPair       OperationType = "GetPair"
-	Orderbook     OperationType = "Orderbook"
+	//Public Query
+	GetCoin OperationType = "GetCoin"
+	GetPair OperationType = "GetPair"
+
 	TradeHistory  OperationType = "TradeHistory"
+	Orderbook     OperationType = "Orderbook"
 	CoinChainType OperationType = "CoinChainType"
 
-	// ##### New - Contract
-	PlaceOrder    OperationType = "PlaceOrder"
-	OrderStatusOp OperationType = "OrderStatus"
-	CancelOrder   OperationType = "CancelOrder"
+	//Trade (Private Action)
+	PlaceOrder     OperationType = "PlaceOrder"
+	CancelOrder    OperationType = "CancelOrder"
+	GetOrderStatus OperationType = "GetOrderStatus"
+
+	//User (Private Action)
+	GetOpenOrder         OperationType = "GetOpenOrder"    // New and Partial Orders
+	GetOrderHistory      OperationType = "GetOrderHistory" // All Orders other than open orders
+	GetDepositHistory    OperationType = "GetDepositHistory"
+	GetWithdrawalHistory OperationType = "GetWithdrawalHistory"
+	GetDepositAddress    OperationType = "GetDepositAddress" // Get address for one coin
 )
 
 type WalletType string
@@ -222,10 +231,23 @@ type AccountOperation struct {
 	//Coin = nil
 	BalanceList []AssetBalance `json:"balance_list"`
 
+	// #OpenOrder, OrderHistory
+	OpenOrders   []*Order
+	OrderHistory []*Order
+
+	// #GetWithdrawal/DepositHistory
+	WithdrawalHistory []*WDHistory
+	DepositHistory    []*WDHistory
+
+	// #GetDepositAddress
+	// Input: Coin. Get addresses for mainnet and erc20.
+	DepositAddresses map[ChainType]*DepositAddr // key: chainType
+
 	//#Debug
-	DebugMode    bool   `json:"debug mode"`
-	RequestURI   string `json:"request_uri"`
-	MapParams    string `json:"map_params"`
+	DebugMode  bool   `json:"debug_mode"`
+	RequestURI string `json:"request_uri"`
+
+	// MapParams    string `json:"map_params"`
 	CallResponce string `json:"call_responce"`
 	Error        error  `json:"error"`
 
@@ -263,6 +285,25 @@ type PublicOperation struct {
 
 	// ##### New Changes - Contract
 	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
+}
+
+type WDHistory struct {
+	ID        string     `json:"id"`
+	Coin      *coin.Coin `json:"wd_history_coin"`
+	Quantity  float64    `json:"quantity"`
+	Tag       string     `json:"tag"`
+	Address   string     `json:"address"`
+	TxHash    string     `json:"txhash"`
+	ChainType ChainType  `json:"chain_type"`
+	Status    string     `json:"status"`
+	TimeStamp int64      `json:"timestamp"`
+}
+
+type DepositAddr struct {
+	Coin    *coin.Coin `json:"wd_history_coin"`
+	Address string     `json:"address"`
+	Tag     string     `json:"tag"`
+	Chain   ChainType  `json:"chain_type"`
 }
 
 type AssetBalance struct {

@@ -261,7 +261,7 @@ func (e *Tradeogre) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Tradeogre) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Tradeogre) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

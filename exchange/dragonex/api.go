@@ -239,7 +239,7 @@ func (e *Dragonex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Dragonex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Dragonex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

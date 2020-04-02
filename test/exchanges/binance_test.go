@@ -17,7 +17,7 @@ import (
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
 	e := InitEx(exchange.BINANCE)
-	pair := pair.GetPairByKey("USDT|BTC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -26,10 +26,15 @@ func Test_Binance(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	Test_NewOrderBook(e, pair)
-	// var err error
-	// ==============================================
+	// Test_NewOrderBook(e, pair)
 
+	Test_AOOpenOrder(e, pair)
+	Test_AOOrderHistory(e, pair)
+	Test_AODepositAddress(e, pair.Base)
+	Test_AODepositHistory(e, pair)
+	Test_AOWithdrawalHistory(e, pair)
+
+	// var err error
 	// contract orderbook
 	// opOrderBook := &exchange.PublicOperation{
 	// 	Wallet: exchange.ContractWallet,
@@ -57,7 +62,7 @@ func Test_Binance(t *testing.T) {
 		Quantity:       0.01,
 		DebugMode:      true,
 	}
-	err = e.DoAccoutOperation(opPlaceOrder)
+	err = e.DoAccountOperation(opPlaceOrder)
 	if err != nil {
 		log.Printf("==%v", err)
 	}
@@ -70,13 +75,13 @@ func Test_Binance(t *testing.T) {
 	}
 	opOrderStatus := &exchange.AccountOperation{
 		Wallet:    exchange.ContractWallet,
-		Type:      exchange.OrderStatusOp,
+		Type:      exchange.GetOrderStatus,
 		Ex:        e.GetName(),
 		Pair:      pair,
 		Order:     order,
 		DebugMode: true,
 	}
-	err = e.DoAccoutOperation(opOrderStatus)
+	err = e.DoAccountOperation(opOrderStatus)
 	if err != nil {
 		log.Printf("==%v", err)
 	}
@@ -95,7 +100,7 @@ func Test_Binance(t *testing.T) {
 		Order:     order,
 		DebugMode: true,
 	}
-	err = e.DoAccoutOperation(opCancelOrder)
+	err = e.DoAccountOperation(opCancelOrder)
 	if err != nil {
 		log.Printf("==%v", err)
 	}
@@ -108,7 +113,7 @@ func Test_Binance(t *testing.T) {
 		Ex:        e.GetName(),
 		DebugMode: true,
 	}
-	err = e.DoAccoutOperation(opAllBalance)
+	err = e.DoAccountOperation(opAllBalance)
 	if err != nil {
 		log.Printf("==%v", err)
 	}

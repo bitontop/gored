@@ -151,3 +151,24 @@ type TradeHistory struct {
 		} `json:"data"`
 	} `json:"data"`
 }
+
+type DWHistory struct {
+	ID         int     `json:"id"`
+	Type       string  `json:"type"`
+	Currency   string  `json:"currency"`
+	TxHash     string  `json:"tx-hash"`
+	Amount     float64 `json:"amount"`
+	Address    string  `json:"address"`
+	AddressTag string  `json:"address-tag"`
+	Fee        int     `json:"fee"`
+	State      string  `json:"state"`
+	CreatedAt  int64   `json:"created-at"`
+	UpdatedAt  int64   `json:"updated-at"`
+}
+
+type DepositAddress struct {
+	Currency   string `json:"currency"`
+	Address    string `json:"address"`
+	AddressTag string `json:"addressTag"`
+	Chain      string `json:"chain"`
+}

@@ -263,7 +263,7 @@ func (e *Digifinex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Digifinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Digifinex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

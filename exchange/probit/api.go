@@ -247,7 +247,7 @@ func (e *Probit) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Probit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Probit) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

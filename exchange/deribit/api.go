@@ -220,7 +220,7 @@ func (e *Deribit) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Deribit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Deribit) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

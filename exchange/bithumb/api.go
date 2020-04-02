@@ -255,7 +255,7 @@ func (e *Bithumb) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 /*************** Public API ***************/
 
 /*************** Private API ***************/
-func (e *Bithumb) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bithumb) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Transfer:
 		return e.transfer(operation)
@@ -290,7 +290,6 @@ func (e *Bithumb) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -351,7 +350,6 @@ func (e *Bithumb) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonBalanceReturn
 	}
 
@@ -405,7 +403,6 @@ func (e *Bithumb) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonWithdrawReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonWithdrawReturn
 	}
 
@@ -466,7 +463,6 @@ func (e *Bithumb) transfer(operation *exchange.AccountOperation) error {
 	jsonTransferReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonTransferReturn
 	}
 

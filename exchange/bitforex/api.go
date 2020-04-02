@@ -253,7 +253,7 @@ func (e *Bitforex) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bitforex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitforex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

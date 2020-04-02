@@ -243,7 +243,7 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Kucoin) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Kucoin) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Transfer:
 		return e.transfer(operation)
@@ -281,7 +281,6 @@ func (e *Kucoin) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonCreateWithdraw
 	}
 
@@ -331,7 +330,6 @@ func (e *Kucoin) transfer(operation *exchange.AccountOperation) error {
 	jsonTransferReturn := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonTransferReturn
 	}
 
@@ -375,7 +373,6 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -439,7 +436,6 @@ func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonBalanceReturn
 	}
 

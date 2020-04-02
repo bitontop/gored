@@ -295,7 +295,7 @@ func (e *Bitfinex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitfinex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitfinex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
@@ -331,7 +331,6 @@ func (e *Bitfinex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonWithdrawReturn := e.ApiKeyPost(mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonWithdrawReturn
 	}
 

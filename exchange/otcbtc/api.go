@@ -263,7 +263,7 @@ func (e *Otcbtc) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Otcbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Otcbtc) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

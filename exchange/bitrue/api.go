@@ -260,7 +260,7 @@ func (e *Bitrue) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Bitrue) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitrue) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 
