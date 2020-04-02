@@ -334,7 +334,7 @@ func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
 	op := &exchange.AccountOperation{
-		Type: exchange.GetOpenOrder,
+		Type: exchange.GetDepositAddress,
 		Ex:   e.GetName(),
 		Coin: coin,
 	}
