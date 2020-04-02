@@ -27,15 +27,14 @@ func Test_Binance(t *testing.T) {
 	// Test_Constraint(e, pair)
 
 	// Test_NewOrderBook(e, pair)
-	// var err error
-	// ==============================================
 
 	Test_AOOpenOrder(e, pair)
-	// Test_AOOrderHistory(e, pair)
-	// Test_AODepositAddress(e, pair.Base)
-	// Test_AODepositHistory(e, pair)
-	// Test_AOWithdrawalHistory(e, pair)
+	Test_AOOrderHistory(e, pair)
+	Test_AODepositAddress(e, pair.Base)
+	Test_AODepositHistory(e, pair)
+	Test_AOWithdrawalHistory(e, pair)
 
+	// var err error
 	// contract orderbook
 	// opOrderBook := &exchange.PublicOperation{
 	// 	Wallet: exchange.ContractWallet,

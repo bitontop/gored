@@ -342,7 +342,9 @@ func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
-		log.Printf("%s DepositAddresses %+v", e.GetName(), op.DepositAddresses)
+		for chain, addr := range op.DepositAddresses {
+			log.Printf("%s DepositAddresses: %v - %+v", e.GetName(), chain, addr)
+		}
 	}
 }
 
@@ -357,7 +359,9 @@ func Test_AODepositHistory(e exchange.Exchange, pair *pair.Pair) {
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
-		log.Printf("%s DepositHistory %+v", e.GetName(), op.DepositHistory)
+		for i, his := range op.DepositHistory {
+			log.Printf("%s DepositHistory: %v %+v", e.GetName(), i, his)
+		}
 	}
 }
 
@@ -372,7 +376,9 @@ func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
-		log.Printf("%s WithdrawalHistory %+v", e.GetName(), op.WithdrawalHistory)
+		for i, his := range op.WithdrawalHistory {
+			log.Printf("%s WithdrawalHistory: %v %+v", e.GetName(), i, his)
+		}
 	}
 }
 

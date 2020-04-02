@@ -3,6 +3,7 @@ package binance
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -148,15 +149,15 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 
-	jsonGetOpenOrder := e.ApiKeyGet(mapParams, strRequest)
+	jsonGetOrderHistory := e.ApiKeyGet(mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
-		operation.CallResponce = jsonGetOpenOrder
+		operation.CallResponce = jsonGetOrderHistory
 	}
 
-	if err := json.Unmarshal([]byte(jsonGetOpenOrder), &closeOrders); err != nil {
-		operation.Error = fmt.Errorf("%s doGetOrderHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOpenOrder)
+	if err := json.Unmarshal([]byte(jsonGetOrderHistory), &closeOrders); err != nil {
+		operation.Error = fmt.Errorf("%s doGetOrderHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOrderHistory)
 		return operation.Error
 	}
 
@@ -188,7 +189,7 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 			Side:         side,
 			DealRate:     rate,
 			DealQuantity: quantity,
-			// JsonResponse: jsonGetOpenOrder,
+			// JsonResponse: jsonGetOrderHistory,
 		}
 
 		order.Status = exchange.Filled
@@ -357,44 +358,52 @@ func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) erro
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
 	}
 
-	depositAddress := DepositAddress{}
 	strRequest := "/sapi/v1/capital/deposit/address"
 	operation.DepositAddresses = make(map[exchange.ChainType]*exchange.DepositAddr)
 
-	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByCoin(operation.Coin)
-	mapParams["network"] = "BTC" // TODO 2 chain
+	for _, network := range []string{"BTC", "ETH"} {
+		depositAddress := DepositAddress{}
+		mapParams := make(map[string]string)
+		mapParams["coin"] = e.GetSymbolByCoin(operation.Coin)
+		mapParams["network"] = network
 
-	jsonGetDepositAddress := e.ApiKeyGet(mapParams, strRequest)
-	if operation.DebugMode {
-		operation.RequestURI = strRequest
-		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
-		operation.CallResponce = jsonGetDepositAddress
+		jsonGetDepositAddress := e.ApiKeyGet(mapParams, strRequest)
+		if operation.DebugMode {
+			operation.RequestURI = strRequest
+			// operation.MapParams = fmt.Sprintf("%+v", mapParams)
+			operation.CallResponce = jsonGetDepositAddress
+		}
+
+		if err := json.Unmarshal([]byte(jsonGetDepositAddress), &depositAddress); err != nil {
+			operation.Error = fmt.Errorf("%s doGetDepositAddress Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetDepositAddress)
+			return operation.Error
+		} else if depositAddress.Code == -9000 { // no deposit addr
+			log.Printf("Coin %v No deposit addr for network: %v", mapParams["coin"], network)
+			continue
+		} else if depositAddress.Code != 0 {
+			operation.Error = fmt.Errorf("%s doGetDepositAddress fail: %s", e.GetName(), jsonGetDepositAddress)
+			return operation.Error
+		}
+
+		var chain exchange.ChainType
+		if mapParams["network"] == "BTC" {
+			chain = exchange.MAINNET
+		} else if mapParams["network"] == "ETH" {
+			chain = exchange.ERC20
+		} else {
+			chain = exchange.OTHER
+		}
+
+		// store info into orders
+		depoAddr := &exchange.DepositAddr{
+			Coin:    operation.Coin,
+			Address: depositAddress.Address,
+			Tag:     depositAddress.Tag,
+			Chain:   chain,
+		}
+
+		operation.DepositAddresses[chain] = depoAddr
 	}
-
-	if err := json.Unmarshal([]byte(jsonGetDepositAddress), &depositAddress); err != nil {
-		operation.Error = fmt.Errorf("%s doGetDepositAddress Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetDepositAddress)
-		return operation.Error
-	}
-
-	var chain exchange.ChainType
-	if mapParams["network"] == "BTC" {
-		chain = exchange.MAINNET
-	} else if mapParams["network"] == "ETH" {
-		chain = exchange.ERC20
-	} else {
-		chain = exchange.OTHER
-	}
-
-	// store info into orders
-	depoAddr := &exchange.DepositAddr{
-		Coin:    operation.Coin,
-		Address: depositAddress.Address,
-		Tag:     depositAddress.Tag,
-		Chain:   chain,
-	}
-
-	operation.DepositAddresses[chain] = depoAddr
 
 	return nil
 }

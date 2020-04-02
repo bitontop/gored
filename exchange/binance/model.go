@@ -317,6 +317,7 @@ type DepositHistory []struct {
 }
 
 type DepositAddress struct {
+	Code    int    `json:"code"`
 	Address string `json:"address"`
 	Coin    string `json:"coin"`
 	Tag     string `json:"tag"`
