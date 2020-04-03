@@ -383,7 +383,7 @@ func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) erro
 			operation.Error = fmt.Errorf("%s doGetDepositAddress Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetDepositAddress)
 			return operation.Error
 		} else if depositAddress.Code == -9000 { // no deposit addr
-			log.Printf("Coin %v No deposit addr for network: %v", mapParams["coin"], network)
+			log.Printf("%v Coin %v No deposit addr for network: %v", e.GetName(), mapParams["coin"], network)
 			continue
 		} else if depositAddress.Code != 0 {
 			operation.Error = fmt.Errorf("%s doGetDepositAddress fail: %s", e.GetName(), jsonGetDepositAddress)
