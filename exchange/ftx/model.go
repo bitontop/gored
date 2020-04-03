@@ -6,6 +6,7 @@ package ftx
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/bitontop/gored/exchange"
 )
@@ -49,17 +50,84 @@ type PairsData []struct {
 	VolumeUsd24H    float64     `json:"volumeUsd24h"`
 }
 
-// ========
-
 type AccountBalances []struct {
-	Currency      string  `json:"Currency"`
-	Balance       float64 `json:"Balance"`
-	Available     float64 `json:"Available"`
-	Pending       float64 `json:"Pending"`
-	CryptoAddress string  `json:"CryptoAddress"`
-	Requested     bool    `json:"Requested"`
-	Uuid          string  `json:"Uuid"`
+	Coin  string  `json:"coin"`
+	Free  float64 `json:"free"`
+	Total float64 `json:"total"`
 }
+
+type OpenOrders []struct {
+	CreatedAt     time.Time   `json:"createdAt"`
+	FilledSize    float64     `json:"filledSize"`
+	Future        string      `json:"future"`
+	ID            int         `json:"id"`
+	Market        string      `json:"market"`
+	Price         float64     `json:"price"`
+	AvgFillPrice  float64     `json:"avgFillPrice"`
+	RemainingSize float64     `json:"remainingSize"`
+	Side          string      `json:"side"`
+	Size          float64     `json:"size"`
+	Status        string      `json:"status"`
+	Type          string      `json:"type"`
+	ReduceOnly    bool        `json:"reduceOnly"`
+	Ioc           bool        `json:"ioc"`
+	PostOnly      bool        `json:"postOnly"`
+	ClientID      interface{} `json:"clientId"`
+}
+
+type CloseOrders []struct {
+	AvgFillPrice  float64     `json:"avgFillPrice"`
+	ClientID      interface{} `json:"clientId"`
+	CreatedAt     time.Time   `json:"createdAt"`
+	FilledSize    float64     `json:"filledSize"`
+	Future        string      `json:"future"`
+	ID            int         `json:"id"`
+	Ioc           bool        `json:"ioc"`
+	Market        string      `json:"market"`
+	PostOnly      bool        `json:"postOnly"`
+	Price         float64     `json:"price"`
+	ReduceOnly    bool        `json:"reduceOnly"`
+	RemainingSize float64     `json:"remainingSize"`
+	Side          string      `json:"side"`
+	Size          float64     `json:"size"`
+	Status        string      `json:"status"`
+	Type          string      `json:"type"`
+
+	// HasMoreData bool `json:"hasMoreData"`
+}
+
+// need test array or single
+type WithdrawHistory []struct {
+	Coin    string    `json:"coin"`
+	Address string    `json:"address"`
+	Tag     string    `json:"tag"`
+	Fee     int       `json:"fee"`
+	ID      int       `json:"id"`
+	Size    string    `json:"size"`
+	Status  string    `json:"status"`
+	Time    time.Time `json:"time"`
+	Txid    string    `json:"txid"`
+}
+
+type DepositHistory []struct {
+	Coin          string    `json:"coin"`
+	Confirmations int       `json:"confirmations"`
+	ConfirmedTime time.Time `json:"confirmedTime"`
+	Fee           int       `json:"fee"`
+	ID            int       `json:"id"`
+	SentTime      time.Time `json:"sentTime"`
+	Size          string    `json:"size"`
+	Status        string    `json:"status"`
+	Time          time.Time `json:"time"`
+	Txid          string    `json:"txid"`
+}
+
+type DepositAddress struct {
+	Address string `json:"address"`
+	Tag     string `json:"tag"`
+}
+
+// =========
 
 type Uuid struct {
 	Id string `json:"uuid"`

@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -106,7 +107,7 @@ func (e *Ftx) GetCoinsData() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Ftx) GetPairsData() error {
+func (e *Ftx) GetPairsData() error { //TODO
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
@@ -169,7 +170,7 @@ Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 
 // orderbook TODO
-func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
+func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) { // TODO
 	jsonResponse := &JsonResponse{}
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
@@ -212,9 +213,6 @@ func (e *Ftx) LoadPublicData(operation *exchange.PublicOperation) error {
 }
 
 /*************** Private API ***************/
-func (e *Ftx) DoAccountOperation(operation *exchange.AccountOperation) error {
-	return nil
-}
 
 func (e *Ftx) UpdateAllBalances() {
 	if e.API_KEY == "" || e.API_SECRET == "" {
@@ -224,14 +222,14 @@ func (e *Ftx) UpdateAllBalances() {
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/v1.1/account/getbalances"
+	strRequest := "/wallet/balances" // "/account"
 
-	jsonBalanceReturn := e.ApiKeyGET(strRequest, make(map[string]string))
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
 	} else if !jsonResponse.Success {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
+		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonBalanceReturn)
 		return
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &accountBalance); err != nil {
@@ -240,13 +238,14 @@ func (e *Ftx) UpdateAllBalances() {
 	}
 
 	for _, v := range accountBalance {
-		c := e.GetCoinBySymbol(v.Currency)
+		c := e.GetCoinBySymbol(v.Coin)
 		if c != nil {
-			balanceMap.Set(c.Code, v.Available)
+			balanceMap.Set(c.Code, v.Free)
 		}
 	}
 }
 
+// TODO
 func (e *Ftx) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		log.Printf("%s API Key or Secret Key are nil", e.GetName())
@@ -289,9 +288,9 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 
 	jsonResponse := &JsonResponse{}
 	uuid := Uuid{}
-	strRequest := "/v1.1/market/selllimit"
+	strRequest := "/orders"
 
-	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !jsonResponse.Success {
@@ -445,6 +444,68 @@ func (e *Ftx) ApiKeyGET(strRequestPath string, mapParams map[string]string) stri
 	request.Header.Add("Content-Type", "application/json;charset=utf-8")
 	request.Header.Add("Accept", "application/json")
 	request.Header.Add("apisign", signature)
+
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}
+
+func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+	nonce := fmt.Sprintf("%v", time.Now().UnixNano()/int64(time.Millisecond)) // Millisecond
+
+	var err error
+	request := &http.Request{}
+	httpClient := &http.Client{}
+	jsonParams := ""
+	preSign := ""
+	strSignUrl := ""
+	strRequestUrl := ""
+
+	if strMethod == "POST" {
+		bytesParams, _ := json.Marshal(mapParams)
+		jsonParams = string(bytesParams)
+		strSignUrl = strRequestPath // ?
+	} else if len(mapParams) != 0 {
+		strSignUrl = strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
+	} else {
+		strSignUrl = strRequestPath
+	}
+	strRequestUrl = API_URL + strSignUrl
+
+	// create signature
+	preSign = nonce + strMethod + strSignUrl
+	signature := exchange.ComputeHmac256NoDecode(preSign, e.API_SECRET)
+
+	log.Printf("jsonParams: %v", jsonParams)
+	log.Printf("preSign: %v", preSign)
+	log.Printf("strRequestUrl: %v", strRequestUrl)
+
+	// request
+	request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
+	if nil != err {
+		return err.Error()
+	}
+	// request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("FTX-KEY", e.API_KEY)
+	request.Header.Add("FTX-TS", nonce)
+	request.Header.Add("FTX-SIGN", signature)
+	// add FTX-SUBACCOUNT if using subaccount
+
+	log.Printf("key: %v", e.API_KEY)
+	log.Printf("secret: %v", e.API_SECRET)
+
+	log.Printf("FTX-KEY: %v", e.API_KEY)
+	log.Printf("FTX-TS: %v", nonce)
+	log.Printf("FTX-SIGN: %v", signature)
 
 	response, err := httpClient.Do(request)
 	if nil != err {
