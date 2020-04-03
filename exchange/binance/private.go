@@ -88,6 +88,7 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	}
 
 	// store info into orders
+	operation.OpenOrders = []*exchange.Order{}
 	for _, o := range openOrders {
 		rate, err := strconv.ParseFloat(o.Price, 64)
 		if err != nil {
@@ -162,6 +163,7 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 	}
 
 	// store info into orders
+	operation.OrderHistory = []*exchange.Order{}
 	for _, o := range closeOrders {
 		rate, err := strconv.ParseFloat(o.Price, 64)
 		if err != nil {
@@ -223,6 +225,7 @@ func (e *Binance) doGetWithdrawalHistory(operation *exchange.AccountOperation) e
 	}
 
 	// store info into orders
+	operation.WithdrawalHistory = []*exchange.WDHistory{}
 	for _, withdrawRecord := range withdrawHistory {
 		c := e.GetCoinBySymbol(withdrawRecord.Coin)
 		quantity, err := strconv.ParseFloat(withdrawRecord.Amount, 64)
@@ -297,6 +300,7 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 	}
 
 	// store info into orders
+	operation.DepositHistory = []*exchange.WDHistory{}
 	for _, depositRecord := range depositHistory {
 		c := e.GetCoinBySymbol(depositRecord.Coin)
 		quantity, err := strconv.ParseFloat(depositRecord.Amount, 64)
@@ -348,10 +352,10 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 	return nil
 }
 
-func (e *Binance) getCoinChains(symbol string) []string {
+// func (e *Binance) getCoinChains(symbol string) []string {
 
-	return nil
-}
+// 	return nil
+// }
 
 func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
@@ -359,8 +363,8 @@ func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) erro
 	}
 
 	strRequest := "/sapi/v1/capital/deposit/address"
-	operation.DepositAddresses = make(map[exchange.ChainType]*exchange.DepositAddr)
 
+	operation.DepositAddresses = make(map[exchange.ChainType]*exchange.DepositAddr)
 	for _, network := range []string{"BTC", "ETH"} {
 		depositAddress := DepositAddress{}
 		mapParams := make(map[string]string)
