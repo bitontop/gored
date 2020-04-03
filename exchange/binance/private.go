@@ -45,20 +45,25 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 
 	// Private operation
 	case exchange.GetOpenOrder:
-		return e.doGetOpenOrder(operation)
-
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetOpenOrder(operation)
+		}
 	case exchange.GetOrderHistory:
-		return e.doGetOrderHistory(operation)
-
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetOrderHistory(operation)
+		}
 	case exchange.GetWithdrawalHistory:
-		return e.doGetWithdrawalHistory(operation)
-
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetWithdrawalHistory(operation)
+		}
 	case exchange.GetDepositHistory:
-		return e.doGetDepositHistory(operation)
-
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetDepositHistory(operation)
+		}
 	case exchange.GetDepositAddress:
-		return e.doGetDepositAddress(operation)
-
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetDepositAddress(operation)
+		}
 	}
 
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)

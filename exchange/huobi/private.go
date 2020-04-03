@@ -21,15 +21,25 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
 	case exchange.GetOpenOrder:
-		return e.getOpenOrder(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.getOpenOrder(operation)
+		}
 	case exchange.GetOrderHistory:
-		return e.getOrderHistory(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.getOrderHistory(operation)
+		}
 	case exchange.GetDepositAddress:
-		return e.getDepositAddress(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.getDepositAddress(operation)
+		}
 	case exchange.GetDepositHistory:
-		return e.getDepositHistory(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.getDepositHistory(operation)
+		}
 	case exchange.GetWithdrawalHistory:
-		return e.getWithdrawalHistory(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.getWithdrawalHistory(operation)
+		}
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
