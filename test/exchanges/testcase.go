@@ -304,11 +304,11 @@ func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:       exchange.GetOpenOrder,
-		WalletType: exchange.SpotWallet,
-		Ex:         e.GetName(),
-		Coin:       pair.Base,
-		Pair:       pair,
+		Type:   exchange.GetOpenOrder,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -320,11 +320,11 @@ func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:       exchange.GetOrderHistory,
-		WalletType: exchange.SpotWallet,
-		Ex:         e.GetName(),
-		Coin:       pair.Base,
-		Pair:       pair,
+		Type:   exchange.GetOrderHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -336,10 +336,10 @@ func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
 	op := &exchange.AccountOperation{
-		Type:       exchange.GetDepositAddress,
-		WalletType: exchange.SpotWallet,
-		Ex:         e.GetName(),
-		Coin:       coin,
+		Type:   exchange.GetDepositAddress,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   coin,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -353,11 +353,11 @@ func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
 
 func Test_AODepositHistory(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:       exchange.GetDepositHistory,
-		WalletType: exchange.SpotWallet,
-		Ex:         e.GetName(),
-		Coin:       pair.Base,
-		Pair:       pair,
+		Type:   exchange.GetDepositHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -371,11 +371,11 @@ func Test_AODepositHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:       exchange.GetWithdrawalHistory,
-		WalletType: exchange.SpotWallet,
-		Ex:         e.GetName(),
-		Coin:       pair.Base,
-		Pair:       pair,
+		Type:   exchange.GetWithdrawalHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
