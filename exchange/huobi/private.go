@@ -41,7 +41,7 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 			return e.getWithdrawalHistory(operation)
 		}
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 func (e *Huobi) doWithdraw(operation *exchange.AccountOperation) error {
@@ -322,12 +322,15 @@ func (e *Huobi) getDepositHistory(op *exchange.AccountOperation) error {
 	result := []*exchange.WDHistory{}
 	for _, data := range histories {
 		history := &exchange.WDHistory{
-			ID:       fmt.Sprintf("%d", data.ID),
-			Coin:     e.GetCoinBySymbol(data.Currency),
-			Quantity: data.Amount,
-			Tag:      data.AddressTag,
-			Address:  data.Address,
-			TxHash:   data.TxHash,
+			ID:        fmt.Sprintf("%d", data.ID),
+			Coin:      e.GetCoinBySymbol(data.Currency),
+			Quantity:  data.Amount,
+			Tag:       data.AddressTag,
+			Address:   data.Address,
+			TxHash:    data.TxHash,
+			ChainType: exchange.MAINNET,
+			Status:    data.State,
+			TimeStamp: data.UpdatedAt,
 		}
 		result = append(result, history)
 	}
@@ -369,12 +372,15 @@ func (e *Huobi) getWithdrawalHistory(op *exchange.AccountOperation) error {
 	result := []*exchange.WDHistory{}
 	for _, data := range histories {
 		history := &exchange.WDHistory{
-			ID:       fmt.Sprintf("%d", data.ID),
-			Coin:     e.GetCoinBySymbol(data.Currency),
-			Quantity: data.Amount,
-			Tag:      data.AddressTag,
-			Address:  data.Address,
-			TxHash:   data.TxHash,
+			ID:        fmt.Sprintf("%d", data.ID),
+			Coin:      e.GetCoinBySymbol(data.Currency),
+			Quantity:  data.Amount,
+			Tag:       data.AddressTag,
+			Address:   data.Address,
+			TxHash:    data.TxHash,
+			ChainType: exchange.MAINNET,
+			Status:    data.State,
+			TimeStamp: data.UpdatedAt,
 		}
 		result = append(result, history)
 	}
