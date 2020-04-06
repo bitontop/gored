@@ -100,6 +100,7 @@ type Order struct {
 	StatusMessage string
 	DealRate      float64
 	DealQuantity  float64
+	Timestamp     float64 `bson:"timestamp"`
 	JsonResponse  string
 
 	Canceled     bool
