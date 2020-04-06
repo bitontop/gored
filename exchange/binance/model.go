@@ -1,5 +1,7 @@
 package binance
 
+import "time"
+
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -293,16 +295,16 @@ type CloseOrders []struct {
 }
 
 type WithdrawHistory []struct {
-	Address         string `json:"address"`
-	Amount          string `json:"amount"`
-	ApplyTime       string `json:"applyTime"`
-	Coin            string `json:"coin"`
-	ID              string `json:"id"`
-	WithdrawOrderID string `json:"withdrawOrderId,omitempty"`
-	Network         string `json:"network"`
-	TransferType    int    `json:"transferType"`
-	Status          int    `json:"status"`
-	TxID            string `json:"txId"`
+	Address         string    `json:"address"`
+	Amount          string    `json:"amount"`
+	ApplyTime       time.Time `json:"applyTime"`
+	Coin            string    `json:"coin"`
+	ID              string    `json:"id"`
+	WithdrawOrderID string    `json:"withdrawOrderId,omitempty"`
+	Network         string    `json:"network"`
+	TransferType    int       `json:"transferType"`
+	Status          int       `json:"status"`
+	TxID            string    `json:"txId"`
 }
 
 type DepositHistory []struct {

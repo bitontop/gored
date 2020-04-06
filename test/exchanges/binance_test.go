@@ -28,11 +28,11 @@ func Test_Binance(t *testing.T) {
 
 	// Test_NewOrderBook(e, pair)
 
-	Test_AOOpenOrder(e, pair)
-	Test_AOOrderHistory(e, pair)
-	Test_AODepositAddress(e, pair.Base)
-	Test_AODepositHistory(e, pair)
-	Test_AOWithdrawalHistory(e, pair)
+	// Test_AOOpenOrder(e, pair)
+	// Test_AOOrderHistory(e, pair) // not tested with asset
+	// Test_AODepositAddress(e, pair.Base)
+	// Test_AODepositHistory(e, pair)
+	// Test_AOWithdrawalHistory(e, pair) // not tested with asset
 
 	// var err error
 	// contract orderbook

@@ -314,7 +314,9 @@ func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
-		log.Printf("%s OpenOrders %+v", e.GetName(), op.OpenOrders)
+		for _, o := range op.OpenOrders {
+			log.Printf("%s OpenOrders %+v", e.GetName(), o)
+		}
 	}
 }
 
@@ -330,7 +332,10 @@ func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
-		log.Printf("%s OrderHistory %+v", e.GetName(), op.OrderHistory)
+		for _, o := range op.OrderHistory {
+			log.Printf("%s OrderHistory %+v", e.GetName(), o)
+		}
+
 	}
 }
 

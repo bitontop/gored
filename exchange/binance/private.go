@@ -119,6 +119,7 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			Side:         o.Side,
 			DealRate:     rate,
 			DealQuantity: dealQuantity,
+			Timestamp:    o.UpdateTime,
 			// JsonResponse: jsonGetOpenOrder,
 		}
 
@@ -196,6 +197,7 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 			Side:         side,
 			DealRate:     rate,
 			DealQuantity: quantity,
+			Timestamp:    o.Time,
 			// JsonResponse: jsonGetOrderHistory,
 		}
 
@@ -273,7 +275,7 @@ func (e *Binance) doGetWithdrawalHistory(operation *exchange.AccountOperation) e
 			TxHash:    withdrawRecord.TxID,
 			ChainType: chainType,
 			Status:    statusMsg,
-			// TimeStamp :  ,
+			TimeStamp: withdrawRecord.ApplyTime.UnixNano(),
 		}
 
 		operation.WithdrawalHistory = append(operation.WithdrawalHistory, record)
@@ -348,7 +350,7 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 			TxHash:    depositRecord.TxID,
 			ChainType: chainType,
 			Status:    statusMsg,
-			// TimeStamp :  ,
+			TimeStamp: depositRecord.InsertTime,
 		}
 
 		operation.DepositHistory = append(operation.DepositHistory, record)
