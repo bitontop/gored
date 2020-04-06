@@ -126,9 +126,10 @@ func (e *Huobi) getOpenOrder(op *exchange.AccountOperation) error {
 	result := []*exchange.Order{}
 	for _, data := range openOrders {
 		order := &exchange.Order{
-			Pair:    op.Pair,
-			OrderID: fmt.Sprintf("%d", data.ID),
-			Side:    data.Type,
+			Pair:      op.Pair,
+			OrderID:   fmt.Sprintf("%d", data.ID),
+			Side:      data.Type,
+			Timestamp: data.CreatedAt,
 		}
 
 		order.Quantity, _ = strconv.ParseFloat(data.Amount, 64)
@@ -201,9 +202,10 @@ func (e *Huobi) getOrderHistory(op *exchange.AccountOperation) error {
 	result := []*exchange.Order{}
 	for _, data := range orders {
 		order := &exchange.Order{
-			Pair:    op.Pair,
-			OrderID: fmt.Sprintf("%d", data.ID),
-			Side:    data.Type,
+			Pair:      op.Pair,
+			OrderID:   fmt.Sprintf("%d", data.ID),
+			Side:      data.Type,
+			Timestamp: data.FinishedAt,
 		}
 
 		order.Quantity, _ = strconv.ParseFloat(data.Amount, 64)
