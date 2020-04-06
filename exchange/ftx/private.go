@@ -87,6 +87,7 @@ func (e *Ftx) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			Side:         o.Side,
 			DealRate:     o.AvgFillPrice,
 			DealQuantity: o.Size - o.RemainingSize,
+			Timestamp:    o.CreatedAt.UnixNano(),
 			// JsonResponse: jsonGetOpenOrder,
 		}
 
@@ -153,6 +154,7 @@ func (e *Ftx) doGetOrderHistory(operation *exchange.AccountOperation) error {
 			Side:         o.Side,
 			DealRate:     o.AvgFillPrice,
 			DealQuantity: o.Size - o.RemainingSize,
+			Timestamp:    o.CreatedAt.UnixNano(),
 			// JsonResponse: jsonGetOrderHistory,
 		}
 
@@ -229,7 +231,7 @@ func (e *Ftx) doGetWithdrawalHistory(operation *exchange.AccountOperation) error
 			TxHash:    withdrawRecord.Txid,
 			ChainType: chainType,
 			Status:    statusMsg,
-			// TimeStamp :  ,
+			TimeStamp: withdrawRecord.Time.UnixNano(),
 		}
 
 		operation.WithdrawalHistory = append(operation.WithdrawalHistory, record)
@@ -289,7 +291,7 @@ func (e *Ftx) doGetDepositHistory(operation *exchange.AccountOperation) error {
 			TxHash:    depositRecord.Txid,
 			ChainType: chainType,
 			Status:    statusMsg,
-			// TimeStamp :  ,
+			TimeStamp: depositRecord.Time.UnixNano(),
 		}
 
 		operation.DepositHistory = append(operation.DepositHistory, record)
