@@ -510,7 +510,7 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Bigone) ApiKeyRequest(strRequestPath string, mapParams map[string]string, method string) string {
-	nonce := strconv.FormatInt(time.Now().UnixNano()+20*1e9, 10) //time.Now().UnixNano() + 20*1e9 //strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
+	nonce := strconv.FormatInt(time.Now().UnixNano() /* +20*1e9 */, 10) //time.Now().UnixNano() + 20*1e9 //strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
 	strRequestUrl := API_URL + strRequestPath
 
 	//Signature Request Params
