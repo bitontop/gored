@@ -149,6 +149,7 @@ const (
 	LIVECOIN     ExchangeName = "LIVECOIN"
 	MXC          ExchangeName = "MXC"
 	NEWCAPITAL   ExchangeName = "NEWCAPITAL"
+	NICEHASH     ExchangeName = "NICEHASH"
 	OKEX         ExchangeName = "OKEX"
 	OKEXDM       ExchangeName = "OKEXDM"
 	OTCBTC       ExchangeName = "OTCBTC"
