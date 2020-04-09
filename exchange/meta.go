@@ -106,6 +106,7 @@ const (
 	BLANK        ExchangeName = "BLANK"
 	BLEUTRADE    ExchangeName = "BLEUTRADE"
 	BLOCKTRADE   ExchangeName = "BLOCKTRADE"
+	BILAXY       ExchangeName = "BILAXY"
 	COINALL      ExchangeName = "COINALL"
 	COINMEX      ExchangeName = "COINMEX"
 	COINBASE     ExchangeName = "COINBASE"
