@@ -245,11 +245,11 @@ func (e *Goko) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Goko) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Goko) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Goko) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

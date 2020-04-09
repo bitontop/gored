@@ -262,11 +262,11 @@ func (e *Tagz) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Public API ***************/
 func (e *Tagz) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Tagz) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Tagz) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	// case exchange.Transfer:
 	// 	return e.transfer(operation)
@@ -299,7 +299,6 @@ func (e *Tagz) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonCreateWithdraw
 	}
 
@@ -349,7 +348,6 @@ func (e *Tagz) transfer(operation *exchange.AccountOperation) error {
 	jsonTransferReturn := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonTransferReturn
 	}
 
@@ -393,7 +391,6 @@ func (e *Tagz) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -454,7 +451,6 @@ func (e *Tagz) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonBalanceReturn
 	}
 

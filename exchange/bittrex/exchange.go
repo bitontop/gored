@@ -240,7 +240,7 @@ func (e *Bittrex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	constrainFetchMethod.Deposit = true
 	constrainFetchMethod.Confirmation = true
 	constrainFetchMethod.ConstrainSource = 1
-	constrainFetchMethod.ApiRestrictIP = false
+	constrainFetchMethod.ApiRestrictIP = true
 	return constrainFetchMethod
 }
 

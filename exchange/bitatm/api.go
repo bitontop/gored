@@ -212,11 +212,11 @@ func (e *BitATM) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *BitATM) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *BitATM) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *BitATM) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

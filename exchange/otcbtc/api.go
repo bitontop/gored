@@ -259,11 +259,11 @@ func (e *Otcbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Otcbtc) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Otcbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Otcbtc) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

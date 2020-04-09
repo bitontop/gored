@@ -222,11 +222,11 @@ func (e *Idex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Idex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Idex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Idex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

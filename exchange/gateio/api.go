@@ -285,7 +285,7 @@ func (e *Gateio) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Gateio) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Gateio) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	// case exchange.BalanceList:
 	// 	return e.getAllBalance(operation)
@@ -319,7 +319,6 @@ func (e *Gateio) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

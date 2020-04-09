@@ -234,11 +234,11 @@ func (e *Bitpie) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Public API ***************/
 func (e *Bitpie) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Bitpie) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitpie) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -272,7 +272,6 @@ func (e *Bitpie) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

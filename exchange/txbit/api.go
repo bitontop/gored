@@ -221,7 +221,7 @@ func (e *Txbit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Txbit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Txbit) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
@@ -257,7 +257,6 @@ func (e *Txbit) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyGET(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

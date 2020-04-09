@@ -248,11 +248,11 @@ func (e *Gemini) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Gemini) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Gemini) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Gemini) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

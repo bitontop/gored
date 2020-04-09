@@ -243,11 +243,11 @@ func Sort(slice interface{}, less func(i, j int) bool) {
 }
 
 func (e *Probit) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Probit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Probit) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

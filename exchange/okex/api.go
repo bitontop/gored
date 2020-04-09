@@ -249,7 +249,7 @@ func (e *Okex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Okex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Okex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Transfer:
 		return e.transfer(operation)
@@ -287,7 +287,6 @@ func (e *Okex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 
@@ -334,7 +333,6 @@ func (e *Okex) transfer(operation *exchange.AccountOperation) error {
 	jsonTransferReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonTransferReturn
 	}
 
@@ -374,7 +372,6 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -427,7 +424,6 @@ func (e *Okex) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonBalanceReturn
 	}
 

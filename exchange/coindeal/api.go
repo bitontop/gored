@@ -238,11 +238,11 @@ func (e *Coindeal) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Coindeal) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Coindeal) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Coindeal) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

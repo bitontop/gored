@@ -257,11 +257,11 @@ func (e *Tradeogre) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Tradeogre) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Tradeogre) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Tradeogre) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

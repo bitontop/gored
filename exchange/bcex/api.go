@@ -263,11 +263,11 @@ func (e *Bcex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bcex) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Bcex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bcex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

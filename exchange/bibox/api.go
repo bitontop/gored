@@ -263,11 +263,11 @@ func (e *Bibox) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bibox) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Bibox) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bibox) DoAccountOperation(operation *exchange.AccountOperation) error {
 
 	switch operation.Type {
 
@@ -311,7 +311,6 @@ func (e *Bibox) transfer(operation *exchange.AccountOperation) error { //(coin *
 	jsonInnerReturn := e.ApiKeyPOSTInner(strRequest, mapParams) //ApiKeyPOST
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonInnerReturn
 	}
 
@@ -363,7 +362,6 @@ func (e *Bibox) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonWithdraw := e.ApiKeyPOST(strRequestUrl, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonWithdraw
 	}
 

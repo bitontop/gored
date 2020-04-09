@@ -1,5 +1,7 @@
 package binance
 
+import "time"
+
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -252,4 +254,74 @@ type ContractBalance struct {
 	TotalUnrealizedProfit       string `json:"totalUnrealizedProfit"`
 	TotalWalletBalance          string `json:"totalWalletBalance"`
 	UpdateTime                  int    `json:"updateTime"`
+}
+
+// private operation
+type OpenOrders []struct {
+	Symbol              string `json:"symbol"`
+	OrderID             int    `json:"orderId"`
+	OrderListID         int    `json:"orderListId"`
+	ClientOrderID       string `json:"clientOrderId"`
+	Price               string `json:"price"`
+	OrigQty             string `json:"origQty"`
+	ExecutedQty         string `json:"executedQty"`
+	CummulativeQuoteQty string `json:"cummulativeQuoteQty"`
+	Status              string `json:"status"`
+	TimeInForce         string `json:"timeInForce"`
+	Type                string `json:"type"`
+	Side                string `json:"side"`
+	StopPrice           string `json:"stopPrice"`
+	IcebergQty          string `json:"icebergQty"`
+	Time                int64  `json:"time"`
+	UpdateTime          int64  `json:"updateTime"`
+	IsWorking           bool   `json:"isWorking"`
+	OrigQuoteOrderQty   string `json:"origQuoteOrderQty"`
+}
+
+type CloseOrders []struct {
+	Symbol          string `json:"symbol"`
+	ID              int    `json:"id"`
+	OrderID         int    `json:"orderId"`
+	OrderListID     int    `json:"orderListId"`
+	Price           string `json:"price"`
+	Qty             string `json:"qty"`
+	QuoteQty        string `json:"quoteQty"`
+	Commission      string `json:"commission"`
+	CommissionAsset string `json:"commissionAsset"`
+	Time            int64  `json:"time"`
+	IsBuyer         bool   `json:"isBuyer"`
+	IsMaker         bool   `json:"isMaker"`
+	IsBestMatch     bool   `json:"isBestMatch"`
+}
+
+type WithdrawHistory []struct {
+	Address         string    `json:"address"`
+	Amount          string    `json:"amount"`
+	ApplyTime       time.Time `json:"applyTime"`
+	Coin            string    `json:"coin"`
+	ID              string    `json:"id"`
+	WithdrawOrderID string    `json:"withdrawOrderId,omitempty"`
+	Network         string    `json:"network"`
+	TransferType    int       `json:"transferType"`
+	Status          int       `json:"status"`
+	TxID            string    `json:"txId"`
+}
+
+type DepositHistory []struct {
+	Address    string `json:"address"`
+	AddressTag string `json:"addressTag"`
+	Amount     string `json:"amount"`
+	Coin       string `json:"coin"`
+	InsertTime int64  `json:"insertTime"`
+	Network    string `json:"network"`
+	Status     int    `json:"status"`
+	TxID       string `json:"txId"`
+}
+
+type DepositAddress struct {
+	Code    int    `json:"code"`
+	Address string `json:"address"`
+	Coin    string `json:"coin"`
+	Tag     string `json:"tag"`
+	URL     string `json:"url"`
 }

@@ -332,7 +332,7 @@ func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Stex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Stex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -373,7 +373,6 @@ func (e *Stex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonCreateWithdraw := e.ApiKeyRequest("POST", mapParams, strRequestUrl)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonCreateWithdraw
 	}
 

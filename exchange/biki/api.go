@@ -261,11 +261,11 @@ func (e *Biki) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Biki) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Biki) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Biki) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

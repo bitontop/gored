@@ -197,11 +197,11 @@ func (e *Okexdm) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Okexdm) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Okexdm) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Okexdm) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

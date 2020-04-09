@@ -191,7 +191,7 @@ func Test_DoWithdraw(e exchange.Exchange, c *coin.Coin, amount string, addr stri
 		WithdrawTag:     tag,
 		DebugMode:       true,
 	}
-	err := e.DoAccoutOperation(opWithdraw)
+	err := e.DoAccountOperation(opWithdraw)
 	if err != nil {
 		log.Printf("%v", err)
 	}
@@ -207,7 +207,7 @@ func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to 
 		TransferDestination: to,
 		DebugMode:           true,
 	}
-	err := e.DoAccoutOperation(opTransfer)
+	err := e.DoAccountOperation(opTransfer)
 	if err != nil {
 		log.Printf("%v", err)
 	}
@@ -219,7 +219,7 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 		Coin:   c,
 		Wallet: balanceType,
 	}
-	err := e.DoAccoutOperation(opBalance)
+	err := e.DoAccountOperation(opBalance)
 	if err != nil {
 		log.Printf("%v", err)
 	}
@@ -231,7 +231,7 @@ func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) 
 		Type:   exchange.BalanceList,
 		Wallet: balanceType,
 	}
-	err := e.DoAccoutOperation(opAllBalance)
+	err := e.DoAccountOperation(opAllBalance)
 	if err != nil {
 		log.Printf("%v", err)
 	}
@@ -300,6 +300,96 @@ func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
 		log.Printf("%v", err)
 	}
 	log.Printf("%s OrderBook %+v", e.GetName(), opTradeHistory.Maker)
+}
+
+func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
+	op := &exchange.AccountOperation{
+		Type:   exchange.GetOpenOrder,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
+	}
+
+	if err := e.DoAccountOperation(op); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for _, o := range op.OpenOrders {
+			log.Printf("%s OpenOrders %+v", e.GetName(), o)
+		}
+	}
+}
+
+func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
+	op := &exchange.AccountOperation{
+		Type:   exchange.GetOrderHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
+	}
+
+	if err := e.DoAccountOperation(op); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for _, o := range op.OrderHistory {
+			log.Printf("%s OrderHistory %+v", e.GetName(), o)
+		}
+
+	}
+}
+
+func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
+	op := &exchange.AccountOperation{
+		Type:   exchange.GetDepositAddress,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   coin,
+	}
+
+	if err := e.DoAccountOperation(op); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for chain, addr := range op.DepositAddresses {
+			log.Printf("%s DepositAddresses: %v - %+v", e.GetName(), chain, addr)
+		}
+	}
+}
+
+func Test_AODepositHistory(e exchange.Exchange, pair *pair.Pair) {
+	op := &exchange.AccountOperation{
+		Type:   exchange.GetDepositHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
+	}
+
+	if err := e.DoAccountOperation(op); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for i, his := range op.DepositHistory {
+			log.Printf("%s DepositHistory: %v %+v", e.GetName(), i, his)
+		}
+	}
+}
+
+func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
+	op := &exchange.AccountOperation{
+		Type:   exchange.GetWithdrawalHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		Coin:   pair.Base,
+		Pair:   pair,
+	}
+
+	if err := e.DoAccountOperation(op); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for i, his := range op.WithdrawalHistory {
+			log.Printf("%s WithdrawalHistory: %v %+v", e.GetName(), i, his)
+		}
+	}
 }
 
 /********************General********************/

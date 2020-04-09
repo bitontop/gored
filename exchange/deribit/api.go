@@ -216,11 +216,11 @@ func (e *Deribit) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Deribit) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Deribit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Deribit) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

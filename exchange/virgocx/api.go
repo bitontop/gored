@@ -249,11 +249,11 @@ func (e *Virgocx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 /*************** Public API ***************/
 func (e *Virgocx) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Virgocx) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Virgocx) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.BalanceList:
 		return e.getAllBalance(operation)
@@ -277,7 +277,6 @@ func (e *Virgocx) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -324,7 +323,6 @@ func (e *Virgocx) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonBalanceReturn
 	}
 

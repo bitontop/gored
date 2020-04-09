@@ -254,11 +254,11 @@ func (e *Ibankdigital) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Ibankdigital) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Ibankdigital) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Ibankdigital) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -292,7 +292,6 @@ func (e *Ibankdigital) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw := e.ApiKeyPost(strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 

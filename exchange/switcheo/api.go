@@ -237,11 +237,11 @@ func (e *Switcheo) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Switcheo) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Switcheo) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Switcheo) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

@@ -215,11 +215,11 @@ func (e *HuobiOTC) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *HuobiOTC) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *HuobiOTC) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *HuobiOTC) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

@@ -233,7 +233,7 @@ func (e *Bitz) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Bitz) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitz) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 
 	// case exchange.Transfer:
@@ -271,7 +271,6 @@ func (e *Bitz) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonWithdrawReturn := e.ApiKeyPOST(mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonWithdrawReturn
 	}
 

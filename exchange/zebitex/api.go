@@ -248,7 +248,7 @@ func (e *Zebitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Zebitex) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Zebitex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.BalanceList:
 		return e.getAllBalance(operation)
@@ -271,7 +271,6 @@ func (e *Zebitex) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyGet(strRequest, nil)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -327,7 +326,6 @@ func (e *Zebitex) getBalance(operation *exchange.AccountOperation) error {
 	jsonBalanceReturn := e.ApiKeyGet(strRequest, nil)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonBalanceReturn
 	}
 
@@ -394,7 +392,6 @@ func (e *Zebitex) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonSubmitWithdraw, code := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestPath
-		operation.MapParams = fmt.Sprintf("%+v", mapParams)
 		operation.CallResponce = jsonSubmitWithdraw
 	}
 	if code == 204 {

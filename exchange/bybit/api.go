@@ -237,11 +237,11 @@ func (e *Bybit) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bybit) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Bybit) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bybit) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

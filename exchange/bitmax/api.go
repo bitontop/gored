@@ -227,11 +227,11 @@ func (e *Bitmax) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 func (e *Bitmax) LoadPublicData(operation *exchange.PublicOperation) error {
-	return nil
+	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
 /*************** Private API ***************/
-func (e *Bitmax) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Bitmax) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return nil
 }
 

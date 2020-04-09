@@ -231,7 +231,7 @@ func (e *Hitbtc) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Hitbtc) DoAccoutOperation(operation *exchange.AccountOperation) error {
+func (e *Hitbtc) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.BalanceList:
 		return e.getAllBalance(operation)
@@ -255,7 +255,6 @@ func (e *Hitbtc) getAllBalance(operation *exchange.AccountOperation) error {
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", make(map[string]string), strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
@@ -311,7 +310,6 @@ func (e *Hitbtc) getBalance(operation *exchange.AccountOperation) error {
 	// log.Printf("RETURN : %v", jsonBalanceReturn)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonBalanceReturn
 	}
 
@@ -377,7 +375,6 @@ func (e *Hitbtc) doWithdraw(operation *exchange.AccountOperation) error {
 	jsonWithdrawReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.MapParams = ""
 		operation.CallResponce = jsonWithdrawReturn
 	}
 
