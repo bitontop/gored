@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -144,8 +145,8 @@ func (e *Bilaxy) GetPairsData() error {
 					ExSymbol:    key,
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     Decimal(float64(data.AmountPrecision)),
-					PriceFilter: Decimal(float64(data.PricePrecision)),
+					LotSize:     math.Pow10(-1 * data.AmountPrecision),
+					PriceFilter: math.Pow10(-1 * data.PricePrecision),
 					Listed:      true,
 				}
 			} else {
@@ -157,11 +158,6 @@ func (e *Bilaxy) GetPairsData() error {
 		}
 	}
 	return nil
-}
-
-func Decimal(value float64) float64 {
-	value, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", value), 64)
-	return value
 }
 
 /*Get Pair Market Depth
