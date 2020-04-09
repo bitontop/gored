@@ -59,6 +59,7 @@ import (
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/newcapital"
+	"github.com/bitontop/gored/exchange/nicehash"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
@@ -569,6 +570,12 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		return ex
 	case exchange.BILAXY:
 		ex := bilaxy.CreateBilaxy(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+	case exchange.NICEHASH:
+		ex := nicehash.CreateNicehash(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
