@@ -513,17 +513,3 @@ func (e *Bilaxy) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 
 	return string(body)
 }
-
-func (e *Bilaxy) DoAccountOperation(operation *exchange.AccountOperation) error {
-	switch operation.Type {
-	case exchange.Withdraw:
-		return nil
-		// case exchange.Transfer:
-		// 	return e.transfer(operation)
-		// case exchange.BalanceList:
-		// 	return e.getAllBalance(operation)
-		// case exchange.Balance:
-		// 	return e.getBalance(operation)
-	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
-}
