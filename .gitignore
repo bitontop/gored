@@ -8,3 +8,4 @@ test/*.cache
 .ishell_history
 test/logs/*
 .vscode/ftp-sync.json
+test/conf/*
