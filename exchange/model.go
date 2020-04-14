@@ -95,7 +95,7 @@ type Order struct {
 	FilledOrders  []int64
 	Rate          float64 `bson:"Rate"`
 	Quantity      float64 `bson:"Quantity"`
-	Side          string
+	Side          OrderType
 	Status        OrderStatus `json:"status"`
 	StatusMessage string
 	DealRate      float64

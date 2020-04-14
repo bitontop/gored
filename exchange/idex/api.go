@@ -277,7 +277,7 @@ func (e *Idex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -321,7 +321,7 @@ func (e *Idex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

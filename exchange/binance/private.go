@@ -120,11 +120,17 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			OrderID:      fmt.Sprintf("%v", o.OrderID),
 			Rate:         rate,
 			Quantity:     quantity,
-			Side:         o.Side,
 			DealRate:     rate,
 			DealQuantity: dealQuantity,
 			Timestamp:    o.UpdateTime,
 			// JsonResponse: jsonGetOpenOrder,
+		}
+
+		switch o.Side {
+		case "BUY":
+			order.Side = exchange.BUY
+		case "SELL":
+			order.Side = exchange.SELL
 		}
 
 		if o.Status == "CANCELED" {
@@ -186,11 +192,9 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 			return operation.Error
 		}
 
-		side := ""
+		side := exchange.SELL
 		if o.IsBuyer {
-			side = "Buy"
-		} else {
-			side = "Sell"
+			side = exchange.BUY
 		}
 
 		order := &exchange.Order{

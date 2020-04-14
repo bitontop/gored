@@ -331,7 +331,7 @@ func (e *Blocktrade) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchan
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -369,7 +369,7 @@ func (e *Blocktrade) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchang
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

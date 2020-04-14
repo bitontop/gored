@@ -336,7 +336,7 @@ func (e *Gemini) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      sellorder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -369,7 +369,7 @@ func (e *Gemini) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      buyorder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

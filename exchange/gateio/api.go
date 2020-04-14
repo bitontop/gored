@@ -411,7 +411,7 @@ func (e *Gateio) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      fmt.Sprintf("%d", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -445,7 +445,7 @@ func (e *Gateio) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      fmt.Sprintf("%d", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

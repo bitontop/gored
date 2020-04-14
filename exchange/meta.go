@@ -9,6 +9,7 @@ type DataSource string
 type ExchangeName string
 type MarginAction string
 type UpdateMethod string
+type OrderType string
 
 // from goredmergin
 type ContractAction string
@@ -44,6 +45,9 @@ const (
 	LIMIT_SELL   MarginAction = "LIMIT_SELL"
 	MARKET_BUY   MarginAction = "MARKET_BUY"
 	MARKET_SELL  MarginAction = "MARKET_SELL"
+
+	BUY  OrderType = "BUY"
+	SELL OrderType = "SELL"
 
 	// ************ from goredmergin ************
 	CONTRACT_MARKET_BUY   ContractAction = "CONTRACT_MARKET_BUY"

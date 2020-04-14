@@ -341,7 +341,7 @@ func (e *Switcheo) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -379,7 +379,7 @@ func (e *Switcheo) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

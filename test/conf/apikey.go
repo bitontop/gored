@@ -12,8 +12,8 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 	config.ExName = name
 	switch name {
 	case exchange.BINANCE:
-		config.API_KEY = ""
-		config.API_SECRET = ""
+		config.API_KEY = "d9e0KQDxRvbKseG4wrmGKQWsM3dtZl4R5gerOXeNcpXOPYDuiVIlqNngKn5Fa01m"
+		config.API_SECRET = "HOhmtTcrEkDXHf6Kla7lDDh0kBawl5crKX3qjxL8oKQWCFbk4jWZg8odxjFYTPes"
 		break
 
 	case exchange.BITTREX:
