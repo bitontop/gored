@@ -387,7 +387,7 @@ func (e *Binance) doGeTransferHistory(operation *exchange.AccountOperation) erro
 		c := e.GetCoinBySymbol(tx.Asset)
 		quantity, err := strconv.ParseFloat(tx.Qty, 64)
 		if err != nil {
-			operation.Error = fmt.Errorf("%s doGetTransferHistory parse quantity Err: %v, %v", e.GetName(), err, withdrawRecord.Amount)
+			operation.Error = fmt.Errorf("%s doGetTransferHistory parse quantity Err: %v, %v", e.GetName(), err, tx.Qty)
 			return operation.Error
 		}
 
@@ -400,10 +400,10 @@ func (e *Binance) doGeTransferHistory(operation *exchange.AccountOperation) erro
 		switch tx.Type {
 		case 1:
 			record.Type = exchange.TransferIn
-			operation.TransferIn = append(operation.TransferIn, record)
+			operation.TransferInHistory = append(operation.TransferInHistory, record)
 		case 2:
 			record.Type = exchange.TransferOut
-			operation.TransferOut = append(operation.TransferOut, record)
+			operation.TransferOutHistory = append(operation.TransferOutHistory, record)
 		}
 	}
 
