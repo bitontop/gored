@@ -719,10 +719,17 @@ func (e *Zebitex) ListOrders() ([]*exchange.Order, error) {
 			OrderID:      string(orderItem.Id),
 			Rate:         rate,
 			Quantity:     quantity,
-			Side:         orderItem.Side,
 			Status:       exchange.New,
 			JsonResponse: jsonOrderStatus,
 		}
+
+		switch orderItem.Side {
+		case "buy":
+			order.Side = exchange.BUY
+		case "sell":
+			order.Side = exchange.SELL
+		}
+
 		res = append(res, order)
 	}
 
