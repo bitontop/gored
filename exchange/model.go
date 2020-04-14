@@ -186,6 +186,7 @@ const (
 	GetOrderHistory      OperationType = "GetOrderHistory" // All Orders other than open orders
 	GetDepositHistory    OperationType = "GetDepositHistory"
 	GetWithdrawalHistory OperationType = "GetWithdrawalHistory"
+	GetTransferHistory   OperationType = "GetTransferHistory"
 	GetDepositAddress    OperationType = "GetDepositAddress" // Get address for one coin
 )
 
@@ -240,6 +241,10 @@ type AccountOperation struct {
 	WithdrawalHistory []*WDHistory
 	DepositHistory    []*WDHistory
 
+	// #Sub Account Transfer History
+	TransferInHistory  []*TransferHistory
+	TransferOutHistory []*TransferHistory
+
 	// #GetDepositAddress
 	// Input: Coin. Get addresses for mainnet and erc20.
 	DepositAddresses map[ChainType]*DepositAddr // key: chainType
@@ -286,6 +291,21 @@ type PublicOperation struct {
 
 	// ##### New Changes - Contract
 	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
+}
+
+type TransferType string
+
+const (
+	TransferIn  TransferType = "TransferIn"
+	TransferOut TransferType = "TransferOut"
+)
+
+type TransferHistory struct {
+	ID        string       `json:"id"`
+	Coin      *coin.Coin   `json:"transfer_history_coin"`
+	Type      TransferType `json:"type"`
+	Quantity  float64      `json:"quantity"`
+	TimeStamp int64        `json:"timestamp"`
 }
 
 type WDHistory struct {

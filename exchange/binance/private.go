@@ -359,10 +359,56 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 	return nil
 }
 
-// func (e *Binance) getCoinChains(symbol string) []string {
+func (e *Binance) doGeTransferHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
 
-// 	return nil
-// }
+	transfer := TransferHistory{}
+	strRequest := "/sapi/v1/sub-account/transfer/subUserHistory"
+
+	mapParams := make(map[string]string)
+
+	jsonTransferOutHistory := e.ApiKeyGet(mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferOutHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferOutHistory), &transfer); err != nil {
+		operation.Error = fmt.Errorf("%s doTransferOutHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+	for _, tx := range transfer {
+		c := e.GetCoinBySymbol(tx.Asset)
+		quantity, err := strconv.ParseFloat(tx.Qty, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doGetTransferHistory parse quantity Err: %v, %v", e.GetName(), err, withdrawRecord.Amount)
+			return operation.Error
+		}
+
+		record := &exchange.TransferHistory{
+			Coin:      c,
+			Quantity:  quantity,
+			TimeStamp: tx.Time,
+		}
+
+		switch tx.Type {
+		case 1:
+			record.Type = exchange.TransferIn
+			operation.TransferIn = append(operation.TransferIn, record)
+		case 2:
+			record.Type = exchange.TransferOut
+			operation.TransferOut = append(operation.TransferOut, record)
+		}
+	}
+
+	return nil
+}
 
 func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
