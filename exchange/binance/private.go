@@ -60,6 +60,10 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositHistory(operation)
 		}
+	case exchange.GetTransferHistory:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetTransferHistory(operation)
+		}
 	case exchange.GetDepositAddress:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositAddress(operation)
@@ -359,7 +363,7 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 	return nil
 }
 
-func (e *Binance) doGeTransferHistory(operation *exchange.AccountOperation) error {
+func (e *Binance) doGetTransferHistory(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
 	}
