@@ -16,6 +16,7 @@ type ContractAction string
 type ContractTransDir string
 type OffSetType string
 type OrderPriceType string
+type OrderTradeType string
 
 const (
 	MAINNET ChainType = "MAINNET"
@@ -63,7 +64,7 @@ const (
 	OPEN  OffSetType = "open"
 	CLOSE OffSetType = "close"
 
-	// Huobi, Bitmex
+	// Huobi, Bitmex Contract
 	LIMIT          OrderPriceType = "limit"
 	OPTIMAL_5_FOK  OrderPriceType = "optimal_5_fok"
 	OPTIMAL_5      OrderPriceType = "optimal_5"
@@ -73,14 +74,24 @@ const (
 	BBO            OrderPriceType = "opponent"
 	BBO_FOK        OrderPriceType = "opponent_fok"
 
+	FUTURE_TO_SPOT ContractTransDir = "futures-to-pro"
+	SPOT_TO_FUTURE ContractTransDir = "pro-to-futures"
+
 	// Binance Contract
 	GTC OrderPriceType = "GTC"
 	IOC OrderPriceType = "IOC"
 	FOK OrderPriceType = "FOK"
 	GTX OrderPriceType = "GTX"
 
-	FUTURE_TO_SPOT ContractTransDir = "futures-to-pro"
-	SPOT_TO_FUTURE ContractTransDir = "pro-to-futures"
+	TRADE_LIMIT  OrderTradeType = "LIMIT"
+	TRADE_MARKET OrderTradeType = "MARKET"
+	// Types below need more params, TODO
+	Trade_STOP                 OrderTradeType = "STOP"
+	Trade_TAKE_PROFIT          OrderTradeType = "TAKE_PROFIT"
+	Trade_STOP_MARKET          OrderTradeType = "STOP_MARKET"
+	Trade_TAKE_PROFIT_MARKET   OrderTradeType = "TAKE_PROFIT_MARKET"
+	Trade_TRAILING_STOP_MARKET OrderTradeType = "TRAILING_STOP_MARKET"
+
 	// *****************************************
 
 	API_TIGGER  UpdateMethod = "API_TIGGER"

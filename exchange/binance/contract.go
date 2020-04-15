@@ -81,7 +81,7 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	} else {
 		mapParams["side"] = "SELL"
 	}
-	mapParams["type"] = "LIMIT"
+	mapParams["type"] = string(operation.TradeType) // "LIMIT"
 	mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
 	mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
 	mapParams["timeInForce"] = string(operation.OrderType) //"GTC"

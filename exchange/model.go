@@ -263,7 +263,8 @@ type AccountOperation struct {
 	Rate           float64
 	Quantity       float64
 	Order          *Order
-	OrderType      OrderPriceType
+	OrderType      OrderPriceType // eg. FOK
+	TradeType      OrderTradeType // eg. TRADE_LIMIT
 	OrderDirection TradeDirection
 }
 
