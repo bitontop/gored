@@ -52,77 +52,78 @@ func Test_Binance(t *testing.T) {
 	// ==============================================
 
 	// contract PlaceOrder
-	/*opPlaceOrder := &exchange.AccountOperation{
-		Wallet:         exchange.ContractWallet,
-		Type:           exchange.PlaceOrder,
-		Ex:             e.GetName(),
-		Pair:           pair,
-		OrderDirection: exchange.Sell,
-		Rate:           9000,
-		Quantity:       0.01,
-		DebugMode:      true,
-	}
-	err = e.DoAccountOperation(opPlaceOrder)
-	if err != nil {
-		log.Printf("==%v", err)
-	}
-	// ==============================================
+	// opPlaceOrder := &exchange.AccountOperation{
+	// 	Wallet:         exchange.ContractWallet,
+	// 	Type:           exchange.PlaceOrder,
+	// 	Ex:             e.GetName(),
+	// 	Pair:           pair,
+	// 	OrderDirection: exchange.Sell,
+	// 	OrderType:      exchange.GTC,
+	// 	Rate:           9000,
+	// 	Quantity:       0.01,
+	// 	DebugMode:      true,
+	// }
+	// err = e.DoAccountOperation(opPlaceOrder)
+	// if err != nil {
+	// 	log.Printf("==%v", err)
+	// }
+	// // ==============================================
 
-	// contract OrderStatus
-	order := &exchange.Order{
-		Pair:    pair,
-		OrderID: "1573346959",
-	}
-	opOrderStatus := &exchange.AccountOperation{
-		Wallet:    exchange.ContractWallet,
-		Type:      exchange.GetOrderStatus,
-		Ex:        e.GetName(),
-		Pair:      pair,
-		Order:     order,
-		DebugMode: true,
-	}
-	err = e.DoAccountOperation(opOrderStatus)
-	if err != nil {
-		log.Printf("==%v", err)
-	}
-	// ==============================================
+	// // contract OrderStatus
+	// order := &exchange.Order{
+	// 	Pair:    pair,
+	// 	OrderID: "1573346959",
+	// }
+	// opOrderStatus := &exchange.AccountOperation{
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Type:      exchange.GetOrderStatus,
+	// 	Ex:        e.GetName(),
+	// 	Pair:      pair,
+	// 	Order:     order,
+	// 	DebugMode: true,
+	// }
+	// err = e.DoAccountOperation(opOrderStatus)
+	// if err != nil {
+	// 	log.Printf("==%v", err)
+	// }
+	// // ==============================================
 
-	// contract CancelOrder
-	order = &exchange.Order{
-		Pair:    pair,
-		OrderID: "1573346959",
-	}
-	opCancelOrder := &exchange.AccountOperation{
-		Wallet:    exchange.ContractWallet,
-		Type:      exchange.CancelOrder,
-		Ex:        e.GetName(),
-		Pair:      pair,
-		Order:     order,
-		DebugMode: true,
-	}
-	err = e.DoAccountOperation(opCancelOrder)
-	if err != nil {
-		log.Printf("==%v", err)
-	}
-	// ==============================================
+	// // contract CancelOrder
+	// order = &exchange.Order{
+	// 	Pair:    pair,
+	// 	OrderID: "1573346959",
+	// }
+	// opCancelOrder := &exchange.AccountOperation{
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Type:      exchange.CancelOrder,
+	// 	Ex:        e.GetName(),
+	// 	Pair:      pair,
+	// 	Order:     order,
+	// 	DebugMode: true,
+	// }
+	// err = e.DoAccountOperation(opCancelOrder)
+	// if err != nil {
+	// 	log.Printf("==%v", err)
+	// }
+	// // ==============================================
 
-	// contract AllBalance
-	opAllBalance := &exchange.AccountOperation{
-		Wallet:    exchange.ContractWallet,
-		Type:      exchange.BalanceList,
-		Ex:        e.GetName(),
-		DebugMode: true,
-	}
-	err = e.DoAccountOperation(opAllBalance)
-	if err != nil {
-		log.Printf("==%v", err)
-	}
-	for _, balance := range opAllBalance.BalanceList {
-		log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
-	}
-	if len(opAllBalance.BalanceList) == 0 {
-		log.Println("AllAccount 0 balance")
-	}*/
+	// // contract AllBalance
+	// opAllBalance := &exchange.AccountOperation{
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Type:      exchange.BalanceList,
+	// 	Ex:        e.GetName(),
+	// 	DebugMode: true,
+	// }
+	// err = e.DoAccountOperation(opAllBalance)
+	// if err != nil {
+	// 	log.Printf("==%v", err)
+	// }
+	// for _, balance := range opAllBalance.BalanceList {
+	// 	log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	// }
+	// if len(opAllBalance.BalanceList) == 0 {
+	// 	log.Println("AllAccount 0 balance")
+	// }
 	// ==============================================
 
 	Test_Balance(e, pair)
