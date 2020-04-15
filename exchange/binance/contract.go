@@ -84,7 +84,7 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	mapParams["type"] = "LIMIT"
 	mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
 	mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
-	mapParams["timeInForce"] = "GTC"
+	mapParams["timeInForce"] = string(operation.OrderType) //"GTC"
 	//  timeInForce:
 	// 	GTC - Good Till Cancel 成交为止
 	//  IOC - Immediate or Cancel 无法立即成交(吃单)的部分就撤销

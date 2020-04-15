@@ -258,6 +258,7 @@ type AccountOperation struct {
 	Rate           float64
 	Quantity       float64
 	Order          *Order
+	OrderType      OrderPriceType
 	OrderDirection TradeDirection
 }
 

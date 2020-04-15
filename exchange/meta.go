@@ -59,6 +59,7 @@ const (
 	OPEN  OffSetType = "open"
 	CLOSE OffSetType = "close"
 
+	// Huobi, Bitmex
 	LIMIT          OrderPriceType = "limit"
 	OPTIMAL_5_FOK  OrderPriceType = "optimal_5_fok"
 	OPTIMAL_5      OrderPriceType = "optimal_5"
@@ -67,6 +68,12 @@ const (
 	OPTIMAL_20_FOK OrderPriceType = "optimal_20_fok"
 	BBO            OrderPriceType = "opponent"
 	BBO_FOK        OrderPriceType = "opponent_fok"
+
+	// Binance Contract
+	GTC OrderPriceType = "GTC"
+	IOC OrderPriceType = "IOC"
+	FOK OrderPriceType = "FOK"
+	GTX OrderPriceType = "GTX"
 
 	FUTURE_TO_SPOT ContractTransDir = "futures-to-pro"
 	SPOT_TO_FUTURE ContractTransDir = "pro-to-futures"
