@@ -305,7 +305,7 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -342,7 +342,7 @@ func (e *Ftx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

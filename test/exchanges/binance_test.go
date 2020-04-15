@@ -5,8 +5,8 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
-	"log"
 	"testing"
+	"time"
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
@@ -17,7 +17,7 @@ import (
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
 	e := InitEx(exchange.BINANCE)
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("BTC|KMD")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -131,21 +131,16 @@ func Test_Binance(t *testing.T) {
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
 	// Test_TradeHistory(e, pair)
-}
 
-func Test_Binance_TradeHistory(t *testing.T) {
-	e := InitEx(exchange.BINANCE)
-	p := pair.GetPairByKey("BTC|ETH")
-
-	opTradeHistory := &exchange.PublicOperation{
-		Type:      exchange.TradeHistory,
-		EX:        e.GetName(),
-		Pair:      p,
-		DebugMode: true,
-	}
-
-	err := e.LoadPublicData(opTradeHistory)
-	if err != nil {
-		log.Printf("%v", err)
-	}
+	// Test_AOOpenOrder(e, pair)
+	// time.Sleep(time.Second * 5)
+	Test_AOOrderHistory(e, pair)
+	time.Sleep(time.Second * 5)
+	// Test_AODepositAddress(e, pair.Base)
+	// time.Sleep(time.Second * 5)
+	// Test_AODepositHistory(e, pair)
+	// time.Sleep(time.Second * 5)
+	// Test_AOWithdrawalHistory(e, pair)
+	// time.Sleep(time.Second * 5)
+	Test_AOTransferHistory(e)
 }

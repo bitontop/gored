@@ -327,7 +327,7 @@ func (e *Dcoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -365,7 +365,7 @@ func (e *Dcoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

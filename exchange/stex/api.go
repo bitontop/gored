@@ -491,7 +491,7 @@ func (e *Stex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceOrder,
 	}
@@ -529,7 +529,7 @@ func (e *Stex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceOrder,
 	}

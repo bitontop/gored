@@ -359,7 +359,7 @@ func (e *Bittrex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -396,7 +396,7 @@ func (e *Bittrex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

@@ -325,3 +325,12 @@ type DepositAddress struct {
 	Tag     string `json:"tag"`
 	URL     string `json:"url"`
 }
+
+type TransferHistory []struct {
+	CounterParty string `json:"counterParty"`
+	Email        string `json:"email"`
+	Type         int    `json:"type"`
+	Asset        string `json:"asset"`
+	Qty          string `json:"qty"`
+	Time         int64  `json:"time"`
+}

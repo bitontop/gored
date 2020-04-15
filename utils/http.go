@@ -33,6 +33,7 @@ type HttpPost struct {
 
 	//Output
 	ResponseBody []byte
+	StatusCode   int
 	DebugMode    bool `json:"debug mode"`
 	Error        error
 }
@@ -50,6 +51,7 @@ type HttpGet struct {
 	//Output
 	DebugMode    bool `json:"debug mode"`
 	ResponseBody []byte
+	StatusCode   int
 	Error        error
 }
 
@@ -84,7 +86,7 @@ func HttpPostRequest(httpPost *HttpPost) error {
 		return httpPost.Error
 	}
 	defer httpPost.Response.Body.Close()
-
+	httpPost.StatusCode = httpPost.Response.StatusCode
 	httpPost.ResponseBody, httpPost.Error = ioutil.ReadAll(httpPost.Response.Body)
 	if nil != httpPost.Error {
 		return httpPost.Error
@@ -224,8 +226,9 @@ func HttpGetRequest(httpGet *HttpGet) error {
 	if nil != httpGet.Error {
 		return httpGet.Error
 	}
-	defer httpGet.Response.Body.Close()
 
+	defer httpGet.Response.Body.Close()
+	httpGet.StatusCode = httpGet.Response.StatusCode
 	httpGet.ResponseBody, httpGet.Error = ioutil.ReadAll(httpGet.Response.Body)
 	if nil != httpGet.Error {
 		return httpGet.Error

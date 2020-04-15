@@ -373,7 +373,7 @@ func (e *Txbit) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      uuid.UUID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Side:        exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -413,7 +413,7 @@ func (e *Txbit) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      uuid.UUID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Side:        exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

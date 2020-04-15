@@ -392,6 +392,25 @@ func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 	}
 }
 
+func Test_AOTransferHistory(e exchange.Exchange) {
+	op := &exchange.AccountOperation{
+		Type:   exchange.GetTransferHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+	}
+
+	if err := e.DoAccountOperation(op); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for i, tIn := range op.TransferInHistory {
+			log.Printf("%s TransferInHistory: %v %+v", e.GetName(), i, tIn)
+		}
+		for i, tOut := range op.TransferOutHistory {
+			log.Printf("%s TransferOutHistory: %v %+v", e.GetName(), i, tOut)
+		}
+	}
+}
+
 /********************General********************/
 func Test_ConstraintFetch(e exchange.Exchange, p *pair.Pair) {
 	status := e.GetConstraintFetchMethod(p)

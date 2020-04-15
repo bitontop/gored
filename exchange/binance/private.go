@@ -60,6 +60,10 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositHistory(operation)
 		}
+	case exchange.GetTransferHistory:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetTransferHistory(operation)
+		}
 	case exchange.GetDepositAddress:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositAddress(operation)
@@ -116,11 +120,17 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			OrderID:      fmt.Sprintf("%v", o.OrderID),
 			Rate:         rate,
 			Quantity:     quantity,
-			Side:         o.Side,
 			DealRate:     rate,
 			DealQuantity: dealQuantity,
 			Timestamp:    o.UpdateTime,
 			// JsonResponse: jsonGetOpenOrder,
+		}
+
+		switch o.Side {
+		case "BUY":
+			order.Side = exchange.BUY
+		case "SELL":
+			order.Side = exchange.SELL
 		}
 
 		if o.Status == "CANCELED" {
@@ -182,11 +192,9 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 			return operation.Error
 		}
 
-		side := ""
+		side := exchange.SELL
 		if o.IsBuyer {
-			side = "Buy"
-		} else {
-			side = "Sell"
+			side = exchange.BUY
 		}
 
 		order := &exchange.Order{
@@ -359,10 +367,56 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 	return nil
 }
 
-// func (e *Binance) getCoinChains(symbol string) []string {
+func (e *Binance) doGetTransferHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
 
-// 	return nil
-// }
+	transfer := TransferHistory{}
+	strRequest := "/sapi/v1/sub-account/transfer/subUserHistory"
+
+	mapParams := make(map[string]string)
+
+	jsonTransferOutHistory := e.ApiKeyGet(mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferOutHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferOutHistory), &transfer); err != nil {
+		operation.Error = fmt.Errorf("%s doTransferOutHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+	for _, tx := range transfer {
+		c := e.GetCoinBySymbol(tx.Asset)
+		quantity, err := strconv.ParseFloat(tx.Qty, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doGetTransferHistory parse quantity Err: %v, %v", e.GetName(), err, tx.Qty)
+			return operation.Error
+		}
+
+		record := &exchange.TransferHistory{
+			Coin:      c,
+			Quantity:  quantity,
+			TimeStamp: tx.Time,
+		}
+
+		switch tx.Type {
+		case 1:
+			record.Type = exchange.TransferIn
+			operation.TransferInHistory = append(operation.TransferInHistory, record)
+		case 2:
+			record.Type = exchange.TransferOut
+			operation.TransferOutHistory = append(operation.TransferOutHistory, record)
+		}
+	}
+
+	return nil
+}
 
 func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
