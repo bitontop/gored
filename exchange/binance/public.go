@@ -125,15 +125,15 @@ func (e *Binance) doContractKline(operation *exchange.PublicOperation) error {
 		}
 
 		detail := &exchange.KlineDetail{
-			OpenTime:            k[0].(float64),
+			OpenTime:            k[0].(int64),
 			Open:                open,
 			High:                high,
 			Low:                 low,
 			Close:               close,
 			Volume:              volume,
-			CloseTime:           k[6].(float64),
+			CloseTime:           k[6].(int64),
 			QuoteAssetVolume:    quoteAssetVolume,
-			TradesCount:         k[8].(float64),
+			TradesCount:         k[8].(int64),
 			TakerBuyBaseVolume:  takerBuyBaseVolume,
 			TakerBuyQuoteVolume: takerBuyQuoteVolume,
 		}
