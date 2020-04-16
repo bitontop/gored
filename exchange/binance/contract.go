@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -31,7 +30,7 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
-	log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
+	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalances); err != nil {
 		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error

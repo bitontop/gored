@@ -35,6 +35,27 @@ func Test_Binance(t *testing.T) {
 	// Test_AOWithdrawalHistory(e, pair) // not tested with asset
 
 	var err error
+
+	// Spot AllBalance
+	opAllBalance := &exchange.AccountOperation{
+		Wallet:    exchange.SpotWallet,
+		Type:      exchange.BalanceList,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+	err = e.DoAccountOperation(opAllBalance)
+	if err != nil {
+		log.Printf("==%v", err)
+	}
+	for _, balance := range opAllBalance.BalanceList {
+		log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
+	if len(opAllBalance.BalanceList) == 0 {
+		log.Println("AllAccount 0 balance")
+	}
+	log.Printf("AllAccount done")
+
+	// ======================================================
 	// contract orderbook
 	// opOrderBook := &exchange.PublicOperation{
 	// 	Wallet: exchange.ContractWallet,
@@ -127,20 +148,20 @@ func Test_Binance(t *testing.T) {
 	// // ==============================================
 
 	// // contract AllBalance
-	// opAllBalance := &exchange.AccountOperation{
+	// opContractAllBalance := &exchange.AccountOperation{
 	// 	Wallet:    exchange.ContractWallet,
 	// 	Type:      exchange.BalanceList,
 	// 	Ex:        e.GetName(),
 	// 	DebugMode: true,
 	// }
-	// err = e.DoAccountOperation(opAllBalance)
+	// err = e.DoAccountOperation(opContractAllBalance)
 	// if err != nil {
 	// 	log.Printf("==%v", err)
 	// }
-	// for _, balance := range opAllBalance.BalanceList {
+	// for _, balance := range opContractAllBalance.BalanceList {
 	// 	log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
 	// }
-	// if len(opAllBalance.BalanceList) == 0 {
+	// if len(opContractAllBalance.BalanceList) == 0 {
 	// 	log.Println("AllAccount 0 balance")
 	// }
 	// ==============================================

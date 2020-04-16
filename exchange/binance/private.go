@@ -37,6 +37,8 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	case exchange.BalanceList:
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractAllBalance(operation)
+		} else if operation.Wallet == exchange.SpotWallet {
+			return e.doAllBalance(operation)
 		}
 	// case exchange.Balance:
 	// 	if operation.Wallet == exchange.ContractWallet {
@@ -71,6 +73,53 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	}
 
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Binance) doAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountBalance := AccountBalances{}
+	strRequest := "/api/v3/account"
+	operation.BalanceList = []exchange.AssetBalance{}
+
+	jsonAllBalanceReturn := e.ApiKeyGet(make(map[string]string), strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else {
+		for _, balance := range accountBalance.Balances {
+			freeamount, err := strconv.ParseFloat(balance.Free, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+			locked, err := strconv.ParseFloat(balance.Locked, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+
+			c := e.GetCoinBySymbol(balance.Asset)
+			if c == nil {
+				continue
+			}
+			b := exchange.AssetBalance{
+				Coin:             c,
+				BalanceAvailable: freeamount,
+				BalanceFrozen:    locked,
+			}
+			operation.BalanceList = append(operation.BalanceList, b)
+		}
+	}
+
+	return nil
 }
 
 func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
