@@ -35,9 +35,9 @@ func (e *Virgocx) doPlaceOrder(operation *exchange.AccountOperation) error {
 		mapParams["category"] = "3" // quick trade
 	}
 
-	if operation.OrderDirection == exchange.BUY {
+	if operation.OrderDirection == exchange.Buy {
 		mapParams["type"] = "1" // buy: 1, sell: 2
-	} else if operation.OrderDirection == exchange.SELL {
+	} else if operation.OrderDirection == exchange.Sell {
 		mapParams["type"] = "2" // buy: 1, sell: 2
 	}
 
@@ -60,7 +60,7 @@ func (e *Virgocx) doPlaceOrder(operation *exchange.AccountOperation) error {
 		OrderID:      placeOrder.OrderID,
 		Rate:         operation.Rate,
 		Quantity:     operation.Quantity,
-		Side:         operation.OrderDirection,
+		Direction:    operation.OrderDirection,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
