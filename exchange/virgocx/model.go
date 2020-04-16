@@ -72,3 +72,15 @@ type SingleOrder struct {
 	Direction  int     `json:"direction"`
 	Status     int     `json:"status"`
 }
+
+type RawKline []struct {
+	ID         int         `json:"id"`
+	MarketID   int         `json:"marketId"`
+	Open       float64     `json:"open"`
+	High       float64     `json:"high"`
+	Low        float64     `json:"low"`
+	Close      float64     `json:"close"`
+	Qty        float64     `json:"qty"`
+	CreateTime int64       `json:"createTime"`
+	CountTime  interface{} `json:"countTime"`
+}
