@@ -95,7 +95,7 @@ type Order struct {
 	FilledOrders  []int64
 	Rate          float64 `bson:"Rate"`
 	Quantity      float64 `bson:"Quantity"`
-	Side          OrderType
+	Direction     TradeDirection
 	Status        OrderStatus `json:"status"`
 	StatusMessage string
 	DealRate      float64
@@ -266,7 +266,7 @@ type AccountOperation struct {
 	Order          *Order
 	OrderType      OrderPriceType // eg. FOK
 	TradeType      OrderTradeType // eg. TRADE_LIMIT
-	OrderDirection TradeDirection      //TradeDirection
+	OrderDirection TradeDirection //TradeDirection
 }
 
 type PublicOperation struct {
@@ -338,8 +338,6 @@ type AssetBalance struct {
 	BalanceFrozen    float64    `json:"balance_frozen"`    // the fund in order or frozen can't do trading         the total amount of fund should be   BalanceAvailable + BalanceFrozen
 
 }
-
-
 
 type KlineDetail struct {
 	ID                  string  `json:"id"`
