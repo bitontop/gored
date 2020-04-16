@@ -75,7 +75,7 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
-	if operation.OrderDirection == exchange.BUY {
+	if operation.OrderDirection == exchange.Buy {
 		mapParams["side"] = "BUY"
 	} else {
 		mapParams["side"] = "SELL"
@@ -112,9 +112,9 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 		Status:       exchange.New,
 		JsonResponse: jsonCreatePlaceOrder,
 	}
-	if operation.OrderDirection == exchange.BUY {
+	if operation.OrderDirection == exchange.Buy {
 		order.Side = "Buy"
-	} else if operation.OrderDirection == exchange.SELL {
+	} else if operation.OrderDirection == exchange.Sell {
 		order.Side = "Sell"
 	}
 
