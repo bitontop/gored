@@ -93,8 +93,9 @@ type Order struct {
 	Pair          *pair.Pair
 	OrderID       string
 	FilledOrders  []int64
-	Rate          float64 `bson:"Rate"`
-	Quantity      float64 `bson:"Quantity"`
+	Rate          float64   `bson:"Rate"`
+	Quantity      float64   `bson:"Quantity"`
+	Side          OrderType //TODO  SIDE ==> Direction, depreated after all changed.
 	Direction     TradeDirection
 	Status        OrderStatus `json:"status"`
 	StatusMessage string

@@ -183,6 +183,8 @@ type TradeDirection string
 const (
 	Buy  TradeDirection = "b"
 	Sell TradeDirection = "s"
+	BUY  OrderType      = "BUY"
+	SELL OrderType      = "BUY"
 )
 
 type OrderTradeType string
