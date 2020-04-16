@@ -179,12 +179,12 @@ const (
 )
 
 type TradeDirection string
-
+type OrderType string //deprecated  after 2020
 const (
 	Buy  TradeDirection = "b"
 	Sell TradeDirection = "s"
-	BUY  OrderType      = "BUY"  //deprecated later after 2020
-	SELL OrderType      = "SELL" //deprecated later after 2020
+	BUY  OrderType      = "BUY"  //deprecated  after 2020
+	SELL OrderType      = "SELL" //deprecated  after 2020
 )
 
 type OrderTradeType string
