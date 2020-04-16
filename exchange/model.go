@@ -266,7 +266,7 @@ type AccountOperation struct {
 	Order          *Order
 	OrderType      OrderPriceType // eg. FOK
 	TradeType      OrderTradeType // eg. TRADE_LIMIT
-	OrderDirection OrderType      //TradeDirection
+	OrderDirection TradeDirection      //TradeDirection
 }
 
 type PublicOperation struct {
@@ -339,12 +339,7 @@ type AssetBalance struct {
 
 }
 
-type TradeDirection string
 
-const (
-	Buy  TradeDirection = "b"
-	Sell TradeDirection = "s"
-)
 
 type KlineDetail struct {
 	ID                  string  `json:"id"`

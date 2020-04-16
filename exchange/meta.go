@@ -9,14 +9,12 @@ type DataSource string
 type ExchangeName string
 type MarginAction string
 type UpdateMethod string
-type OrderType string
 
 // from goredmergin
 type ContractAction string
 type ContractTransDir string
 type OffSetType string
 type OrderPriceType string
-type OrderTradeType string
 
 const (
 	MAINNET ChainType = "MAINNET"
@@ -46,9 +44,6 @@ const (
 	LIMIT_SELL   MarginAction = "LIMIT_SELL"
 	MARKET_BUY   MarginAction = "MARKET_BUY"
 	MARKET_SELL  MarginAction = "MARKET_SELL"
-
-	BUY  OrderType = "BUY"
-	SELL OrderType = "SELL"
 
 	// ************ from goredmergin ************
 	CONTRACT_MARKET_BUY   ContractAction = "CONTRACT_MARKET_BUY"
@@ -82,17 +77,6 @@ const (
 	IOC OrderPriceType = "IOC"
 	FOK OrderPriceType = "FOK"
 	GTX OrderPriceType = "GTX"
-
-	TRADE_LIMIT  OrderTradeType = "LIMIT"
-	TRADE_MARKET OrderTradeType = "MARKET"
-	// Types below need more params, TODO
-	Trade_STOP                 OrderTradeType = "STOP"
-	Trade_TAKE_PROFIT          OrderTradeType = "TAKE_PROFIT"
-	Trade_STOP_MARKET          OrderTradeType = "STOP_MARKET"
-	Trade_TAKE_PROFIT_MARKET   OrderTradeType = "TAKE_PROFIT_MARKET"
-	Trade_TRAILING_STOP_MARKET OrderTradeType = "TRAILING_STOP_MARKET"
-
-	// *****************************************
 
 	API_TIGGER  UpdateMethod = "API_TIGGER"
 	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
@@ -192,4 +176,24 @@ const (
 	VIRGOCX      ExchangeName = "VIRGOCX"
 	ZBEX         ExchangeName = "ZBEX"
 	ZEBITEX      ExchangeName = "ZEBITEX"
+)
+
+type TradeDirection string
+
+const (
+	Buy  TradeDirection = "b"
+	Sell TradeDirection = "s"
+)
+
+type OrderTradeType string
+
+const (
+	TRADE_LIMIT  OrderTradeType = "LIMIT"
+	TRADE_MARKET OrderTradeType = "MARKET"
+	//TODO Types below need more params,
+	Trade_STOP                 OrderTradeType = "STOP"
+	Trade_TAKE_PROFIT          OrderTradeType = "TAKE_PROFIT"
+	Trade_STOP_MARKET          OrderTradeType = "STOP_MARKET"
+	Trade_TAKE_PROFIT_MARKET   OrderTradeType = "TAKE_PROFIT_MARKET"
+	Trade_TRAILING_STOP_MARKET OrderTradeType = "TRAILING_STOP_MARKET"
 )
