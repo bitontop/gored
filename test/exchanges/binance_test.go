@@ -5,8 +5,8 @@ package test
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"log"
 	"testing"
-	"time"
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
@@ -17,7 +17,7 @@ import (
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
 	e := InitEx(exchange.BINANCE)
-	pair := pair.GetPairByKey("BTC|KMD")
+	pair := pair.GetPairByKey("USDT|BTC")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -34,7 +34,7 @@ func Test_Binance(t *testing.T) {
 	// Test_AODepositHistory(e, pair)
 	// Test_AOWithdrawalHistory(e, pair) // not tested with asset
 
-	// var err error
+	var err error
 	// contract orderbook
 	// opOrderBook := &exchange.PublicOperation{
 	// 	Wallet: exchange.ContractWallet,
@@ -49,6 +49,24 @@ func Test_Binance(t *testing.T) {
 	// }
 
 	// log.Printf("%s ContractOrderBook %+v", e.GetName(), opOrderBook.Maker)
+
+	// contract Kline
+	opKline := &exchange.PublicOperation{
+		Wallet:        exchange.ContractWallet,
+		Type:          exchange.KLine,
+		EX:            e.GetName(),
+		Pair:          pair,
+		KlineInterval: "5m", // default to 5m if not provided
+		DebugMode:     true,
+	}
+	err = e.LoadPublicData(opKline)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	for _, k := range opKline.Kline {
+		log.Printf("%s ContractKline %+v", e.GetName(), k)
+	}
 	// ==============================================
 
 	// contract PlaceOrder
@@ -136,13 +154,13 @@ func Test_Binance(t *testing.T) {
 
 	// Test_AOOpenOrder(e, pair)
 	// time.Sleep(time.Second * 5)
-	Test_AOOrderHistory(e, pair)
-	time.Sleep(time.Second * 5)
+	// Test_AOOrderHistory(e, pair)
+	// time.Sleep(time.Second * 5)
 	// Test_AODepositAddress(e, pair.Base)
 	// time.Sleep(time.Second * 5)
 	// Test_AODepositHistory(e, pair)
 	// time.Sleep(time.Second * 5)
 	// Test_AOWithdrawalHistory(e, pair)
 	// time.Sleep(time.Second * 5)
-	Test_AOTransferHistory(e)
+	// Test_AOTransferHistory(e)
 }

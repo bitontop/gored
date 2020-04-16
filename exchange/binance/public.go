@@ -27,8 +27,121 @@ func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {
 		case exchange.ContractWallet:
 			return e.doContractOrderBook(operation)
 		}
+	case exchange.KLine:
+		switch operation.Wallet {
+		case exchange.ContractWallet:
+			return e.doContractKline(operation)
+		}
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+// interval options: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M
+func (e *Binance) doContractKline(operation *exchange.PublicOperation) error {
+	interval := "5m"
+	if operation.KlineInterval != "" {
+		interval = operation.KlineInterval
+	}
+
+	get := &utils.HttpGet{
+		URI: fmt.Sprintf("https://fapi.binance.com/fapi/v1/klines?symbol=%v&interval=%v",
+			e.GetSymbolByPair(operation.Pair), // BTCUSDT
+			interval,
+		),
+		Proxy: operation.Proxy,
+	}
+
+	err := utils.HttpGetRequest(get)
+
+	if err != nil {
+		log.Printf("%+v", err)
+		operation.Error = err
+		return err
+
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	var rawKline [][]interface{}
+	if err := json.Unmarshal(get.ResponseBody, &rawKline); err != nil {
+		operation.Error = err
+		return err
+	} else {
+		// log.Printf("%+v ", tradeHistory)
+	}
+
+	operation.Kline = []*exchange.KlineDetail{}
+	for _, k := range rawKline {
+		open, err := strconv.ParseFloat(k[1].(string), 64)
+		if err != nil {
+			log.Printf("%s open parse Err: %v %v", e.GetName(), err, k[1])
+			operation.Error = err
+			return err
+		}
+		high, err := strconv.ParseFloat(k[2].(string), 64)
+		if err != nil {
+			log.Printf("%s high parse Err: %v %v", e.GetName(), err, k[2])
+			operation.Error = err
+			return err
+		}
+		low, err := strconv.ParseFloat(k[3].(string), 64)
+		if err != nil {
+			log.Printf("%s low parse Err: %v %v", e.GetName(), err, k[3])
+			operation.Error = err
+			return err
+		}
+		close, err := strconv.ParseFloat(k[4].(string), 64)
+		if err != nil {
+			log.Printf("%s close parse Err: %v %v", e.GetName(), err, k[4])
+			operation.Error = err
+			return err
+		}
+		volume, err := strconv.ParseFloat(k[5].(string), 64)
+		if err != nil {
+			log.Printf("%s volume parse Err: %v %v", e.GetName(), err, k[5])
+			operation.Error = err
+			return err
+		}
+		quoteAssetVolume, err := strconv.ParseFloat(k[7].(string), 64)
+		if err != nil {
+			log.Printf("%s quoteAssetVolume parse Err: %v %v", e.GetName(), err, k[7])
+			operation.Error = err
+			return err
+		}
+		takerBuyBaseVolume, err := strconv.ParseFloat(k[9].(string), 64)
+		if err != nil {
+			log.Printf("%s takerBuyBaseVolume parse Err: %v %v", e.GetName(), err, k[9])
+			operation.Error = err
+			return err
+		}
+		takerBuyQuoteVolume, err := strconv.ParseFloat(k[10].(string), 64)
+		if err != nil {
+			log.Printf("%s takerBuyQuoteVolume parse Err: %v %v", e.GetName(), err, k[10])
+			operation.Error = err
+			return err
+		}
+
+		detail := &exchange.KlineDetail{
+			OpenTime:            k[0].(float64),
+			Open:                open,
+			High:                high,
+			Low:                 low,
+			Close:               close,
+			Volume:              volume,
+			CloseTime:           k[6].(float64),
+			QuoteAssetVolume:    quoteAssetVolume,
+			TradesCount:         k[8].(float64),
+			TakerBuyBaseVolume:  takerBuyBaseVolume,
+			TakerBuyQuoteVolume: takerBuyQuoteVolume,
+		}
+
+		operation.Kline = append(operation.Kline, detail)
+	}
+
+	return nil
 }
 
 func (e *Binance) doTradeHistory(operation *exchange.PublicOperation) error {
