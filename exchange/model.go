@@ -266,7 +266,7 @@ type AccountOperation struct {
 	Order          *Order
 	OrderType      OrderPriceType // eg. FOK
 	TradeType      OrderTradeType // eg. TRADE_LIMIT
-	OrderDirection TradeDirection
+	OrderDirection OrderType      //TradeDirection
 }
 
 type PublicOperation struct {

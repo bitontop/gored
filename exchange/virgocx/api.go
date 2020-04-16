@@ -379,7 +379,7 @@ func (e *Virgocx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-	} else if placeOrder.OrderID == 0 {
+	} else if placeOrder.OrderID == "0" {
 
 	}
 	// log.Printf("==%t,%s, %v", jsonResponse.Data, jsonResponse.Data, string(jsonResponse.Data) == "null")

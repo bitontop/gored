@@ -43,7 +43,7 @@ type OrderBook struct {
 }
 
 type PlaceOrder struct {
-	OrderID int `json:"OrderId"`
+	OrderID string `json:"OrderId"`
 }
 
 type AccountBalances []struct {

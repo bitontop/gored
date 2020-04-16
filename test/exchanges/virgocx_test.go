@@ -35,6 +35,7 @@ func Test_Virgocx(t *testing.T) {
 	// log.Println(e.GetTradingWebURL(pair))
 
 	var err error
+
 	// contract Kline
 	opKline := &exchange.PublicOperation{
 		Wallet:        exchange.ContractWallet,
@@ -53,6 +54,24 @@ func Test_Virgocx(t *testing.T) {
 		log.Printf("%s ContractKline %+v", e.GetName(), k)
 	}
 
+	// Limit/Market PlaceOrder
+	// opPlaceOrder := &exchange.AccountOperation{
+	// 	Wallet:         exchange.SpotWallet,
+	// 	Type:           exchange.PlaceOrder,
+	// 	Ex:             e.GetName(),
+	// 	Pair:           pair,
+	// 	OrderDirection: exchange.BUY,
+	// 	TradeType:      exchange.TRADE_LIMIT, // TRADE_MARKET
+	// 	Rate:           5000,
+	// 	Quantity:       0.01,
+	// 	DebugMode:      true,
+	// }
+	// err = e.DoAccountOperation(opPlaceOrder)
+	// if err != nil {
+	// 	log.Printf("==%v", err)
+	// }
+
+	// Test_CancelOrder(e, pair, "2395474881")
 	Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	Test_CheckAllBalance(e, exchange.SpotWallet)
 }

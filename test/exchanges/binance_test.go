@@ -75,7 +75,7 @@ func Test_Binance(t *testing.T) {
 	// 	Type:           exchange.PlaceOrder,
 	// 	Ex:             e.GetName(),
 	// 	Pair:           pair,
-	// 	OrderDirection: exchange.Sell,
+	// 	OrderDirection: exchange.SELL,
 	// 	TradeType:      exchange.TRADE_LIMIT,
 	// 	OrderType:      exchange.GTC,
 	// 	Rate:           9000,
