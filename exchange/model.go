@@ -209,7 +209,7 @@ type AccountOperation struct {
 	Type OperationType `json:"type"`
 	Ex   ExchangeName  `json:"exchange_name"`
 
-	//#Transfer,Balance,Withdraw
+	//#Transfer,TransferHistory,Balance,Withdraw
 	Coin *coin.Coin `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
 
 	//specific operations
@@ -217,6 +217,7 @@ type AccountOperation struct {
 	TransferFrom        WalletType `json:"transfer_from"`
 	TransferDestination WalletType `json:"transfer_dest"`
 	TransferAmount      string     `json:"transfer_amount"`
+	TransferStartTime   int64      `json:"transfer_start_time"`
 
 	// #Withdraw
 	WithdrawAddress string `json:"withdraw_address"`
@@ -312,6 +313,7 @@ type TransferHistory struct {
 	Type      TransferType `json:"type"`
 	Quantity  float64      `json:"quantity"`
 	TimeStamp int64        `json:"timestamp"`
+	StatusMsg string       `json: status_msg`
 }
 
 type WDHistory struct {

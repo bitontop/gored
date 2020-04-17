@@ -49,10 +49,14 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	case exchange.GetOpenOrder:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetOpenOrder(operation)
+		} else if operation.Wallet == exchange.ContractWallet {
+			return e.doContractGetOpenOrder(operation)
 		}
 	case exchange.GetOrderHistory:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetOrderHistory(operation)
+		} else if operation.Wallet == exchange.ContractWallet {
+			return e.doContractGetOrderHistory(operation)
 		}
 	case exchange.GetWithdrawalHistory:
 		if operation.Wallet == exchange.SpotWallet {
@@ -65,6 +69,8 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	case exchange.GetTransferHistory:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetTransferHistory(operation)
+		} else if operation.Wallet == exchange.ContractWallet {
+			return e.doContractGetTransferHistory(operation)
 		}
 	case exchange.GetDepositAddress:
 		if operation.Wallet == exchange.SpotWallet {
@@ -190,10 +196,12 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			order.Status = exchange.Partial
 		} else if o.Status == "REJECTED" {
 			order.Status = exchange.Rejected
-		} else if o.Status == "Expired" {
+		} else if o.Status == "EXPIRED" {
 			order.Status = exchange.Expired
 		} else if o.Status == "NEW" {
 			order.Status = exchange.New
+		} else if o.Status == "PENDING_CANCEL" {
+			order.Status = exchange.Canceling
 		} else {
 			order.Status = exchange.Other
 		}
