@@ -164,10 +164,11 @@ type MarginBalance struct {
 type OperationType string
 
 const (
-	Withdraw    OperationType = "Withdraw"
-	Transfer    OperationType = "Transfer"   // transfer  between inneral wallet
-	Balance     OperationType = "Balance"    // balance(s) of different accounts
-	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
+	Withdraw        OperationType = "Withdraw"
+	Transfer        OperationType = "Transfer"        // transfer  between inneral wallet
+	Balance         OperationType = "Balance"         // balance(s) of different accounts
+	BalanceList     OperationType = "BalanceAll"      // balance(s) of different accounts
+	GetPositionInfo OperationType = "GetPositionInfo" // position information for Contract
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"

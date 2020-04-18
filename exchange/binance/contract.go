@@ -231,6 +231,29 @@ func (e *Binance) doContractGetTransferHistory(operation *exchange.AccountOperat
 	return nil
 }
 
+func (e *Binance) doGetPositionInfo(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	positionInfo := PositionInfo{}
+	strRequest := "/fapi/v1/positionRisk"
+
+	jsonPositionInfoReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonPositionInfoReturn
+	}
+
+	// log.Printf("jsonPositionInfoReturn: %v", jsonPositionInfoReturn)
+	if err := json.Unmarshal([]byte(jsonPositionInfoReturn), &positionInfo); err != nil {
+		operation.Error = fmt.Errorf("%s doGetPositionInfo Json Unmarshal Err: %v, %s", e.GetName(), err, jsonPositionInfoReturn)
+		return operation.Error
+	}
+
+	return nil
+}
+
 // // contract balance has too many detail
 // // contract balance doc
 // // https://binance-docs.github.io/apidocs/futures/cn/#user_data-5

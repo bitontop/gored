@@ -377,3 +377,18 @@ type ContractTransferHistory struct {
 	} `json:"rows"`
 	Total int `json:"total"`
 }
+
+type PositionInfo []struct {
+	EntryPrice       string `json:"entryPrice"`
+	MarginType       string `json:"marginType"`
+	IsAutoAddMargin  string `json:"isAutoAddMargin"`
+	IsolatedMargin   string `json:"isolatedMargin"`
+	Leverage         string `json:"leverage"`
+	LiquidationPrice string `json:"liquidationPrice"`
+	MarkPrice        string `json:"markPrice"`
+	MaxNotionalValue string `json:"maxNotionalValue"`
+	PositionAmt      string `json:"positionAmt"`
+	Symbol           string `json:"symbol"`
+	UnRealizedProfit string `json:"unRealizedProfit"`
+	PositionSide     string `json:"positionSide"`
+}

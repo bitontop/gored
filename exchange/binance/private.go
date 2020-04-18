@@ -76,6 +76,10 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositAddress(operation)
 		}
+	case exchange.GetPositionInfo:
+		if operation.Wallet == exchange.ContractWallet {
+			return e.doGetPositionInfo(operation)
+		}
 	}
 
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)

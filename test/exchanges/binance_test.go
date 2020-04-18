@@ -130,6 +130,20 @@ func Test_Binance(t *testing.T) {
 		log.Printf("Contract TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
 	}
 	// ==============================================
+	// Contract Position Information
+	opCPositionInfo := &exchange.AccountOperation{
+		Type:      exchange.GetPositionInfo,
+		Wallet:    exchange.ContractWallet,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+
+	if err := e.DoAccountOperation(opCPositionInfo); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		log.Printf("Contract Position Information CallResponse: %+v", opCPositionInfo.CallResponce)
+	}
+	// ==============================================
 
 	// contract Kline
 	// opKline := &exchange.PublicOperation{
