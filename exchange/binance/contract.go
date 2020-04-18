@@ -263,7 +263,7 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	}
 
 	accountBalances := ContractBalance{}
-	strRequest := "/fapi/v1/balance"
+	strRequest := "/fapi/v1/account"
 
 	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
 	if operation.DebugMode {
@@ -281,13 +281,13 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	} */
 
 	operation.BalanceList = []exchange.AssetBalance{}
-	for _, account := range accountBalances {
+	for _, account := range accountBalances.Assets {
 		// if account.Balance == "0" {
 		// 	continue
 		// }
 
-		total, err := strconv.ParseFloat(account.Balance, 64)
-		available, err := strconv.ParseFloat(account.WithdrawAvailable, 64)
+		total, err := strconv.ParseFloat(account.WalletBalance, 64)
+		available, err := strconv.ParseFloat(account.MaxWithdrawAmount, 64)
 		frozen := total - available
 		if err != nil {
 			return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, account)

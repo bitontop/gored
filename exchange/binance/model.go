@@ -219,49 +219,49 @@ type ContractCancelOrder struct {
 	WorkingType   string `json:"workingType"`
 }
 
-type ContractBalance []struct {
-	AccountAlias      string `json:"accountAlias"`
-	Asset             string `json:"asset"`
-	Balance           string `json:"balance"`
-	WithdrawAvailable string `json:"withdrawAvailable"`
-}
-
-// type ContractBalance struct {
-// 	Assets []struct {
-// 		Asset                  string `json:"asset"`
-// 		InitialMargin          string `json:"initialMargin"`
-// 		MaintMargin            string `json:"maintMargin"`
-// 		MarginBalance          string `json:"marginBalance"`
-// 		MaxWithdrawAmount      string `json:"maxWithdrawAmount"`
-// 		OpenOrderInitialMargin string `json:"openOrderInitialMargin"`
-// 		PositionInitialMargin  string `json:"positionInitialMargin"`
-// 		UnrealizedProfit       string `json:"unrealizedProfit"`
-// 		WalletBalance          string `json:"walletBalance"`
-// 	} `json:"assets"`
-// 	CanDeposit        bool   `json:"canDeposit"`
-// 	CanTrade          bool   `json:"canTrade"`
-// 	CanWithdraw       bool   `json:"canWithdraw"`
-// 	FeeTier           int    `json:"feeTier"`
-// 	MaxWithdrawAmount string `json:"maxWithdrawAmount"`
-// 	Positions         []struct {
-// 		Isolated               bool   `json:"isolated"`
-// 		Leverage               string `json:"leverage"`
-// 		InitialMargin          string `json:"initialMargin"`
-// 		MaintMargin            string `json:"maintMargin"`
-// 		OpenOrderInitialMargin string `json:"openOrderInitialMargin"`
-// 		PositionInitialMargin  string `json:"positionInitialMargin"`
-// 		Symbol                 string `json:"symbol"`
-// 		UnrealizedProfit       string `json:"unrealizedProfit"`
-// 	} `json:"positions"`
-// 	TotalInitialMargin          string `json:"totalInitialMargin"`
-// 	TotalMaintMargin            string `json:"totalMaintMargin"`
-// 	TotalMarginBalance          string `json:"totalMarginBalance"`
-// 	TotalOpenOrderInitialMargin string `json:"totalOpenOrderInitialMargin"`
-// 	TotalPositionInitialMargin  string `json:"totalPositionInitialMargin"`
-// 	TotalUnrealizedProfit       string `json:"totalUnrealizedProfit"`
-// 	TotalWalletBalance          string `json:"totalWalletBalance"`
-// 	UpdateTime                  int    `json:"updateTime"`
+// type ContractBalance []struct {
+// 	AccountAlias      string `json:"accountAlias"`
+// 	Asset             string `json:"asset"`
+// 	Balance           string `json:"balance"`
+// 	WithdrawAvailable string `json:"withdrawAvailable"`
 // }
+
+type ContractBalance struct {
+	Assets []struct {
+		Asset                  string `json:"asset"`
+		InitialMargin          string `json:"initialMargin"`
+		MaintMargin            string `json:"maintMargin"`
+		MarginBalance          string `json:"marginBalance"`
+		MaxWithdrawAmount      string `json:"maxWithdrawAmount"`
+		OpenOrderInitialMargin string `json:"openOrderInitialMargin"`
+		PositionInitialMargin  string `json:"positionInitialMargin"`
+		UnrealizedProfit       string `json:"unrealizedProfit"`
+		WalletBalance          string `json:"walletBalance"`
+	} `json:"assets"`
+	CanDeposit        bool   `json:"canDeposit"`
+	CanTrade          bool   `json:"canTrade"`
+	CanWithdraw       bool   `json:"canWithdraw"`
+	FeeTier           int    `json:"feeTier"`
+	MaxWithdrawAmount string `json:"maxWithdrawAmount"`
+	Positions         []struct {
+		Isolated               bool   `json:"isolated"`
+		Leverage               string `json:"leverage"`
+		InitialMargin          string `json:"initialMargin"`
+		MaintMargin            string `json:"maintMargin"`
+		OpenOrderInitialMargin string `json:"openOrderInitialMargin"`
+		PositionInitialMargin  string `json:"positionInitialMargin"`
+		Symbol                 string `json:"symbol"`
+		UnrealizedProfit       string `json:"unrealizedProfit"`
+	} `json:"positions"`
+	TotalInitialMargin          string `json:"totalInitialMargin"`
+	TotalMaintMargin            string `json:"totalMaintMargin"`
+	TotalMarginBalance          string `json:"totalMarginBalance"`
+	TotalOpenOrderInitialMargin string `json:"totalOpenOrderInitialMargin"`
+	TotalPositionInitialMargin  string `json:"totalPositionInitialMargin"`
+	TotalUnrealizedProfit       string `json:"totalUnrealizedProfit"`
+	TotalWalletBalance          string `json:"totalWalletBalance"`
+	UpdateTime                  int    `json:"updateTime"`
+}
 
 // private operation
 type OpenOrders []struct {
