@@ -265,6 +265,7 @@ type AccountOperation struct {
 	// OperationType  WalletType `json:"operation_type"`  // replace by walelt!!!
 	Pair           *pair.Pair `json:"pair"`
 	Rate           float64
+	StopRate       float64 // for STOP_LIMIT, STOP_MARKET
 	Quantity       float64
 	Order          *Order
 	OrderType      OrderPriceType // eg. FOK

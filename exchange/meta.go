@@ -192,10 +192,11 @@ type OrderTradeType string
 const (
 	TRADE_LIMIT  OrderTradeType = "LIMIT"
 	TRADE_MARKET OrderTradeType = "MARKET"
+	// Stop order need 'StopRate' param
+	Trade_STOP_LIMIT  OrderTradeType = "STOP"
+	Trade_STOP_MARKET OrderTradeType = "STOP_MARKET"
 	//TODO Types below need more params,
-	Trade_STOP                 OrderTradeType = "STOP"
 	Trade_TAKE_PROFIT          OrderTradeType = "TAKE_PROFIT"
-	Trade_STOP_MARKET          OrderTradeType = "STOP_MARKET"
 	Trade_TAKE_PROFIT_MARKET   OrderTradeType = "TAKE_PROFIT_MARKET"
 	Trade_TRAILING_STOP_MARKET OrderTradeType = "TRAILING_STOP_MARKET"
 )

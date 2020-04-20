@@ -306,6 +306,8 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	// return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
 }
 
+// type: TRADE_LIMIT, TRADE_MARKET, Trade_STOP_LIMIT, Trade_STOP_MARKET
+// Stop order need 'StopRate' param
 func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
@@ -321,6 +323,9 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 		mapParams["side"] = "BUY"
 	} else {
 		mapParams["side"] = "SELL"
+	}
+	if operation.TradeType == exchange.Trade_STOP_LIMIT || operation.TradeType == exchange.Trade_STOP_MARKET {
+		mapParams["stopPrice"] = fmt.Sprintf("%v", operation.StopRate)
 	}
 	mapParams["type"] = string(operation.TradeType) // "LIMIT"
 	mapParams["price"] = fmt.Sprintf("%v", operation.Rate)

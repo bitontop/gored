@@ -183,6 +183,9 @@ func Test_Binance(t *testing.T) {
 	}
 	// ==============================================
 
+	// OrderType: GTC, IOC, FOK, GTX
+	// TradeType: TRADE_LIMIT, TRADE_MARKET, Trade_STOP_LIMIT, Trade_STOP_MARKET
+	// Stop order need 'StopRate' param
 	// Contract PlaceOrder
 	// opPlaceOrder := &exchange.AccountOperation{
 	// 	Wallet:         exchange.ContractWallet,
