@@ -285,7 +285,7 @@ type PublicOperation struct {
 	TradeHistory   []*TradeDetail `json:"history"`
 	CoinChainType  []ChainType    `json:"chain_type"`
 	KlineInterval  string         `json:"kline_interval"`
-	KlineStartTime string         `json:"kline_start_time"`
+	KlineStartTime int64          `json:"kline_start_time"`
 	Kline          []*KlineDetail `json:"kline"`
 
 	//#Debug

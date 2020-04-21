@@ -51,7 +51,7 @@ func (e *Binance) doContractKline(operation *exchange.PublicOperation) error {
 		Proxy: operation.Proxy,
 	}
 
-	if operation.KlineStartTime != "" {
+	if operation.KlineStartTime != 0 {
 		get.URI += fmt.Sprintf("&startTime=%v", operation.KlineStartTime)
 	}
 
