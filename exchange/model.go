@@ -279,13 +279,14 @@ type PublicOperation struct {
 	Type OperationType `json:"type"`
 	EX   ExchangeName  `json:"exchange_name"`
 
-	Coin          *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
-	Pair          *pair.Pair     `json:"op_pair"`
-	Maker         *Maker         `json:"maker"`
-	TradeHistory  []*TradeDetail `json:"history"`
-	CoinChainType []ChainType    `json:"chain_type"`
-	KlineInterval string         `json:"kline_interval"`
-	Kline         []*KlineDetail `json:"kline"`
+	Coin           *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
+	Pair           *pair.Pair     `json:"op_pair"`
+	Maker          *Maker         `json:"maker"`
+	TradeHistory   []*TradeDetail `json:"history"`
+	CoinChainType  []ChainType    `json:"chain_type"`
+	KlineInterval  string         `json:"kline_interval"`
+	KlineStartTime string         `json:"kline_start_time"`
+	Kline          []*KlineDetail `json:"kline"`
 
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`

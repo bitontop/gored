@@ -44,11 +44,15 @@ func (e *Binance) doContractKline(operation *exchange.PublicOperation) error {
 	}
 
 	get := &utils.HttpGet{
-		URI: fmt.Sprintf("https://fapi.binance.com/fapi/v1/klines?symbol=%v&interval=%v",
+		URI: fmt.Sprintf("https://fapi.binance.com/fapi/v1/klines?symbol=%v&interval=%v&limit=1500",
 			e.GetSymbolByPair(operation.Pair), // BTCUSDT
 			interval,
 		),
 		Proxy: operation.Proxy,
+	}
+
+	if operation.KlineStartTime != "" {
+		get.URI += fmt.Sprintf("&startTime=%v", operation.KlineStartTime)
 	}
 
 	err := utils.HttpGetRequest(get)

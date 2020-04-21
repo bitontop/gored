@@ -147,12 +147,13 @@ func Test_Binance(t *testing.T) {
 
 	// contract Kline
 	// opKline := &exchange.PublicOperation{
-	// 	Wallet:        exchange.ContractWallet,
-	// 	Type:          exchange.KLine,
-	// 	EX:            e.GetName(),
-	// 	Pair:          pair,
-	// 	KlineInterval: "5m", // default to 5m if not provided
-	// 	DebugMode:     true,
+	// 	Wallet:         exchange.ContractWallet,
+	// 	Type:           exchange.KLine,
+	// 	EX:             e.GetName(),
+	// 	Pair:           pair,
+	// 	KlineInterval:  "1m", // default to 5m if not provided
+	// 	KlineStartTime: "1560965420000",
+	// 	DebugMode:      true,
 	// }
 	// err = e.LoadPublicData(opKline)
 	// if err != nil {
