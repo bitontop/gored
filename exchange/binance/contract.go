@@ -182,6 +182,10 @@ func (e *Binance) doContractGetTransferHistory(operation *exchange.AccountOperat
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
 	}
 
+	if operation.Coin == nil {
+		return fmt.Errorf("%s doContractGetTransferHistory got nil coin", e.GetName())
+	}
+
 	transfer := ContractTransferHistory{}
 	strRequest := "/sapi/v1/futures/transfer"
 
