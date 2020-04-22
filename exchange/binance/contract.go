@@ -192,6 +192,7 @@ func (e *Binance) doContractGetTransferHistory(operation *exchange.AccountOperat
 	mapParams := make(map[string]string)
 	mapParams["asset"] = e.GetSymbolByCoin(operation.Coin)
 	mapParams["startTime"] = fmt.Sprintf("%v", operation.TransferStartTime)
+	mapParams["size"] = "100"
 
 	jsonTransferOutHistory := e.ApiKeyGet(mapParams, strRequest)
 	if operation.DebugMode {
