@@ -270,9 +270,9 @@ func (e *Hibitex) UpdateAllBalances() {
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/open/api/user/account"
 
-	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequestPath, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -285,10 +285,10 @@ func (e *Hibitex) UpdateAllBalances() {
 		return
 	}
 
-	for _, balance := range accountBalance {
-		c := e.GetCoinBySymbol(balance.Asset)
+	for _, balance := range accountBalance.CoinList {
+		c := e.GetCoinBySymbol(balance.Coin)
 		if c != nil {
-			balanceMap.Set(c.Code, balance.Available)
+			balanceMap.Set(c.Code, balance.Normal-balance.Locked)
 		}
 	}
 }
@@ -522,6 +522,10 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
 func (e *Hibitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
 	strUrl := API_URL + strRequestPath
+	timeStamp := fmt.Sprintf("%d", time.Now().UTC())
+
+	// signature := exchange.ComputeMD5(authParams)
+	signature := ""
 
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 	jsonParams := ""
@@ -534,8 +538,12 @@ func (e *Hibitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	if nil != err {
 		return err.Error()
 	}
+
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+	// request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Add("ACCESS-KEY", e.API_KEY)
+	request.Header.Add("ACCESS-SIGN", signature)
+	request.Header.Add("ACCESS-TIMESTAMP", timeStamp)
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)

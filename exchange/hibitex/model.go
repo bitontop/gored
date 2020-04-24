@@ -46,23 +46,23 @@ type OrderBook struct {
 // type OrderBook []Order
 
 /********** Private API Structure**********/
-// type AccountBalances struct {
-// 	TotalAsset float64 `json:"total_asset"`
-// 	CoinList   []struct {
-// 		Coin        string  `json:"coin"`
-// 		Normal      float64 `json:"normal"`
-// 		Locked      float64 `json:"locked"`
-// 		BtcValuatin float64 `json:"btcValuatin"`
-// 	} `json:"coin_list"`
-// }
+type AccountBalances struct {
+	TotalAsset float64 `json:"total_asset"`
+	CoinList   []struct {
+		Coin        string  `json:"coin"`
+		Normal      float64 `json:"normal"`
+		Locked      float64 `json:"locked"`
+		BtcValuatin float64 `json:"btcValuatin"`
+	} `json:"coin_list"`
+}
 
 // Old
-type AccountBalances []struct {
-	Asset     string  `json:"asset"`
-	Total     float64 `json:"total"`
-	Available float64 `json:"available"`
-	Locked    float64 `json:"locked"`
-}
+// type AccountBalances []struct {
+// 	Asset     string  `json:"asset"`
+// 	Total     float64 `json:"total"`
+// 	Available float64 `json:"available"`
+// 	Locked    float64 `json:"locked"`
+// }
 
 type WithdrawResponse struct {
 	Msg     string `json:"msg"`
