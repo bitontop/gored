@@ -26,18 +26,37 @@ type CoinsData []Ticker
 
 type PairsData []Ticker
 
-type Order struct {
-	Amount float64 `json:"amount"`
-	Price  float64 `json:"price"`
-	Id     int     `json:"id"`
-	Type   string  `json:"type"`
-	Ts     int     `json:"ts"`
-	Ds     string  `json:"ds"`
+type OrderBook struct {
+	Tick struct {
+		Asks [][]float64 `json:"asks"`
+		Bids [][]float64 `json:"bids"`
+		Time interface{} `json:"time"`
+	} `json:"tick"`
 }
 
-type OrderBook []Order
+// type Order struct {
+// 	Amount float64 `json:"amount"`
+// 	Price  float64 `json:"price"`
+// 	Id     int     `json:"id"`
+// 	Type   string  `json:"type"`
+// 	Ts     int     `json:"ts"`
+// 	Ds     string  `json:"ds"`
+// }
+
+// type OrderBook []Order
 
 /********** Private API Structure**********/
+// type AccountBalances struct {
+// 	TotalAsset float64 `json:"total_asset"`
+// 	CoinList   []struct {
+// 		Coin        string  `json:"coin"`
+// 		Normal      float64 `json:"normal"`
+// 		Locked      float64 `json:"locked"`
+// 		BtcValuatin float64 `json:"btcValuatin"`
+// 	} `json:"coin_list"`
+// }
+
+// Old
 type AccountBalances []struct {
 	Asset     string  `json:"asset"`
 	Total     float64 `json:"total"`

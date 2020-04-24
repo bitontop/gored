@@ -12,7 +12,6 @@ import (
 	"log"
 	"math"
 	"net/http"
-	"sort"
 	"strconv"
 	"time"
 
@@ -208,8 +207,9 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = symbol
+	mapParams["type"] = "step0"
 
-	strRequestPath := "/open/api/get_trades"
+	strRequestPath := "/open/api/market_dept"
 	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{
@@ -231,27 +231,23 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
-	for _, data := range orderBook {
-		if data.Type == "buy" {
-			buydata := exchange.Order{}
-			buydata.Quantity = data.Amount
-			buydata.Rate = data.Price
-			maker.Bids = append(maker.Bids, buydata)
-		} else if data.Type == "sell" {
-			selldata := exchange.Order{}
-			selldata.Quantity = data.Amount
-			selldata.Rate = data.Price
-			maker.Asks = append(maker.Asks, selldata)
-		}
+	for _, bid := range orderBook.Tick.Bids {
+		buydata := exchange.Order{}
+
+		buydata.Quantity = bid[1]
+		buydata.Rate = bid[0]
+
+		maker.Bids = append(maker.Bids, buydata)
 	}
 
-	//排序:bid买入,高到低;ask卖出,低到高
-	sort.Slice(maker.Bids, func(i, j int) bool {
-		return maker.Bids[i].Rate > maker.Bids[j].Rate
-	})
-	sort.Slice(maker.Asks, func(i, j int) bool {
-		return maker.Asks[i].Rate < maker.Asks[j].Rate
-	})
+	for _, ask := range orderBook.Tick.Asks {
+		selldata := exchange.Order{}
+
+		selldata.Quantity = ask[1]
+		selldata.Rate = ask[0]
+
+		maker.Asks = append(maker.Asks, selldata)
+	}
 
 	return maker, err
 }
@@ -361,7 +357,7 @@ func (e *Hibitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Side:         exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -399,7 +395,7 @@ func (e *Hibitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Side:         exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
