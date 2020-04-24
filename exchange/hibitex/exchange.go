@@ -98,7 +98,7 @@ func (e *Hibitex) GetID() int {
 }
 
 func (e *Hibitex) GetName() exchange.ExchangeName {
-	return exchange.BLANK
+	return exchange.HIBITEX
 }
 
 func (e *Hibitex) GetTradingWebURL(pair *pair.Pair) string {
@@ -242,7 +242,7 @@ func (e *Hibitex) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainF
 	constrainFetchMethod.Deposit = false
 	constrainFetchMethod.Confirmation = false
 	constrainFetchMethod.ConstrainSource = 1
-	constrainFetchMethod.ApiRestrictIP = false
+	constrainFetchMethod.ApiRestrictIP = true
 	return constrainFetchMethod
 }
 
