@@ -418,7 +418,8 @@ func (e *Hibitex) OrderStatus(order *exchange.Order) error {
 
 	jsonResponse := &JsonResponse{}
 	orderStatus := OrderStatus{}
-	strRequestPath := "/open/api/new_order" // "/open/api/v2/new_order" No tradeList transaction record
+	strRequestPath := "/open/api/v2/new_order" // No tradeList transaction record
+	// strRequestPath := "/open/api/new_order"
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
