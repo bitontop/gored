@@ -59,6 +59,7 @@ const (
 	OPEN  OffSetType = "open"
 	CLOSE OffSetType = "close"
 
+	// Huobi, Bitmex Contract
 	LIMIT          OrderPriceType = "limit"
 	OPTIMAL_5_FOK  OrderPriceType = "optimal_5_fok"
 	OPTIMAL_5      OrderPriceType = "optimal_5"
@@ -70,7 +71,12 @@ const (
 
 	FUTURE_TO_SPOT ContractTransDir = "futures-to-pro"
 	SPOT_TO_FUTURE ContractTransDir = "pro-to-futures"
-	// *****************************************
+
+	// Binance Contract
+	GTC OrderPriceType = "GTC"
+	IOC OrderPriceType = "IOC"
+	FOK OrderPriceType = "FOK"
+	GTX OrderPriceType = "GTX"
 
 	API_TIGGER  UpdateMethod = "API_TIGGER"
 	TIME_TIGGER UpdateMethod = "TIME_TIGGER"
@@ -171,4 +177,27 @@ const (
 	VIRGOCX      ExchangeName = "VIRGOCX"
 	ZBEX         ExchangeName = "ZBEX"
 	ZEBITEX      ExchangeName = "ZEBITEX"
+)
+
+type TradeDirection string
+type OrderType string //deprecated  after 2020
+const (
+	Buy  TradeDirection = "b"
+	Sell TradeDirection = "s"
+	BUY  OrderType      = "BUY"  //deprecated  after 2020
+	SELL OrderType      = "SELL" //deprecated  after 2020
+)
+
+type OrderTradeType string
+
+const (
+	TRADE_LIMIT  OrderTradeType = "LIMIT"
+	TRADE_MARKET OrderTradeType = "MARKET"
+	// Stop order need 'StopRate' param
+	Trade_STOP_LIMIT  OrderTradeType = "STOP"
+	Trade_STOP_MARKET OrderTradeType = "STOP_MARKET"
+	//TODO Types below need more params,
+	Trade_TAKE_PROFIT          OrderTradeType = "TAKE_PROFIT"
+	Trade_TAKE_PROFIT_MARKET   OrderTradeType = "TAKE_PROFIT_MARKET"
+	Trade_TRAILING_STOP_MARKET OrderTradeType = "TRAILING_STOP_MARKET"
 )
