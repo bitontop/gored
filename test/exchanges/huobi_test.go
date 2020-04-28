@@ -2,7 +2,6 @@ package test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
@@ -25,15 +24,18 @@ func Test_Huobi(t *testing.T) {
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
-	// Test_Pair(e, pair)
+	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
 	// Test_NewOrderBook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
+	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+
+	SubBalances(e, "8459451")
+	SubAccountList(e)
 
 	// Test Withdraw
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
@@ -44,9 +46,9 @@ func Test_Huobi(t *testing.T) {
 	// time.Sleep(time.Second * 5)
 	// Test_AOOrderHistory(e, pair)
 	// time.Sleep(time.Second * 5)
-	Test_AODepositAddress(e, pair.Base)
-	time.Sleep(time.Second * 5)
-	Test_AODepositHistory(e, pair)
-	time.Sleep(time.Second * 5)
-	Test_AOWithdrawalHistory(e, pair)
+	// Test_AODepositAddress(e, pair.Base)
+	// time.Sleep(time.Second * 5)
+	// Test_AODepositHistory(e, pair)
+	// time.Sleep(time.Second * 5)
+	// Test_AOWithdrawalHistory(e, pair)
 }

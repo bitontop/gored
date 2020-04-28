@@ -3,6 +3,7 @@ package huobi
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/bitontop/gored/exchange"
@@ -40,8 +41,129 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.getWithdrawalHistory(operation)
 		}
+	case exchange.SubBalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubBalance(operation)
+		}
+	case exchange.GetSubAccountList: // all type accounts
+		// if operation.Wallet == exchange.SpotWallet {
+		return e.doSubAccountList(operation)
+		// }
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+// 查询当前用户的"所有"账户 ID 及其相关信息
+// sub account if 'Subtype' != "" （仅对逐仓杠杆账户有效）
+func (e *Huobi) doSubAccountList(operation *exchange.AccountOperation) error { //TODO, test with sub account
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountList := SubAccountList{}
+	strRequest := "/v1/account/accounts"
+
+	mapParams := make(map[string]string)
+
+	jsonSubAccountReturn := e.ApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonSubAccountReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubAccountReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubAccountReturn)
+		return operation.Error
+	} else if jsonResponse.Status != "ok" {
+		operation.Error = fmt.Errorf("%s doSubAllBalance failed: %v", e.GetName(), jsonSubAccountReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountList); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAllBalance Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.SubAccountList = []*exchange.SubAccountInfo{}
+	for _, account := range accountList {
+		var accountType exchange.WalletType
+		if account.Type == "spot" {
+			accountType = exchange.SpotWallet
+		} else if account.Type == "margin" || account.Type == "super-margin" {
+			accountType = exchange.MarginWallet
+		} else if account.Type == "otc" {
+			accountType = exchange.FiatOTCWallet
+		}
+
+		a := &exchange.SubAccountInfo{
+			ID:          fmt.Sprintf("%v", account.ID),
+			Status:      account.State,
+			AccountType: accountType,
+			Activated:   true,
+			// TimeStamp:   account.CreateTime,
+		}
+		operation.SubAccountList = append(operation.SubAccountList, a)
+	}
+
+	return nil
+}
+
+func (e *Huobi) doSubBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountBalance := SubAccountBalances{}
+	strRequest := fmt.Sprintf("/v1/account/accounts/%v", operation.SubAccountID)
+	operation.BalanceList = []exchange.AssetBalance{}
+
+	mapParams := make(map[string]string)
+	mapParams["sub-uid"] = operation.SubAccountID
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doSubBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Status != "ok" {
+		operation.Error = fmt.Errorf("%s doSubBalance failed: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s doSubBalance Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.BalanceList = []exchange.AssetBalance{}
+	if len(accountBalance) == 0 {
+		log.Printf("%s doSubBalance got empty list: %v", e.GetName(), jsonBalanceReturn)
+		return nil
+	}
+	for _, balance := range accountBalance[0].List {
+		totalAmount, err := strconv.ParseFloat(balance.Balance, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doSubBalance parse err: %+v %v", e.GetName(), balance, err)
+			return operation.Error
+		}
+
+		c := e.GetCoinBySymbol(balance.Currency)
+		if c == nil {
+			continue
+		}
+		b := exchange.AssetBalance{
+			Coin:             c,
+			BalanceAvailable: totalAmount,
+			BalanceFrozen:    0,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
+	return nil
 }
 
 func (e *Huobi) doWithdraw(operation *exchange.AccountOperation) error {

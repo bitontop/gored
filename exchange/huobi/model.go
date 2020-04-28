@@ -172,3 +172,20 @@ type DepositAddress struct {
 	AddressTag string `json:"addressTag"`
 	Chain      string `json:"chain"`
 }
+
+type SubAccountBalances []struct {
+	ID   int    `json:"id"`
+	Type string `json:"type"`
+	List []struct {
+		Currency string `json:"currency"`
+		Type     string `json:"type"`
+		Balance  string `json:"balance"`
+	} `json:"list"`
+}
+
+type SubAccountList []struct {
+	ID      int    `json:"id"`
+	Type    string `json:"type"`
+	Subtype string `json:"subtype"` // sub account type
+	State   string `json:"state"`
+}
