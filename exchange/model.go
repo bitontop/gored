@@ -168,7 +168,8 @@ const (
 	Transfer          OperationType = "Transfer"          // transfer  between inneral wallet
 	Balance           OperationType = "Balance"           // balance(s) of different accounts
 	BalanceList       OperationType = "BalanceAll"        // balance(s) of different accounts
-	SubBalanceList    OperationType = "SubBalanceList"    // balance(s) of all subaccounts
+	SubBalanceList    OperationType = "SubBalanceList"    // balance(s) of subaccount
+	SubAllBalanceList OperationType = "SubAllBalanceList" // balance(s) of all subaccounts
 	GetSubAccountList OperationType = "GetSubAccountList" // get sub accounts list
 	GetPositionInfo   OperationType = "GetPositionInfo"   // position information for Contract
 
@@ -352,10 +353,11 @@ type AssetBalance struct {
 }
 
 type SubAccountInfo struct {
-	ID        string `json:"id"` // account ID, email, etc.
-	Status    string `json:"status"`
-	Activated bool   `json:"activated"`
-	TimeStamp int64  `json:"timestamp"`
+	ID          string     `json:"id"` // account ID, email, etc.
+	Status      string     `json:"status"`
+	Activated   bool       `json:"activated"`
+	AccountType WalletType `json:"account_type"`
+	TimeStamp   int64      `json:"timestamp"`
 }
 
 type KlineDetail struct {

@@ -36,7 +36,7 @@ func Test_Binance(t *testing.T) {
 
 	// var err error
 
-	SubBalances(e)
+	SubBalances(e, "example@bitontop.com")
 	SubAccountList(e)
 
 	// Spot AllBalance
@@ -268,53 +268,6 @@ func Test_Binance(t *testing.T) {
 	// Test_AOWithdrawalHistory(e, pair)
 	// time.Sleep(time.Second * 5)
 	// Test_AOTransferHistory(e)
-}
-
-func SubBalances(e exchange.Exchange) {
-	// Sub Spot AllBalance
-	opSubAllBalance := &exchange.AccountOperation{
-		Wallet:       exchange.SpotWallet,
-		Type:         exchange.SubBalanceList,
-		SubAccountID: "example@bitontop.com",
-		Ex:           e.GetName(),
-		DebugMode:    true,
-	}
-	err := e.DoAccountOperation(opSubAllBalance)
-	if err != nil {
-		log.Printf("==%v", err)
-		return
-	}
-	for _, balance := range opSubAllBalance.BalanceList {
-		log.Printf("AllSubAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
-	}
-	if len(opSubAllBalance.BalanceList) == 0 {
-		log.Println("AllSubAccount 0 balance")
-	}
-	log.Printf("JSON RESPONSE: %v", opSubAllBalance.CallResponce)
-	log.Printf("AllSubAccount done")
-}
-
-func SubAccountList(e exchange.Exchange) {
-	// Sub account list
-	opSubAccountList := &exchange.AccountOperation{
-		Wallet:    exchange.SpotWallet,
-		Type:      exchange.GetSubAccountList,
-		Ex:        e.GetName(),
-		DebugMode: true,
-	}
-	err := e.DoAccountOperation(opSubAccountList)
-	if err != nil {
-		log.Printf("==%v", err)
-		return
-	}
-	for _, account := range opSubAccountList.SubAccountList {
-		log.Printf("AllSubAccount account: %+v", account)
-	}
-	if len(opSubAccountList.BalanceList) == 0 {
-		log.Println("No Sub Account Info")
-	}
-	log.Printf("JSON RESPONSE: %v", opSubAccountList.CallResponce)
-	log.Printf("AllSubAccount done")
 }
 
 func Withdraw(e exchange.Exchange, pair *pair.Pair) {

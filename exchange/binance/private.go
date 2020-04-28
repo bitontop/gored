@@ -82,7 +82,7 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		}
 	case exchange.SubBalanceList:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.doSubAllBalance(operation)
+			return e.doSubBalance(operation)
 		}
 	case exchange.GetSubAccountList:
 		if operation.Wallet == exchange.SpotWallet {
@@ -93,28 +93,27 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
 
-func (e *Binance) doSubAccountList(operation *exchange.AccountOperation) error { //TODO, test with asset
+func (e *Binance) doSubAccountList(operation *exchange.AccountOperation) error { //TODO, test with sub account
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
 	accountList := SubAccountList{}
 	strRequest := "/wapi/v3/sub-account/list.html"
-	operation.BalanceList = []exchange.AssetBalance{}
 
 	mapParams := make(map[string]string)
 
-	jsonAllBalanceReturn := e.WApiKeyRequest("GET", mapParams, strRequest) // e.ApiKeyGet(mapParams, strRequest) // e.WApiKeyRequest("GET", mapParams, strRequest)
+	jsonSubAccountReturn := e.WApiKeyRequest("GET", mapParams, strRequest) // e.ApiKeyGet(mapParams, strRequest) // e.WApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.CallResponce = jsonAllBalanceReturn
+		operation.CallResponce = jsonSubAccountReturn
 	}
 
-	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountList); err != nil {
-		operation.Error = fmt.Errorf("%s doSubAccountList Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonSubAccountReturn), &accountList); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAccountList Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubAccountReturn)
 		return operation.Error
 	} else if !accountList.Success {
-		operation.Error = fmt.Errorf("%s doSubAccountList failed: %v", e.GetName(), jsonAllBalanceReturn)
+		operation.Error = fmt.Errorf("%s doSubAccountList failed: %v", e.GetName(), jsonSubAccountReturn)
 		return operation.Error
 	}
 
@@ -125,6 +124,7 @@ func (e *Binance) doSubAccountList(operation *exchange.AccountOperation) error {
 			ID:        account.Email,
 			Status:    account.Status,
 			Activated: account.Activated,
+			// AccountType: exchange.SpotWallet,
 			TimeStamp: account.CreateTime,
 		}
 		operation.SubAccountList = append(operation.SubAccountList, a)
@@ -133,7 +133,7 @@ func (e *Binance) doSubAccountList(operation *exchange.AccountOperation) error {
 	return nil
 }
 
-func (e *Binance) doSubAllBalance(operation *exchange.AccountOperation) error { //TODO, test with asset
+func (e *Binance) doSubBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
@@ -145,17 +145,17 @@ func (e *Binance) doSubAllBalance(operation *exchange.AccountOperation) error { 
 	mapParams := make(map[string]string)
 	mapParams["email"] = url.QueryEscape(operation.SubAccountID)
 
-	jsonAllBalanceReturn := e.WApiKeyRequest("GET", mapParams, strRequest)
+	jsonBalanceReturn := e.WApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
-		operation.CallResponce = jsonAllBalanceReturn
+		operation.CallResponce = jsonBalanceReturn
 	}
 
-	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalance); err != nil {
-		operation.Error = fmt.Errorf("%s doSubAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s doSubBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
 		return operation.Error
 	} else if !accountBalance.Success {
-		operation.Error = fmt.Errorf("%s doSubAllBalance failed: %v", e.GetName(), jsonAllBalanceReturn)
+		operation.Error = fmt.Errorf("%s doSubBalance failed: %v", e.GetName(), jsonBalanceReturn)
 		return operation.Error
 	}
 

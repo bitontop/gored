@@ -411,6 +411,53 @@ func Test_AOTransferHistory(e exchange.Exchange) {
 	}
 }
 
+func SubBalances(e exchange.Exchange, subID string) {
+	// Sub Spot AllBalance
+	opSubBalance := &exchange.AccountOperation{
+		Wallet:       exchange.SpotWallet,
+		Type:         exchange.SubBalanceList,
+		SubAccountID: subID,
+		Ex:           e.GetName(),
+		DebugMode:    true,
+	}
+	err := e.DoAccountOperation(opSubBalance)
+	if err != nil {
+		log.Printf("==%v", err)
+		return
+	}
+	for _, balance := range opSubBalance.BalanceList {
+		log.Printf("SubBalances balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
+	if len(opSubBalance.BalanceList) == 0 {
+		log.Println("SubBalances 0 balance")
+	}
+	log.Printf("JSON RESPONSE: %v", opSubBalance.CallResponce)
+	log.Printf("SubBalances done")
+}
+
+func SubAccountList(e exchange.Exchange) {
+	// Sub account list
+	opSubAccountList := &exchange.AccountOperation{
+		Wallet:    exchange.SpotWallet,
+		Type:      exchange.GetSubAccountList,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+	err := e.DoAccountOperation(opSubAccountList)
+	if err != nil {
+		log.Printf("==%v", err)
+		return
+	}
+	for _, account := range opSubAccountList.SubAccountList {
+		log.Printf("AllSubAccount account: %+v", account)
+	}
+	if len(opSubAccountList.SubAccountList) == 0 {
+		log.Println("No Sub Account Info")
+	}
+	log.Printf("JSON RESPONSE: %v", opSubAccountList.CallResponce)
+	log.Printf("AllSubAccount done")
+}
+
 /********************General********************/
 func Test_ConstraintFetch(e exchange.Exchange, p *pair.Pair) {
 	status := e.GetConstraintFetchMethod(p)
