@@ -332,7 +332,7 @@ func (e *Binance) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		// OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Side:         exchange.SELL,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -378,7 +378,7 @@ func (e *Binance) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		// OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Side:         exchange.BUY,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -550,13 +550,25 @@ func (e *Binance) WApiKeyRequest(strMethod string, mapParams map[string]string, 
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	signature := exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
-	payload := fmt.Sprintf("%s&signature=%s", exchange.Map2UrlQuery(mapParams), signature)
-	strUrl := API_URL + strRequestPath
+	// payload := fmt.Sprintf("%s&signature=%s", exchange.Map2UrlQuery(mapParams), signature)
+	// if len(mapParams) == 0 {
+	// 	payload = fmt.Sprintf("signature=%s", signature)
+	// }
 
-	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
+	// strUrl := API_URL + strRequestPath
+	// request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
+	// mapParams["signature"] = signature
+
+	// signature at end
+	strUrl := API_URL + strRequestPath + "?" + fmt.Sprintf("%s&signature=%s", exchange.Map2UrlQuery(mapParams), signature)
+	request, err := http.NewRequest(strMethod, strUrl, nil)
+
 	if nil != err {
 		return err.Error()
 	}
+
+	// log.Printf("=wwww= strUrl: %v", strUrl) // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
 

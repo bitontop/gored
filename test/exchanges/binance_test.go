@@ -34,7 +34,10 @@ func Test_Binance(t *testing.T) {
 	// Test_AODepositHistory(e, pair)
 	// Test_AOWithdrawalHistory(e, pair) // not tested with asset
 
-	var err error
+	// var err error
+
+	SubBalances(e)
+	SubAccountList(e)
 
 	// Spot AllBalance
 	// opAllBalance := &exchange.AccountOperation{
@@ -72,77 +75,79 @@ func Test_Binance(t *testing.T) {
 	// log.Printf("%s ContractOrderBook %+v", e.GetName(), opOrderBook.Maker)
 
 	// ==============================================
-	// Contract OpenOrder
-	opCOpen := &exchange.AccountOperation{
-		Type:      exchange.GetOpenOrder,
-		Wallet:    exchange.ContractWallet,
-		Ex:        e.GetName(),
-		Pair:      pair,
-		DebugMode: true,
-	}
 
-	if err := e.DoAccountOperation(opCOpen); err != nil {
-		log.Printf("error: %+v", err)
-	} else {
-		for _, o := range opCOpen.OpenOrders {
-			log.Printf("%s OpenOrders %+v", e.GetName(), o)
-		}
-		log.Printf("callResponse: %+v", opCOpen.CallResponce)
-	}
+	// Contract OpenOrder
+	// opCOpen := &exchange.AccountOperation{
+	// 	Type:      exchange.GetOpenOrder,
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Ex:        e.GetName(),
+	// 	Pair:      pair,
+	// 	DebugMode: true,
+	// }
+
+	// if err := e.DoAccountOperation(opCOpen); err != nil {
+	// 	log.Printf("error: %+v", err)
+	// } else {
+	// 	for _, o := range opCOpen.OpenOrders {
+	// 		log.Printf("%s OpenOrders %+v", e.GetName(), o)
+	// 	}
+	// 	log.Printf("callResponse: %+v", opCOpen.CallResponce)
+	// }
 	// ==============================================
 	// Contract OrderHistory
-	opCOrderHistory := &exchange.AccountOperation{
-		Type:      exchange.GetOrderHistory,
-		Wallet:    exchange.ContractWallet,
-		Ex:        e.GetName(),
-		Pair:      pair,
-		DebugMode: true,
-	}
+	// opCOrderHistory := &exchange.AccountOperation{
+	// 	Type:      exchange.GetOrderHistory,
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Ex:        e.GetName(),
+	// 	Pair:      pair,
+	// 	DebugMode: true,
+	// }
 
-	if err := e.DoAccountOperation(opCOrderHistory); err != nil {
-		log.Printf("%+v", err)
-	} else {
-		for _, o := range opCOrderHistory.OrderHistory {
-			log.Printf("%s OrderHistory %+v", e.GetName(), o)
-		}
-		log.Printf("Contract OrderHistory CallResponse: %+v", opCOrderHistory.CallResponce)
-	}
+	// if err := e.DoAccountOperation(opCOrderHistory); err != nil {
+	// 	log.Printf("%+v", err)
+	// } else {
+	// 	for _, o := range opCOrderHistory.OrderHistory {
+	// 		log.Printf("%s OrderHistory %+v", e.GetName(), o)
+	// 	}
+	// 	log.Printf("Contract OrderHistory CallResponse: %+v", opCOrderHistory.CallResponce)
+	// }
 	// ==============================================
 	// Contract TransferHistory
-	opCTransferHistory := &exchange.AccountOperation{
-		Type:              exchange.GetTransferHistory,
-		Wallet:            exchange.ContractWallet,
-		Ex:                e.GetName(),
-		Coin:              pair.Base,
-		TransferStartTime: 1555056425000,
-		DebugMode:         true,
-	}
+	// opCTransferHistory := &exchange.AccountOperation{
+	// 	Type:              exchange.GetTransferHistory,
+	// 	Wallet:            exchange.ContractWallet,
+	// 	Ex:                e.GetName(),
+	// 	Coin:              pair.Base,
+	// 	TransferStartTime: 1555056425000,
+	// 	DebugMode:         true,
+	// }
 
-	if err := e.DoAccountOperation(opCTransferHistory); err != nil {
-		log.Printf("%+v", err)
-	} else {
-		for _, o := range opCTransferHistory.TransferInHistory {
-			log.Printf("%s TransferInHistory %+v", e.GetName(), o)
-		}
-		for _, o := range opCTransferHistory.TransferOutHistory {
-			log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
-		}
-		log.Printf("Contract TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
-	}
+	// if err := e.DoAccountOperation(opCTransferHistory); err != nil {
+	// 	log.Printf("%+v", err)
+	// } else {
+	// 	for _, o := range opCTransferHistory.TransferInHistory {
+	// 		log.Printf("%s TransferInHistory %+v", e.GetName(), o)
+	// 	}
+	// 	for _, o := range opCTransferHistory.TransferOutHistory {
+	// 		log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
+	// 	}
+	// 	log.Printf("Contract TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
+	// }
 	// ==============================================
-	// Contract Position Information
-	opCPositionInfo := &exchange.AccountOperation{
-		Type:      exchange.GetPositionInfo,
-		Wallet:    exchange.ContractWallet,
-		Ex:        e.GetName(),
-		DebugMode: true,
-	}
 
-	if err := e.DoAccountOperation(opCPositionInfo); err != nil {
-		log.Printf("%+v", err)
-	} else {
-		log.Printf("Contract Position Information CallResponse: %+v", opCPositionInfo.CallResponce)
-	}
+	// Contract Position Information
+	// opCPositionInfo := &exchange.AccountOperation{
+	// 	Type:      exchange.GetPositionInfo,
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Ex:        e.GetName(),
+	// 	DebugMode: true,
+	// }
+
+	// if err := e.DoAccountOperation(opCPositionInfo); err != nil {
+	// 	log.Printf("%+v", err)
+	// } else {
+	// 	log.Printf("Contract Position Information CallResponse: %+v", opCPositionInfo.CallResponce)
+	// }
 	// ==============================================
 
 	// spot Kline
@@ -166,22 +171,22 @@ func Test_Binance(t *testing.T) {
 	// ==============================================
 
 	// contract AllBalance
-	opContractAllBalance := &exchange.AccountOperation{
-		Wallet:    exchange.ContractWallet,
-		Type:      exchange.BalanceList,
-		Ex:        e.GetName(),
-		DebugMode: true,
-	}
-	err = e.DoAccountOperation(opContractAllBalance)
-	if err != nil {
-		log.Printf("==%v", err)
-	}
-	for _, balance := range opContractAllBalance.BalanceList {
-		log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
-	}
-	if len(opContractAllBalance.BalanceList) == 0 {
-		log.Println("AllAccount 0 balance")
-	}
+	// opContractAllBalance := &exchange.AccountOperation{
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Type:      exchange.BalanceList,
+	// 	Ex:        e.GetName(),
+	// 	DebugMode: true,
+	// }
+	// err = e.DoAccountOperation(opContractAllBalance)
+	// if err != nil {
+	// 	log.Printf("==%v", err)
+	// }
+	// for _, balance := range opContractAllBalance.BalanceList {
+	// 	log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	// }
+	// if len(opContractAllBalance.BalanceList) == 0 {
+	// 	log.Println("AllAccount 0 balance")
+	// }
 	// ==============================================
 
 	// OrderType: GTC, IOC, FOK, GTX
@@ -263,4 +268,69 @@ func Test_Binance(t *testing.T) {
 	// Test_AOWithdrawalHistory(e, pair)
 	// time.Sleep(time.Second * 5)
 	// Test_AOTransferHistory(e)
+}
+
+func SubBalances(e exchange.Exchange) {
+	// Sub Spot AllBalance
+	opSubAllBalance := &exchange.AccountOperation{
+		Wallet:       exchange.SpotWallet,
+		Type:         exchange.SubBalanceList,
+		SubAccountID: "example@bitontop.com",
+		Ex:           e.GetName(),
+		DebugMode:    true,
+	}
+	err := e.DoAccountOperation(opSubAllBalance)
+	if err != nil {
+		log.Printf("==%v", err)
+		return
+	}
+	for _, balance := range opSubAllBalance.BalanceList {
+		log.Printf("AllSubAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
+	if len(opSubAllBalance.BalanceList) == 0 {
+		log.Println("AllSubAccount 0 balance")
+	}
+	log.Printf("JSON RESPONSE: %v", opSubAllBalance.CallResponce)
+	log.Printf("AllSubAccount done")
+}
+
+func SubAccountList(e exchange.Exchange) {
+	// Sub account list
+	opSubAccountList := &exchange.AccountOperation{
+		Wallet:    exchange.SpotWallet,
+		Type:      exchange.GetSubAccountList,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+	err := e.DoAccountOperation(opSubAccountList)
+	if err != nil {
+		log.Printf("==%v", err)
+		return
+	}
+	for _, account := range opSubAccountList.SubAccountList {
+		log.Printf("AllSubAccount account: %+v", account)
+	}
+	if len(opSubAccountList.BalanceList) == 0 {
+		log.Println("No Sub Account Info")
+	}
+	log.Printf("JSON RESPONSE: %v", opSubAccountList.CallResponce)
+	log.Printf("AllSubAccount done")
+}
+
+func Withdraw(e exchange.Exchange, pair *pair.Pair) {
+	opWithdraw := &exchange.AccountOperation{
+		Wallet:          exchange.SpotWallet,
+		Type:            exchange.Withdraw,
+		Coin:            pair.Target,
+		WithdrawAddress: "35263",
+		WithdrawAmount:  "0.1",
+		Ex:              e.GetName(),
+		DebugMode:       true,
+	}
+	err := e.DoAccountOperation(opWithdraw)
+	if err != nil {
+		log.Printf("==%v", err)
+		return
+	}
+	log.Printf("Withdraw JSON RESPONSE: %v", opWithdraw.CallResponce)
 }

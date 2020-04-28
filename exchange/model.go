@@ -164,11 +164,13 @@ type MarginBalance struct {
 type OperationType string
 
 const (
-	Withdraw        OperationType = "Withdraw"
-	Transfer        OperationType = "Transfer"        // transfer  between inneral wallet
-	Balance         OperationType = "Balance"         // balance(s) of different accounts
-	BalanceList     OperationType = "BalanceAll"      // balance(s) of different accounts
-	GetPositionInfo OperationType = "GetPositionInfo" // position information for Contract
+	Withdraw          OperationType = "Withdraw"
+	Transfer          OperationType = "Transfer"          // transfer  between inneral wallet
+	Balance           OperationType = "Balance"           // balance(s) of different accounts
+	BalanceList       OperationType = "BalanceAll"        // balance(s) of different accounts
+	SubBalanceList    OperationType = "SubBalanceList"    // balance(s) of all subaccounts
+	GetSubAccountList OperationType = "GetSubAccountList" // get sub accounts list
+	GetPositionInfo   OperationType = "GetPositionInfo"   // position information for Contract
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"
@@ -227,7 +229,8 @@ type AccountOperation struct {
 	WithdrawID      string `json:"withdraw_id"`
 
 	// #Balance
-	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
+	Wallet       WalletType `json:"wallet"`         // Contract/Spot operation. Default spot if empty
+	SubAccountID string     `json:"sub_account_id"` // Sub account id. eg. Sub account email
 
 	//#Single Balance
 	BalanceAvailable float64 `json:"balance_available"` //the fund able to do trading
@@ -244,6 +247,9 @@ type AccountOperation struct {
 	// #GetWithdrawal/DepositHistory
 	WithdrawalHistory []*WDHistory
 	DepositHistory    []*WDHistory
+
+	// #GetSubAccountList
+	SubAccountList []*SubAccountInfo
 
 	// #Sub Account Transfer History
 	TransferInHistory  []*TransferHistory
@@ -343,6 +349,13 @@ type AssetBalance struct {
 	BalanceAvailable float64    `json:"balance_available"` //the fund able to do trading
 	BalanceFrozen    float64    `json:"balance_frozen"`    // the fund in order or frozen can't do trading         the total amount of fund should be   BalanceAvailable + BalanceFrozen
 
+}
+
+type SubAccountInfo struct {
+	ID        string `json:"id"` // account ID, email, etc.
+	Status    string `json:"status"`
+	Activated bool   `json:"activated"`
+	TimeStamp int64  `json:"timestamp"`
 }
 
 type KlineDetail struct {

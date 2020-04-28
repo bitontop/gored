@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"strconv"
-	"time"
 
 	"github.com/bitontop/gored/exchange"
 )
@@ -80,9 +79,111 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doGetPositionInfo(operation)
 		}
+	case exchange.SubBalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubAllBalance(operation)
+		}
+	case exchange.GetSubAccountList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubAccountList(operation)
+		}
 	}
 
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Binance) doSubAccountList(operation *exchange.AccountOperation) error { //TODO, test with asset
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountList := SubAccountList{}
+	strRequest := "/wapi/v3/sub-account/list.html"
+	operation.BalanceList = []exchange.AssetBalance{}
+
+	mapParams := make(map[string]string)
+
+	jsonAllBalanceReturn := e.WApiKeyRequest("GET", mapParams, strRequest) // e.ApiKeyGet(mapParams, strRequest) // e.WApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountList); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAccountList Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else if !accountList.Success {
+		operation.Error = fmt.Errorf("%s doSubAccountList failed: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
+	}
+
+	operation.SubAccountList = []*exchange.SubAccountInfo{}
+	for _, account := range accountList.SubAccounts {
+
+		a := &exchange.SubAccountInfo{
+			ID:        account.Email,
+			Status:    account.Status,
+			Activated: account.Activated,
+			TimeStamp: account.CreateTime,
+		}
+		operation.SubAccountList = append(operation.SubAccountList, a)
+	}
+
+	return nil
+}
+
+func (e *Binance) doSubAllBalance(operation *exchange.AccountOperation) error { //TODO, test with asset
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountBalance := SubAccountBalances{}
+	strRequest := "/wapi/v3/sub-account/assets.html"
+	operation.BalanceList = []exchange.AssetBalance{}
+
+	mapParams := make(map[string]string)
+	mapParams["email"] = operation.SubAccountID
+
+	jsonAllBalanceReturn := e.WApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else if !accountBalance.Success {
+		operation.Error = fmt.Errorf("%s doSubAllBalance failed: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
+	}
+
+	operation.BalanceList = []exchange.AssetBalance{}
+	for _, balance := range accountBalance.Balances {
+		// freeamount, err := strconv.ParseFloat(balance.Free, 64)
+		// if err != nil {
+		// 	operation.Error = fmt.Errorf("%s UpdateSubBalances parse err: %+v %v", e.GetName(), balance, err)
+		// 	return operation.Error
+		// }
+		// locked, err := strconv.ParseFloat(balance.Locked, 64)
+		// if err != nil {
+		// 	operation.Error = fmt.Errorf("%s UpdateSubBalances parse err: %+v %v", e.GetName(), balance, err)
+		// 	return operation.Error
+		// }
+
+		c := e.GetCoinBySymbol(balance.Asset)
+		if c == nil {
+			continue
+		}
+		b := exchange.AssetBalance{
+			Coin:             c,
+			BalanceAvailable: balance.Free,
+			BalanceFrozen:    balance.Locked,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
+	return nil
 }
 
 func (e *Binance) doAllBalance(operation *exchange.AccountOperation) error {
@@ -549,7 +650,6 @@ func (e *Binance) doWithdraw(operation *exchange.AccountOperation) error {
 		mapParams["addressTag"] = operation.WithdrawTag
 	}
 	mapParams["amount"] = operation.WithdrawAmount
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
 	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {

@@ -392,3 +392,24 @@ type PositionInfo []struct {
 	UnRealizedProfit string `json:"unRealizedProfit"`
 	PositionSide     string `json:"positionSide"`
 }
+
+type SubAccountBalances struct {
+	Success  bool `json:"success"`
+	Balances []struct {
+		Asset  string  `json:"asset"`
+		Free   float64 `json:"free"`
+		Locked float64 `json:"locked"`
+	} `json:"balances"`
+}
+
+type SubAccountList struct {
+	Success     bool `json:"success"`
+	SubAccounts []struct {
+		Email      string `json:"email"`
+		Status     string `json:"status"`
+		Activated  bool   `json:"activated"`
+		Mobile     string `json:"mobile"`
+		GAuth      bool   `json:"gAuth"`
+		CreateTime int64  `json:"createTime"`
+	} `json:"subAccounts"`
+}
