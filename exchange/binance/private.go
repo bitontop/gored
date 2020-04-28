@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"strconv"
 
 	"github.com/bitontop/gored/exchange"
@@ -142,7 +143,7 @@ func (e *Binance) doSubAllBalance(operation *exchange.AccountOperation) error { 
 	operation.BalanceList = []exchange.AssetBalance{}
 
 	mapParams := make(map[string]string)
-	mapParams["email"] = operation.SubAccountID
+	mapParams["email"] = url.QueryEscape(operation.SubAccountID)
 
 	jsonAllBalanceReturn := e.WApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
