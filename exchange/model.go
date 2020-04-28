@@ -314,12 +314,8 @@ type AssetBalance struct {
 
 }
 
-type TradeDirection string
 
-const (
-	Buy  TradeDirection = "b"
-	Sell TradeDirection = "s"
-)
+
 
 type TradeDetail struct {
 	ID        string         `json:"id"`

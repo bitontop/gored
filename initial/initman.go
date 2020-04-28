@@ -1,6 +1,7 @@
 package initial
 
 import (
+	"github.com/bitontop/gored/exchange/btse"
 	"sync"
 
 	"github.com/bitontop/gored/exchange"
@@ -580,7 +581,12 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 			e.exMan.Add(ex)
 		}
 		return ex
-
+	case exchange.BTSE:
+		ex := btse.CreateBtse(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
 	}
 	return nil
 }
