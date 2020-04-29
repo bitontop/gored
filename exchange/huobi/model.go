@@ -189,3 +189,9 @@ type SubAccountList []struct {
 	Subtype string `json:"subtype"` // sub account type
 	State   string `json:"state"`
 }
+
+type SubAllAccountBalances []struct {
+	Currency string `json:"currency"`
+	Type     string `json:"type"`
+	Balance  string `json:"balance"`
+}

@@ -36,6 +36,7 @@ func Test_Huobi(t *testing.T) {
 
 	SubBalances(e, "8459451")
 	SubAccountList(e)
+	SubAllBalances(e)
 
 	// Test Withdraw
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")

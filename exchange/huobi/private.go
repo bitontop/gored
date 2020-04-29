@@ -49,6 +49,10 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 		// if operation.Wallet == exchange.SpotWallet {
 		return e.doSubAccountList(operation)
 		// }
+	case exchange.SubAllBalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubAllBalance(operation)
+		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
@@ -116,7 +120,6 @@ func (e *Huobi) doSubBalance(operation *exchange.AccountOperation) error { //TOD
 	jsonResponse := &JsonResponse{}
 	accountBalance := SubAccountBalances{}
 	strRequest := fmt.Sprintf("/v1/account/accounts/%v", operation.SubAccountID)
-	operation.BalanceList = []exchange.AssetBalance{}
 
 	mapParams := make(map[string]string)
 	mapParams["sub-uid"] = operation.SubAccountID
@@ -145,6 +148,62 @@ func (e *Huobi) doSubBalance(operation *exchange.AccountOperation) error { //TOD
 		return nil
 	}
 	for _, balance := range accountBalance[0].List {
+		totalAmount, err := strconv.ParseFloat(balance.Balance, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doSubBalance parse err: %+v %v", e.GetName(), balance, err)
+			return operation.Error
+		}
+
+		c := e.GetCoinBySymbol(balance.Currency)
+		if c == nil {
+			continue
+		}
+		b := exchange.AssetBalance{
+			Coin:             c,
+			BalanceAvailable: totalAmount,
+			BalanceFrozen:    0,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
+	return nil
+}
+
+func (e *Huobi) doSubAllBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountBalance := SubAllAccountBalances{}
+	strRequest := "/v1/subuser/aggregate-balance"
+
+	mapParams := make(map[string]string)
+
+	jsonSubAllBalanceReturn := e.ApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonSubAllBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubAllBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubAllBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Status != "ok" {
+		operation.Error = fmt.Errorf("%s doSubAllBalance failed: %v", e.GetName(), jsonSubAllBalanceReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAllBalance Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.BalanceList = []exchange.AssetBalance{}
+	if len(accountBalance) == 0 {
+		log.Printf("%s doSubAllBalance got empty list: %v", e.GetName(), jsonSubAllBalanceReturn)
+		return nil
+	}
+	for _, balance := range accountBalance {
 		totalAmount, err := strconv.ParseFloat(balance.Balance, 64)
 		if err != nil {
 			operation.Error = fmt.Errorf("%s doSubBalance parse err: %+v %v", e.GetName(), balance, err)
