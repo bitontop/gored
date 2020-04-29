@@ -88,6 +88,10 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSubAccountList(operation)
 		}
+	case exchange.SubAllBalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubAllBalance(operation) // All spot trading and main sub account
+		}
 	}
 
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
@@ -181,6 +185,62 @@ func (e *Binance) doSubBalance(operation *exchange.AccountOperation) error { //T
 			BalanceFrozen:    balance.Locked,
 		}
 		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
+	return nil
+}
+
+func (e *Binance) doSubAllBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	// get all subAccountID(email)
+	opSubAccountList := &exchange.AccountOperation{
+		Wallet:    exchange.SpotWallet,
+		Type:      exchange.GetSubAccountList,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+	err := e.DoAccountOperation(opSubAccountList)
+	if err != nil {
+		return err
+	}
+
+	balanceMap := make(map[string]exchange.AssetBalance)
+	operation.BalanceList = []exchange.AssetBalance{}
+	for _, account := range opSubAccountList.SubAccountList {
+		opSubBalance := &exchange.AccountOperation{
+			Wallet:       exchange.SpotWallet,
+			Type:         exchange.SubBalanceList,
+			SubAccountID: account.ID,
+			Ex:           e.GetName(),
+			DebugMode:    true,
+		}
+		err := e.DoAccountOperation(opSubBalance)
+		if err != nil {
+			return err
+		}
+		for _, balance := range opSubBalance.BalanceList {
+			b := exchange.AssetBalance{
+				Coin:             balance.Coin,
+				BalanceAvailable: balance.BalanceAvailable,
+				BalanceFrozen:    balance.BalanceFrozen,
+			}
+
+			// update balance for coin c
+			oldBalance, ok := balanceMap[b.Coin.Code]
+			if ok {
+				b.BalanceAvailable += oldBalance.BalanceAvailable
+				b.BalanceFrozen += oldBalance.BalanceFrozen
+			}
+			balanceMap[b.Coin.Code] = b
+		}
+	}
+
+	// store aggregated balance into list
+	for _, balance := range balanceMap {
+		operation.BalanceList = append(operation.BalanceList, balance)
 	}
 
 	return nil
