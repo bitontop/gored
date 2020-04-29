@@ -73,7 +73,7 @@ func (e *Binance) doSpotKline(operation *exchange.PublicOperation) error {
 
 	var rawKline [][]interface{}
 	if err := json.Unmarshal(get.ResponseBody, &rawKline); err != nil {
-		operation.Error = fmt.Errorf("%s doContractKline Json Unmarshal Err: %v %v", e.GetName(), err, string(get.ResponseBody))
+		operation.Error = fmt.Errorf("%s doSpotKline Json Unmarshal Err: %v %v", e.GetName(), err, string(get.ResponseBody))
 		return operation.Error
 	}
 
