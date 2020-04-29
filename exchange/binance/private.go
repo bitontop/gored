@@ -140,7 +140,6 @@ func (e *Binance) doSubBalance(operation *exchange.AccountOperation) error { //T
 
 	accountBalance := SubAccountBalances{}
 	strRequest := "/wapi/v3/sub-account/assets.html"
-	operation.BalanceList = []exchange.AssetBalance{}
 
 	mapParams := make(map[string]string)
 	mapParams["email"] = url.QueryEscape(operation.SubAccountID)

@@ -194,6 +194,7 @@ func Test_DoWithdraw(e exchange.Exchange, c *coin.Coin, amount string, addr stri
 	err := e.DoAccountOperation(opWithdraw)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 }
@@ -210,6 +211,7 @@ func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to 
 	err := e.DoAccountOperation(opTransfer)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 }
 
@@ -222,6 +224,7 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 	err := e.DoAccountOperation(opBalance)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 	log.Printf("%v Account available: %v, frozen: %v", opBalance.Coin.Code, opBalance.BalanceAvailable, opBalance.BalanceFrozen)
 }
@@ -234,6 +237,7 @@ func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) 
 	err := e.DoAccountOperation(opAllBalance)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 	for _, balance := range opAllBalance.BalanceList {
 		log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
@@ -252,6 +256,7 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 	err := e.LoadPublicData(opTradeHistory)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 	for _, trade := range opTradeHistory.TradeHistory {
 		log.Printf("TradeHistory: %+v", trade)
@@ -268,6 +273,7 @@ func Test_NewOrderBook(e exchange.Exchange, pair *pair.Pair) {
 	err := e.LoadPublicData(opOrderBook)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 
 	log.Printf("%s OrderBook %+v   error:%v", e.GetName(), opOrderBook.Maker, opOrderBook.Error)
@@ -284,6 +290,7 @@ func Test_CoinChainType(e exchange.Exchange, coin *coin.Coin) {
 	err := e.LoadPublicData(opCoinChainType)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 
 	log.Printf("%s %s Chain Type: %s", opCoinChainType.EX, opCoinChainType.Coin.Code, opCoinChainType.CoinChainType)
@@ -298,6 +305,7 @@ func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
 	err := e.LoadPublicData(opTradeHistory)
 	if err != nil {
 		log.Printf("%v", err)
+		return
 	}
 	log.Printf("%s OrderBook %+v", e.GetName(), opTradeHistory.Maker)
 }
