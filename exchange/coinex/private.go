@@ -27,11 +27,92 @@ func (e *Coinex) DoAccountOperation(operation *exchange.AccountOperation) error 
 			return e.doSubBalance(operation)
 		}
 
+	case exchange.SubAllBalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubAllBalance(operation) // All spot trading and main sub account
+		}
+
 	}
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
 }
 
-// could also get all sub
+func (e *Coinex) doSubAllBalance(operation *exchange.AccountOperation) error { // tested
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	jsonResponse := JsonResponse{}
+	accountBalance := SubAccountBalances{}
+	strRequest := "/v1/sub_account/balance"
+
+	mapParams := make(map[string]string)
+	mapParams["access_id"] = e.API_KEY
+	// mapParams["sub_user_name"] = url.QueryEscape(operation.SubAccountID) //
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doSubBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s doSubBalance failed: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s doSubBalance Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	balanceMap := make(map[string]exchange.AssetBalance)
+	operation.BalanceList = []exchange.AssetBalance{}
+	for accountName, account := range accountBalance {
+		if mapParams["sub_user_name"] != "" && mapParams["sub_user_name"] != accountName {
+			continue
+		}
+		for symbol, balance := range account {
+			freeamount, err := strconv.ParseFloat(balance.Available, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s UpdateSubBalances parse err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+			locked, err := strconv.ParseFloat(balance.Frozen, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s UpdateSubBalances parse err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+
+			c := e.GetCoinBySymbol(symbol)
+			if c == nil {
+				continue
+			}
+			b := exchange.AssetBalance{
+				Coin:             c,
+				BalanceAvailable: freeamount,
+				BalanceFrozen:    locked,
+			}
+
+			// update balance for coin c
+			oldBalance, ok := balanceMap[c.Code]
+			if ok {
+				b.BalanceAvailable += oldBalance.BalanceAvailable
+				b.BalanceFrozen += oldBalance.BalanceFrozen
+			}
+			balanceMap[c.Code] = b
+		}
+	}
+
+	// store aggregated balance into list
+	for _, balance := range balanceMap {
+		operation.BalanceList = append(operation.BalanceList, balance)
+	}
+
+	return nil
+}
+
 func (e *Coinex) doSubBalance(operation *exchange.AccountOperation) error { // tested
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())

@@ -439,7 +439,7 @@ func SubBalances(e exchange.Exchange, subID string) {
 	if len(opSubBalance.BalanceList) == 0 {
 		log.Println("SubBalances 0 balance")
 	}
-	log.Printf("JSON RESPONSE: %v", opSubBalance.CallResponce)
+	log.Printf("SubBalances JSON RESPONSE: %v", opSubBalance.CallResponce)
 	log.Printf("SubBalances done")
 }
 
@@ -462,7 +462,7 @@ func SubAllBalances(e exchange.Exchange) {
 	if len(opSubAllBalance.BalanceList) == 0 {
 		log.Println("SubAllBalances 0 balance")
 	}
-	log.Printf("JSON RESPONSE: %v", opSubAllBalance.CallResponce)
+	log.Printf("SubAllBalances JSON RESPONSE: %v", opSubAllBalance.CallResponce)
 	log.Printf("SubAllBalances done")
 }
 
@@ -485,7 +485,7 @@ func SubAccountList(e exchange.Exchange) {
 	if len(opSubAccountList.SubAccountList) == 0 {
 		log.Println("No Sub Account Info")
 	}
-	log.Printf("JSON RESPONSE: %v", opSubAccountList.CallResponce)
+	log.Printf("SubAccountList JSON RESPONSE: %v", opSubAccountList.CallResponce)
 	log.Printf("AllSubAccount done")
 }
 
