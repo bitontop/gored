@@ -130,3 +130,73 @@ type TradeHistory []struct {
 	Price    string `json:"price"`
 	Time     int64  `json:"time"`
 }
+
+type SubAllAccountBalances []struct {
+	SubUserID    string `json:"subUserId"`
+	SubName      string `json:"subName"`
+	MainAccounts []struct {
+		Currency          string `json:"currency"`
+		Balance           string `json:"balance"`
+		Available         string `json:"available"`
+		Holds             string `json:"holds"`
+		BaseCurrency      string `json:"baseCurrency"`
+		BaseCurrencyPrice string `json:"baseCurrencyPrice"`
+		BaseAmount        string `json:"baseAmount"`
+	} `json:"mainAccounts"`
+	TradeAccounts []struct {
+		Currency          string `json:"currency"`
+		Balance           string `json:"balance"`
+		Available         string `json:"available"`
+		Holds             string `json:"holds"`
+		BaseCurrency      string `json:"baseCurrency"`
+		BaseCurrencyPrice string `json:"baseCurrencyPrice"`
+		BaseAmount        string `json:"baseAmount"`
+	} `json:"tradeAccounts"`
+	MarginAccounts []struct {
+		Currency          string `json:"currency"`
+		Balance           string `json:"balance"`
+		Available         string `json:"available"`
+		Holds             string `json:"holds"`
+		BaseCurrency      string `json:"baseCurrency"`
+		BaseCurrencyPrice string `json:"baseCurrencyPrice"`
+		BaseAmount        string `json:"baseAmount"`
+	} `json:"marginAccounts"`
+}
+
+type SubAccountBalances struct {
+	SubUserID    string `json:"subUserId"`
+	SubName      string `json:"subName"`
+	MainAccounts []struct {
+		Currency          string `json:"currency"`
+		Balance           string `json:"balance"`
+		Available         string `json:"available"`
+		Holds             string `json:"holds"`
+		BaseCurrency      string `json:"baseCurrency"`
+		BaseCurrencyPrice string `json:"baseCurrencyPrice"`
+		BaseAmount        string `json:"baseAmount"`
+	} `json:"mainAccounts"`
+	TradeAccounts []struct {
+		Currency          string `json:"currency"`
+		Balance           string `json:"balance"`
+		Available         string `json:"available"`
+		Holds             string `json:"holds"`
+		BaseCurrency      string `json:"baseCurrency"`
+		BaseCurrencyPrice string `json:"baseCurrencyPrice"`
+		BaseAmount        string `json:"baseAmount"`
+	} `json:"tradeAccounts"`
+	MarginAccounts []struct {
+		Currency          string `json:"currency"`
+		Balance           string `json:"balance"`
+		Available         string `json:"available"`
+		Holds             string `json:"holds"`
+		BaseCurrency      string `json:"baseCurrency"`
+		BaseCurrencyPrice string `json:"baseCurrencyPrice"`
+		BaseAmount        string `json:"baseAmount"`
+	} `json:"marginAccounts"`
+}
+
+type SubAccountList []struct {
+	UserID  string `json:"userId"`
+	SubName string `json:"subName"`
+	Remarks string `json:"remarks"`
+}

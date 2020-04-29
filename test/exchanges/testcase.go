@@ -443,6 +443,29 @@ func SubBalances(e exchange.Exchange, subID string) {
 	log.Printf("SubBalances done")
 }
 
+func SubAllBalances(e exchange.Exchange) {
+	// Sub All Spot AllBalance
+	opSubAllBalance := &exchange.AccountOperation{
+		Wallet:    exchange.SpotWallet,
+		Type:      exchange.SubAllBalanceList,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+	err := e.DoAccountOperation(opSubAllBalance)
+	if err != nil {
+		log.Printf("==%v", err)
+		return
+	}
+	for _, balance := range opSubAllBalance.BalanceList {
+		log.Printf("SubAllBalances balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	}
+	if len(opSubAllBalance.BalanceList) == 0 {
+		log.Println("SubAllBalances 0 balance")
+	}
+	log.Printf("JSON RESPONSE: %v", opSubAllBalance.CallResponce)
+	log.Printf("SubAllBalances done")
+}
+
 func SubAccountList(e exchange.Exchange) {
 	// Sub account list
 	opSubAccountList := &exchange.AccountOperation{
