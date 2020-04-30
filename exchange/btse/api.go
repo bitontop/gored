@@ -281,25 +281,20 @@ func (e *Btse) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	jsonResponse := &JsonResponse{}
+	//jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "//api/v3.1/order"
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
 	mapParams["type"] = "LIMIT"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	//mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
@@ -319,25 +314,20 @@ func (e *Btse) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	jsonResponse := &JsonResponse{}
+	//jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/v3.1/order"
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
 	mapParams["type"] = "LIMIT"
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	//mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
-	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
-	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	order := &exchange.Order{
@@ -453,8 +443,7 @@ func (e *Btse) ApiKeyGet(strRequestPath string, mapParams map[string]string) str
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("btse-api", e.API_KEY)
 	request.Header.Add("btse-nonce", string(time.Now().Unix()))
-	secretKey := "your secret key"
-	sign := exchange.ComputeHmac384(secretKey, strRequestPath+e.API_KEY+string(jsonBytes))
+	sign := exchange.ComputeHmac384(e.API_SECRET, strRequestPath+e.API_KEY+string(jsonBytes))
 	request.Header.Add("btse-sign", sign)
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
@@ -488,11 +477,11 @@ func (e *Btse) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[str
 	if nil != err {
 		return err.Error()
 	}
+	jsonBytes, _ := json.Marshal(mapParams)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("btse-api", e.API_KEY)
 	request.Header.Add("btse-nonce", string(time.Now().Unix()))
-	secretKey := "your secret key"
-	sign := exchange.ComputeHmac384(secretKey, strRequestPath+e.API_KEY)
+	sign := exchange.ComputeHmac384(e.API_SECRET, strRequestPath+e.API_KEY+string(jsonBytes))
 	request.Header.Add("btse-sign", sign)
 
 	httpClient := &http.Client{}

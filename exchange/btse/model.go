@@ -52,14 +52,19 @@ type WithdrawResponse struct {
 }
 
 type PlaceOrder struct {
-	Symbol       string `json:"symbol"`
-	OrderID      string `json:"orderId"`
-	Side         string `json:"side"`
-	Type         string `json:"type"`
-	Price        string `json:"price"`
-	AveragePrice string `json:"executedQty"`
-	OrigQty      string `json:"origQty"`
-	ExecutedQty  string `json:"executedQty"`
-	Status       string `json:"status"`
-	TimeInForce  string `json:"timeInForce"`
+	AverageFillPrice float64 `json:"symbol"`
+	ClOrderID        string  `json:"orderId"`
+	FillSize         float64 `json:"side"`
+	Message          string  `json:"type"`
+	OrderID          string  `json:"price"`
+	OrderType        float64 `json:"executedQty"`
+	Price            float64 `json:"origQty"`
+	Side             string  `json:"executedQty"`
+	Size             float64 `json:"status"`
+	Status           float64 `json:"timeInForce"`
+	StopPrice        float64 `json:"timeInForce"`
+	Symbol           string  `json:"timeInForce"`
+	Timestamp        float64 `json:"timeInForce"`
+	Trigger          bool    `json:"timeInForce"`
+	TriggerPrice     float64 `json:"timeInForce"`
 }
