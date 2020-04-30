@@ -337,8 +337,12 @@ func Exchange(name exchange.ExchangeName, config *exchange.Config) {
 		config.API_SECRET = ""
 
 	case exchange.COINBASE:
-		config.API_KEY = "34c04e7f575e5e8a1115af459f38d245"
-		config.API_SECRET = "ImgRDl2pfw2W1M4CY2GJ/e3WEr0pI4T/wwrIAII4S4zaYDt6na2jTBrOuOlSSYHH1b1tOK7FG7Ar5xx5H7l/OQ=="
-		config.Passphrase = "tanboo."
+		config.API_KEY = ""
+		config.API_SECRET = ""
+		config.Passphrase = ""
+
+	case exchange.BITBNS:
+		config.API_KEY = ""
+		config.API_SECRET = ""
 	}
 }
