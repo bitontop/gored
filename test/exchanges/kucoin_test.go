@@ -25,7 +25,7 @@ func Test_Kucoin(t *testing.T) {
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_TradeHistory(e, pair)
-	Test_NewOrderBook(e, pair)
+	// Test_NewOrderBook(e, pair)
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -34,10 +34,14 @@ func Test_Kucoin(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
+	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.06, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+
+	SubBalances(e, "5cbd31ab9c93e9280cd36a0a")
+	SubAccountList(e)
+	SubAllBalances(e)
 
 	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)

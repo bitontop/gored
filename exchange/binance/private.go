@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"strconv"
-	"time"
 
 	"github.com/bitontop/gored/exchange"
 )
@@ -37,6 +37,8 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	case exchange.BalanceList:
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractAllBalance(operation)
+		} else if operation.Wallet == exchange.SpotWallet {
+			return e.doAllBalance(operation)
 		}
 	// case exchange.Balance:
 	// 	if operation.Wallet == exchange.ContractWallet {
@@ -47,10 +49,14 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	case exchange.GetOpenOrder:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetOpenOrder(operation)
+		} else if operation.Wallet == exchange.ContractWallet {
+			return e.doContractGetOpenOrder(operation)
 		}
 	case exchange.GetOrderHistory:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetOrderHistory(operation)
+		} else if operation.Wallet == exchange.ContractWallet {
+			return e.doContractGetOrderHistory(operation)
 		}
 	case exchange.GetWithdrawalHistory:
 		if operation.Wallet == exchange.SpotWallet {
@@ -60,13 +66,231 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositHistory(operation)
 		}
+	case exchange.GetTransferHistory:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetTransferHistory(operation)
+		} else if operation.Wallet == exchange.ContractWallet {
+			return e.doContractGetTransferHistory(operation)
+		}
 	case exchange.GetDepositAddress:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositAddress(operation)
 		}
+	case exchange.GetPositionInfo:
+		if operation.Wallet == exchange.ContractWallet {
+			return e.doGetPositionInfo(operation)
+		}
+	case exchange.SubBalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubBalance(operation)
+		}
+	case exchange.GetSubAccountList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubAccountList(operation)
+		}
+	case exchange.SubAllBalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doSubAllBalance(operation) // All spot trading and main sub account
+		}
 	}
 
 	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+}
+
+func (e *Binance) doSubAccountList(operation *exchange.AccountOperation) error { //TODO, test with sub account
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountList := SubAccountList{}
+	strRequest := "/wapi/v3/sub-account/list.html"
+
+	mapParams := make(map[string]string)
+
+	jsonSubAccountReturn := e.WApiKeyRequest("GET", mapParams, strRequest) // e.ApiKeyGet(mapParams, strRequest) // e.WApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonSubAccountReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonSubAccountReturn), &accountList); err != nil {
+		operation.Error = fmt.Errorf("%s doSubAccountList Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSubAccountReturn)
+		return operation.Error
+	} else if !accountList.Success {
+		operation.Error = fmt.Errorf("%s doSubAccountList failed: %v", e.GetName(), jsonSubAccountReturn)
+		return operation.Error
+	}
+
+	operation.SubAccountList = []*exchange.SubAccountInfo{}
+	for _, account := range accountList.SubAccounts {
+
+		a := &exchange.SubAccountInfo{
+			ID:        account.Email,
+			Status:    account.Status,
+			Activated: account.Activated,
+			// AccountType: exchange.SpotWallet,
+			TimeStamp: account.CreateTime,
+		}
+		operation.SubAccountList = append(operation.SubAccountList, a)
+	}
+
+	return nil
+}
+
+func (e *Binance) doSubBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountBalance := SubAccountBalances{}
+	strRequest := "/wapi/v3/sub-account/assets.html"
+
+	mapParams := make(map[string]string)
+	mapParams["email"] = url.QueryEscape(operation.SubAccountID)
+
+	jsonBalanceReturn := e.WApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s doSubBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonBalanceReturn)
+		return operation.Error
+	} else if !accountBalance.Success {
+		operation.Error = fmt.Errorf("%s doSubBalance failed: %v", e.GetName(), jsonBalanceReturn)
+		return operation.Error
+	}
+
+	operation.BalanceList = []exchange.AssetBalance{}
+	for _, balance := range accountBalance.Balances {
+		// freeamount, err := strconv.ParseFloat(balance.Free, 64)
+		// if err != nil {
+		// 	operation.Error = fmt.Errorf("%s UpdateSubBalances parse err: %+v %v", e.GetName(), balance, err)
+		// 	return operation.Error
+		// }
+		// locked, err := strconv.ParseFloat(balance.Locked, 64)
+		// if err != nil {
+		// 	operation.Error = fmt.Errorf("%s UpdateSubBalances parse err: %+v %v", e.GetName(), balance, err)
+		// 	return operation.Error
+		// }
+
+		c := e.GetCoinBySymbol(balance.Asset)
+		if c == nil {
+			continue
+		}
+		b := exchange.AssetBalance{
+			Coin:             c,
+			BalanceAvailable: balance.Free,
+			BalanceFrozen:    balance.Locked,
+		}
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
+	return nil
+}
+
+func (e *Binance) doSubAllBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	// get all subAccountID(email)
+	opSubAccountList := &exchange.AccountOperation{
+		Wallet:    exchange.SpotWallet,
+		Type:      exchange.GetSubAccountList,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+	err := e.DoAccountOperation(opSubAccountList)
+	if err != nil {
+		return err
+	}
+
+	balanceMap := make(map[string]exchange.AssetBalance)
+	operation.BalanceList = []exchange.AssetBalance{}
+	for _, account := range opSubAccountList.SubAccountList {
+		opSubBalance := &exchange.AccountOperation{
+			Wallet:       exchange.SpotWallet,
+			Type:         exchange.SubBalanceList,
+			SubAccountID: account.ID,
+			Ex:           e.GetName(),
+			DebugMode:    true,
+		}
+		err := e.DoAccountOperation(opSubBalance)
+		if err != nil {
+			return err
+		}
+		for _, balance := range opSubBalance.BalanceList {
+			b := exchange.AssetBalance{
+				Coin:             balance.Coin,
+				BalanceAvailable: balance.BalanceAvailable,
+				BalanceFrozen:    balance.BalanceFrozen,
+			}
+
+			// update balance for coin c
+			oldBalance, ok := balanceMap[b.Coin.Code]
+			if ok {
+				b.BalanceAvailable += oldBalance.BalanceAvailable
+				b.BalanceFrozen += oldBalance.BalanceFrozen
+			}
+			balanceMap[b.Coin.Code] = b
+		}
+	}
+
+	// store aggregated balance into list
+	for _, balance := range balanceMap {
+		operation.BalanceList = append(operation.BalanceList, balance)
+	}
+
+	return nil
+}
+
+func (e *Binance) doAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	accountBalance := AccountBalances{}
+	strRequest := "/api/v3/account"
+	operation.BalanceList = []exchange.AssetBalance{}
+
+	jsonAllBalanceReturn := e.ApiKeyGet(make(map[string]string), strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else {
+		for _, balance := range accountBalance.Balances {
+			freeamount, err := strconv.ParseFloat(balance.Free, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+			locked, err := strconv.ParseFloat(balance.Locked, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+
+			c := e.GetCoinBySymbol(balance.Asset)
+			if c == nil {
+				continue
+			}
+			b := exchange.AssetBalance{
+				Coin:             c,
+				BalanceAvailable: freeamount,
+				BalanceFrozen:    locked,
+			}
+			operation.BalanceList = append(operation.BalanceList, b)
+		}
+	}
+
+	return nil
 }
 
 func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
@@ -116,11 +340,17 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			OrderID:      fmt.Sprintf("%v", o.OrderID),
 			Rate:         rate,
 			Quantity:     quantity,
-			Side:         o.Side,
 			DealRate:     rate,
 			DealQuantity: dealQuantity,
 			Timestamp:    o.UpdateTime,
 			// JsonResponse: jsonGetOpenOrder,
+		}
+
+		switch o.Side {
+		case "BUY":
+			order.Side = exchange.BUY
+		case "SELL":
+			order.Side = exchange.SELL
 		}
 
 		if o.Status == "CANCELED" {
@@ -131,10 +361,12 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			order.Status = exchange.Partial
 		} else if o.Status == "REJECTED" {
 			order.Status = exchange.Rejected
-		} else if o.Status == "Expired" {
+		} else if o.Status == "EXPIRED" {
 			order.Status = exchange.Expired
 		} else if o.Status == "NEW" {
 			order.Status = exchange.New
+		} else if o.Status == "PENDING_CANCEL" {
+			order.Status = exchange.Canceling
 		} else {
 			order.Status = exchange.Other
 		}
@@ -182,11 +414,9 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 			return operation.Error
 		}
 
-		side := ""
+		side := exchange.SELL
 		if o.IsBuyer {
-			side = "Buy"
-		} else {
-			side = "Sell"
+			side = exchange.BUY
 		}
 
 		order := &exchange.Order{
@@ -359,10 +589,56 @@ func (e *Binance) doGetDepositHistory(operation *exchange.AccountOperation) erro
 	return nil
 }
 
-// func (e *Binance) getCoinChains(symbol string) []string {
+func (e *Binance) doGetTransferHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
 
-// 	return nil
-// }
+	transfer := TransferHistory{}
+	strRequest := "/sapi/v1/sub-account/transfer/subUserHistory"
+
+	mapParams := make(map[string]string)
+
+	jsonTransferOutHistory := e.ApiKeyGet(mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferOutHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferOutHistory), &transfer); err != nil {
+		operation.Error = fmt.Errorf("%s doTransferOutHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+	for _, tx := range transfer {
+		c := e.GetCoinBySymbol(tx.Asset)
+		quantity, err := strconv.ParseFloat(tx.Qty, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doGetTransferHistory parse quantity Err: %v, %v", e.GetName(), err, tx.Qty)
+			return operation.Error
+		}
+
+		record := &exchange.TransferHistory{
+			Coin:      c,
+			Quantity:  quantity,
+			TimeStamp: tx.Time,
+		}
+
+		switch tx.Type {
+		case 1:
+			record.Type = exchange.TransferIn
+			operation.TransferInHistory = append(operation.TransferInHistory, record)
+		case 2:
+			record.Type = exchange.TransferOut
+			operation.TransferOutHistory = append(operation.TransferOutHistory, record)
+		}
+	}
+
+	return nil
+}
 
 func (e *Binance) doGetDepositAddress(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
@@ -434,7 +710,6 @@ func (e *Binance) doWithdraw(operation *exchange.AccountOperation) error {
 		mapParams["addressTag"] = operation.WithdrawTag
 	}
 	mapParams["amount"] = operation.WithdrawAmount
-	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UnixNano()/1e6)
 
 	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {

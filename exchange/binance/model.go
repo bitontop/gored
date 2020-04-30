@@ -219,6 +219,13 @@ type ContractCancelOrder struct {
 	WorkingType   string `json:"workingType"`
 }
 
+// type ContractBalance []struct {
+// 	AccountAlias      string `json:"accountAlias"`
+// 	Asset             string `json:"asset"`
+// 	Balance           string `json:"balance"`
+// 	WithdrawAvailable string `json:"withdrawAvailable"`
+// }
+
 type ContractBalance struct {
 	Assets []struct {
 		Asset                  string `json:"asset"`
@@ -278,6 +285,30 @@ type OpenOrders []struct {
 	OrigQuoteOrderQty   string `json:"origQuoteOrderQty"`
 }
 
+type ContractOpenOrders []struct {
+	AvgPrice      string `json:"avgPrice"`
+	ClientOrderID string `json:"clientOrderId"`
+	CumQuote      string `json:"cumQuote"`
+	ExecutedQty   string `json:"executedQty"`
+	OrderID       int    `json:"orderId"`
+	OrigQty       string `json:"origQty"`
+	OrigType      string `json:"origType"`
+	Price         string `json:"price"`
+	ReduceOnly    bool   `json:"reduceOnly"`
+	Side          string `json:"side"`
+	PositionSide  string `json:"positionSide"`
+	Status        string `json:"status"`
+	StopPrice     string `json:"stopPrice"`
+	Symbol        string `json:"symbol"`
+	Time          int64  `json:"time"`
+	TimeInForce   string `json:"timeInForce"`
+	Type          string `json:"type"`
+	ActivatePrice string `json:"activatePrice"`
+	PriceRate     string `json:"priceRate"`
+	UpdateTime    int64  `json:"updateTime"`
+	WorkingType   string `json:"workingType"`
+}
+
 type CloseOrders []struct {
 	Symbol          string `json:"symbol"`
 	ID              int    `json:"id"`
@@ -324,4 +355,61 @@ type DepositAddress struct {
 	Coin    string `json:"coin"`
 	Tag     string `json:"tag"`
 	URL     string `json:"url"`
+}
+
+type TransferHistory []struct {
+	CounterParty string `json:"counterParty"`
+	Email        string `json:"email"`
+	Type         int    `json:"type"`
+	Asset        string `json:"asset"`
+	Qty          string `json:"qty"`
+	Time         int64  `json:"time"`
+}
+
+type ContractTransferHistory struct {
+	Rows []struct {
+		Asset     string `json:"asset"`
+		TranID    int    `json:"tranId"`
+		Amount    string `json:"amount"`
+		Type      int    `json:"type"`
+		Timestamp int64  `json:"timestamp"`
+		Status    string `json:"status"`
+	} `json:"rows"`
+	Total int `json:"total"`
+}
+
+type PositionInfo []struct {
+	EntryPrice       string `json:"entryPrice"`
+	MarginType       string `json:"marginType"`
+	IsAutoAddMargin  string `json:"isAutoAddMargin"`
+	IsolatedMargin   string `json:"isolatedMargin"`
+	Leverage         string `json:"leverage"`
+	LiquidationPrice string `json:"liquidationPrice"`
+	MarkPrice        string `json:"markPrice"`
+	MaxNotionalValue string `json:"maxNotionalValue"`
+	PositionAmt      string `json:"positionAmt"`
+	Symbol           string `json:"symbol"`
+	UnRealizedProfit string `json:"unRealizedProfit"`
+	PositionSide     string `json:"positionSide"`
+}
+
+type SubAccountBalances struct {
+	Success  bool `json:"success"`
+	Balances []struct {
+		Asset  string  `json:"asset"`
+		Free   float64 `json:"free"`
+		Locked float64 `json:"locked"`
+	} `json:"balances"`
+}
+
+type SubAccountList struct {
+	Success     bool `json:"success"`
+	SubAccounts []struct {
+		Email      string `json:"email"`
+		Status     string `json:"status"`
+		Activated  bool   `json:"activated"`
+		Mobile     string `json:"mobile"`
+		GAuth      bool   `json:"gAuth"`
+		CreateTime int64  `json:"createTime"`
+	} `json:"subAccounts"`
 }

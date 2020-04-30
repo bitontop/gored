@@ -17,6 +17,8 @@ type AccountBalances struct {
 	Frozen    string `json:"frozen"`
 }
 
+type SubAccountBalances map[string](map[string]*AccountBalances)
+
 type PlaceOrder struct {
 	Amount       string `json:"amount"`
 	AvgPrice     string `json:"avg_price"`
