@@ -13,8 +13,8 @@ import (
 
 /********************Public API********************/
 
-func Test_Bilaxy(t *testing.T) {
-	e := InitEx(exchange.BILAXY)
+func Test_Btse(t *testing.T) {
+	e := InitEx(exchange.BTSE)
 	pair := pair.GetPairByKey("USDT|ETH")
 
 	Test_Coins(e)
@@ -22,10 +22,11 @@ func Test_Bilaxy(t *testing.T) {
 	Test_Pair(e, pair)
 
 	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	Test_CancelOrder(e, pair, "111112")
+	//Test_ConstraintFetch(e, pair)
+	//Test_Constraint(e, pair)
 
-	//Test_Balance(e, pair)
+	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 }

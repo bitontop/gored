@@ -50,32 +50,32 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestPath)*/
 func (e *Btse) GetCoinsData() error {
-	//coinsData := CoinsData{}
+	coinsData := CoinsData{}
 	//coinsData := make(map[string]*CoinsData)
-	//strRequestUrl := "/v1/currencies"
-	//strUrl := API_URL + strRequestUrl
-	//
-	//jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
-	//if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
-	//	return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
-	//}
+	strRequestUrl := "/api/v3.1/market_summary"
+	strUrl := API_URL + strRequestUrl
 
-	coins := []string{"USDT", "TUSD", "USDC", "DC", "BTC", "ETH", "LTC", "XMR", "BTSE"}
-	for _, symbol := range coins {
+	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
+		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
+	}
+
+	for _, data := range coinsData {
+		data.symbol = data.Base
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(symbol)
+			c = coin.GetCoin(data.symbol)
 			if c == nil {
 				c = &coin.Coin{}
-				c.Code = symbol
+				c.Code = data.symbol
 				//c.Name = data.FullName
 				//c.Website = data.URL
 				//c.Explorer = data.BlockURL
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(symbol)
+			c = e.GetCoinBySymbol(data.symbol)
 		}
 
 		if c != nil {
@@ -85,7 +85,7 @@ func (e *Btse) GetCoinsData() error {
 				coinConstraint = &exchange.CoinConstraint{
 					CoinID:       c.ID,
 					Coin:         c,
-					ExSymbol:     symbol,
+					ExSymbol:     data.symbol,
 					ChainType:    exchange.MAINNET,
 					TxFee:        DEFAULT_TXFEE,
 					Withdraw:     DEFAULT_WITHDRAW,
@@ -94,7 +94,7 @@ func (e *Btse) GetCoinsData() error {
 					Listed:       DEFAULT_LISTED,
 				}
 			} else {
-				coinConstraint.ExSymbol = symbol
+				coinConstraint.ExSymbol = data.symbol
 				//coinConstraint.Confirmation = DEFAULT_CONFIRMATION
 			}
 
@@ -181,11 +181,11 @@ func (e *Btse) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	}
 
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
-	fmt.Println("jsonOrderbook:%s", jsonOrderbook)
+	//fmt.Printf("jsonOrderbook:%s", jsonOrderbook)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
-	fmt.Println("orderBook:%s", orderBook)
+	//fmt.Printf("orderBook:%s", orderBook)
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
@@ -225,26 +225,18 @@ func (e *Btse) UpdateAllBalances() {
 		return
 	}
 
-	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/api/v3.1/user/wallet"
 
 	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
-	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
+	if err := json.Unmarshal([]byte(jsonBalanceReturn), &accountBalance); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
-		return
-	} else if !jsonResponse.Success {
-		log.Printf("%s UpdateAllBalances Failed: %v", e.GetName(), jsonResponse.Message)
-		return
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
-		log.Printf("%s UpdateAllBalances Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 		return
 	}
 
 	for _, balance := range accountBalance {
-		c := e.GetCoinBySymbol(balance.Asset)
+		c := e.GetCoinBySymbol(balance.Currency)
 		if c != nil {
 			balanceMap.Set(c.Code, balance.Available)
 		}
@@ -457,9 +449,13 @@ func (e *Btse) ApiKeyGet(strRequestPath string, mapParams map[string]string) str
 	if nil != err {
 		return err.Error()
 	}
+	jsonBytes, _ := json.Marshal(mapParams)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
-
+	request.Header.Add("btse-api", e.API_KEY)
+	request.Header.Add("btse-nonce", string(time.Now().Unix()))
+	secretKey := "your secret key"
+	sign := exchange.ComputeHmac384(secretKey, strRequestPath+e.API_KEY+string(jsonBytes))
+	request.Header.Add("btse-sign", sign)
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
 	if nil != err {
@@ -493,7 +489,11 @@ func (e *Btse) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[str
 		return err.Error()
 	}
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+	request.Header.Add("btse-api", e.API_KEY)
+	request.Header.Add("btse-nonce", string(time.Now().Unix()))
+	secretKey := "your secret key"
+	sign := exchange.ComputeHmac384(secretKey, strRequestPath+e.API_KEY)
+	request.Header.Add("btse-sign", sign)
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)

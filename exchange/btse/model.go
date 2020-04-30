@@ -13,17 +13,10 @@ type JsonResponse struct {
 }
 
 /********** Public API Structure**********/
-type CoinsData struct {
-	Currency                string `json:"currency"`
-	FullName                string `json:"fullname"`
-	MinWithdraw             string `json:"min_withdraw"`
-	MaxWithdraw             string `json:"max_withdraw"`
-	FixedWithdrawFee        string `json:"fixed_withdraw_fee"`
-	PercentWithdrawFee      string `json:"percent_withdraw_fee"`
-	WithdrawFeeCurrencyId   int    `json:"withdraw_fee_currency_id"`
-	WithdrawFeeCurrencyName string `json:"withdraw_fee_currency_name"`
-	WithdrawEnabled         bool   `json:"withdraw_enabled"`
-	DepositEnabled          bool   `json:"deposit_enabled"`
+type CoinsData []struct {
+	symbol string `json:"symbol"`
+	Base   string `json:"base"`
+	Quote  string `json:"quote"`
 }
 
 type PairsData []struct {
@@ -47,10 +40,9 @@ type OrderBook struct {
 
 /********** Private API Structure**********/
 type AccountBalances []struct {
-	Asset     string  `json:"asset"`
 	Total     float64 `json:"total"`
 	Available float64 `json:"available"`
-	Locked    float64 `json:"locked"`
+	Currency  string  `json:"currency"`
 }
 
 type WithdrawResponse struct {
