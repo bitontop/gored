@@ -288,4 +288,5 @@ func (e *ExchangeManager) initExchangeNames() {
 	supportList = append(supportList, HOMIEX)   // ID = 69
 	supportList = append(supportList, COINBASE) // ID = 70
 	// supportList = append(supportList, NICEHASH) // ID = 72
+	supportList = append(supportList, BITBNS) // ID = 73
 }

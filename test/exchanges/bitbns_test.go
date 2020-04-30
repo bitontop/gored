@@ -13,9 +13,9 @@ import (
 
 /********************Public API********************/
 
-func Test_Blank(t *testing.T) {
-	e := InitEx(exchange.BLANK)
-	pair := pair.GetPairByKey("BTC|ETH")
+func Test_Bitbns(t *testing.T) {
+	e := InitEx(exchange.BITBNS)
+	pair := pair.GetPairByKey("INR|BTC")
 
 	Test_Coins(e)
 	Test_Pairs(e)
@@ -25,7 +25,7 @@ func Test_Blank(t *testing.T) {
 	Test_Constraint(e, pair)
 	// log.Println(e.GetTradingWebURL(pair))
 
-	Test_Balance(e, pair)
+	// Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 100000000, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
