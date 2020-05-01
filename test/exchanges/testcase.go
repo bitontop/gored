@@ -194,7 +194,6 @@ func Test_DoWithdraw(e exchange.Exchange, c *coin.Coin, amount string, addr stri
 	err := e.DoAccountOperation(opWithdraw)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 	log.Printf("WithdrawID: %v, err: %v", opWithdraw.WithdrawID, opWithdraw.Error)
 }
@@ -211,7 +210,6 @@ func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to 
 	err := e.DoAccountOperation(opTransfer)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 }
 
@@ -224,7 +222,6 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 	err := e.DoAccountOperation(opBalance)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 	log.Printf("%v Account available: %v, frozen: %v", opBalance.Coin.Code, opBalance.BalanceAvailable, opBalance.BalanceFrozen)
 }
@@ -237,7 +234,6 @@ func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) 
 	err := e.DoAccountOperation(opAllBalance)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 	for _, balance := range opAllBalance.BalanceList {
 		log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
@@ -256,7 +252,6 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 	err := e.LoadPublicData(opTradeHistory)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 	for _, trade := range opTradeHistory.TradeHistory {
 		log.Printf("TradeHistory: %+v", trade)
@@ -273,7 +268,6 @@ func Test_NewOrderBook(e exchange.Exchange, pair *pair.Pair) {
 	err := e.LoadPublicData(opOrderBook)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 
 	log.Printf("%s OrderBook %+v   error:%v", e.GetName(), opOrderBook.Maker, opOrderBook.Error)
@@ -290,7 +284,6 @@ func Test_CoinChainType(e exchange.Exchange, coin *coin.Coin) {
 	err := e.LoadPublicData(opCoinChainType)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 
 	log.Printf("%s %s Chain Type: %s", opCoinChainType.EX, opCoinChainType.Coin.Code, opCoinChainType.CoinChainType)
@@ -305,7 +298,6 @@ func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
 	err := e.LoadPublicData(opTradeHistory)
 	if err != nil {
 		log.Printf("%v", err)
-		return
 	}
 	log.Printf("%s OrderBook %+v", e.GetName(), opTradeHistory.Maker)
 }
@@ -398,95 +390,6 @@ func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 			log.Printf("%s WithdrawalHistory: %v %+v", e.GetName(), i, his)
 		}
 	}
-}
-
-func Test_AOTransferHistory(e exchange.Exchange) {
-	op := &exchange.AccountOperation{
-		Type:   exchange.GetTransferHistory,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
-	}
-
-	if err := e.DoAccountOperation(op); err != nil {
-		log.Printf("%+v", err)
-	} else {
-		for i, tIn := range op.TransferInHistory {
-			log.Printf("%s TransferInHistory: %v %+v", e.GetName(), i, tIn)
-		}
-		for i, tOut := range op.TransferOutHistory {
-			log.Printf("%s TransferOutHistory: %v %+v", e.GetName(), i, tOut)
-		}
-	}
-}
-
-func SubBalances(e exchange.Exchange, subID string) {
-	// Sub Spot AllBalance
-	opSubBalance := &exchange.AccountOperation{
-		Wallet:       exchange.SpotWallet,
-		Type:         exchange.SubBalanceList,
-		SubAccountID: subID,
-		Ex:           e.GetName(),
-		DebugMode:    true,
-	}
-	err := e.DoAccountOperation(opSubBalance)
-	if err != nil {
-		log.Printf("==%v", err)
-		return
-	}
-	for _, balance := range opSubBalance.BalanceList {
-		log.Printf("SubBalances balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
-	}
-	if len(opSubBalance.BalanceList) == 0 {
-		log.Println("SubBalances 0 balance")
-	}
-	log.Printf("SubBalances JSON RESPONSE: %v", opSubBalance.CallResponce)
-	log.Printf("SubBalances done")
-}
-
-func SubAllBalances(e exchange.Exchange) {
-	// Sub All Spot AllBalance
-	opSubAllBalance := &exchange.AccountOperation{
-		Wallet:    exchange.SpotWallet,
-		Type:      exchange.SubAllBalanceList,
-		Ex:        e.GetName(),
-		DebugMode: true,
-	}
-	err := e.DoAccountOperation(opSubAllBalance)
-	if err != nil {
-		log.Printf("==%v", err)
-		return
-	}
-	for _, balance := range opSubAllBalance.BalanceList {
-		log.Printf("SubAllBalances balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
-	}
-	if len(opSubAllBalance.BalanceList) == 0 {
-		log.Println("SubAllBalances 0 balance")
-	}
-	log.Printf("SubAllBalances JSON RESPONSE: %v", opSubAllBalance.CallResponce)
-	log.Printf("SubAllBalances done")
-}
-
-func SubAccountList(e exchange.Exchange) {
-	// Sub account list
-	opSubAccountList := &exchange.AccountOperation{
-		Wallet:    exchange.SpotWallet,
-		Type:      exchange.GetSubAccountList,
-		Ex:        e.GetName(),
-		DebugMode: true,
-	}
-	err := e.DoAccountOperation(opSubAccountList)
-	if err != nil {
-		log.Printf("==%v", err)
-		return
-	}
-	for _, account := range opSubAccountList.SubAccountList {
-		log.Printf("AllSubAccount account: %+v", account)
-	}
-	if len(opSubAccountList.SubAccountList) == 0 {
-		log.Println("No Sub Account Info")
-	}
-	log.Printf("SubAccountList JSON RESPONSE: %v", opSubAccountList.CallResponce)
-	log.Printf("AllSubAccount done")
 }
 
 /********************General********************/

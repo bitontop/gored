@@ -73,7 +73,6 @@ import (
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/tradesatoshi"
 	"github.com/bitontop/gored/exchange/txbit"
-	"github.com/bitontop/gored/exchange/virgocx"
 	"github.com/bitontop/gored/exchange/zebitex"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
@@ -185,7 +184,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBcex(config)
 	InitDigifinex(config)
 	InitLatoken(config)
-	InitVirgocx(config)
+	//InitVirgocx(config)
 	InitAbcc(config)
 	InitBybit(config)
 	InitZebitex(config)
@@ -586,14 +585,14 @@ func InitLatoken(config *exchange.Config) {
 	exMan.Add(ex)
 }
 
-func InitVirgocx(config *exchange.Config) {
-	conf.Exchange(exchange.VIRGOCX, config)
-	ex := virgocx.CreateVirgocx(config)
-	log.Printf("Initial [ %12v ] ", ex.GetName())
+// func InitVirgocx(config *exchange.Config) {
+// 	conf.Exchange(exchange.VIRGOCX, config)
+// 	ex := virgocx.CreateVirgocx(config)
+// 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
-	exMan := exchange.CreateExchangeManager()
-	exMan.Add(ex)
-}
+// 	exMan := exchange.CreateExchangeManager()
+// 	exMan.Add(ex)
+// }
 
 func InitAbcc(config *exchange.Config) {
 	conf.Exchange(exchange.ABCC, config)

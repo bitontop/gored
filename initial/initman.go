@@ -70,7 +70,6 @@ import (
 	"github.com/bitontop/gored/exchange/tokok"
 	"github.com/bitontop/gored/exchange/tradeogre"
 	"github.com/bitontop/gored/exchange/txbit"
-	"github.com/bitontop/gored/exchange/virgocx"
 	"github.com/bitontop/gored/exchange/zebitex"
 )
 
@@ -421,12 +420,12 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 		}
 		return ex
 
-	case exchange.VIRGOCX:
-		ex := virgocx.CreateVirgocx(config)
-		if ex != nil {
-			e.exMan.Add(ex)
-		}
-		return ex
+	// case exchange.VIRGOCX:
+	// 	ex := virgocx.CreateVirgocx(config)
+	// 	if ex != nil {
+	// 		e.exMan.Add(ex)
+	// 	}
+	// 	return ex
 
 	case exchange.ABCC:
 		ex := abcc.CreateAbcc(config)

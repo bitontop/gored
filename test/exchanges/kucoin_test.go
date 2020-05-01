@@ -39,9 +39,9 @@ func Test_Kucoin(t *testing.T) {
 	// Test_Trading_Sell(e, pair, 0.06, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	SubBalances(e, "5cbd31ab9c93e9280cd36a0a")
-	SubAccountList(e)
-	SubAllBalances(e)
+	// SubBalances(e, "5cbd31ab9c93e9280cd36a0a")
+	// SubAccountList(e)
+	// SubAllBalances(e)
 
 	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)

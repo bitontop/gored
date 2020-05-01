@@ -71,7 +71,7 @@ type ConstrainFetchMethod struct {
 	Withdraw        bool
 	Deposit         bool
 	Confirmation    bool
-	ConstrainSource int // 1）API   2)WEB 3）Manual
+	ConstrainSource int // 1?API   2)WEB 3?Manual
 	ApiRestrictIP   bool
 }
 

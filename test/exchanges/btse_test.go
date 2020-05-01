@@ -5,8 +5,6 @@ import (
 
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-	// "../exchange/ftx"
-	// "./conf"
 )
 
 // Copyright (c) 2015-2019 Bitontop Technologies Inc.
@@ -15,20 +13,20 @@ import (
 
 /********************Public API********************/
 
-func Test_Ftx(t *testing.T) {
-	e := InitEx(exchange.FTX)
-	pair := pair.GetPairByKey("USD|ETHMOON")
+func Test_Btse(t *testing.T) {
+	e := InitEx(exchange.BTSE)
+	pair := pair.GetPairByKey("USDT|ETH")
 
 	Test_Coins(e)
 	Test_Pairs(e)
 	Test_Pair(e, pair)
-	// Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
+	Test_Orderbook(e, pair)
+	Test_CancelOrder(e, pair, "111112")
+	//Test_ConstraintFetch(e, pair)
+	//Test_Constraint(e, pair)
+
+	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
-	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-	// log.Println(e.GetTradingWebURL(pair))
 }
