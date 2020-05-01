@@ -339,7 +339,7 @@ func (e *Bitrue) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      fmt.Sprint(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -381,7 +381,7 @@ func (e *Bitrue) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      fmt.Sprint(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

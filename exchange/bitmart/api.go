@@ -290,7 +290,7 @@ func (e *Bitmart) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      fmt.Sprintf("%v", placeOrder.EntrustID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -327,7 +327,7 @@ func (e *Bitmart) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      fmt.Sprintf("%v", placeOrder.EntrustID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

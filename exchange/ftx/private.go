@@ -92,9 +92,9 @@ func (e *Ftx) doGetOpenOrder(operation *exchange.AccountOperation) error {
 
 		switch o.Side {
 		case "buy":
-			order.Side = exchange.BUY
+			order.Direction = exchange.Buy
 		case "sell":
-			order.Side = exchange.SELL
+			order.Direction = exchange.Sell
 		}
 
 		if o.Status == "new" {
@@ -165,9 +165,9 @@ func (e *Ftx) doGetOrderHistory(operation *exchange.AccountOperation) error {
 
 		switch o.Side {
 		case "buy":
-			order.Side = exchange.BUY
+			order.Direction = exchange.Buy
 		case "sell":
-			order.Side = exchange.SELL
+			order.Direction = exchange.Sell
 		}
 
 		if o.Status == "new" {

@@ -434,7 +434,7 @@ func (e *Ibankdigital) LimitSell(pair *pair.Pair, quantity, rate float64) (*exch
 		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -476,7 +476,7 @@ func (e *Ibankdigital) LimitBuy(pair *pair.Pair, quantity, rate float64) (*excha
 		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

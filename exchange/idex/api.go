@@ -277,7 +277,7 @@ func (e *Idex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -313,7 +313,7 @@ func (e *Idex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	jsonPlaceReturn := e.ApiKeyPOST(strRequest, mapParams)
 	log.Printf("jsonPlaceReturn: %s", jsonPlaceReturn)
 	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
-		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
+		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -321,7 +321,7 @@ func (e *Idex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderNumber),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

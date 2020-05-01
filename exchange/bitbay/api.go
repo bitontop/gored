@@ -311,7 +311,7 @@ func (e *Bitbay) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      placeOrder.OfferID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -347,7 +347,7 @@ func (e *Bitbay) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      placeOrder.OfferID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -399,8 +399,15 @@ func (e *Bitbay) CancelOrder(order *exchange.Order) error {
 	mapParams := make(map[string]interface{})
 	mapParams["uuid"] = order.OrderID
 
+	side := ""
+	if order.Direction == exchange.Buy {
+		side = "BUY"
+	} else {
+		side = "SELL"
+	}
+
 	cancelOrder := CancelOrder{}
-	strRequest := fmt.Sprintf("/trading/offer/%s/%s/%s/%s", e.GetSymbolByPair(order.Pair), order.OrderID, order.Side, order.Rate)
+	strRequest := fmt.Sprintf("/trading/offer/%s/%s/%s/%s", e.GetSymbolByPair(order.Pair), order.OrderID, side, order.Rate)
 
 	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {

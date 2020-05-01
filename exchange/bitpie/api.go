@@ -382,7 +382,7 @@ func (e *Bitpie) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -419,7 +419,7 @@ func (e *Bitpie) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

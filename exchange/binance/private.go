@@ -348,9 +348,9 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 
 		switch o.Side {
 		case "BUY":
-			order.Side = exchange.BUY
+			order.Direction = exchange.Buy
 		case "SELL":
-			order.Side = exchange.SELL
+			order.Direction = exchange.Sell
 		}
 
 		if o.Status == "CANCELED" {
@@ -414,9 +414,9 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 			return operation.Error
 		}
 
-		side := exchange.SELL
+		side := exchange.Sell
 		if o.IsBuyer {
-			side = exchange.BUY
+			side = exchange.Buy
 		}
 
 		order := &exchange.Order{
@@ -424,7 +424,7 @@ func (e *Binance) doGetOrderHistory(operation *exchange.AccountOperation) error 
 			OrderID:      fmt.Sprintf("%v", o.OrderID),
 			Rate:         rate,
 			Quantity:     quantity,
-			Side:         side,
+			Direction:    side,
 			DealRate:     rate,
 			DealQuantity: quantity,
 			Timestamp:    o.Time,

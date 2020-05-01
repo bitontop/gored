@@ -322,7 +322,7 @@ func (e *Tokok) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -365,7 +365,7 @@ func (e *Tokok) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      placeOrder,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

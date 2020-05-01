@@ -66,9 +66,9 @@ func (e *Binance) doContractGetOpenOrder(operation *exchange.AccountOperation) e
 
 		switch o.Side {
 		case "BUY":
-			order.Side = exchange.BUY
+			order.Direction = exchange.Buy
 		case "SELL":
-			order.Side = exchange.SELL
+			order.Direction = exchange.Sell
 		}
 
 		if o.Status == "CANCELED" {
@@ -148,9 +148,9 @@ func (e *Binance) doContractGetOrderHistory(operation *exchange.AccountOperation
 
 		switch o.Side {
 		case "BUY":
-			order.Side = exchange.BUY
+			order.Direction = exchange.Buy
 		case "SELL":
-			order.Side = exchange.SELL
+			order.Direction = exchange.Sell
 		}
 
 		if o.Status == "CANCELED" {
@@ -365,9 +365,9 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 		JsonResponse: jsonCreatePlaceOrder,
 	}
 	if operation.OrderDirection == exchange.Buy {
-		order.Side = "Buy"
+		order.Direction = exchange.Buy
 	} else if operation.OrderDirection == exchange.Sell {
-		order.Side = "Sell"
+		order.Direction = exchange.Sell
 	}
 
 	operation.Order = order

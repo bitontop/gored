@@ -320,7 +320,7 @@ func (e *Deribit) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -358,7 +358,7 @@ func (e *Deribit) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

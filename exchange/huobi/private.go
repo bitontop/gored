@@ -314,9 +314,9 @@ func (e *Huobi) getOpenOrder(op *exchange.AccountOperation) error {
 
 		switch data.Type {
 		case "buy":
-			order.Side = exchange.BUY
+			order.Direction = exchange.Buy
 		case "sell":
-			order.Side = exchange.SELL
+			order.Direction = exchange.Sell
 		}
 
 		order.Quantity, _ = strconv.ParseFloat(data.Amount, 64)
@@ -396,9 +396,9 @@ func (e *Huobi) getOrderHistory(op *exchange.AccountOperation) error {
 
 		switch data.Type {
 		case "buy":
-			order.Side = exchange.BUY
+			order.Direction = exchange.Buy
 		case "sell":
-			order.Side = exchange.SELL
+			order.Direction = exchange.Sell
 		}
 
 		order.Quantity, _ = strconv.ParseFloat(data.Amount, 64)

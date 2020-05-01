@@ -344,7 +344,7 @@ func (e *Biki) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -386,7 +386,7 @@ func (e *Biki) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

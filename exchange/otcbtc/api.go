@@ -339,7 +339,7 @@ func (e *Otcbtc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -376,7 +376,7 @@ func (e *Otcbtc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

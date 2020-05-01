@@ -413,7 +413,7 @@ func (e *Bitfinex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange
 		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.SELL,
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -450,7 +450,7 @@ func (e *Bitfinex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:        exchange.BUY,
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
