@@ -9,6 +9,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 
 	cmap "github.com/orcaman/concurrent-map"
@@ -102,7 +103,13 @@ func (e *Bitbns) GetName() exchange.ExchangeName {
 }
 
 func (e *Bitbns) GetTradingWebURL(pair *pair.Pair) string {
-	return fmt.Sprintf("https://www.blank.com/marker/%s_%s", e.GetSymbolByCoin(pair.Target), e.GetSymbolByCoin(pair.Base))
+	symbol := ""
+	if pair.Base.Code == "INR" {
+		symbol = strings.ToLower(e.GetSymbolByCoin(pair.Target))
+	} else {
+		symbol = fmt.Sprintf("%v-%v", strings.ToLower(e.GetSymbolByCoin(pair.Target)), strings.ToLower(e.GetSymbolByCoin(pair.Base)))
+	}
+	return fmt.Sprintf("https://bitbns.com/trade/?utm_source=refID_221726_2020-05-01&utm_medium=#/%v/", symbol)
 }
 
 func (e *Bitbns) GetBalance(coin *coin.Coin) float64 {

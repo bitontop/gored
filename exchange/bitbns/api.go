@@ -18,7 +18,6 @@ import (
 	"github.com/bitontop/gored/coin"
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
-	"github.com/bitontop/gored/utils"
 )
 
 /*The Base Endpoint URL*/
@@ -194,15 +193,9 @@ func (e *Bitbns) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	}
 
 	// get buy orderbook
-	getBuy := &utils.HttpGet{
-		URI: fmt.Sprintf("%s/api/trade/v1/orderbook/buy/%v", API_URL, e.GetSymbolByCoin(p.Target)),
-	}
-	getBuy.Request.Header.Add("X-BITBNS-APIKEY", e.API_KEY)
-	if err := utils.HttpGetRequest(getBuy); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), err)
-	}
+	buyUrl := fmt.Sprintf("/api/trade/v1/orderbook/buy/%v", e.GetSymbolByCoin(p.Target))
 
-	jsonOrderbookBuy := getBuy.ResponseBody
+	jsonOrderbookBuy := e.ApiKeyGet(buyUrl, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonOrderbookBuy), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookBuy)
 	} else if jsonResponse.Code != 200 {
@@ -214,15 +207,9 @@ func (e *Bitbns) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	// get sell orderbook
 	jsonResponse = &JsonResponse{}
-	getSell := &utils.HttpGet{
-		URI: fmt.Sprintf("%s/api/trade/v1/orderbook/sell/%v", API_URL, e.GetSymbolByCoin(p.Target)),
-	}
-	getSell.Request.Header.Add("X-BITBNS-APIKEY", e.API_KEY)
-	if err := utils.HttpGetRequest(getSell); err != nil {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), err)
-	}
+	sellUrl := fmt.Sprintf("/api/trade/v1/orderbook/sell/%v", e.GetSymbolByCoin(p.Target))
 
-	jsonOrderbookSell := getSell.ResponseBody
+	jsonOrderbookSell := e.ApiKeyGet(sellUrl, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonOrderbookSell), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbookSell)
 	} else if jsonResponse.Code != 200 {
@@ -492,15 +479,15 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Bitbns) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
-	payload := exchange.Map2UrlQuery(mapParams)
-	strUrl := API_URL + strRequestPath + "?" + payload
+	// payload := exchange.Map2UrlQuery(mapParams)
+	strUrl := API_URL + strRequestPath
 
 	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+	request.Header.Add("X-BITBNS-APIKEY", e.API_KEY)
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)

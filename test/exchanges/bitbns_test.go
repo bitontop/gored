@@ -17,12 +17,12 @@ func Test_Bitbns(t *testing.T) {
 	e := InitEx(exchange.BITBNS)
 	pair := pair.GetPairByKey("INR|BTC")
 
-	Test_Coins(e)
-	Test_Pairs(e)
+	// Test_Coins(e)
+	// Test_Pairs(e)
 	Test_Pair(e, pair)
-	Test_Orderbook(e, pair)
-	Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	Test_Orderbook(e, pair) // Orderbook Only Support INR based pair
+	// Test_ConstraintFetch(e, pair)
+	// Test_Constraint(e, pair)
 	// log.Println(e.GetTradingWebURL(pair))
 
 	// Test_Balance(e, pair)
