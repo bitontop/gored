@@ -507,7 +507,7 @@ func (e *Idcm) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 		OrderID:      placeOrder.Orderid,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -549,7 +549,7 @@ func (e *Idcm) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		OrderID:      placeOrder.Orderid,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

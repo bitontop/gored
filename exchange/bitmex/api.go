@@ -294,7 +294,7 @@ func (e *Bitmex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	} else {
 		order := &exchange.Order{
 			Pair:         pair,
-			Side:         "Sell",
+			Direction:    exchange.Sell,
 			OrderID:      placeOrder.OrderID,
 			Rate:         rate,
 			Quantity:     quantity,
@@ -330,7 +330,7 @@ func (e *Bitmex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	} else {
 		order := &exchange.Order{
 			Pair:         pair,
-			Side:         "Buy",
+			Direction:    exchange.Buy,
 			OrderID:      placeOrder.OrderID,
 			Rate:         rate,
 			Quantity:     quantity,

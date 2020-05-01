@@ -352,7 +352,7 @@ func (e *Liquid) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      strconv.Itoa(placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -391,7 +391,7 @@ func (e *Liquid) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      strconv.Itoa(placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

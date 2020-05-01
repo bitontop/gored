@@ -326,7 +326,7 @@ func (e *Tradeogre) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchang
 		OrderID:      placeOrder.UUID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -359,7 +359,7 @@ func (e *Tradeogre) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange
 		OrderID:      placeOrder.UUID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

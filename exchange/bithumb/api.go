@@ -584,7 +584,7 @@ func (e *Bithumb) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -626,7 +626,7 @@ func (e *Bithumb) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      placeOrder.OrderID,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

@@ -343,7 +343,7 @@ func (e *Probit) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -381,7 +381,7 @@ func (e *Probit) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      fmt.Sprintf("%d", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

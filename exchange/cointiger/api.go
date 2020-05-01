@@ -355,7 +355,7 @@ func (e *Cointiger) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchang
 		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -397,7 +397,7 @@ func (e *Cointiger) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange
 		OrderID:      strconv.Itoa(placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

@@ -305,7 +305,7 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -342,7 +342,7 @@ func (e *Ftx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 		OrderID:      uuid.Id,
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -460,19 +460,19 @@ func (e *Ftx) ApiKeyGET(strRequestPath string, mapParams map[string]string) stri
 }
 
 func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
-	nonce := fmt.Sprintf("%v", time.Now().UnixNano()/int64(time.Millisecond)) // Millisecond
+	timestamp := fmt.Sprintf("%v", time.Now().UnixNano()/int64(time.Millisecond)) // Millisecond
 
 	var err error
 	request := &http.Request{}
 	httpClient := &http.Client{}
-	jsonParams := ""
+	postBody := ""
 	preSign := ""
 	strSignUrl := ""
 	strRequestUrl := ""
 
 	if strMethod == "POST" {
 		bytesParams, _ := json.Marshal(mapParams)
-		jsonParams = string(bytesParams)
+		postBody = string(bytesParams)
 		strSignUrl = strRequestPath // ?
 	} else if len(mapParams) != 0 {
 		strSignUrl = strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
@@ -482,29 +482,31 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 	strRequestUrl = API_URL + strSignUrl
 
 	// create signature
-	preSign = nonce + strMethod + strSignUrl
+	preSign = timestamp + strMethod + strSignUrl
 	signature := exchange.ComputeHmac256NoDecode(preSign, e.API_SECRET)
 
-	log.Printf("jsonParams: %v", jsonParams)
+	log.Printf("postBody: %v", postBody)
 	log.Printf("preSign: %v", preSign)
 	log.Printf("strRequestUrl: %v", strRequestUrl)
 
 	// request
-	request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
+	strRequestUrl = strRequestPath // ==========================
+	request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(postBody))
 	if nil != err {
 		return err.Error()
 	}
-	// request.Header.Add("Content-Type", "application/json")
+
 	request.Header.Add("FTX-KEY", e.API_KEY)
-	request.Header.Add("FTX-TS", nonce)
+	request.Header.Add("FTX-TS", timestamp)
 	request.Header.Add("FTX-SIGN", signature)
+	// request.Header.Add("Content-Type", "application/json")
 	// add FTX-SUBACCOUNT if using subaccount
 
 	log.Printf("key: %v", e.API_KEY)
 	log.Printf("secret: %v", e.API_SECRET)
 
 	log.Printf("FTX-KEY: %v", e.API_KEY)
-	log.Printf("FTX-TS: %v", nonce)
+	log.Printf("FTX-TS: %v", timestamp)
 	log.Printf("FTX-SIGN: %v", signature)
 
 	response, err := httpClient.Do(request)

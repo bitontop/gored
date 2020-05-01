@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -12,9 +11,257 @@ import (
 	"github.com/bitontop/gored/exchange"
 )
 
-// contract balance has too many detail
-// contract balance doc
-// https://binance-docs.github.io/apidocs/futures/cn/#user_data-5
+func (e *Binance) doContractGetOpenOrder(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	openOrders := ContractOpenOrders{}
+	strRequest := "/fapi/v1/openOrders"
+
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+
+	jsonGetOpenOrder := e.ContractApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonGetOpenOrder
+	}
+
+	if err := json.Unmarshal([]byte(jsonGetOpenOrder), &openOrders); err != nil {
+		operation.Error = fmt.Errorf("%s doContractGetOpenOrder Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOpenOrder)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.OpenOrders = []*exchange.Order{}
+	for _, o := range openOrders {
+		rate, err := strconv.ParseFloat(o.Price, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doContractGetOpenOrder parse rate Err: %v, %v", e.GetName(), err, o.Price)
+			return operation.Error
+		}
+		quantity, err := strconv.ParseFloat(o.OrigQty, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doContractGetOpenOrder parse quantity Err: %v, %v", e.GetName(), err, o.OrigQty)
+			return operation.Error
+		}
+		dealQuantity, err := strconv.ParseFloat(o.ExecutedQty, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doContractGetOpenOrder parse dealQuantity Err: %v, %v", e.GetName(), err, o.ExecutedQty)
+			return operation.Error
+		}
+
+		order := &exchange.Order{
+			Pair:         operation.Pair,
+			OrderID:      fmt.Sprintf("%v", o.OrderID),
+			Rate:         rate,
+			Quantity:     quantity,
+			DealRate:     rate,
+			DealQuantity: dealQuantity,
+			Timestamp:    o.UpdateTime,
+			// JsonResponse: jsonGetOpenOrder,
+		}
+
+		switch o.Side {
+		case "BUY":
+			order.Direction = exchange.Buy
+		case "SELL":
+			order.Direction = exchange.Sell
+		}
+
+		if o.Status == "CANCELED" {
+			order.Status = exchange.Cancelled
+		} else if o.Status == "FILLED" {
+			order.Status = exchange.Filled
+		} else if o.Status == "PARTIALLY_FILLED" {
+			order.Status = exchange.Partial
+		} else if o.Status == "REJECTED" {
+			order.Status = exchange.Rejected
+		} else if o.Status == "EXPIRED" {
+			order.Status = exchange.Expired
+		} else if o.Status == "NEW" {
+			order.Status = exchange.New
+		} else {
+			order.Status = exchange.Other
+		}
+
+		operation.OpenOrders = append(operation.OpenOrders, order)
+	}
+
+	return nil
+}
+
+func (e *Binance) doContractGetOrderHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	allOrders := ContractOpenOrders{}
+	strRequest := "/fapi/v1/allOrders"
+
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+
+	jsonGetOpenOrder := e.ContractApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonGetOpenOrder
+	}
+
+	if err := json.Unmarshal([]byte(jsonGetOpenOrder), &allOrders); err != nil {
+		operation.Error = fmt.Errorf("%s doContractGetOrderHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOpenOrder)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.OrderHistory = []*exchange.Order{}
+	for _, o := range allOrders {
+		rate, err := strconv.ParseFloat(o.Price, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doContractGetOrderHistory parse rate Err: %v, %v", e.GetName(), err, o.Price)
+			return operation.Error
+		}
+		quantity, err := strconv.ParseFloat(o.OrigQty, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doContractGetOrderHistory parse quantity Err: %v, %v", e.GetName(), err, o.OrigQty)
+			return operation.Error
+		}
+		dealQuantity, err := strconv.ParseFloat(o.ExecutedQty, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doContractGetOrderHistory parse dealQuantity Err: %v, %v", e.GetName(), err, o.ExecutedQty)
+			return operation.Error
+		}
+
+		order := &exchange.Order{
+			Pair:         operation.Pair,
+			OrderID:      fmt.Sprintf("%v", o.OrderID),
+			Rate:         rate,
+			Quantity:     quantity,
+			DealRate:     rate,
+			DealQuantity: dealQuantity,
+			Timestamp:    o.UpdateTime,
+			// JsonResponse: jsonGetOpenOrder,
+		}
+
+		switch o.Side {
+		case "BUY":
+			order.Direction = exchange.Buy
+		case "SELL":
+			order.Direction = exchange.Sell
+		}
+
+		if o.Status == "CANCELED" {
+			order.Status = exchange.Cancelled
+		} else if o.Status == "FILLED" {
+			order.Status = exchange.Filled
+		} else if o.Status == "PARTIALLY_FILLED" {
+			// order.Status = exchange.Partial
+			continue
+		} else if o.Status == "REJECTED" {
+			order.Status = exchange.Rejected
+		} else if o.Status == "EXPIRED" {
+			order.Status = exchange.Expired
+		} else if o.Status == "NEW" {
+			// order.Status = exchange.New
+			continue
+		} else {
+			order.Status = exchange.Other
+		}
+
+		operation.OrderHistory = append(operation.OrderHistory, order)
+	}
+
+	return nil
+}
+
+func (e *Binance) doContractGetTransferHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	if operation.Coin == nil {
+		return fmt.Errorf("%s doContractGetTransferHistory got nil coin", e.GetName())
+	}
+
+	transfer := ContractTransferHistory{}
+	strRequest := "/sapi/v1/futures/transfer"
+
+	mapParams := make(map[string]string)
+	mapParams["asset"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["startTime"] = fmt.Sprintf("%v", operation.TransferStartTime)
+	mapParams["size"] = "100"
+
+	jsonTransferOutHistory := e.ApiKeyGet(mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferOutHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferOutHistory), &transfer); err != nil {
+		operation.Error = fmt.Errorf("%s doContractGetTransferHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+	for _, tx := range transfer.Rows {
+		c := e.GetCoinBySymbol(tx.Asset)
+		quantity, err := strconv.ParseFloat(tx.Amount, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doContractGetTransferHistory parse quantity Err: %v, %v", e.GetName(), err, tx.Amount)
+			return operation.Error
+		}
+
+		record := &exchange.TransferHistory{
+			Coin:      c,
+			Quantity:  quantity,
+			TimeStamp: tx.Timestamp,
+			StatusMsg: tx.Status,
+		}
+
+		switch tx.Type {
+		case 1:
+			record.Type = exchange.TransferIn
+			operation.TransferInHistory = append(operation.TransferInHistory, record)
+		case 2:
+			record.Type = exchange.TransferOut
+			operation.TransferOutHistory = append(operation.TransferOutHistory, record)
+		}
+	}
+
+	return nil
+}
+
+func (e *Binance) doGetPositionInfo(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	positionInfo := PositionInfo{}
+	strRequest := "/fapi/v1/positionRisk"
+
+	jsonPositionInfoReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonPositionInfoReturn
+	}
+
+	// log.Printf("jsonPositionInfoReturn: %v", jsonPositionInfoReturn)
+	if err := json.Unmarshal([]byte(jsonPositionInfoReturn), &positionInfo); err != nil {
+		operation.Error = fmt.Errorf("%s doGetPositionInfo Json Unmarshal Err: %v, %s", e.GetName(), err, jsonPositionInfoReturn)
+		return operation.Error
+	}
+
+	return nil
+}
+
+// // contract balance has too many detail
+// // contract balance doc
+// // https://binance-docs.github.io/apidocs/futures/cn/#user_data-5
 func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
@@ -23,27 +270,26 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	accountBalances := ContractBalance{}
 	strRequest := "/fapi/v1/account"
 
-	// balanceList := []exchange.AssetBalance{}
-
 	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
-	log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
+	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalances); err != nil {
 		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
-	} else if len(accountBalances.Assets) == 0 {
+	} /* else if len(accountBalances) == 0 {
 		operation.Error = fmt.Errorf("%s ContractAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
 		return operation.Error
-	}
+	} */
 
+	operation.BalanceList = []exchange.AssetBalance{}
 	for _, account := range accountBalances.Assets {
-		if account.WalletBalance == "0" {
-			continue
-		}
+		// if account.Balance == "0" {
+		// 	continue
+		// }
 
 		total, err := strconv.ParseFloat(account.WalletBalance, 64)
 		available, err := strconv.ParseFloat(account.MaxWithdrawAmount, 64)
@@ -65,6 +311,8 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	// return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
 }
 
+// type: TRADE_LIMIT, TRADE_MARKET, Trade_STOP_LIMIT, Trade_STOP_MARKET
+// Stop order need 'StopRate' param
 func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
@@ -81,10 +329,13 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	} else {
 		mapParams["side"] = "SELL"
 	}
-	mapParams["type"] = "LIMIT"
+	if operation.TradeType == exchange.Trade_STOP_LIMIT || operation.TradeType == exchange.Trade_STOP_MARKET {
+		mapParams["stopPrice"] = fmt.Sprintf("%v", operation.StopRate)
+	}
+	mapParams["type"] = string(operation.TradeType) // "LIMIT"
 	mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
 	mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
-	mapParams["timeInForce"] = "GTC"
+	mapParams["timeInForce"] = string(operation.OrderType) //"GTC"
 	//  timeInForce:
 	// 	GTC - Good Till Cancel 成交为止
 	//  IOC - Immediate or Cancel 无法立即成交(吃单)的部分就撤销
@@ -114,9 +365,9 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 		JsonResponse: jsonCreatePlaceOrder,
 	}
 	if operation.OrderDirection == exchange.Buy {
-		order.Side = "Buy"
+		order.Direction = exchange.Buy
 	} else if operation.OrderDirection == exchange.Sell {
-		order.Side = "Sell"
+		order.Direction = exchange.Sell
 	}
 
 	operation.Order = order

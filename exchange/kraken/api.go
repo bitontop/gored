@@ -405,7 +405,7 @@ func (e *Kraken) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      strings.Join(placeOrder.TransactionIds, ""),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -447,7 +447,7 @@ func (e *Kraken) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      strings.Join(placeOrder.TransactionIds, ""),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

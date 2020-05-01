@@ -1,7 +1,6 @@
 package initial
 
 import (
-	"github.com/bitontop/gored/exchange/btse"
 	"sync"
 
 	"github.com/bitontop/gored/exchange"
@@ -11,10 +10,10 @@ import (
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/biki"
-	"github.com/bitontop/gored/exchange/bilaxy"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/binancedex"
 	"github.com/bitontop/gored/exchange/bitbay"
+	"github.com/bitontop/gored/exchange/bitbns"
 	"github.com/bitontop/gored/exchange/bitfinex"
 	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bithumb"
@@ -60,7 +59,6 @@ import (
 	"github.com/bitontop/gored/exchange/liquid"
 	"github.com/bitontop/gored/exchange/mxc"
 	"github.com/bitontop/gored/exchange/newcapital"
-	"github.com/bitontop/gored/exchange/nicehash"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
 	"github.com/bitontop/gored/exchange/otcbtc"
@@ -569,24 +567,14 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 			e.exMan.Add(ex)
 		}
 		return ex
-	case exchange.BILAXY:
-		ex := bilaxy.CreateBilaxy(config)
+
+	case exchange.BITBNS:
+		ex := bitbns.CreateBitbns(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
 		return ex
-	case exchange.NICEHASH:
-		ex := nicehash.CreateNicehash(config)
-		if ex != nil {
-			e.exMan.Add(ex)
-		}
-		return ex
-	case exchange.BTSE:
-		ex := btse.CreateBtse(config)
-		if ex != nil {
-			e.exMan.Add(ex)
-		}
-		return ex
+
 	}
 	return nil
 }

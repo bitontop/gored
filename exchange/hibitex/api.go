@@ -208,8 +208,9 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = symbol
+	mapParams["type"] = "step0"
 
-	strRequestPath := "/open/api/get_trades"
+	strRequestPath := "/open/api/market_dept"
 	strUrl := API_URL + strRequestPath
 
 	maker := &exchange.Maker{
@@ -231,27 +232,23 @@ func (e *Hibitex) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
-	for _, data := range orderBook {
-		if data.Type == "buy" {
-			buydata := exchange.Order{}
-			buydata.Quantity = data.Amount
-			buydata.Rate = data.Price
-			maker.Bids = append(maker.Bids, buydata)
-		} else if data.Type == "sell" {
-			selldata := exchange.Order{}
-			selldata.Quantity = data.Amount
-			selldata.Rate = data.Price
-			maker.Asks = append(maker.Asks, selldata)
-		}
+	for _, bid := range orderBook.Tick.Bids {
+		buydata := exchange.Order{}
+
+		buydata.Quantity = bid[1]
+		buydata.Rate = bid[0]
+
+		maker.Bids = append(maker.Bids, buydata)
 	}
 
-	//排序:bid买入,高到低;ask卖出,低到高
-	sort.Slice(maker.Bids, func(i, j int) bool {
-		return maker.Bids[i].Rate > maker.Bids[j].Rate
-	})
-	sort.Slice(maker.Asks, func(i, j int) bool {
-		return maker.Asks[i].Rate < maker.Asks[j].Rate
-	})
+	for _, ask := range orderBook.Tick.Asks {
+		selldata := exchange.Order{}
+
+		selldata.Quantity = ask[1]
+		selldata.Rate = ask[0]
+
+		maker.Asks = append(maker.Asks, selldata)
+	}
 
 	return maker, err
 }
@@ -274,9 +271,9 @@ func (e *Hibitex) UpdateAllBalances() {
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
 
-	strRequestPath := "/API Path"
+	strRequestPath := "/open/api/user/account"
 
-	jsonBalanceReturn := e.ApiKeyGet(strRequestPath, make(map[string]string))
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequestPath, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -289,10 +286,10 @@ func (e *Hibitex) UpdateAllBalances() {
 		return
 	}
 
-	for _, balance := range accountBalance {
-		c := e.GetCoinBySymbol(balance.Asset)
+	for _, balance := range accountBalance.CoinList {
+		c := e.GetCoinBySymbol(balance.Coin)
 		if c != nil {
-			balanceMap.Set(c.Code, balance.Available)
+			balanceMap.Set(c.Code, balance.Normal-balance.Locked)
 		}
 	}
 }
@@ -337,14 +334,17 @@ func (e *Hibitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 	jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/open/api/create_order"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "SELL"
-	mapParams["type"] = "LIMIT"
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["type"] = "1" // 1:limit order、2:market order
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -358,13 +358,14 @@ func (e *Hibitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.OrderID,
+		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
+
 	return order, nil
 }
 
@@ -375,14 +376,17 @@ func (e *Hibitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	strRequestPath := "/open/api/create_order"
+
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(pair)) * -1))
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(pair)
 	mapParams["side"] = "BUY"
-	mapParams["type"] = "LIMIT"
-	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["type"] = "1" // 1:limit order、2:market order
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
+	mapParams["volume"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
@@ -396,13 +400,14 @@ func (e *Hibitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      placeOrder.OrderID,
+		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
+
 	return order, nil
 }
 
@@ -412,14 +417,15 @@ func (e *Hibitex) OrderStatus(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
-	strRequestPath := "/API Path"
+	orderStatus := OrderStatus{}
+	strRequestPath := "/open/api/v2/new_order" // No tradeList transaction record
+	// strRequestPath := "/open/api/new_order"
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
+	// mapParams["order_id"] = order.OrderID
 
-	jsonOrderStatus := e.ApiKeyGet(strRequestPath, mapParams)
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != "0" {
@@ -429,26 +435,34 @@ func (e *Hibitex) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	if orderStatus.Status == "CANCELED" {
-		order.Status = exchange.Cancelled
-	} else if orderStatus.Status == "FILLED" {
-		order.Status = exchange.Filled
-	} else if orderStatus.Status == "PARTIALLY_FILLED" {
-		order.Status = exchange.Partial
-	} else if orderStatus.Status == "REJECTED" {
-		order.Status = exchange.Rejected
-	} else if orderStatus.Status == "Expired" {
-		order.Status = exchange.Expired
-	} else if orderStatus.Status == "NEW" {
-		order.Status = exchange.New
-	} else {
-		order.Status = exchange.Other
+	for _, os := range orderStatus.ResultList {
+		if fmt.Sprintf("%v", os.ID) != order.OrderID {
+			continue
+		}
+
+		if os.Status == 0 || os.Status == 1 {
+			order.Status = exchange.New
+		} else if os.Status == 2 {
+			order.Status = exchange.Filled
+		} else if os.Status == 3 {
+			order.Status = exchange.Partial
+		} else if os.Status == 4 {
+			order.Status = exchange.Cancelled
+		} else if os.Status == 5 {
+			order.Status = exchange.Canceling
+		} else if os.Status == 6 {
+			order.Status = exchange.Expired
+		} else {
+			order.Status = exchange.Other
+		}
+
+		order.DealRate, _ = strconv.ParseFloat(os.AvgPrice, 64)
+		order.DealQuantity, _ = strconv.ParseFloat(os.DealVolume, 64)
+
+		return nil
 	}
 
-	order.DealRate, _ = strconv.ParseFloat(orderStatus.AveragePrice, 64)
-	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.ExecutedQty, 64)
-
-	return nil
+	return fmt.Errorf("%s OrderStatus Order not found: %+v", e.GetName(), orderStatus)
 }
 
 func (e *Hibitex) ListOrders() ([]*exchange.Order, error) {
@@ -461,22 +475,24 @@ func (e *Hibitex) CancelOrder(order *exchange.Order) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequestPath := "/API Path"
+	// cancelOrder := PlaceOrder{}
+	strRequestPath := "/open/api/cancel_order"
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(order.Pair)
-	mapParams["orderId"] = order.OrderID
+	mapParams["order_id"] = order.OrderID
 
-	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequestPath, mapParams)
+	jsonCancelOrder := e.ApiKeyRequest("POST", strRequestPath, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != "0" {
 		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
 	}
-	if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
-		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-	}
+	// if err := json.Unmarshal(jsonResponse.Data, &cancelOrder); err != nil {
+	// 	return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	// }
+
+	log.Printf("%s CancelOrder response: %v", e.GetName(), jsonResponse.Data)
 
 	order.Status = exchange.Canceling
 	order.CancelStatus = jsonCancelOrder
@@ -524,22 +540,40 @@ func (e *Hibitex) ApiKeyGet(strRequestPath string, mapParams map[string]string) 
 /*Method: API Request and Signature is required
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request*/
-func (e *Hibitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+func (e *Hibitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string { //TODO test
 	strUrl := API_URL + strRequestPath
+	timeStamp := fmt.Sprintf("%d", time.Now().UTC()) // doc eg. 1524801032573?  fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 
-	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+	// TODO, verify
+	mapParams["api_key"] = e.API_KEY
+	mapParams["time"] = timeStamp
+	signature := exchange.ComputeMD5(createPreSign(mapParams) + e.API_SECRET)
+	mapParams["sign"] = signature
+
 	jsonParams := ""
 	if nil != mapParams {
 		bytesParams, _ := json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
+	if strMethod == "POST" {
 
-	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(jsonParams)))
+	} else if len(mapParams) > 0 {
+		strUrl = strUrl + "?" + exchange.Map2UrlQuery(mapParams)
+		// jsonParams = ""
+	} else {
+
+	}
+
+	request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(jsonParams))) // TODO, check m1=1&m2=2
 	if nil != err {
 		return err.Error()
 	}
-	request.Header.Add("Content-Type", "application/json; charset=utf-8")
-	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+
+	// request.Header.Add("Content-Type", "application/json; charset=utf-8")
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Add("ACCESS-KEY", e.API_KEY)
+	request.Header.Add("ACCESS-SIGN", signature)
+	request.Header.Add("ACCESS-TIMESTAMP", timeStamp)
 
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
@@ -554,4 +588,19 @@ func (e *Hibitex) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[
 	}
 
 	return string(body)
+}
+
+func createPreSign(mapParams map[string]string) string {
+	var strParams string
+	mapSort := []string{}
+	for key := range mapParams {
+		mapSort = append(mapSort, key)
+	}
+	sort.Strings(mapSort)
+
+	for _, key := range mapSort {
+		strParams += (key + mapParams[key])
+	}
+
+	return strParams
 }

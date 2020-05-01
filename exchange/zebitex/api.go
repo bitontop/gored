@@ -589,7 +589,7 @@ func (e *Zebitex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.
 		OrderID:      fmt.Sprintf("%v", placeOrder.Id),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "ask",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -623,7 +623,7 @@ func (e *Zebitex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      fmt.Sprintf("%v", placeOrder.Id),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "bid",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -719,10 +719,17 @@ func (e *Zebitex) ListOrders() ([]*exchange.Order, error) {
 			OrderID:      string(orderItem.Id),
 			Rate:         rate,
 			Quantity:     quantity,
-			Side:         orderItem.Side,
 			Status:       exchange.New,
 			JsonResponse: jsonOrderStatus,
 		}
+
+		switch orderItem.Side {
+		case "buy":
+			order.Direction = exchange.Buy
+		case "sell":
+			order.Direction = exchange.Sell
+		}
+
 		res = append(res, order)
 	}
 

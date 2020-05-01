@@ -366,7 +366,7 @@ func (e *TradeSatoshi) LimitSell(pair *pair.Pair, quantity, rate float64) (*exch
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -404,7 +404,7 @@ func (e *TradeSatoshi) LimitBuy(pair *pair.Pair, quantity, rate float64) (*excha
 		OrderID:      fmt.Sprintf("%v", placeOrder.OrderID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}

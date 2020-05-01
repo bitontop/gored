@@ -17,9 +17,9 @@ import (
 	"github.com/bitontop/gored/exchange/bibox"
 	"github.com/bitontop/gored/exchange/bigone"
 	"github.com/bitontop/gored/exchange/biki"
-	"github.com/bitontop/gored/exchange/bilaxy"
 	"github.com/bitontop/gored/exchange/binance"
 	"github.com/bitontop/gored/exchange/bitbay"
+	"github.com/bitontop/gored/exchange/bitbns"
 	"github.com/bitontop/gored/exchange/bitforex"
 	"github.com/bitontop/gored/exchange/bithumb"
 	"github.com/bitontop/gored/exchange/bitmart"
@@ -206,7 +206,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitHoo(config)
 	InitHomiex(config)
 	InitCoinbase(config)
-	InitBilaxy(config)
+	InitBitbns(config)
 }
 
 func InitBinance(config *exchange.Config) {
@@ -775,9 +775,9 @@ func InitCoinbase(config *exchange.Config) {
 	exMan.Add(ex)
 }
 
-func InitBilaxy(config *exchange.Config) {
-	conf.Exchange(exchange.BILAXY, config)
-	ex := bilaxy.CreateBilaxy(config)
+func InitBitbns(config *exchange.Config) {
+	conf.Exchange(exchange.BITBNS, config)
+	ex := bitbns.CreateBitbns(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

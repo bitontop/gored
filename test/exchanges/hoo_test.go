@@ -36,7 +36,7 @@ func Test_Hoo(t *testing.T) {
 	// 	OrderID:      "11579192813104769",
 	// 	Rate:         0.001,
 	// 	Quantity:     10,
-	// 	Side:         "Buy",
+	// 	Direction:    exchange.Buy,
 	// 	Status:       exchange.New,
 	// 	CancelStatus: "500788212430320131636",
 	// }

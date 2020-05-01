@@ -140,12 +140,12 @@ func Test_Trading_Sell(e exchange.Exchange, p *pair.Pair, rate, quantity float64
 // check auth only
 func Test_OrderStatus(e exchange.Exchange, p *pair.Pair, orderID string) {
 	order := &exchange.Order{
-		Pair:     p,
-		OrderID:  orderID,
-		Rate:     0.001,
-		Quantity: 100,
-		Side:     "Buy",
-		Status:   exchange.New,
+		Pair:      p,
+		OrderID:   orderID,
+		Rate:      0.001,
+		Quantity:  100,
+		Direction: exchange.Buy,
+		Status:    exchange.New,
 	}
 
 	err := e.OrderStatus(order)
@@ -158,12 +158,12 @@ func Test_OrderStatus(e exchange.Exchange, p *pair.Pair, orderID string) {
 
 func Test_CancelOrder(e exchange.Exchange, p *pair.Pair, orderID string) {
 	order := &exchange.Order{
-		Pair:     p,
-		OrderID:  orderID,
-		Rate:     0.001,
-		Quantity: 10,
-		Side:     "Buy",
-		Status:   exchange.New,
+		Pair:      p,
+		OrderID:   orderID,
+		Rate:      0.001,
+		Quantity:  10,
+		Direction: exchange.Buy,
+		Status:    exchange.New,
 	}
 
 	err := e.CancelOrder(order)

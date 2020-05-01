@@ -84,11 +84,17 @@ func (e *Ftx) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			OrderID:      fmt.Sprintf("%v", o.ID),
 			Rate:         o.Price,
 			Quantity:     o.Size,
-			Side:         o.Side,
 			DealRate:     o.AvgFillPrice,
 			DealQuantity: o.Size - o.RemainingSize,
 			Timestamp:    o.CreatedAt.UnixNano(),
 			// JsonResponse: jsonGetOpenOrder,
+		}
+
+		switch o.Side {
+		case "buy":
+			order.Direction = exchange.Buy
+		case "sell":
+			order.Direction = exchange.Sell
 		}
 
 		if o.Status == "new" {
@@ -151,11 +157,17 @@ func (e *Ftx) doGetOrderHistory(operation *exchange.AccountOperation) error {
 			OrderID:      fmt.Sprintf("%v", o.ID),
 			Rate:         o.Price,
 			Quantity:     o.Size,
-			Side:         o.Side,
 			DealRate:     o.AvgFillPrice,
 			DealQuantity: o.Size - o.RemainingSize,
 			Timestamp:    o.CreatedAt.UnixNano(),
 			// JsonResponse: jsonGetOrderHistory,
+		}
+
+		switch o.Side {
+		case "buy":
+			order.Direction = exchange.Buy
+		case "sell":
+			order.Direction = exchange.Sell
 		}
 
 		if o.Status == "new" {

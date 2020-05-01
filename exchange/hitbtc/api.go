@@ -461,7 +461,7 @@ func (e *Hitbtc) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Sell",
+		Direction:    exchange.Sell,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
@@ -498,7 +498,7 @@ func (e *Hitbtc) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 		OrderID:      fmt.Sprintf("%d", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
-		Side:         "Buy",
+		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
