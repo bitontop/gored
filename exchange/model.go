@@ -95,7 +95,7 @@ type Order struct {
 	FilledOrders  []int64
 	Rate          float64   `bson:"Rate"`
 	Quantity      float64   `bson:"Quantity"`
-	Side          OrderType //TODO  SIDE ==> Direction, depreated after all changed.
+	Side          OrderType //TODO  SIDE ==> Direction, depreated after all changed. All gored, goredws fixed.
 	Direction     TradeDirection
 	Status        OrderStatus `json:"status"`
 	StatusMessage string
