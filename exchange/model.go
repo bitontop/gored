@@ -71,7 +71,7 @@ type ConstrainFetchMethod struct {
 	Withdraw        bool
 	Deposit         bool
 	Confirmation    bool
-	ConstrainSource int // 1）API   2)WEB 3）Manual
+	ConstrainSource int // 1?API   2)WEB 3?Manual
 	ApiRestrictIP   bool
 }
 
@@ -93,9 +93,10 @@ type Order struct {
 	Pair          *pair.Pair
 	OrderID       string
 	FilledOrders  []int64
-	Rate          float64 `bson:"Rate"`
-	Quantity      float64 `bson:"Quantity"`
-	Side          string
+	Rate          float64   `bson:"Rate"`
+	Quantity      float64   `bson:"Quantity"`
+	Side          OrderType //TODO  SIDE ==> Direction, depreated after all changed.
+	Direction     TradeDirection
 	Status        OrderStatus `json:"status"`
 	StatusMessage string
 	DealRate      float64
@@ -163,10 +164,14 @@ type MarginBalance struct {
 type OperationType string
 
 const (
-	Withdraw    OperationType = "Withdraw"
-	Transfer    OperationType = "Transfer"   // transfer  between inneral wallet
-	Balance     OperationType = "Balance"    // balance(s) of different accounts
-	BalanceList OperationType = "BalanceAll" // balance(s) of different accounts
+	Withdraw          OperationType = "Withdraw"
+	Transfer          OperationType = "Transfer"          // transfer  between inneral wallet
+	Balance           OperationType = "Balance"           // balance(s) of different accounts
+	BalanceList       OperationType = "BalanceAll"        // balance(s) of different accounts
+	SubBalanceList    OperationType = "SubBalanceList"    // balance(s) of subaccount
+	SubAllBalanceList OperationType = "SubAllBalanceList" // balance(s) of all subaccounts
+	GetSubAccountList OperationType = "GetSubAccountList" // get sub accounts list
+	GetPositionInfo   OperationType = "GetPositionInfo"   // position information for Contract
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"
@@ -175,6 +180,7 @@ const (
 	TradeHistory  OperationType = "TradeHistory"
 	Orderbook     OperationType = "Orderbook"
 	CoinChainType OperationType = "CoinChainType"
+	KLine         OperationType = "KLine"
 
 	//Trade (Private Action)
 	PlaceOrder     OperationType = "PlaceOrder"
@@ -186,6 +192,7 @@ const (
 	GetOrderHistory      OperationType = "GetOrderHistory" // All Orders other than open orders
 	GetDepositHistory    OperationType = "GetDepositHistory"
 	GetWithdrawalHistory OperationType = "GetWithdrawalHistory"
+	GetTransferHistory   OperationType = "GetTransferHistory"
 	GetDepositAddress    OperationType = "GetDepositAddress" // Get address for one coin
 )
 
@@ -206,7 +213,7 @@ type AccountOperation struct {
 	Type OperationType `json:"type"`
 	Ex   ExchangeName  `json:"exchange_name"`
 
-	//#Transfer,Balance,Withdraw
+	//#Transfer,TransferHistory,Balance,Withdraw
 	Coin *coin.Coin `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
 
 	//specific operations
@@ -214,6 +221,7 @@ type AccountOperation struct {
 	TransferFrom        WalletType `json:"transfer_from"`
 	TransferDestination WalletType `json:"transfer_dest"`
 	TransferAmount      string     `json:"transfer_amount"`
+	TransferStartTime   int64      `json:"transfer_start_time"`
 
 	// #Withdraw
 	WithdrawAddress string `json:"withdraw_address"`
@@ -222,7 +230,8 @@ type AccountOperation struct {
 	WithdrawID      string `json:"withdraw_id"`
 
 	// #Balance
-	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
+	Wallet       WalletType `json:"wallet"`         // Contract/Spot operation. Default spot if empty
+	SubAccountID string     `json:"sub_account_id"` // Sub account id. eg. Sub account email
 
 	//#Single Balance
 	BalanceAvailable float64 `json:"balance_available"` //the fund able to do trading
@@ -240,6 +249,13 @@ type AccountOperation struct {
 	WithdrawalHistory []*WDHistory
 	DepositHistory    []*WDHistory
 
+	// #GetSubAccountList
+	SubAccountList []*SubAccountInfo
+
+	// #Sub Account Transfer History
+	TransferInHistory  []*TransferHistory
+	TransferOutHistory []*TransferHistory
+
 	// #GetDepositAddress
 	// Input: Coin. Get addresses for mainnet and erc20.
 	DepositAddresses map[ChainType]*DepositAddr // key: chainType
@@ -256,9 +272,12 @@ type AccountOperation struct {
 	// OperationType  WalletType `json:"operation_type"`  // replace by walelt!!!
 	Pair           *pair.Pair `json:"pair"`
 	Rate           float64
+	StopRate       float64 // for STOP_LIMIT, STOP_MARKET
 	Quantity       float64
 	Order          *Order
-	OrderDirection TradeDirection
+	OrderType      OrderPriceType // eg. FOK
+	TradeType      OrderTradeType // eg. TRADE_LIMIT
+	OrderDirection TradeDirection //TradeDirection
 }
 
 type PublicOperation struct {
@@ -267,11 +286,14 @@ type PublicOperation struct {
 	Type OperationType `json:"type"`
 	EX   ExchangeName  `json:"exchange_name"`
 
-	Coin          *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
-	Pair          *pair.Pair     `json:"op_pair"`
-	Maker         *Maker         `json:"maker"`
-	TradeHistory  []*TradeDetail `json:"history"`
-	CoinChainType []ChainType    `json:"chain_type"`
+	Coin           *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
+	Pair           *pair.Pair     `json:"op_pair"`
+	Maker          *Maker         `json:"maker"`
+	TradeHistory   []*TradeDetail `json:"history"`
+	CoinChainType  []ChainType    `json:"chain_type"`
+	KlineInterval  string         `json:"kline_interval"`
+	KlineStartTime int64          `json:"kline_start_time"`
+	Kline          []*KlineDetail `json:"kline"`
 
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`
@@ -286,6 +308,22 @@ type PublicOperation struct {
 
 	// ##### New Changes - Contract
 	Wallet WalletType `json:"wallet"` // Contract/Spot operation. Default spot if empty
+}
+
+type TransferType string
+
+const (
+	TransferIn  TransferType = "TransferIn"
+	TransferOut TransferType = "TransferOut"
+)
+
+type TransferHistory struct {
+	ID        string       `json:"id"`
+	Coin      *coin.Coin   `json:"transfer_history_coin"`
+	Type      TransferType `json:"type"`
+	Quantity  float64      `json:"quantity"`
+	TimeStamp int64        `json:"timestamp"`
+	StatusMsg string       `json: status_msg`
 }
 
 type WDHistory struct {
@@ -314,8 +352,28 @@ type AssetBalance struct {
 
 }
 
+type SubAccountInfo struct {
+	ID          string     `json:"id"` // account ID, email, etc.
+	Status      string     `json:"status"`
+	Activated   bool       `json:"activated"`
+	AccountType WalletType `json:"account_type"`
+	TimeStamp   int64      `json:"timestamp"`
+}
 
-
+type KlineDetail struct {
+	ID                  string  `json:"id"`
+	OpenTime            float64 `json:"open_time"`
+	Open                float64 `json:"open"`
+	High                float64 `json:"high"`
+	Low                 float64 `json:"low"`
+	Close               float64 `json:"close"`
+	Volume              float64 `json:"volume"`
+	CloseTime           float64 `json:"close_time"`
+	QuoteAssetVolume    float64 `json:"quote_asset_volume"`
+	TradesCount         float64 `json:"trades_count"`
+	TakerBuyBaseVolume  float64 `json:"taker_buy_base_volume"`
+	TakerBuyQuoteVolume float64 `json:"taker_buy_quote_volume"`
+}
 
 type TradeDetail struct {
 	ID        string         `json:"id"`

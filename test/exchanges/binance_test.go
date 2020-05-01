@@ -36,9 +36,9 @@ func Test_Binance(t *testing.T) {
 
 	// var err error
 
-	SubBalances(e, "example@bitontop.com")
-	SubAccountList(e)
-	SubAllBalances(e)
+	// SubBalances(e, "example@bitontop.com")
+	// SubAccountList(e)
+	// SubAllBalances(e)
 
 	// Spot AllBalance
 	// opAllBalance := &exchange.AccountOperation{

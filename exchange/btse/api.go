@@ -365,24 +365,24 @@ func (e *Btse) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
-	if orderStatus.Status == "CANCELED" {
-		order.Status = exchange.Cancelled
-	} else if orderStatus.Status == "FILLED" {
-		order.Status = exchange.Filled
-	} else if orderStatus.Status == "PARTIALLY_FILLED" {
-		order.Status = exchange.Partial
-	} else if orderStatus.Status == "REJECTED" {
-		order.Status = exchange.Rejected
-	} else if orderStatus.Status == "Expired" {
-		order.Status = exchange.Expired
-	} else if orderStatus.Status == "NEW" {
-		order.Status = exchange.New
-	} else {
-		order.Status = exchange.Other
-	}
+	// if orderStatus.Status == "CANCELED" {
+	// 	order.Status = exchange.Cancelled
+	// } else if orderStatus.Status == "FILLED" {
+	// 	order.Status = exchange.Filled
+	// } else if orderStatus.Status == "PARTIALLY_FILLED" {
+	// 	order.Status = exchange.Partial
+	// } else if orderStatus.Status == "REJECTED" {
+	// 	order.Status = exchange.Rejected
+	// } else if orderStatus.Status == "Expired" {
+	// 	order.Status = exchange.Expired
+	// } else if orderStatus.Status == "NEW" {
+	// 	order.Status = exchange.New
+	// } else {
+	// 	order.Status = exchange.Other
+	// }
 
-	order.DealRate, _ = strconv.ParseFloat(orderStatus.AveragePrice, 64)
-	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.ExecutedQty, 64)
+	order.DealRate = orderStatus.AverageFillPrice
+	order.DealQuantity = orderStatus.FillSize
 
 	return nil
 }
