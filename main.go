@@ -31,6 +31,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitz"
 	"github.com/bitontop/gored/exchange/bkex"
 	"github.com/bitontop/gored/exchange/blocktrade"
+	"github.com/bitontop/gored/exchange/btse"
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/bybit"
 	"github.com/bitontop/gored/exchange/coinbase"
@@ -778,6 +779,15 @@ func InitCoinbase(config *exchange.Config) {
 func InitBitbns(config *exchange.Config) {
 	conf.Exchange(exchange.BITBNS, config)
 	ex := bitbns.CreateBitbns(config)
+	log.Printf("Initial [ %12v ] ", ex.GetName())
+
+	exMan := exchange.CreateExchangeManager()
+	exMan.Add(ex)
+}
+
+func InitBtse(config *exchange.Config) {
+	conf.Exchange(exchange.BTSE, config)
+	ex := btse.CreateBtse(config)
 	log.Printf("Initial [ %12v ] ", ex.GetName())
 
 	exMan := exchange.CreateExchangeManager()

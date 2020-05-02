@@ -27,6 +27,7 @@ import (
 	"github.com/bitontop/gored/exchange/bitz"
 	"github.com/bitontop/gored/exchange/bkex"
 	"github.com/bitontop/gored/exchange/blocktrade"
+	"github.com/bitontop/gored/exchange/btse"
 	"github.com/bitontop/gored/exchange/bw"
 	"github.com/bitontop/gored/exchange/bybit"
 	"github.com/bitontop/gored/exchange/coinbase"
@@ -570,6 +571,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITBNS:
 		ex := bitbns.CreateBitbns(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.BTSE:
+		ex := btse.CreateBtse(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
