@@ -26,16 +26,16 @@ type PairsData []struct {
 }
 
 type OrderBook struct {
-	buyQuote []struct {
-		price string `json:"price"`
-		size  string `json:"size"`
+	BuyQuote []struct {
+		Price string `json:"price"`
+		Size  string `json:"size"`
 	} `json:"buyQuote"`
-	sellQuote []struct {
-		price string `json:"price"`
-		size  string `json:"size"`
+	SellQuote []struct {
+		Price string `json:"price"`
+		Size  string `json:"size"`
 	} `json:"sellQuote"`
-	symbol    string `json:"symbol"`
-	timestamp string `json:"timestamp"`
+	Symbol    string  `json:"symbol"`
+	Timestamp float64 `json:"timestamp"`
 }
 
 /********** Private API Structure**********/

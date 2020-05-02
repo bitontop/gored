@@ -187,19 +187,19 @@ func (e *Btse) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
 
 	var err error
-	for _, bid := range orderBook.buyQuote {
+	for _, bid := range orderBook.BuyQuote {
 		buydata := exchange.Order{}
-		bid0, _ := strconv.ParseFloat(bid.price, 64)
-		bid1, _ := strconv.ParseFloat(bid.size, 64)
+		bid0, _ := strconv.ParseFloat(bid.Price, 64)
+		bid1, _ := strconv.ParseFloat(bid.Size, 64)
 		buydata.Quantity = bid1
 		buydata.Rate = bid0
 		maker.Bids = append(maker.Bids, buydata)
 	}
 
-	for _, ask := range orderBook.sellQuote {
+	for _, ask := range orderBook.SellQuote {
 		selldata := exchange.Order{}
-		ask0, _ := strconv.ParseFloat(ask.price, 64)
-		ask1, _ := strconv.ParseFloat(ask.size, 64)
+		ask0, _ := strconv.ParseFloat(ask.Price, 64)
+		ask1, _ := strconv.ParseFloat(ask.Size, 64)
 		selldata.Quantity = ask1
 		selldata.Rate = ask0
 		maker.Asks = append(maker.Asks, selldata)
@@ -439,9 +439,11 @@ func (e *Btse) ApiKeyGet(strRequestPath string, mapParams map[string]string) str
 		return err.Error()
 	}
 	//jsonBytes, _ := json.Marshal(mapParams)
+	abc := exchange.ComputeHmac384("NDQ0MWFkMDBkNTA1NDA3", "/api/v3.1/user/wallet1582258739280")
+	fmt.Printf("abc:%s", abc)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("btse-api", e.API_KEY)
-	request.Header.Add("btse-nonce", string(time.Now().Unix()))
+	request.Header.Add("btse-nonce", string(time.Now().UnixNano()))
 	sign := exchange.ComputeHmac384(e.API_SECRET, strRequestPath+e.API_KEY)
 	request.Header.Add("btse-sign", sign)
 	httpClient := &http.Client{}
