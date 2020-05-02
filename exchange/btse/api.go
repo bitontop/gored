@@ -439,12 +439,14 @@ func (e *Btse) ApiKeyGet(strRequestPath string, mapParams map[string]string) str
 		return err.Error()
 	}
 	//jsonBytes, _ := json.Marshal(mapParams)
-	abc := exchange.ComputeHmac384("NDQ0MWFkMDBkNTA1NDA3", "/api/v3.1/user/wallet1582258739280")
+	abc := exchange.ComputeHmac384("/api/v3.1/user/wallet1582258739280", "NDQ0MWFkMDBkNTA1NDA3")
 	fmt.Printf("abc:%s", abc)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("btse-api", e.API_KEY)
-	request.Header.Add("btse-nonce", string(time.Now().UnixNano()))
-	sign := exchange.ComputeHmac384(e.API_SECRET, strRequestPath+e.API_KEY)
+	timestamp := time.Now().Unix()
+	timeNow := strconv.FormatInt(timestamp, 10)
+	request.Header.Add("btse-nonce", timeNow)
+	sign := exchange.ComputeHmac384(strRequestPath+timeNow, e.API_SECRET)
 	request.Header.Add("btse-sign", sign)
 	httpClient := &http.Client{}
 	response, err := httpClient.Do(request)
