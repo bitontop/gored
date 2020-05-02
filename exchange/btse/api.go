@@ -428,19 +428,19 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Btse) ApiKeyGet(strRequestPath string, mapParams map[string]string) string {
-	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+	//mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	//payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := API_URL + strRequestPath // + "?" + payload
 
-	fmt.Printf("strUrl:%s", strUrl)
+	//fmt.Printf("strUrl:%s", strUrl)
 	request, err := http.NewRequest("GET", strUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
 	//jsonBytes, _ := json.Marshal(mapParams)
-	abc := exchange.ComputeHmac384("/api/v3.1/user/wallet1582258739280", "NDQ0MWFkMDBkNTA1NDA3")
-	fmt.Printf("abc:%s", abc)
+	//abc := exchange.ComputeHmac384("/api/v3.1/user/wallet1582258739280", "NDQ0MWFkMDBkNTA1NDA3")
+	//fmt.Printf("abc:%s", abc)
 	request.Header.Add("Content-Type", "application/json; charset=utf-8")
 	request.Header.Add("btse-api", e.API_KEY)
 	timestamp := time.Now().Unix()

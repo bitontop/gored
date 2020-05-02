@@ -129,7 +129,7 @@ func ComputeHmac384(strMessage string, strSecret string) string {
 	h := hmac.New(sha512.New384, key)
 	h.Write([]byte(strMessage))
 
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+	return hex.EncodeToString(h.Sum(nil))
 }
 func ComputeHmac512(strMessage string, strSecret string) string {
 	key, _ := base64.StdEncoding.DecodeString(strSecret)
