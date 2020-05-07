@@ -187,7 +187,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitLatoken(config)
 	InitVirgocx(config)
 	InitAbcc(config)
-	InitBybit(config)
+	// InitBybit(config)
 	InitZebitex(config)
 	InitBithumb(config)
 	InitSwitcheo(config)
@@ -195,7 +195,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitBkex(config)
 	InitNewcapital(config)
 	InitCoindeal(config)
-	InitHibitex(config)
+	// InitHibitex(config)
 	InitBgogo(config)
 	InitFtx(config)
 	InitTxbit(config)
@@ -206,7 +206,7 @@ func Init(source exchange.DataSource, sourceURI string) {
 	InitHoo(config)
 	InitHomiex(config)
 	InitCoinbase(config)
-	InitBitbns(config)
+	// InitBitbns(config)
 }
 
 func InitBinance(config *exchange.Config) {
