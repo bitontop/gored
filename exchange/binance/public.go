@@ -34,8 +34,69 @@ func (e *Binance) LoadPublicData(operation *exchange.PublicOperation) error {
 		case exchange.SpotWallet:
 			return e.doSpotKline(operation)
 		}
+	case exchange.GetTickerPrice:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doTickerPrice(operation)
+		}
+
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Binance) doTickerPrice(operation *exchange.PublicOperation) error {
+	tickerPrice := TickerPrice{}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/api/v3/ticker/price", API_URL),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonTickerPrice := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonTickerPrice), &tickerPrice); err != nil {
+		operation.Error = fmt.Errorf("%s doTickerPrice json Unmarshal error: %v %v", e.GetName(), err, string(jsonTickerPrice))
+		return operation.Error
+	} else if len(tickerPrice) == 0 {
+		operation.Error = fmt.Errorf("%s doTickerPrice got empty return: %v %v", e.GetName(), err, string(jsonTickerPrice))
+		return operation.Error
+	}
+
+	operation.TickerPrice = []*exchange.TickerPriceDetail{}
+	for _, tp := range tickerPrice {
+		p := e.GetPairBySymbol(tp.Symbol)
+		price, err := strconv.ParseFloat(tp.Price, 64)
+		if err != nil {
+			log.Printf("%s doTickerPrice parse Err: %v %v", e.GetName(), err, tp.Price)
+			operation.Error = err
+			return err
+		}
+
+		if p == nil {
+			if operation.DebugMode {
+				log.Printf("doTickerPrice got nil pair for symbol: %v", tp.Symbol)
+			}
+			continue
+		}
+
+		tpd := &exchange.TickerPriceDetail{
+			Pair:  p,
+			Price: price,
+		}
+
+		operation.TickerPrice = append(operation.TickerPrice, tpd)
+	}
+
+	return nil
 }
 
 // interval options: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M

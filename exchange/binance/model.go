@@ -413,3 +413,8 @@ type SubAccountList struct {
 		CreateTime int64  `json:"createTime"`
 	} `json:"subAccounts"`
 }
+
+type TickerPrice []struct {
+	Symbol string `json:"symbol"`
+	Price  string `json:"price"`
+}

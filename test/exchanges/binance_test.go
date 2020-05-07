@@ -17,7 +17,7 @@ import (
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
 	e := InitEx(exchange.BINANCE)
-	pair := pair.GetPairByKey("USDT|BTC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -27,6 +27,13 @@ func Test_Binance(t *testing.T) {
 	// Test_Constraint(e, pair)
 
 	// Test_NewOrderBook(e, pair)
+	Test_TickerPrice(e)
+
+	Test_Balance(e, pair)
+	// Test_Trading(e, pair, 0.01, 0.01)
+	// Test_Trading_Sell(e, pair, 0.04, 0.01)
+	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
 	// Test_AOOpenOrder(e, pair)
 	// Test_AOOrderHistory(e, pair) // not tested with asset
@@ -36,9 +43,9 @@ func Test_Binance(t *testing.T) {
 
 	// var err error
 
-	SubBalances(e, "example@bitontop.com")
-	SubAccountList(e)
-	SubAllBalances(e)
+	// SubBalances(e, "example@bitontop.com")
+	// SubAccountList(e)
+	// SubAllBalances(e)
 
 	// Spot AllBalance
 	// opAllBalance := &exchange.AccountOperation{
@@ -250,11 +257,6 @@ func Test_Binance(t *testing.T) {
 	// 	log.Printf("==%v", err)
 	// }
 	// // ==============================================
-
-	Test_Balance(e, pair)
-	// Test_Trading(e, pair, 0.01, 0.01)
-	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
-	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
 	// Test_TradeHistory(e, pair)
 

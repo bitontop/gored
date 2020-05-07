@@ -419,6 +419,23 @@ func Test_AOTransferHistory(e exchange.Exchange) {
 	}
 }
 
+func Test_TickerPrice(e exchange.Exchange) {
+	opTickerPrice := &exchange.PublicOperation{
+		Type:      exchange.GetTickerPrice,
+		EX:        e.GetName(),
+		Wallet:    exchange.SpotWallet,
+		DebugMode: true,
+	}
+	err := e.LoadPublicData(opTickerPrice)
+	if err != nil {
+		log.Printf("%v", err)
+		return
+	}
+	for _, ticker := range opTickerPrice.TickerPrice {
+		log.Printf("TickerPrice: %v, %v", ticker.Pair.Name, ticker.Price)
+	}
+}
+
 func SubBalances(e exchange.Exchange, subID string) {
 	// Sub Spot AllBalance
 	opSubBalance := &exchange.AccountOperation{

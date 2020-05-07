@@ -177,10 +177,11 @@ const (
 	GetCoin OperationType = "GetCoin"
 	GetPair OperationType = "GetPair"
 
-	TradeHistory  OperationType = "TradeHistory"
-	Orderbook     OperationType = "Orderbook"
-	CoinChainType OperationType = "CoinChainType"
-	KLine         OperationType = "KLine"
+	TradeHistory   OperationType = "TradeHistory"
+	Orderbook      OperationType = "Orderbook"
+	CoinChainType  OperationType = "CoinChainType"
+	KLine          OperationType = "KLine"
+	GetTickerPrice OperationType = "GetTickerPrice"
 
 	//Trade (Private Action)
 	PlaceOrder     OperationType = "PlaceOrder"
@@ -286,14 +287,15 @@ type PublicOperation struct {
 	Type OperationType `json:"type"`
 	EX   ExchangeName  `json:"exchange_name"`
 
-	Coin           *coin.Coin     `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
-	Pair           *pair.Pair     `json:"op_pair"`
-	Maker          *Maker         `json:"maker"`
-	TradeHistory   []*TradeDetail `json:"history"`
-	CoinChainType  []ChainType    `json:"chain_type"`
-	KlineInterval  string         `json:"kline_interval"`
-	KlineStartTime int64          `json:"kline_start_time"`
-	Kline          []*KlineDetail `json:"kline"`
+	Coin           *coin.Coin           `json:"op_coin"` //BOT standard symbol, not the symbol on exchange
+	Pair           *pair.Pair           `json:"op_pair"`
+	Maker          *Maker               `json:"maker"`
+	TradeHistory   []*TradeDetail       `json:"history"`
+	CoinChainType  []ChainType          `json:"chain_type"`
+	KlineInterval  string               `json:"kline_interval"`
+	KlineStartTime int64                `json:"kline_start_time"`
+	Kline          []*KlineDetail       `json:"kline"`
+	TickerPrice    []*TickerPriceDetail `json:"ticker_price"`
 
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`
@@ -373,6 +375,11 @@ type KlineDetail struct {
 	TradesCount         float64 `json:"trades_count"`
 	TakerBuyBaseVolume  float64 `json:"taker_buy_base_volume"`
 	TakerBuyQuoteVolume float64 `json:"taker_buy_quote_volume"`
+}
+
+type TickerPriceDetail struct {
+	Pair  *pair.Pair `json:"pair"`
+	Price float64    `json:"price"`
 }
 
 type TradeDetail struct {
