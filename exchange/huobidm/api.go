@@ -173,7 +173,7 @@ func (e *Huobidm) GetPairsData() error {
 						PairID:      p.ID,
 						Pair:        p,
 						ExSymbol:    data.Symbol + "_" + data.ContractType,
-						ExID:        strings.ToLower(data.Symbol),
+						ExID:        data.ContractCode, // strings.ToLower(data.Symbol), //
 						MakerFee:    DEFAULT_MAKER_FEE,
 						TakerFee:    DEFAULT_TAKER_FEE,
 						LotSize:     data.ContractSize,
@@ -182,6 +182,7 @@ func (e *Huobidm) GetPairsData() error {
 					}
 				} else {
 					pairConstraint.ExSymbol = data.Symbol + "_" + data.ContractType
+					pairConstraint.ExID = data.ContractCode
 					pairConstraint.LotSize = data.ContractSize
 					pairConstraint.PriceFilter = data.PriceTick
 				}
