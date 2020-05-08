@@ -86,6 +86,8 @@ func (e *Binance) doTickerPrice(operation *exchange.PublicOperation) error {
 				log.Printf("doTickerPrice got nil pair for symbol: %v", tp.Symbol)
 			}
 			continue
+		} else if p.Name == "" {
+			continue
 		}
 
 		tpd := &exchange.TickerPriceDetail{
