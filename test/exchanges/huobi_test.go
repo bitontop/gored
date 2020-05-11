@@ -29,14 +29,17 @@ func Test_Huobi(t *testing.T) {
 	// Test_NewOrderBook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
+	Test_TickerPrice(e)
 
 	Test_Balance(e, pair)
+	// Test_CheckAllBalance(e, exchange.SpotWallet)
 	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Trading_Sell(e, pair, 0.05, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	SubBalances(e, "8459451")
-	SubAccountList(e)
-	SubAllBalances(e)
+	// SubBalances(e, "8459451")
+	// SubAccountList(e)
+	// SubAllBalances(e)
 
 	// Test Withdraw
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")

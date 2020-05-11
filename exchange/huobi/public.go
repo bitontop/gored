@@ -7,6 +7,7 @@ package huobi
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	exchange "github.com/bitontop/gored/exchange"
@@ -25,8 +26,70 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSpotOrderBook(operation)
 		}
+	case exchange.GetTickerPrice:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doTickerPrice(operation)
+		}
+
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Huobi) doTickerPrice(operation *exchange.PublicOperation) error {
+	jsonResponse := &JsonResponse{}
+	tickerPrice := TickerPrice{}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/market/tickers", API_URL),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonTickerPrice := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonTickerPrice), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doTickerPrice json Unmarshal error: %v %v", e.GetName(), err, string(jsonTickerPrice))
+		return operation.Error
+	} else if jsonResponse.Status != "ok" {
+		operation.Error = fmt.Errorf("%s doTickerPrice failed: %v %v", e.GetName(), err, string(jsonTickerPrice))
+		return operation.Error
+	}
+
+	if err := json.Unmarshal(jsonResponse.Data, &tickerPrice); err != nil {
+		operation.Error = fmt.Errorf("%s doTickerPrice Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.TickerPrice = []*exchange.TickerPriceDetail{}
+	for _, tp := range tickerPrice {
+		p := e.GetPairBySymbol(tp.Symbol)
+		if p == nil {
+			if operation.DebugMode {
+				log.Printf("doTickerPrice got nil pair for symbol: %v", tp.Symbol)
+			}
+			continue
+		} else if p.Name == "" {
+			continue
+		}
+
+		tpd := &exchange.TickerPriceDetail{
+			Pair:  p,
+			Price: (tp.Bid + tp.Ask) / 2,
+		}
+
+		operation.TickerPrice = append(operation.TickerPrice, tpd)
+	}
+
+	return nil
 }
 
 func (e *Huobi) doSpotOrderBook(op *exchange.PublicOperation) error {

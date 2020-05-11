@@ -195,3 +195,18 @@ type SubAllAccountBalances []struct {
 	Type     string `json:"type"`
 	Balance  string `json:"balance"`
 }
+
+type TickerPrice []struct {
+	Symbol  string  `json:"symbol"`
+	Open    float64 `json:"open"`
+	High    float64 `json:"high"`
+	Low     float64 `json:"low"`
+	Close   float64 `json:"close"`
+	Amount  float64 `json:"amount"`
+	Vol     float64 `json:"vol"`
+	Count   int     `json:"count"`
+	Bid     float64 `json:"bid"`
+	BidSize float64 `json:"bidSize"`
+	Ask     float64 `json:"ask"`
+	AskSize float64 `json:"askSize"`
+}
