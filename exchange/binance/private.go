@@ -16,8 +16,6 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		return e.doWithdraw(operation)
 	// case exchange.Transfer:
 	// 	return e.transfer(operation)
-	// case exchange.BalanceList:
-	// 	return e.getAllBalance(operation)
 	// case exchange.Balance:
 	// 	return e.getBalance(operation)
 

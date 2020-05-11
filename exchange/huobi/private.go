@@ -19,6 +19,13 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 	// case exchange.Balance:
 	// 	return e.getBalance(operation)
 
+	case exchange.BalanceList:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doAllBalance(operation)
+		} /* else if operation.Wallet == exchange.ContractWallet {
+			return e.doContractAllBalance(operation)
+		}  */
+
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
 	case exchange.GetOpenOrder:
@@ -55,6 +62,93 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Huobi) doAllBalance(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	if e.Account_ID == "" {
+		e.Account_ID = e.GetAccounts()
+		if e.Account_ID == "" {
+			operation.Error = fmt.Errorf("%s doAllBalance failed, get AccountID failed", e.GetName())
+			return operation.Error
+		}
+	}
+
+	jsonResponse := &JsonResponse{}
+	accountBalance := AccountBalances{}
+	strRequest := fmt.Sprintf("/v1/account/accounts/%s/balance", e.Account_ID)
+	operation.BalanceList = []exchange.AssetBalance{}
+
+	jsonAllBalanceReturn := e.ApiKeyRequest("GET", make(map[string]string), strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} else if jsonResponse.Status != "ok" {
+		operation.Error = fmt.Errorf("%s doAllBalance Failed: %v", e.GetName(), jsonResponse)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &accountBalance); err != nil {
+		operation.Error = fmt.Errorf("%s doAllBalance Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	balanceMap := make(map[string]exchange.AssetBalance)
+	for _, balance := range accountBalance.List {
+		if balance.Type == "trade" {
+			freeamount, err := strconv.ParseFloat(balance.Balance, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doAllBalance err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+			c := e.GetCoinBySymbol(balance.Currency)
+			if c == nil {
+				continue
+			}
+			b := exchange.AssetBalance{
+				Coin:             c,
+				BalanceAvailable: freeamount,
+			}
+
+			if balanceMap[balance.Currency].Coin != nil {
+				b.BalanceFrozen = balanceMap[balance.Currency].BalanceFrozen
+			}
+			balanceMap[balance.Currency] = b
+
+		} else if balance.Type == "frozen" {
+			locked, err := strconv.ParseFloat(balance.Balance, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doAllBalance err: %+v %v", e.GetName(), balance, err)
+				return operation.Error
+			}
+			c := e.GetCoinBySymbol(balance.Currency)
+			if c == nil {
+				continue
+			}
+			b := exchange.AssetBalance{
+				Coin:          c,
+				BalanceFrozen: locked,
+			}
+
+			if balanceMap[balance.Currency].Coin != nil {
+				b.BalanceAvailable = balanceMap[balance.Currency].BalanceAvailable
+			}
+			balanceMap[balance.Currency] = b
+		}
+	}
+
+	for _, b := range balanceMap {
+		operation.BalanceList = append(operation.BalanceList, b)
+	}
+
+	return nil
 }
 
 // 查询当前用户的"所有"账户 ID 及其相关信息
