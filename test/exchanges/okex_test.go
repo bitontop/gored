@@ -23,9 +23,10 @@ func Test_Okex(t *testing.T) {
 	// Test_Pairs(e)
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
-	Test_NewOrderBook(e, pair)
+	// Test_NewOrderBook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
+	// Test_TickerPrice(e)
 
 	// new interface methods
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")

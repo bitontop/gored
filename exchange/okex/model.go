@@ -143,3 +143,22 @@ type TradeHistory []struct {
 	Size      string    `json:"size"`
 	Side      string    `json:"side"`
 }
+
+type TickerPrice []struct {
+	BestAsk        string    `json:"best_ask"`
+	BestBid        string    `json:"best_bid"`
+	InstrumentID   string    `json:"instrument_id"`
+	ProductID      string    `json:"product_id"`
+	Last           string    `json:"last"`
+	LastQty        string    `json:"last_qty"`
+	Ask            string    `json:"ask"`
+	BestAskSize    string    `json:"best_ask_size"`
+	Bid            string    `json:"bid"`
+	BestBidSize    string    `json:"best_bid_size"`
+	Open24H        string    `json:"open_24h"`
+	High24H        string    `json:"high_24h"`
+	Low24H         string    `json:"low_24h"`
+	BaseVolume24H  string    `json:"base_volume_24h"`
+	Timestamp      time.Time `json:"timestamp"`
+	QuoteVolume24H string    `json:"quote_volume_24h"`
+}

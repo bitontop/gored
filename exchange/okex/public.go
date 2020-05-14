@@ -3,6 +3,7 @@ package okex
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -19,9 +20,77 @@ func (e *Okex) LoadPublicData(operation *exchange.PublicOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSpotOrderBook(operation)
 		}
+	case exchange.GetTickerPrice:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doTickerPrice(operation)
+		}
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Okex) doTickerPrice(operation *exchange.PublicOperation) error {
+	tickerPrice := TickerPrice{}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/api/spot/v3/instruments/ticker", API_URL),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonTickerPrice := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonTickerPrice), &tickerPrice); err != nil {
+		operation.Error = fmt.Errorf("%s doTickerPrice json Unmarshal error: %v %v", e.GetName(), err, string(jsonTickerPrice))
+		return operation.Error
+	} else if len(tickerPrice) == 0 {
+		operation.Error = fmt.Errorf("%s doTickerPrice failed, got empty ticker: %v", e.GetName(), string(jsonTickerPrice))
+		return operation.Error
+	}
+
+	operation.TickerPrice = []*exchange.TickerPriceDetail{}
+	for _, tp := range tickerPrice {
+		p := e.GetPairBySymbol(tp.InstrumentID)
+		if p == nil {
+			if operation.DebugMode {
+				log.Printf("doTickerPrice got nil pair for symbol: %v", tp.InstrumentID)
+			}
+			continue
+		} else if p.Name == "" {
+			continue
+		}
+
+		bid, err := strconv.ParseFloat(tp.BestBid, 64)
+		if err != nil {
+			log.Printf("%s doTickerPrice parse Err: %v %v", e.GetName(), err, tp.BestBid)
+			operation.Error = err
+			return err
+		}
+		ask, err := strconv.ParseFloat(tp.BestAsk, 64)
+		if err != nil {
+			log.Printf("%s doTickerPrice parse Err: %v %v", e.GetName(), err, tp.BestAsk)
+			operation.Error = err
+			return err
+		}
+
+		tpd := &exchange.TickerPriceDetail{
+			Pair:  p,
+			Price: (bid + ask) / 2,
+		}
+
+		operation.TickerPrice = append(operation.TickerPrice, tpd)
+	}
+
+	return nil
 }
 
 func (e *Okex) doSpotOrderBook(op *exchange.PublicOperation) error {
