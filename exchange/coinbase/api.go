@@ -130,7 +130,7 @@ func (e *Coinbase) DoAccountOperation(operation *exchange.AccountOperation) erro
 		// case exchange.Balance:
 		// 	return e.getBalance(operation)
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 func (e *Coinbase) doWithdraw(operation *exchange.AccountOperation) error {

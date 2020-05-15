@@ -272,7 +272,7 @@ func (e *Ibankdigital) DoAccountOperation(operation *exchange.AccountOperation) 
 	// 	return e.doWithdraw(operation)
 
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 // not a valid api, disappeared from api document.

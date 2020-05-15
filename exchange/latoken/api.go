@@ -236,7 +236,7 @@ func (e *Latoken) DoAccountOperation(operation *exchange.AccountOperation) error
 	case exchange.Withdraw: // TODO, v2 key
 		return e.doWithdraw(operation)
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 func (e *Latoken) doWithdraw(operation *exchange.AccountOperation) error { // TODO

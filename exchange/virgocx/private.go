@@ -16,7 +16,7 @@ func (e *Virgocx) DoAccountOperation(operation *exchange.AccountOperation) error
 	case exchange.PlaceOrder:
 		return e.doPlaceOrder(operation)
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 func (e *Virgocx) doPlaceOrder(operation *exchange.AccountOperation) error {

@@ -232,7 +232,7 @@ func (e *Liquid) DoAccountOperation(operation *exchange.AccountOperation) error 
 		return e.doWithdraw(operation)
 
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 func (e *Liquid) doWithdraw(operation *exchange.AccountOperation) error {

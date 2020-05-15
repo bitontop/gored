@@ -33,7 +33,7 @@ func (e *Kucoin) DoAccountOperation(operation *exchange.AccountOperation) error 
 			return e.doSubAllBalance(operation) // All spot trading and main sub account
 		}
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 func (e *Kucoin) doSubAllBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account

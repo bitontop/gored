@@ -294,7 +294,7 @@ func (e *Gateio) DoAccountOperation(operation *exchange.AccountOperation) error 
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
 	}
-	return fmt.Errorf("Operation type invalid: %v", operation.Type)
+	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
 // need to add address to address book, or set TOTP or add phone number
