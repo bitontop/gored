@@ -252,13 +252,21 @@ func (e *Okex) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 func (e *Okex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Transfer:
-		return e.transfer(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.transfer(operation)
+		}
 	case exchange.BalanceList:
-		return e.getAllBalance(operation)
+		if operation.Wallet == exchange.AssetWallet || operation.Wallet == exchange.SpotWallet {
+			return e.getAllBalance(operation)
+		}
 	case exchange.Balance:
-		return e.getBalance(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.getBalance(operation)
+		}
 	case exchange.Withdraw:
-		return e.doWithdraw(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doWithdraw(operation)
+		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
