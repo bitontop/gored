@@ -92,13 +92,22 @@ func (e *Huobi) GetCoinsData() error {
 				confirmation = data.Chains[0].NumOfConfirmations
 			}
 			coinConstraint := e.GetCoinConstraint(c)
+			txFee := DEFAULT_TXFEE
+			if len(data.Chains) > 0 {
+				fee, err := strconv.ParseFloat(data.Chains[0].TransactFeeWithdraw, 64)
+				if err != nil {
+					log.Printf("%s Get Coins parse txFee err: %v, %v", e.GetName(), err, data.Chains[0].TransactFeeWithdraw)
+				} else {
+					txFee = fee
+				}
+			}
 			if coinConstraint == nil {
 				coinConstraint = &exchange.CoinConstraint{
 					CoinID:       c.ID,
 					Coin:         c,
 					ExSymbol:     data.Currency,
 					ChainType:    exchange.MAINNET,
-					TxFee:        DEFAULT_TXFEE,
+					TxFee:        txFee,
 					Withdraw:     withdrawStatus,
 					Deposit:      depositStatus,
 					Confirmation: confirmation,
@@ -106,6 +115,7 @@ func (e *Huobi) GetCoinsData() error {
 				}
 			} else {
 				coinConstraint.ExSymbol = data.Currency
+				coinConstraint.TxFee = txFee
 				coinConstraint.Withdraw = withdrawStatus
 				coinConstraint.Deposit = depositStatus
 				coinConstraint.Confirmation = confirmation
