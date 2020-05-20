@@ -604,7 +604,7 @@ func (e *Binance) doGetTransferHistory(operation *exchange.AccountOperation) err
 	}
 
 	if err := json.Unmarshal([]byte(jsonTransferOutHistory), &transfer); err != nil {
-		operation.Error = fmt.Errorf("%s doTransferOutHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
+		operation.Error = fmt.Errorf("%s doGetTransferHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
 		return operation.Error
 	}
 
