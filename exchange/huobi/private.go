@@ -60,7 +60,7 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSubAllBalance(operation)
 		}
-	case exchange.GetTransferHistory:
+	case exchange.GetTransferHistory: // now designed for sub-account only
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetTransferHistory(operation)
 		}
