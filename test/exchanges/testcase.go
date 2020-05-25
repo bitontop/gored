@@ -12,6 +12,7 @@ import (
 	"github.com/bitontop/gored/initial"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/test/conf"
+	"github.com/bitontop/gored/utils"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -28,6 +29,25 @@ func InitEx(exName exchange.ExchangeName) exchange.Exchange {
 	inMan := initial.CreateInitManager()
 	e := inMan.Init(config)
 	log.Printf("Initial [ %v ] ", e.GetName())
+
+	config = nil
+
+	return e
+}
+
+func InitExFromJson(exName exchange.ExchangeName) exchange.Exchange {
+	coin.Init()
+	pair.Init()
+	config := &exchange.Config{}
+	// config.Source = exchange.EXCHANGE_API
+	config.Source = exchange.JSON_FILE
+	config.SourceURI = "https://raw.githubusercontent.com/bitontop/gored/master/data"
+	utils.GetCommonDataFromJSON(config.SourceURI)
+	conf.Exchange(exName, config)
+
+	inMan := initial.CreateInitManager()
+	e := inMan.Init(config)
+	log.Printf("Initial [ %v ] from JSON", e.GetName())
 
 	config = nil
 

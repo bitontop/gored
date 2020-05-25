@@ -60,8 +60,97 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSubAllBalance(operation)
 		}
+	case exchange.GetTransferHistory:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetTransferHistory(operation)
+		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Huobi) doGetTransferHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	// Get accountID
+	accountID := ""
+	accountOP := &exchange.AccountOperation{
+		Type:   exchange.GetSubAccountList,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+	}
+	err := e.doSubAccountList(accountOP)
+	if err != nil {
+		return err
+	}
+	for _, ac := range accountOP.SubAccountList {
+		if ac.AccountType == exchange.SpotWallet {
+			if accountID != "" {
+				log.Printf("%s got more than one spot-accountID: %v, %v", e.GetName(), accountID, ac.ID)
+			}
+			accountID = ac.ID
+		}
+		log.Printf("accounts: %+v", ac)
+	}
+	if accountID == "" {
+		return fmt.Errorf("%s doGetTransferHistory get spot-accountID failed: %+v.", e.GetName(), accountOP.SubAccountList)
+	}
+
+	jsonResponse := &JsonResponse{}
+	transfer := TransferHistory{}
+	strRequest := "/v2/account/ledger"
+
+	mapParams := make(map[string]string)
+	mapParams["accountId"] = accountID
+	mapParams["size"] = "500"
+
+	jsonTransferOutHistory := e.ApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferOutHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferOutHistory), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetTransferHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
+		return operation.Error
+	} else if jsonResponse.Code != 200 {
+		operation.Error = fmt.Errorf("%s doGetTransferHistory Failed: %v", e.GetName(), jsonResponse)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &transfer); err != nil {
+		operation.Error = fmt.Errorf("%s doGetTransferHistory Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+	for _, tx := range transfer {
+		c := e.GetCoinBySymbol(tx.Currency)
+		record := &exchange.TransferHistory{
+			ID:        fmt.Sprintf("%v", tx.TransactID),
+			Coin:      c,
+			TimeStamp: tx.TransactTime,
+			StatusMsg: fmt.Sprintf("AccountID: %v", accountID),
+		}
+
+		switch tx.TransferType {
+		case "sub-transfer-in":
+			record.Type = exchange.TransferIn
+			record.Quantity = tx.TransactAmt
+			operation.TransferInHistory = append(operation.TransferInHistory, record)
+		case "sub-transfer-out":
+			record.Type = exchange.TransferOut
+			record.Quantity = -tx.TransactAmt
+			operation.TransferOutHistory = append(operation.TransferOutHistory, record)
+		default:
+			continue
+		}
+
+	}
+
+	return nil
 }
 
 func (e *Huobi) doAllBalance(operation *exchange.AccountOperation) error {

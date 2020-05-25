@@ -1,6 +1,7 @@
 package test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/bitontop/gored/exchange"
@@ -18,6 +19,13 @@ import (
 func Test_Huobi(t *testing.T) {
 	e := InitEx(exchange.HUOBI)
 	pair := pair.GetPairByKey("BTC|ETH")
+	// e := InitExFromJson(exchange.HUOBI)
+	// pair := pair.GetPairByKey("BTC|BSV")
+	if pair == nil {
+		log.Printf("got nil pair: %+v", pair)
+	} else {
+		log.Printf("got pair: %+v", pair)
+	}
 
 	// Test_CoinChainType(e, pair.Base)
 	// Test_TradeHistory(e, pair)
@@ -28,14 +36,36 @@ func Test_Huobi(t *testing.T) {
 	// Test_Orderbook(e, pair)
 	// Test_NewOrderBook(e, pair)
 	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
-	Test_TickerPrice(e)
+	Test_Constraint(e, pair)
+	// Test_TickerPrice(e)
 
 	Test_Balance(e, pair)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.05, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
+
+	// =====================================================================
+	// TransferHistory
+	opCTransferHistory := &exchange.AccountOperation{
+		Type:      exchange.GetTransferHistory,
+		Wallet:    exchange.SpotWallet,
+		Ex:        e.GetName(),
+		DebugMode: true,
+	}
+
+	if err := e.DoAccountOperation(opCTransferHistory); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for _, o := range opCTransferHistory.TransferInHistory {
+			log.Printf("%s TransferInHistory %+v", e.GetName(), o)
+		}
+		for _, o := range opCTransferHistory.TransferOutHistory {
+			log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
+		}
+		log.Printf("Contract TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
+	}
+	// =====================================================================
 
 	// SubBalances(e, "8459451")
 	// SubAccountList(e)

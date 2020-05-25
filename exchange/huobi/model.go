@@ -10,6 +10,7 @@ import (
 
 type JsonResponse struct {
 	Code    int             `json:"code"`
+	Message string          `json:"message"`
 	Status  string          `json:"status"`
 	Data    json.RawMessage `json:"data"`
 	Tick    json.RawMessage `json:"tick"`
@@ -209,4 +210,16 @@ type TickerPrice []struct {
 	BidSize float64 `json:"bidSize"`
 	Ask     float64 `json:"ask"`
 	AskSize float64 `json:"askSize"`
+}
+
+type TransferHistory []struct {
+	AccountID    int     `json:"accountId"`
+	Currency     string  `json:"currency"`
+	TransactAmt  float64 `json:"transactAmt"`
+	TransactType string  `json:"transactType"`
+	TransferType string  `json:"transferType"`
+	TransactID   int     `json:"transactId"`
+	TransactTime int64   `json:"transactTime"`
+	Transferer   int     `json:"transferer"`
+	Transferee   int     `json:"transferee"`
 }
