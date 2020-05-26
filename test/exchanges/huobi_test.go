@@ -63,7 +63,7 @@ func Test_Huobi(t *testing.T) {
 		for _, o := range opCTransferHistory.TransferOutHistory {
 			log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
 		}
-		log.Printf("Contract TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
+		log.Printf("Spot TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
 	}
 	// =====================================================================
 

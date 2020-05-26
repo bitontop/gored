@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 
 	"github.com/bitontop/gored/exchange"
 )
@@ -73,6 +74,10 @@ func (e *Huobi) doGetTransferHistory(operation *exchange.AccountOperation) error
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
 	}
 
+	operation.CallResponce = ""
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+
 	// Get accountID
 	accountID := ""
 	accountOP := &exchange.AccountOperation{
@@ -91,63 +96,70 @@ func (e *Huobi) doGetTransferHistory(operation *exchange.AccountOperation) error
 			}
 			accountID = ac.ID
 		}
-		log.Printf("accounts: %+v", ac)
+		// log.Printf("accounts: %+v", ac)
 	}
 	if accountID == "" {
 		return fmt.Errorf("%s doGetTransferHistory get spot-accountID failed: %+v.", e.GetName(), accountOP.SubAccountList)
 	}
 
-	jsonResponse := &JsonResponse{}
-	transfer := TransferHistory{}
-	strRequest := "/v2/account/ledger"
+	// get past 30 days data
+	endTime := time.Now()
+	endTS := endTime.UnixNano() / int64(time.Millisecond)
+	for i := 0; i < 3; i++ {
+		jsonResponse := &JsonResponse{}
+		transfer := TransferHistory{}
+		strRequest := "/v2/account/ledger"
 
-	mapParams := make(map[string]string)
-	mapParams["accountId"] = accountID
-	mapParams["size"] = "500"
+		mapParams := make(map[string]string)
+		mapParams["accountId"] = accountID
+		mapParams["size"] = "500"
+		mapParams["endTime"] = fmt.Sprintf("%v", endTS)
 
-	jsonTransferOutHistory := e.ApiKeyRequest("GET", mapParams, strRequest)
-	if operation.DebugMode {
-		operation.RequestURI = strRequest
-		operation.CallResponce = jsonTransferOutHistory
-	}
-
-	if err := json.Unmarshal([]byte(jsonTransferOutHistory), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s doGetTransferHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
-		return operation.Error
-	} else if jsonResponse.Code != 200 {
-		operation.Error = fmt.Errorf("%s doGetTransferHistory Failed: %v", e.GetName(), jsonResponse)
-		return operation.Error
-	}
-	if err := json.Unmarshal(jsonResponse.Data, &transfer); err != nil {
-		operation.Error = fmt.Errorf("%s doGetTransferHistory Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return operation.Error
-	}
-
-	// store info into orders
-	operation.TransferOutHistory = []*exchange.TransferHistory{}
-	operation.TransferInHistory = []*exchange.TransferHistory{}
-	for _, tx := range transfer {
-		c := e.GetCoinBySymbol(tx.Currency)
-		record := &exchange.TransferHistory{
-			ID:        fmt.Sprintf("%v", tx.TransactID),
-			Coin:      c,
-			TimeStamp: tx.TransactTime,
-			StatusMsg: fmt.Sprintf("AccountID: %v", accountID),
+		jsonTransferOutHistory := e.ApiKeyRequest("GET", mapParams, strRequest)
+		if operation.DebugMode {
+			operation.RequestURI = strRequest
+			operation.CallResponce += jsonTransferOutHistory
 		}
 
-		switch tx.TransferType {
-		case "sub-transfer-in":
-			record.Type = exchange.TransferIn
-			record.Quantity = tx.TransactAmt
-			operation.TransferInHistory = append(operation.TransferInHistory, record)
-		case "sub-transfer-out":
-			record.Type = exchange.TransferOut
-			record.Quantity = -tx.TransactAmt
-			operation.TransferOutHistory = append(operation.TransferOutHistory, record)
-		default:
-			continue
+		if err := json.Unmarshal([]byte(jsonTransferOutHistory), &jsonResponse); err != nil {
+			operation.Error = fmt.Errorf("%s doGetTransferHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferOutHistory)
+			return operation.Error
+		} else if jsonResponse.Code != 200 {
+			operation.Error = fmt.Errorf("%s doGetTransferHistory Failed: %v", e.GetName(), jsonResponse)
+			return operation.Error
+		}
+		if err := json.Unmarshal(jsonResponse.Data, &transfer); err != nil {
+			operation.Error = fmt.Errorf("%s doGetTransferHistory Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+			return operation.Error
 		}
 
+		// store info into orders
+		for _, tx := range transfer {
+			c := e.GetCoinBySymbol(tx.Currency)
+			record := &exchange.TransferHistory{
+				ID:        fmt.Sprintf("%v", tx.TransactID),
+				Coin:      c,
+				TimeStamp: tx.TransactTime,
+				StatusMsg: fmt.Sprintf("AccountID: %v", accountID),
+			}
+
+			switch tx.TransferType {
+			case "sub-transfer-in":
+				record.Type = exchange.TransferIn
+				record.Quantity = tx.TransactAmt
+				operation.TransferInHistory = append(operation.TransferInHistory, record)
+			case "sub-transfer-out":
+				record.Type = exchange.TransferOut
+				record.Quantity = -tx.TransactAmt
+				operation.TransferOutHistory = append(operation.TransferOutHistory, record)
+			default:
+				continue
+			}
+
+		}
+
+		endTime = endTime.Add(-240 * time.Hour)
+		endTS = endTime.UnixNano() / int64(time.Millisecond)
 	}
 
 	return nil
