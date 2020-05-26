@@ -162,3 +162,13 @@ type TickerPrice []struct {
 	Timestamp      time.Time `json:"timestamp"`
 	QuoteVolume24H string    `json:"quote_volume_24h"`
 }
+
+type TransferHistory []struct {
+	Amount    string    `json:"amount"`
+	Balance   string    `json:"balance"`
+	Currency  string    `json:"currency"`
+	Fee       string    `json:"fee"`
+	LedgerID  string    `json:"ledger_id"`
+	Timestamp time.Time `json:"timestamp"`
+	Typename  string    `json:"typename"`
+}
