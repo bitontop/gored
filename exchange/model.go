@@ -294,6 +294,7 @@ type PublicOperation struct {
 	CoinChainType  []ChainType          `json:"chain_type"`
 	KlineInterval  string               `json:"kline_interval"`
 	KlineStartTime int64                `json:"kline_start_time"`
+	KlineEndTime   int64                `json:"kline_end_time"`
 	Kline          []*KlineDetail       `json:"kline"`
 	TickerPrice    []*TickerPriceDetail `json:"ticker_price"`
 

@@ -119,6 +119,9 @@ func (e *Binance) doSpotKline(operation *exchange.PublicOperation) error {
 	if operation.KlineStartTime != 0 {
 		get.URI += fmt.Sprintf("&startTime=%v", operation.KlineStartTime)
 	}
+	if operation.KlineEndTime != 0 {
+		get.URI += fmt.Sprintf("&endTime=%v", operation.KlineEndTime)
+	}
 
 	err := utils.HttpGetRequest(get)
 
