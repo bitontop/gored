@@ -307,6 +307,8 @@ func (e *Binance) doContractKline(operation *exchange.PublicOperation) error {
 		}
 
 		detail := &exchange.KlineDetail{
+			Exchange:            e.GetName(),
+			Pair:                operation.Pair.Name,
 			OpenTime:            k[0].(float64),
 			Open:                open,
 			High:                high,

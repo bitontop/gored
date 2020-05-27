@@ -364,7 +364,7 @@ type SubAccountInfo struct {
 }
 
 type KlineDetail struct {
-	ID                  string       `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
+	ID                  int          `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
 	Exchange            ExchangeName `json:"exchange"`
 	Pair                string       `json:"pair"`
 	OpenTime            float64      `json:"open_time"`

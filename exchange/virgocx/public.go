@@ -64,7 +64,6 @@ func (e *Virgocx) doKline(operation *exchange.PublicOperation) error {
 	operation.Kline = []*exchange.KlineDetail{}
 	for _, k := range rawKline {
 		detail := &exchange.KlineDetail{
-			ID:       fmt.Sprintf("%v", k.ID),
 			OpenTime: float64(k.CreateTime),
 			Open:     k.Open,
 			High:     k.High,
