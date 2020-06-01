@@ -260,18 +260,18 @@ func (e *Binance) doAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalance); err != nil {
-		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		operation.Error = fmt.Errorf("%s doAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
 	} else {
 		for _, balance := range accountBalance.Balances {
 			freeamount, err := strconv.ParseFloat(balance.Free, 64)
 			if err != nil {
-				operation.Error = fmt.Errorf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
+				operation.Error = fmt.Errorf("%s doAllBalance err: %+v %v", e.GetName(), balance, err)
 				return operation.Error
 			}
 			locked, err := strconv.ParseFloat(balance.Locked, 64)
 			if err != nil {
-				operation.Error = fmt.Errorf("%s UpdateAllBalances err: %+v %v", e.GetName(), balance, err)
+				operation.Error = fmt.Errorf("%s doAllBalance err: %+v %v", e.GetName(), balance, err)
 				return operation.Error
 			}
 

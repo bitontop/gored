@@ -3,6 +3,7 @@ package coinex
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -20,8 +21,73 @@ func (e *Coinex) LoadPublicData(operation *exchange.PublicOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSpotOrderBook(operation)
 		}
+
+	case exchange.GetTickerPrice:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doTickerPrice(operation)
+		}
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Coinex) doTickerPrice(operation *exchange.PublicOperation) error {
+	jsonResponse := &JsonResponse{}
+	tickerPrice := TickerPrice{}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/v1/market/ticker/all", API_URL),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonTickerPrice := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonTickerPrice), &jsonResponse); err != nil {
+		return fmt.Errorf("%s doTickerPrice Json Unmarshal Err: %s %s", e.GetName(), err, jsonTickerPrice)
+	} else if jsonResponse.Code != 0 {
+		return fmt.Errorf("%s doTickerPrice Failed: %s", e.GetName(), jsonTickerPrice)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &tickerPrice); err != nil {
+		return fmt.Errorf("%s doTickerPrice Result Unmarshal Err: %s %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	operation.TickerPrice = []*exchange.TickerPriceDetail{}
+	for symbol, tp := range tickerPrice.Ticker {
+		p := e.GetPairBySymbol(symbol)
+		price, err := strconv.ParseFloat(tp.Last, 64)
+		if err != nil {
+			log.Printf("%s doTickerPrice parse Err: %v %v", e.GetName(), err, tp.Last)
+			operation.Error = err
+			return err
+		}
+
+		if p == nil {
+			if operation.DebugMode {
+				log.Printf("doTickerPrice got nil pair for symbol: %v", symbol)
+			}
+			continue
+		} else if p.Name == "" {
+			continue
+		}
+
+		tpd := &exchange.TickerPriceDetail{
+			Pair:  p,
+			Price: price,
+		}
+
+		operation.TickerPrice = append(operation.TickerPrice, tpd)
+	}
+
+	return nil
 }
 
 func (e *Coinex) doSpotOrderBook(op *exchange.PublicOperation) error {
