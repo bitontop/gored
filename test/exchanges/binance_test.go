@@ -17,6 +17,7 @@ import (
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
 	e := InitEx(exchange.BINANCE)
+	// e := InitExFromJson(exchange.BINANCE)
 	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
@@ -166,6 +167,7 @@ func Test_Binance(t *testing.T) {
 	// 	Pair:           pair,
 	// 	KlineInterval:  "1m", // default to 5m if not provided
 	// 	KlineStartTime: 1530965420000,
+	// 	KlineEndTime:   1530966020000,
 	// 	DebugMode:      true,
 	// }
 	// err = e.LoadPublicData(opKline)

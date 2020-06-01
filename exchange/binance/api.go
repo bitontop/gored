@@ -52,11 +52,17 @@ Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Binance) GetCoinsData() error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		log.Printf("%s Get Coins API Key or Secret Key are nil. Using backupGetCoin", e.GetName())
+		return e.backupGetCoinsData()
+	}
+
 	coinsData := CoinsData{}
+	strUrl := "/sapi/v1/capital/config/getall"
 
-	strUrl := "https://www.binance.com/assetWithdraw/getAllAsset.html"
+	mapParams := make(map[string]string)
 
-	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
+	jsonCurrencyReturn := e.ApiKeyGet(mapParams, strUrl)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	}
@@ -65,45 +71,134 @@ func (e *Binance) GetCoinsData() error {
 		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			c = coin.GetCoin(data.AssetCode)
+			c = coin.GetCoin(data.Coin)
 			if c == nil {
 				c = &coin.Coin{}
-				c.Code = data.AssetCode
-				c.Name = data.AssetName
-				c.Website = data.URL
-				c.Explorer = data.BlockURL
+				c.Code = data.Coin
+				c.Name = data.Name
 				coin.AddCoin(c)
 			}
 		case exchange.JSON_FILE:
-			c = e.GetCoinBySymbol(data.AssetCode)
+			c = e.GetCoinBySymbol(data.Coin)
 		}
 
 		if c != nil {
-			confirmation, _ := strconv.Atoi(data.ConfirmTimes)
+			confirmation := DEFAULT_CONFIRMATION
+			txFee := DEFAULT_TXFEE
+			deposit, withdraw := DEFAULT_DEPOSIT, DEFAULT_WITHDRAW
+			for _, netWork := range data.NetworkList {
+				if netWork.IsDefault != true {
+					continue
+				}
+				confirmation = netWork.MinConfirm
+				tempTX, err := strconv.ParseFloat(netWork.WithdrawFee, 64)
+				if err == nil {
+					txFee = tempTX
+				}
+				deposit = netWork.DepositEnable
+				withdraw = netWork.WithdrawEnable
+			}
+
 			coinConstraint := e.GetCoinConstraint(c)
 			if coinConstraint == nil {
 				coinConstraint = &exchange.CoinConstraint{
 					CoinID:       c.ID,
 					Coin:         c,
-					ExSymbol:     data.AssetCode,
+					ExSymbol:     data.Coin,
 					ChainType:    exchange.MAINNET,
-					TxFee:        data.TransactionFee,
-					Withdraw:     data.EnableWithdraw,
-					Deposit:      data.EnableCharge,
+					TxFee:        txFee,
+					Withdraw:     withdraw,
+					Deposit:      deposit,
 					Confirmation: confirmation,
 					Listed:       true,
 				}
 			} else {
-				coinConstraint.ExSymbol = data.AssetCode
-				coinConstraint.TxFee = data.TransactionFee
-				coinConstraint.Withdraw = data.EnableWithdraw
-				coinConstraint.Deposit = data.EnableCharge
+				coinConstraint.ExSymbol = data.Coin
+				coinConstraint.TxFee = txFee
+				coinConstraint.Withdraw = withdraw
+				coinConstraint.Deposit = deposit
 				coinConstraint.Confirmation = confirmation
 			}
 
 			e.SetCoinConstraint(coinConstraint)
 		}
 	}
+	return nil
+}
+
+func (e *Binance) backupGetCoinsData() error {
+	pairsData := PairsData{}
+	strRequestUrl := "/api/v1/exchangeInfo"
+	strUrl := API_URL + strRequestUrl
+
+	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
+	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &pairsData); err != nil {
+		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
+	}
+
+	for _, data := range pairsData.Symbols {
+		base := &coin.Coin{}
+		target := &coin.Coin{}
+		switch e.Source {
+		case exchange.EXCHANGE_API:
+			base = coin.GetCoin(data.QuoteAsset)
+			if base == nil {
+				base = &coin.Coin{}
+				base.Code = data.QuoteAsset
+				coin.AddCoin(base)
+			}
+			target = coin.GetCoin(data.BaseAsset)
+			if target == nil {
+				target = &coin.Coin{}
+				target.Code = data.BaseAsset
+				coin.AddCoin(target)
+			}
+		case exchange.JSON_FILE:
+			base = e.GetCoinBySymbol(data.QuoteAsset)
+			target = e.GetCoinBySymbol(data.BaseAsset)
+		}
+
+		if base != nil {
+			coinConstraint := e.GetCoinConstraint(base)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       base.ID,
+					Coin:         base,
+					ExSymbol:     data.QuoteAsset,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.QuoteAsset
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+
+		if target != nil {
+			coinConstraint := e.GetCoinConstraint(target)
+			if coinConstraint == nil {
+				coinConstraint = &exchange.CoinConstraint{
+					CoinID:       target.ID,
+					Coin:         target,
+					ExSymbol:     data.BaseAsset,
+					ChainType:    exchange.MAINNET,
+					TxFee:        DEFAULT_TXFEE,
+					Withdraw:     DEFAULT_WITHDRAW,
+					Deposit:      DEFAULT_DEPOSIT,
+					Confirmation: DEFAULT_CONFIRMATION,
+					Listed:       true,
+				}
+			} else {
+				coinConstraint.ExSymbol = data.BaseAsset
+			}
+			e.SetCoinConstraint(coinConstraint)
+		}
+	}
+
 	return nil
 }
 
