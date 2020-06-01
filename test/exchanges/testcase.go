@@ -237,9 +237,10 @@ func Test_DoTransfer(e exchange.Exchange, c *coin.Coin, amount string, from, to 
 
 func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.WalletType) {
 	opBalance := &exchange.AccountOperation{
-		Type:   exchange.Balance,
-		Coin:   c,
-		Wallet: balanceType,
+		Type:      exchange.Balance,
+		Coin:      c,
+		Wallet:    balanceType,
+		DebugMode: true,
 	}
 	err := e.DoAccountOperation(opBalance)
 	if err != nil {
@@ -251,8 +252,9 @@ func Test_CheckBalance(e exchange.Exchange, c *coin.Coin, balanceType exchange.W
 
 func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) {
 	opAllBalance := &exchange.AccountOperation{
-		Type:   exchange.BalanceList,
-		Wallet: balanceType,
+		Type:      exchange.BalanceList,
+		Wallet:    balanceType,
+		DebugMode: true,
 	}
 	err := e.DoAccountOperation(opAllBalance)
 	if err != nil {
@@ -269,9 +271,10 @@ func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) 
 
 func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 	opTradeHistory := &exchange.PublicOperation{
-		Type: exchange.TradeHistory,
-		EX:   e.GetName(),
-		Pair: pair,
+		Type:      exchange.TradeHistory,
+		EX:        e.GetName(),
+		Pair:      pair,
+		DebugMode: true,
 	}
 	err := e.LoadPublicData(opTradeHistory)
 	if err != nil {
@@ -285,10 +288,11 @@ func Test_TradeHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_NewOrderBook(e exchange.Exchange, pair *pair.Pair) {
 	opOrderBook := &exchange.PublicOperation{
-		Type:   exchange.Orderbook,
-		Wallet: exchange.SpotWallet,
-		EX:     e.GetName(),
-		Pair:   pair,
+		Type:      exchange.Orderbook,
+		Wallet:    exchange.SpotWallet,
+		EX:        e.GetName(),
+		Pair:      pair,
+		DebugMode: true,
 	}
 	err := e.LoadPublicData(opOrderBook)
 	if err != nil {
@@ -318,9 +322,10 @@ func Test_CoinChainType(e exchange.Exchange, coin *coin.Coin) {
 
 func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
 	opTradeHistory := &exchange.PublicOperation{
-		Type: exchange.Orderbook,
-		EX:   e.GetName(),
-		Pair: pair,
+		Type:      exchange.Orderbook,
+		EX:        e.GetName(),
+		Pair:      pair,
+		DebugMode: true,
 	}
 	err := e.LoadPublicData(opTradeHistory)
 	if err != nil {
@@ -332,11 +337,12 @@ func Test_DoOrderbook(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:   exchange.GetOpenOrder,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
-		Coin:   pair.Base,
-		Pair:   pair,
+		Type:      exchange.GetOpenOrder,
+		Wallet:    exchange.SpotWallet,
+		Ex:        e.GetName(),
+		Coin:      pair.Base,
+		Pair:      pair,
+		DebugMode: true,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -350,11 +356,12 @@ func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:   exchange.GetOrderHistory,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
-		Coin:   pair.Base,
-		Pair:   pair,
+		Type:      exchange.GetOrderHistory,
+		Wallet:    exchange.SpotWallet,
+		Ex:        e.GetName(),
+		Coin:      pair.Base,
+		Pair:      pair,
+		DebugMode: true,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -369,10 +376,11 @@ func Test_AOOrderHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
 	op := &exchange.AccountOperation{
-		Type:   exchange.GetDepositAddress,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
-		Coin:   coin,
+		Type:      exchange.GetDepositAddress,
+		Wallet:    exchange.SpotWallet,
+		Ex:        e.GetName(),
+		Coin:      coin,
+		DebugMode: true,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
@@ -386,16 +394,20 @@ func Test_AODepositAddress(e exchange.Exchange, coin *coin.Coin) {
 
 func Test_AODepositHistory(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:   exchange.GetDepositHistory,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
-		Coin:   pair.Base,
-		Pair:   pair,
+		Type:      exchange.GetDepositHistory,
+		Wallet:    exchange.SpotWallet,
+		Ex:        e.GetName(),
+		Coin:      pair.Base,
+		Pair:      pair,
+		DebugMode: true,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
+		if len(op.DepositHistory) == 0 {
+			log.Printf("%s DepositHistory Response: %v", e.GetName(), op.CallResponce)
+		}
 		for i, his := range op.DepositHistory {
 			log.Printf("%s DepositHistory: %v %+v", e.GetName(), i, his)
 		}
@@ -404,16 +416,20 @@ func Test_AODepositHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 	op := &exchange.AccountOperation{
-		Type:   exchange.GetWithdrawalHistory,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
-		Coin:   pair.Base,
-		Pair:   pair,
+		Type:      exchange.GetWithdrawalHistory,
+		Wallet:    exchange.SpotWallet,
+		Ex:        e.GetName(),
+		Coin:      pair.Base,
+		Pair:      pair,
+		DebugMode: true,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
+		if len(op.WithdrawalHistory) == 0 {
+			log.Printf("%s DepositHistory Response: %v", e.GetName(), op.CallResponce)
+		}
 		for i, his := range op.WithdrawalHistory {
 			log.Printf("%s WithdrawalHistory: %v %+v", e.GetName(), i, his)
 		}
@@ -422,14 +438,18 @@ func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOTransferHistory(e exchange.Exchange) {
 	op := &exchange.AccountOperation{
-		Type:   exchange.GetTransferHistory,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
+		Type:      exchange.GetTransferHistory,
+		Wallet:    exchange.SpotWallet,
+		Ex:        e.GetName(),
+		DebugMode: true,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
+		if len(op.TransferInHistory)+len(op.TransferOutHistory) == 0 {
+			log.Printf("%s TransferInHistory Response: %v", e.GetName(), op.CallResponce)
+		}
 		for i, tIn := range op.TransferInHistory {
 			log.Printf("%s TransferInHistory: %v %+v", e.GetName(), i, tIn)
 		}
