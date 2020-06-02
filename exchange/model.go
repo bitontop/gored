@@ -254,6 +254,7 @@ type AccountOperation struct {
 	SubAccountList []*SubAccountInfo
 
 	// #Sub Account Transfer History
+	SubUserName        string // coinex only
 	TransferInHistory  []*TransferHistory
 	TransferOutHistory []*TransferHistory
 

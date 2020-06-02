@@ -46,6 +46,7 @@ func Test_Coinex(t *testing.T) {
 	Test_AOOpenOrder(e, pair)
 	Test_AOWithdrawalHistory(e, pair)
 	Test_AODepositHistory(e, pair)
+	Test_AOTransferHistory(e)
 
 	// SubBalances(e, "test_sub2")
 	// SubAllBalances(e)

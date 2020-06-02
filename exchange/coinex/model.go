@@ -155,3 +155,19 @@ type DepositHistory []struct {
 	TxID                string `json:"tx_id"`
 	TxIDDisplay         string `json:"tx_id_display"`
 }
+
+type TransferHistory struct {
+	CurrPage int `json:"curr_page"`
+	Data     []struct {
+		Time         int64  `json:"time"`
+		Amount       string `json:"amount"`
+		CoinType     string `json:"coin_type"`
+		TransferFrom string `json:"transfer_from"`
+		TransferTo   string `json:"transfer_to"`
+		Status       string `json:"status"`
+	} `json:"data"`
+	HasNext   bool `json:"has_next"`
+	PerPage   int  `json:"per_page"`
+	Total     int  `json:"total"`
+	TotalPage int  `json:"total_page"`
+}

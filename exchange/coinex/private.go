@@ -46,13 +46,76 @@ func (e *Coinex) DoAccountOperation(operation *exchange.AccountOperation) error 
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositHistory(operation)
 		}
-		// case exchange.GetTransferHistory:
-		// 	if operation.Wallet == exchange.SpotWallet {
-		// 		return e.doGetTransferHistory(operation)
-		// 	}
+	case exchange.GetTransferHistory:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetTransferHistory(operation)
+		}
 
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Coinex) doGetTransferHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	jsonResponse := JsonResponse{}
+	transfer := TransferHistory{}
+	strRequest := "/v1/sub_account/transfer/history"
+
+	subUserName := operation.SubUserName
+
+	mapParams := make(map[string]string)
+	mapParams["access_id"] = e.API_KEY
+	mapParams["sub_user_name"] = subUserName
+
+	jsonTransferHistory := e.ApiKeyRequest("GET", strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferHistory), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetTransferHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferHistory)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s doGetTransferHistory failed: %v", e.GetName(), jsonTransferHistory)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &transfer); err != nil {
+		operation.Error = fmt.Errorf("%s doGetTransferHistory Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+	for _, tx := range transfer.Data {
+		c := e.GetCoinBySymbol(tx.CoinType)
+		quantity, err := strconv.ParseFloat(tx.Amount, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doGetTransferHistory parse quantity Err: %v, %v", e.GetName(), err, tx.Amount)
+			return operation.Error
+		}
+
+		record := &exchange.TransferHistory{
+			Coin:      c,
+			Quantity:  quantity,
+			TimeStamp: tx.Time,
+			StatusMsg: tx.Status,
+		}
+
+		if tx.TransferTo == subUserName {
+			record.Type = exchange.TransferIn
+			operation.TransferInHistory = append(operation.TransferInHistory, record)
+		} else if tx.TransferFrom == subUserName {
+			record.Type = exchange.TransferOut
+			operation.TransferOutHistory = append(operation.TransferOutHistory, record)
+		}
+	}
+
+	return nil
 }
 
 func (e *Coinex) doGetWithdrawalHistory(operation *exchange.AccountOperation) error {

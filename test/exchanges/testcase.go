@@ -438,10 +438,11 @@ func Test_AOWithdrawalHistory(e exchange.Exchange, pair *pair.Pair) {
 
 func Test_AOTransferHistory(e exchange.Exchange) {
 	op := &exchange.AccountOperation{
-		Type:      exchange.GetTransferHistory,
-		Wallet:    exchange.SpotWallet,
-		Ex:        e.GetName(),
-		DebugMode: true,
+		Type:        exchange.GetTransferHistory,
+		Wallet:      exchange.SpotWallet,
+		SubUserName: "sub1", // coinex only
+		Ex:          e.GetName(),
+		DebugMode:   true,
 	}
 
 	if err := e.DoAccountOperation(op); err != nil {
