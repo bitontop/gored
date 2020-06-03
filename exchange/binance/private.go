@@ -334,7 +334,7 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 		}
 
 		order := &exchange.Order{
-			Pair:         operation.Pair,
+			Pair:         e.GetPairBySymbol(o.Symbol),
 			OrderID:      fmt.Sprintf("%v", o.OrderID),
 			Rate:         rate,
 			Quantity:     quantity,

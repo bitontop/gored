@@ -502,7 +502,7 @@ func (e *Huobi) getOpenOrder(op *exchange.AccountOperation) error {
 	result := []*exchange.Order{}
 	for _, data := range openOrders {
 		order := &exchange.Order{
-			Pair:      op.Pair,
+			Pair:      e.GetPairBySymbol(data.Symbol),
 			OrderID:   fmt.Sprintf("%d", data.ID),
 			Timestamp: data.CreatedAt,
 		}
