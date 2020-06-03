@@ -351,6 +351,9 @@ func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 		for _, o := range op.OpenOrders {
 			log.Printf("%s OpenOrders %+v", e.GetName(), o)
 		}
+		if len(op.OpenOrders) == 0 {
+			log.Printf("%s OpenOrder Response: %v", e.GetName(), op.CallResponce)
+		}
 	}
 }
 

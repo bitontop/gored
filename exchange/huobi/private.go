@@ -479,7 +479,7 @@ func (e *Huobi) getOpenOrder(op *exchange.AccountOperation) error {
 
 	mapParams := make(map[string]string)
 	mapParams["account-id"] = e.Account_ID
-	mapParams["symbol"] = e.GetSymbolByPair(op.Pair)
+	// mapParams["symbol"] = e.GetSymbolByPair(op.Pair)
 
 	jsonOrders := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if op.DebugMode {

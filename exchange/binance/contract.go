@@ -20,7 +20,7 @@ func (e *Binance) doContractGetOpenOrder(operation *exchange.AccountOperation) e
 	strRequest := "/fapi/v1/openOrders"
 
 	mapParams := make(map[string]string)
-	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+	// mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 
 	jsonGetOpenOrder := e.ContractApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
