@@ -18,8 +18,7 @@ import (
 	"github.com/bitontop/gored/exchange"
 	"github.com/bitontop/gored/pair"
 	"github.com/bitontop/gored/utils"
-
-	"github.com/tendermint/tendermint/crypto/secp256k1"
+	// "github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
 type BinanceDex struct {
@@ -27,8 +26,8 @@ type BinanceDex struct {
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
 
-	API_KEY    []byte
-	API_SECRET secp256k1.PrivKeySecp256k1
+	API_KEY    [32]byte
+	API_SECRET [32]byte // secp256k1.PrivKeySecp256k1 // gored CI error here
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -78,8 +77,8 @@ func (e *BinanceDex) recoveryFromPrivateKey(privateKey string) error {
 
 	var keyBytesArray [32]byte
 	copy(keyBytesArray[:], priBytes[:32])
-	e.API_SECRET = secp256k1.PrivKeySecp256k1(keyBytesArray)
-	e.API_KEY = e.API_SECRET.PubKey().Address()
+	e.API_SECRET = keyBytesArray // secp256k1.PrivKeySecp256k1(keyBytesArray)
+	e.API_KEY = keyBytesArray    // e.API_SECRET.PubKey().Address()
 	return nil
 }
 
