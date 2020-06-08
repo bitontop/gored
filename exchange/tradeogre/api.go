@@ -99,7 +99,7 @@ func (e *Tradeogre) GetCoinsData() error {
 						Listed:       DEFAULT_LISTED,
 					}
 				} else {
-					coinConstraint.ExSymbol = coinStrs[1]
+					coinConstraint.ExSymbol = coinStrs[0]
 				}
 				e.SetCoinConstraint(coinConstraint)
 			}
