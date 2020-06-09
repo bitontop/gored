@@ -71,6 +71,17 @@ func GetCoin(code string) *Coin {
 	return nil
 }
 
+func ExistID(id int) bool {
+	if tmp, ok := coinMap.Get(fmt.Sprintf("%d", id)); ok {
+		c := tmp.(*Coin)
+		if c.Code != "" {
+			// log.Printf("Exist id, coin: %+v", c)
+			return true
+		}
+	}
+	return false
+}
+
 func GetCoins() []*Coin {
 	coins := []*Coin{}
 	keySort := []int{}
@@ -88,6 +99,8 @@ func GetCoins() []*Coin {
 func AddCoin(coin *Coin) error {
 	if coin != nil && coin.Code != "" {
 		if coin.ID == 0 {
+			coin.ID = GenerateCoinID()
+		} else if ExistID(coin.ID) {
 			coin.ID = GenerateCoinID()
 		}
 		coin.Code = strings.ToUpper(coin.Code)
