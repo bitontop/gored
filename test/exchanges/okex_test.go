@@ -43,9 +43,11 @@ func Test_Okex(t *testing.T) {
 	// =====================================================================
 	// TransferHistory
 	opCTransferHistory := &exchange.AccountOperation{
-		Type:      exchange.GetTransferHistory,
-		Wallet:    exchange.SpotWallet,
-		Ex:        e.GetName(),
+		Type:   exchange.GetTransferHistory,
+		Wallet: exchange.SpotWallet,
+		Ex:     e.GetName(),
+		// TransferStartTime: 123456,
+		// TransferEndTime:   234567,
 		DebugMode: true,
 	}
 
@@ -58,7 +60,7 @@ func Test_Okex(t *testing.T) {
 		for _, o := range opCTransferHistory.TransferOutHistory {
 			log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
 		}
-		log.Printf("Contract TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
+		log.Printf("Spot TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
 	}
 	// =====================================================================
 

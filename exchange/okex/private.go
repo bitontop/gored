@@ -44,6 +44,10 @@ func (e *Okex) doGetTransferHistory(operation *exchange.AccountOperation) error 
 	transfer := TransferHistory{}
 	strRequest := "/api/account/v3/ledger"
 
+	// 	//============
+	// strRequest = "/api/account/v3/deposit/history"
+	// 	// ==============
+
 	mapParams := make(map[string]interface{})
 	if operation.TransferStartTime != 0 {
 		mapParams["after"] = operation.TransferStartTime
@@ -52,7 +56,7 @@ func (e *Okex) doGetTransferHistory(operation *exchange.AccountOperation) error 
 		mapParams["before"] = operation.TransferEndTime
 	}
 
-	jsonTransferOutHistory := e.ApiKeyRequest("GET", nil, strRequest)
+	jsonTransferOutHistory := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonTransferOutHistory

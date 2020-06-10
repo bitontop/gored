@@ -503,10 +503,18 @@ func (e *Okex) ApiKeyRequest(method string, mapParams map[string]interface{}, st
 
 	var strMessage string
 	if method == "GET" {
+		if len(mapParams) > 0 {
+			strRequestPath += "?" + exchange.Map2UrlQueryInterface(mapParams)
+		}
 		strMessage = TimeStamp + method + strRequestPath
+		if len(mapParams) > 0 {
+			strMessage += jsonParams
+		}
 	} else {
 		strMessage = TimeStamp + method + strRequestPath + jsonParams
 	}
+
+	// log.Printf("===================strMessage: %v", strMessage)
 
 	signature := exchange.ComputeHmac256Base64(strMessage, e.API_SECRET)
 	strUrl := API_URL + strRequestPath
