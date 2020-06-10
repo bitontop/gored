@@ -69,6 +69,7 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
+// get past 30 days data
 func (e *Huobi) doGetTransferHistory(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
