@@ -223,6 +223,7 @@ type AccountOperation struct {
 	TransferDestination WalletType `json:"transfer_dest"`
 	TransferAmount      string     `json:"transfer_amount"`
 	TransferStartTime   int64      `json:"transfer_start_time"`
+	TransferEndTime     int64      `json:"transfer_end_time"`
 
 	// #Withdraw
 	WithdrawAddress string `json:"withdraw_address"`
