@@ -35,6 +35,7 @@ type CoinsData []struct {
 		WithdrawQuotaTotal     string `json:"withdrawQuotaTotal"`
 		WithdrawFeeType        string `json:"withdrawFeeType"`
 		TransactFeeWithdraw    string `json:"transactFeeWithdraw"`
+		MinTransactFeeWithdraw string `json:"minTransactFeeWithdraw"`
 	} `json:"chains"`
 	InstStatus string `json:"instStatus"`
 }
