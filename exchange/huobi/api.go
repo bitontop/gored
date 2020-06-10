@@ -95,7 +95,12 @@ func (e *Huobi) GetCoinsData() error {
 			txFee := DEFAULT_TXFEE
 			if len(data.Chains) > 0 {
 				fee, err := strconv.ParseFloat(data.Chains[0].TransactFeeWithdraw, 64)
-				if err != nil {
+				if err != nil && data.Chains[0].MinTransactFeeWithdraw != "" {
+					fee, err = strconv.ParseFloat(data.Chains[0].MinTransactFeeWithdraw, 64)
+					if err != nil {
+						log.Printf("%s Get Coins parse min txFee err: %v, %v\n%v json: %+v", e.GetName(), err, data.Chains[0].MinTransactFeeWithdraw, data.Currency, data.Chains)
+					}
+				} else if err != nil {
 					log.Printf("%s Get Coins parse txFee err: %v, %v\n%v json: %+v", e.GetName(), err, data.Chains[0].TransactFeeWithdraw, data.Currency, data.Chains)
 				} else {
 					txFee = fee
