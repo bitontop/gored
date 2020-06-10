@@ -35,6 +35,7 @@ func (e *Okex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
+// only 1 month data
 func (e *Okex) doGetTransferHistory(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
