@@ -496,7 +496,7 @@ func (e *Okex) ApiKeyRequest(method string, mapParams map[string]interface{}, st
 
 	jsonParams := ""
 	var bytesParams []byte
-	if mapParams != nil {
+	if len(mapParams) != 0 {
 		bytesParams, _ = json.Marshal(mapParams)
 		jsonParams = string(bytesParams)
 	}
