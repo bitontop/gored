@@ -1,7 +1,6 @@
 package test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/bitontop/gored/exchange"
@@ -40,28 +39,30 @@ func Test_Okex(t *testing.T) {
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
+	Test_AOOpenOrder(e, pair)
+
 	// =====================================================================
 	// TransferHistory
-	opCTransferHistory := &exchange.AccountOperation{
-		Type:   exchange.GetTransferHistory,
-		Wallet: exchange.SpotWallet,
-		Ex:     e.GetName(),
-		// TransferStartTime: 123456,
-		// TransferEndTime:   234567,
-		DebugMode: true,
-	}
+	// opCTransferHistory := &exchange.AccountOperation{
+	// 	Type:   exchange.GetTransferHistory,
+	// 	Wallet: exchange.SpotWallet,
+	// 	Ex:     e.GetName(),
+	// 	// TransferStartTime: 123456,
+	// 	// TransferEndTime:   234567,
+	// 	DebugMode: true,
+	// }
 
-	if err := e.DoAccountOperation(opCTransferHistory); err != nil {
-		log.Printf("%+v", err)
-	} else {
-		for _, o := range opCTransferHistory.TransferInHistory {
-			log.Printf("%s TransferInHistory %+v", e.GetName(), o)
-		}
-		for _, o := range opCTransferHistory.TransferOutHistory {
-			log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
-		}
-		log.Printf("Spot TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
-	}
+	// if err := e.DoAccountOperation(opCTransferHistory); err != nil {
+	// 	log.Printf("%+v", err)
+	// } else {
+	// 	for _, o := range opCTransferHistory.TransferInHistory {
+	// 		log.Printf("%s TransferInHistory %+v", e.GetName(), o)
+	// 	}
+	// 	for _, o := range opCTransferHistory.TransferOutHistory {
+	// 		log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
+	// 	}
+	// 	log.Printf("Spot TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
+	// }
 	// =====================================================================
 
 	// Test_TradeHistory(e, pair)
