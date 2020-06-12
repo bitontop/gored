@@ -31,8 +31,81 @@ func (e *Okex) DoAccountOperation(operation *exchange.AccountOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetTransferHistory(operation)
 		}
+	case exchange.GetOpenOrder:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.getOpenOrder(operation)
+		}
+
 	}
+
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Okex) getOpenOrder(op *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	openOrders := OpenOrders{}
+	strRequest := "/api/spot/v3/orders_pending"
+
+	mapParams := make(map[string]interface{})
+	// mapParams["instrument_id"] = e.GetSymbolByPair(op.Pair)
+
+	jsonOrders := e.ApiKeyRequest("GET", mapParams, strRequest)
+	if op.DebugMode {
+		op.RequestURI = strRequest
+		op.CallResponce = jsonOrders
+	}
+
+	if err := json.Unmarshal([]byte(jsonOrders), &openOrders); err != nil {
+		op.Error = fmt.Errorf("%s Get OpenOrders Json Unmarshal Err: %v, %s", e.GetName(), err, jsonOrders)
+		return op.Error
+	}
+
+	result := []*exchange.Order{}
+	for _, data := range openOrders {
+		order := &exchange.Order{
+			Pair:      e.GetPairBySymbol(data.InstrumentID),
+			OrderID:   data.OrderID,
+			Timestamp: data.Timestamp.UnixNano(),
+		}
+
+		switch data.Side {
+		case "buy":
+			order.Direction = exchange.Buy
+		case "sell":
+			order.Direction = exchange.Sell
+		}
+
+		order.Quantity, _ = strconv.ParseFloat(data.Size, 64)
+		order.Rate, _ = strconv.ParseFloat(data.Price, 64)
+
+		order.DealRate = order.Rate
+		order.DealQuantity = 0.0
+
+		dealQ, _ := strconv.ParseFloat(data.FilledSize, 64)
+		dealTotal, _ := strconv.ParseFloat(data.FilledNotional, 64)
+		if dealQ > 0 {
+			order.DealQuantity = dealQ
+		}
+		if dealTotal > 0 && dealQ > 0 {
+			order.DealRate = dealTotal / dealQ
+		}
+
+		if data.State == "0" && order.DealQuantity == 0 {
+			order.Status = exchange.New
+		} else if data.State == "0" && order.DealQuantity < order.Quantity {
+			order.Status = exchange.Partial
+		} else {
+			order.Status = exchange.Other
+		}
+
+		result = append(result, order)
+	}
+	op.OpenOrders = result
+
+	return nil
 }
 
 // only 1 month data

@@ -349,7 +349,7 @@ func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 		log.Printf("%+v", err)
 	} else {
 		for _, o := range op.OpenOrders {
-			log.Printf("%s OpenOrders %+v", e.GetName(), o)
+			log.Printf("%s OpenOrders: %v %+v", e.GetName(), o.Pair.Name, o)
 		}
 		if len(op.OpenOrders) == 0 {
 			log.Printf("%s OpenOrder Response: %v", e.GetName(), op.CallResponce)
@@ -561,7 +561,7 @@ func Test_Constraint(e exchange.Exchange, p *pair.Pair) {
 	targerConstraint := e.GetCoinConstraint(p.Target)
 	pairConstrinat := e.GetPairConstraint(p)
 
-	log.Printf("%s %s Coin Constraint: %+v", e.GetName(), p.Base.Code, baseConstraint)
-	log.Printf("%s %s Coin Constraint: %+v", e.GetName(), p.Target.Code, targerConstraint)
+	log.Printf("%s %s Coin Constraint: %+v, %v", e.GetName(), p.Base.Code, baseConstraint, baseConstraint.Coin)
+	log.Printf("%s %s Coin Constraint: %+v, %v", e.GetName(), p.Target.Code, targerConstraint, targerConstraint.Coin)
 	log.Printf("%s %s Pair Constraint: %+v", e.GetName(), p.Name, pairConstrinat)
 }

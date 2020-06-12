@@ -172,3 +172,24 @@ type TransferHistory []struct {
 	Timestamp time.Time `json:"timestamp"`
 	Typename  string    `json:"typename"`
 }
+
+type OpenOrders []struct {
+	ClientOid      string    `json:"client_oid"`
+	CreatedAt      time.Time `json:"created_at"`
+	FilledNotional string    `json:"filled_notional"`
+	FilledSize     string    `json:"filled_size"`
+	Funds          string    `json:"funds"`
+	InstrumentID   string    `json:"instrument_id"`
+	Notional       string    `json:"notional"`
+	OrderID        string    `json:"order_id"`
+	OrderType      string    `json:"order_type"`
+	Price          string    `json:"price"`
+	PriceAvg       string    `json:"price_avg"`
+	ProductID      string    `json:"product_id"`
+	Side           string    `json:"side"`
+	Size           string    `json:"size"`
+	Status         string    `json:"status"`
+	State          string    `json:"state"`
+	Timestamp      time.Time `json:"timestamp"`
+	Type           string    `json:"type"`
+}
