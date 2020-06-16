@@ -108,12 +108,22 @@ func (e *Huobidm) GetCoinsData() error {
 	// add USD
 	c := &coin.Coin{}
 	if e.Source == exchange.EXCHANGE_API {
-		c = &coin.Coin{
-			ID:   311,
-			Code: "USD",
-			Name: "US Dollar",
+		c = coin.GetCoin("USD")
+		if c == nil {
+			c = &coin.Coin{
+				Code: "USD",
+				Name: "US Dollar",
+			}
+			coin.AddCoin(c)
 		}
-		coin.AddCoin(c)
+	} else {
+		c = e.GetCoinBySymbol("usd")
+		if c == nil {
+			c = &coin.Coin{
+				ID:   308,
+				Code: "USD",
+			}
+		}
 	}
 	coinConstraint := &exchange.CoinConstraint{
 		CoinID:       c.ID,
