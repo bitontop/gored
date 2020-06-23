@@ -21,7 +21,11 @@ func (e *Coinex) LoadPublicData(operation *exchange.PublicOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSpotOrderBook(operation)
 		}
-
+	case exchange.KLine:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doSpotKline(operation)
+		}
 	case exchange.GetTickerPrice:
 		switch operation.Wallet {
 		case exchange.SpotWallet:
@@ -29,6 +33,98 @@ func (e *Coinex) LoadPublicData(operation *exchange.PublicOperation) error {
 		}
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+// interval options: 1min, 3min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 12hour, 1day, 3day, 1week
+func (e *Coinex) doSpotKline(operation *exchange.PublicOperation) error {
+	interval := "5min"
+	if operation.KlineInterval != "" {
+		interval = operation.KlineInterval
+	}
+
+	get := &utils.HttpGet{
+		URI: fmt.Sprintf("https://api.coinex.com/v1/market/kline?market=%v&type=%v&limit=1000", // ETHBTC
+			e.GetSymbolByPair(operation.Pair), // BTCUSDT
+			interval,
+		),
+		Proxy: operation.Proxy,
+	}
+
+	err := utils.HttpGetRequest(get)
+
+	if err != nil {
+		log.Printf("%+v", err)
+		operation.Error = err
+		return err
+
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonKLine := get.ResponseBody
+	jsonResponse := &JsonResponse{}
+	var rawKline [][]interface{}
+
+	if err := json.Unmarshal([]byte(jsonKLine), &jsonResponse); err != nil {
+		return fmt.Errorf("%s doSpotKline Json Unmarshal Err: %s %s", e.GetName(), err, jsonKLine)
+	} else if jsonResponse.Code != 0 {
+		return fmt.Errorf("%s doSpotKline Failed: %s", e.GetName(), jsonKLine)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &rawKline); err != nil {
+		return fmt.Errorf("%s doSpotKline Result Unmarshal Err: %s %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	operation.Kline = []*exchange.KlineDetail{}
+	for _, k := range rawKline {
+		open, err := strconv.ParseFloat(k[1].(string), 64)
+		if err != nil {
+			log.Printf("%s open parse Err: %v %v", e.GetName(), err, k[1])
+			operation.Error = err
+			return err
+		}
+		close, err := strconv.ParseFloat(k[2].(string), 64)
+		if err != nil {
+			log.Printf("%s high parse Err: %v %v", e.GetName(), err, k[2])
+			operation.Error = err
+			return err
+		}
+		high, err := strconv.ParseFloat(k[3].(string), 64)
+		if err != nil {
+			log.Printf("%s low parse Err: %v %v", e.GetName(), err, k[3])
+			operation.Error = err
+			return err
+		}
+		low, err := strconv.ParseFloat(k[4].(string), 64)
+		if err != nil {
+			log.Printf("%s close parse Err: %v %v", e.GetName(), err, k[4])
+			operation.Error = err
+			return err
+		}
+		volume, err := strconv.ParseFloat(k[5].(string), 64)
+		if err != nil {
+			log.Printf("%s volume parse Err: %v %v", e.GetName(), err, k[5])
+			operation.Error = err
+			return err
+		}
+
+		detail := &exchange.KlineDetail{
+			Exchange: e.GetName(),
+			Pair:     operation.Pair.Name,
+			OpenTime: k[0].(float64),
+			Open:     open,
+			High:     high,
+			Low:      low,
+			Close:    close,
+			Volume:   volume,
+		}
+
+		operation.Kline = append(operation.Kline, detail)
+	}
+
+	return nil
 }
 
 func (e *Coinex) doTickerPrice(operation *exchange.PublicOperation) error {

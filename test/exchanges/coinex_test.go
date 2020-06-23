@@ -1,6 +1,7 @@
 package test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/bitontop/gored/exchange"
@@ -43,14 +44,36 @@ func Test_Coinex(t *testing.T) {
 	// Test_DoTransfer(e, pair.Target, "1", exchange.AssetWallet, exchange.SpotWallet)
 	// Test_DoWithdraw(e, pair.Target, "1", "0x37E0Fc27C6cDB5035B2a3d0682B4E7C05A4e6C46", "tag")
 
-	Test_AOOpenOrder(e, pair)
-	Test_AOWithdrawalHistory(e, pair)
-	Test_AODepositHistory(e, pair)
-	Test_AOTransferHistory(e)
+	// Test_AOOpenOrder(e, pair)
+	// Test_AOWithdrawalHistory(e, pair)
+	// Test_AODepositHistory(e, pair)
+	// Test_AOTransferHistory(e)
 
 	// SubBalances(e, "test_sub2")
 	// SubAllBalances(e)
 
 	// Test_TradeHistory(e, pair)
 	// Test_CoinChainType(e, pair.Base)
+
+	// ==============================================
+
+	// spot Kline
+	// interval options: 1min, 3min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 12hour, 1day, 3day, 1week
+	opKline := &exchange.PublicOperation{
+		Wallet:        exchange.SpotWallet,
+		Type:          exchange.KLine,
+		EX:            e.GetName(),
+		Pair:          pair,
+		KlineInterval: "1min", // default to 5min if not provided
+		DebugMode:     true,
+	}
+	err := e.LoadPublicData(opKline)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	for _, k := range opKline.Kline {
+		log.Printf("%s SpotKline %+v", e.GetName(), k)
+	}
+	// ==============================================
 }
