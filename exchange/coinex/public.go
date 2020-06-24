@@ -87,19 +87,19 @@ func (e *Coinex) doSpotKline(operation *exchange.PublicOperation) error {
 		}
 		close, err := strconv.ParseFloat(k[2].(string), 64)
 		if err != nil {
-			log.Printf("%s high parse Err: %v %v", e.GetName(), err, k[2])
+			log.Printf("%s close parse Err: %v %v", e.GetName(), err, k[2])
 			operation.Error = err
 			return err
 		}
 		high, err := strconv.ParseFloat(k[3].(string), 64)
 		if err != nil {
-			log.Printf("%s low parse Err: %v %v", e.GetName(), err, k[3])
+			log.Printf("%s high parse Err: %v %v", e.GetName(), err, k[3])
 			operation.Error = err
 			return err
 		}
 		low, err := strconv.ParseFloat(k[4].(string), 64)
 		if err != nil {
-			log.Printf("%s close parse Err: %v %v", e.GetName(), err, k[4])
+			log.Printf("%s low parse Err: %v %v", e.GetName(), err, k[4])
 			operation.Error = err
 			return err
 		}

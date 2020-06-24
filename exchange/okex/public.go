@@ -20,6 +20,11 @@ func (e *Okex) LoadPublicData(operation *exchange.PublicOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSpotOrderBook(operation)
 		}
+	case exchange.KLine:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doSpotKline(operation)
+		}
 	case exchange.GetTickerPrice:
 		switch operation.Wallet {
 		case exchange.SpotWallet:
@@ -28,6 +33,112 @@ func (e *Okex) LoadPublicData(operation *exchange.PublicOperation) error {
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+// interval options: 60/180/300/900/1800/3600/7200/14400/21600/43200/86400/604800
+func (e *Okex) doSpotKline(operation *exchange.PublicOperation) error {
+	interval := "300"
+	if operation.KlineInterval != "" {
+		interval = operation.KlineInterval
+	}
+
+	get := &utils.HttpGet{
+		URI: fmt.Sprintf("https://www.okex.com/api/spot/v3/instruments/%v/candles?granularity=%v", // ETHBTC
+			e.GetSymbolByPair(operation.Pair), // BTCUSDT
+			interval,
+		),
+		Proxy: operation.Proxy,
+	}
+
+	//TODO 13ts to time
+	startTime := time.Unix(operation.KlineStartTime/1000, 0)
+	endTime := time.Unix(operation.KlineEndTime/1000, 0)
+	start := startTime.UTC().Format("2006-01-02T15:04:05.000Z")
+	end := endTime.UTC().Format("2006-01-02T15:04:05.000Z")
+
+	if operation.KlineStartTime != 0 {
+		get.URI += fmt.Sprintf("&start=%v", start)
+	}
+	if operation.KlineEndTime != 0 {
+		get.URI += fmt.Sprintf("&end=%v", end)
+	}
+	log.Printf("startTime: %v", start) //TODO
+	log.Printf("end: %v", end)         //TODO
+	log.Printf("get.URI: %v", get.URI) //TODO
+
+	err := utils.HttpGetRequest(get)
+
+	if err != nil {
+		log.Printf("%+v", err)
+		operation.Error = err
+		return err
+
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonKLine := get.ResponseBody
+	var rawKline [][]interface{}
+
+	if err := json.Unmarshal([]byte(jsonKLine), &rawKline); err != nil {
+		return fmt.Errorf("%s doSpotKline Json Unmarshal Err: %s %s", e.GetName(), err, jsonKLine)
+	}
+
+	operation.Kline = []*exchange.KlineDetail{}
+	for _, k := range rawKline {
+		open, err := strconv.ParseFloat(k[1].(string), 64)
+		if err != nil {
+			log.Printf("%s open parse Err: %v %v", e.GetName(), err, k[1])
+			operation.Error = err
+			return err
+		}
+		high, err := strconv.ParseFloat(k[2].(string), 64)
+		if err != nil {
+			log.Printf("%s high parse Err: %v %v", e.GetName(), err, k[2])
+			operation.Error = err
+			return err
+		}
+		low, err := strconv.ParseFloat(k[3].(string), 64)
+		if err != nil {
+			log.Printf("%s low parse Err: %v %v", e.GetName(), err, k[3])
+			operation.Error = err
+			return err
+		}
+		close, err := strconv.ParseFloat(k[4].(string), 64)
+		if err != nil {
+			log.Printf("%s close parse Err: %v %v", e.GetName(), err, k[4])
+			operation.Error = err
+			return err
+		}
+		volume, err := strconv.ParseFloat(k[5].(string), 64)
+		if err != nil {
+			log.Printf("%s volume parse Err: %v %v", e.GetName(), err, k[5])
+			operation.Error = err
+			return err
+		}
+
+		strTime := k[0].(string)
+		openTime, err := time.Parse("2006-01-02T15:04:05.000Z", strTime) //
+		openTS := float64(openTime.Unix()) * 1000
+
+		detail := &exchange.KlineDetail{
+			Exchange: e.GetName(),
+			Pair:     operation.Pair.Name,
+			OpenTime: openTS,
+			Open:     open,
+			High:     high,
+			Low:      low,
+			Close:    close,
+			Volume:   volume,
+		}
+
+		operation.Kline = append(operation.Kline, detail)
+	}
+
+	return nil
 }
 
 func (e *Okex) doTickerPrice(operation *exchange.PublicOperation) error {

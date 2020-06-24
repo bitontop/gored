@@ -1,6 +1,7 @@
 package test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/bitontop/gored/exchange"
@@ -39,7 +40,7 @@ func Test_Okex(t *testing.T) {
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	Test_AOOpenOrder(e, pair)
+	// Test_AOOpenOrder(e, pair)
 
 	// =====================================================================
 	// TransferHistory
@@ -64,6 +65,30 @@ func Test_Okex(t *testing.T) {
 	// 	log.Printf("Spot TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
 	// }
 	// =====================================================================
+
+	// ==============================================
+
+	// spot Kline
+	// interval options: 60/180/300/900/1800/3600/7200/14400/21600/43200/86400/604800
+	opKline := &exchange.PublicOperation{
+		Wallet:         exchange.SpotWallet,
+		Type:           exchange.KLine,
+		EX:             e.GetName(),
+		Pair:           pair,
+		KlineInterval:  "60", // default to 300 if not provided
+		KlineStartTime: 1592950051001,
+		KlineEndTime:   1592960051002,
+		DebugMode:      true,
+	}
+	err := e.LoadPublicData(opKline)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	for _, k := range opKline.Kline {
+		log.Printf("%s SpotKline %+v", e.GetName(), k)
+	}
+	// ==============================================
 
 	// Test_TradeHistory(e, pair)
 }
