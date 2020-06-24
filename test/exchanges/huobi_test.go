@@ -36,7 +36,7 @@ func Test_Huobi(t *testing.T) {
 	// Test_Orderbook(e, pair)
 	// Test_NewOrderBook(e, pair)
 	// Test_ConstraintFetch(e, pair)
-	Test_Constraint(e, pair)
+	// Test_Constraint(e, pair)
 	// Test_TickerPrice(e)
 
 	Test_Balance(e, pair)
@@ -45,26 +45,46 @@ func Test_Huobi(t *testing.T) {
 	// Test_Trading_Sell(e, pair, 0.05, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	// =====================================================================
-	// TransferHistory
-	opCTransferHistory := &exchange.AccountOperation{
-		Type:      exchange.GetTransferHistory,
-		Wallet:    exchange.SpotWallet,
-		Ex:        e.GetName(),
-		DebugMode: true,
+	// ==============================================
+
+	// spot Kline
+	// interval options: 1min, 5min, 15min, 30min, 60min, 4hour, 1day, 1mon, 1week, 1year
+	opKline := &exchange.PublicOperation{
+		Wallet:        exchange.SpotWallet,
+		Type:          exchange.KLine,
+		EX:            e.GetName(),
+		Pair:          pair,
+		KlineInterval: "1min", // default to 5min if not provided
+		DebugMode:     true,
+	}
+	err := e.LoadPublicData(opKline)
+	if err != nil {
+		log.Printf("%v", err)
 	}
 
-	if err := e.DoAccountOperation(opCTransferHistory); err != nil {
-		log.Printf("%+v", err)
-	} else {
-		for _, o := range opCTransferHistory.TransferInHistory {
-			log.Printf("%s TransferInHistory %+v", e.GetName(), o)
-		}
-		for _, o := range opCTransferHistory.TransferOutHistory {
-			log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
-		}
-		log.Printf("Spot TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
+	for _, k := range opKline.Kline {
+		log.Printf("%s SpotKline %+v", e.GetName(), k)
 	}
+	// =====================================================================
+	// TransferHistory
+	// opCTransferHistory := &exchange.AccountOperation{
+	// 	Type:      exchange.GetTransferHistory,
+	// 	Wallet:    exchange.SpotWallet,
+	// 	Ex:        e.GetName(),
+	// 	DebugMode: true,
+	// }
+
+	// if err := e.DoAccountOperation(opCTransferHistory); err != nil {
+	// 	log.Printf("%+v", err)
+	// } else {
+	// 	for _, o := range opCTransferHistory.TransferInHistory {
+	// 		log.Printf("%s TransferInHistory %+v", e.GetName(), o)
+	// 	}
+	// 	for _, o := range opCTransferHistory.TransferOutHistory {
+	// 		log.Printf("%s TransferOutHistory %+v", e.GetName(), o)
+	// 	}
+	// 	log.Printf("Spot TransferHistory CallResponse: %+v", opCTransferHistory.CallResponce)
+	// }
 	// =====================================================================
 
 	// SubBalances(e, "8459451")

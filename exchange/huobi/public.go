@@ -26,6 +26,11 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSpotOrderBook(operation)
 		}
+	case exchange.KLine:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doSpotKline(operation)
+		}
 	case exchange.GetTickerPrice:
 		switch operation.Wallet {
 		case exchange.SpotWallet:
@@ -34,6 +39,71 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+// interval options: 1min, 5min, 15min, 30min, 60min, 4hour, 1day, 1mon, 1week, 1year
+func (e *Huobi) doSpotKline(operation *exchange.PublicOperation) error {
+	interval := "5min"
+	if operation.KlineInterval != "" {
+		interval = operation.KlineInterval
+	}
+
+	get := &utils.HttpGet{
+		URI: fmt.Sprintf("%s/market/history/kline?symbol=%v&period=%v&size=2000", API_URL, // ETHBTC
+			e.GetSymbolByPair(operation.Pair), // BTCUSDT
+			interval,
+		),
+		Proxy: operation.Proxy,
+	}
+
+	err := utils.HttpGetRequest(get)
+
+	if err != nil {
+		log.Printf("%+v", err)
+		operation.Error = err
+		return err
+
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonResponse := &JsonResponse{}
+	jsonKLine := get.ResponseBody
+	rawKline := KLines{}
+
+	if err := json.Unmarshal([]byte(jsonKLine), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doSpotKline json Unmarshal error: %v %v", e.GetName(), err, string(jsonKLine))
+		return operation.Error
+	} else if jsonResponse.Status != "ok" {
+		operation.Error = fmt.Errorf("%s doSpotKline failed: %v %v", e.GetName(), err, string(jsonKLine))
+		return operation.Error
+	}
+
+	if err := json.Unmarshal(jsonResponse.Data, &rawKline); err != nil {
+		operation.Error = fmt.Errorf("%s doSpotKline Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	operation.Kline = []*exchange.KlineDetail{}
+	for _, k := range rawKline {
+		detail := &exchange.KlineDetail{
+			Exchange: e.GetName(),
+			Pair:     operation.Pair.Name,
+			OpenTime: float64(k.ID),
+			Open:     k.Open,
+			High:     k.High,
+			Low:      k.Low,
+			Close:    k.Close,
+			Volume:   k.Vol,
+		}
+
+		operation.Kline = append(operation.Kline, detail)
+	}
+
+	return nil
 }
 
 func (e *Huobi) doTickerPrice(operation *exchange.PublicOperation) error {

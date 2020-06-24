@@ -94,6 +94,17 @@ type OrderBook struct {
 	Version int64       `json:"version"`
 }
 
+type KLines []struct {
+	ID     int64   `json:"id"`
+	Amount float64 `json:"amount"`
+	Count  int     `json:"count"`
+	Open   float64 `json:"open"`
+	Close  float64 `json:"close"`
+	Low    float64 `json:"low"`
+	High   float64 `json:"high"`
+	Vol    float64 `json:"vol"`
+}
+
 type AccountsReturn []struct {
 	ID      int64  `json:"id"`
 	Type    string `json:"type"`
