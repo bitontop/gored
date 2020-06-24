@@ -48,7 +48,7 @@ func Test_Huobi(t *testing.T) {
 	// ==============================================
 
 	// spot Kline
-	// interval options: 1min, 5min, 15min, 30min, 60min, 4hour, 1day, 1mon, 1week, 1year
+	// interval options: 1min, 5min, 15min, 30min, 1hour, 4hour, 1day, 1mon, 1week, 1year
 	opKline := &exchange.PublicOperation{
 		Wallet:        exchange.SpotWallet,
 		Type:          exchange.KLine,

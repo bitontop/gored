@@ -69,15 +69,16 @@ func Test_Okex(t *testing.T) {
 	// ==============================================
 
 	// spot Kline
-	// interval options: 60/180/300/900/1800/3600/7200/14400/21600/43200/86400/604800
+	// interval options: 1min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 12hour, 1day, 1week
+	// can only get 24h data
 	opKline := &exchange.PublicOperation{
 		Wallet:         exchange.SpotWallet,
 		Type:           exchange.KLine,
 		EX:             e.GetName(),
 		Pair:           pair,
-		KlineInterval:  "60", // default to 300 if not provided
-		KlineStartTime: 1592950051001,
-		KlineEndTime:   1592960051002,
+		KlineInterval:  "1hour", // default to 5min if not provided
+		KlineStartTime: 1592650051001,
+		KlineEndTime:   1592660051002,
 		DebugMode:      true,
 	}
 	err := e.LoadPublicData(opKline)

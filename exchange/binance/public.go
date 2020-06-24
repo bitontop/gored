@@ -101,11 +101,42 @@ func (e *Binance) doTickerPrice(operation *exchange.PublicOperation) error {
 	return nil
 }
 
-// interval options: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M
+// interval options: 1min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 8hour, 12hour, 1day, 3day, 1week, 1month
 func (e *Binance) doSpotKline(operation *exchange.PublicOperation) error {
 	interval := "5m"
 	if operation.KlineInterval != "" {
-		interval = operation.KlineInterval
+		switch operation.KlineInterval {
+		case "1min":
+			interval = "1m"
+		case "3min":
+			interval = "3m"
+		case "5min":
+			interval = "5m"
+		case "15min":
+			interval = "15m"
+		case "30min":
+			interval = "30m"
+		case "1hour":
+			interval = "1h"
+		case "2hour":
+			interval = "2h"
+		case "4hour":
+			interval = "4h"
+		case "6hour":
+			interval = "6h"
+		case "8hour":
+			interval = "8h"
+		case "12hour":
+			interval = "12h"
+		case "1day":
+			interval = "1d"
+		case "3day":
+			interval = "3d"
+		case "1week":
+			interval = "1w"
+		case "1month":
+			interval = "1M"
+		}
 	}
 
 	get := &utils.HttpGet{

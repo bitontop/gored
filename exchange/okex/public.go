@@ -35,11 +35,36 @@ func (e *Okex) LoadPublicData(operation *exchange.PublicOperation) error {
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
-// interval options: 60/180/300/900/1800/3600/7200/14400/21600/43200/86400/604800
+// interval options: 1min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 12hour, 1day, 1week
 func (e *Okex) doSpotKline(operation *exchange.PublicOperation) error {
 	interval := "300"
 	if operation.KlineInterval != "" {
-		interval = operation.KlineInterval
+		switch operation.KlineInterval {
+		case "1min":
+			interval = "60"
+		case "3min":
+			interval = "180"
+		case "5min":
+			interval = "300"
+		case "15min":
+			interval = "900"
+		case "30min":
+			interval = "1800"
+		case "1hour":
+			interval = "3600"
+		case "2hour":
+			interval = "7200"
+		case "4hour":
+			interval = "14400"
+		case "6hour":
+			interval = "21600"
+		case "12hour":
+			interval = "43200"
+		case "1day":
+			interval = "86400"
+		case "1week":
+			interval = "604800"
+		}
 	}
 
 	get := &utils.HttpGet{
@@ -50,7 +75,6 @@ func (e *Okex) doSpotKline(operation *exchange.PublicOperation) error {
 		Proxy: operation.Proxy,
 	}
 
-	//TODO 13ts to time
 	startTime := time.Unix(operation.KlineStartTime/1000, 0)
 	endTime := time.Unix(operation.KlineEndTime/1000, 0)
 	start := startTime.UTC().Format("2006-01-02T15:04:05.000Z")
@@ -62,10 +86,8 @@ func (e *Okex) doSpotKline(operation *exchange.PublicOperation) error {
 	if operation.KlineEndTime != 0 {
 		get.URI += fmt.Sprintf("&end=%v", end)
 	}
-	log.Printf("startTime: %v", start) //TODO
-	log.Printf("end: %v", end)         //TODO
-	log.Printf("get.URI: %v", get.URI) //TODO
 
+	// log.Printf("url: %v", get.URI) // ***********************
 	err := utils.HttpGetRequest(get)
 
 	if err != nil {

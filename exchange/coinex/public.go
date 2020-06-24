@@ -113,7 +113,7 @@ func (e *Coinex) doSpotKline(operation *exchange.PublicOperation) error {
 		detail := &exchange.KlineDetail{
 			Exchange: e.GetName(),
 			Pair:     operation.Pair.Name,
-			OpenTime: k[0].(float64),
+			OpenTime: k[0].(float64) * 1000,
 			Open:     open,
 			High:     high,
 			Low:      low,

@@ -160,25 +160,25 @@ func Test_Binance(t *testing.T) {
 	// ==============================================
 
 	// spot Kline
-	// interval options: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M
-	// opKline := &exchange.PublicOperation{
-	// 	Wallet:         exchange.SpotWallet,
-	// 	Type:           exchange.KLine,
-	// 	EX:             e.GetName(),
-	// 	Pair:           pair,
-	// 	KlineInterval:  "1m", // default to 5m if not provided
-	// 	KlineStartTime: 1530965420000,
-	// 	KlineEndTime:   1530966020000,
-	// 	DebugMode:      true,
-	// }
-	// err = e.LoadPublicData(opKline)
-	// if err != nil {
-	// 	log.Printf("%v", err)
-	// }
+	// interval options: 1min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 8hour, 12hour, 1day, 3day, 1week, 1month
+	opKline := &exchange.PublicOperation{
+		Wallet:         exchange.SpotWallet,
+		Type:           exchange.KLine,
+		EX:             e.GetName(),
+		Pair:           pair,
+		KlineInterval:  "1min", // default to 5min if not provided
+		KlineStartTime: 1530965420000,
+		KlineEndTime:   1530966020000,
+		DebugMode:      true,
+	}
+	err := e.LoadPublicData(opKline)
+	if err != nil {
+		log.Printf("%v", err)
+	}
 
-	// for _, k := range opKline.Kline {
-	// 	log.Printf("%s SpotKline %+v", e.GetName(), k)
-	// }
+	for _, k := range opKline.Kline {
+		log.Printf("%s SpotKline %+v", e.GetName(), k)
+	}
 	// ==============================================
 
 	// contract AllBalance

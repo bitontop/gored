@@ -41,11 +41,14 @@ func (e *Huobi) LoadPublicData(operation *exchange.PublicOperation) error {
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
-// interval options: 1min, 5min, 15min, 30min, 60min, 4hour, 1day, 1mon, 1week, 1year
+// interval options: 1min, 5min, 15min, 30min, 1hour, 4hour, 1day, 1mon, 1week, 1year
 func (e *Huobi) doSpotKline(operation *exchange.PublicOperation) error {
 	interval := "5min"
 	if operation.KlineInterval != "" {
 		interval = operation.KlineInterval
+		if operation.KlineInterval == "1hour" {
+			interval = "60min"
+		}
 	}
 
 	get := &utils.HttpGet{
@@ -92,7 +95,7 @@ func (e *Huobi) doSpotKline(operation *exchange.PublicOperation) error {
 		detail := &exchange.KlineDetail{
 			Exchange: e.GetName(),
 			Pair:     operation.Pair.Name,
-			OpenTime: float64(k.ID),
+			OpenTime: float64(k.ID) * 1000,
 			Open:     k.Open,
 			High:     k.High,
 			Low:      k.Low,
