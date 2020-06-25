@@ -37,7 +37,7 @@ func Test_Huobi(t *testing.T) {
 	// Test_NewOrderBook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
-	Test_TickerPrice(e)
+	// Test_TickerPrice(e)
 
 	Test_Balance(e, pair)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)

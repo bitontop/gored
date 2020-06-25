@@ -110,7 +110,8 @@ func (e *Okex) doSpotKline(operation *exchange.PublicOperation) error {
 	}
 
 	operation.Kline = []*exchange.KlineDetail{}
-	for _, k := range rawKline {
+	for i := len(rawKline) - 1; i >= 0; i-- {
+		k := rawKline[i]
 		open, err := strconv.ParseFloat(k[1].(string), 64)
 		if err != nil {
 			log.Printf("%s open parse Err: %v %v", e.GetName(), err, k[1])

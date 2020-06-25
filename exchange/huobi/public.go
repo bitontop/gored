@@ -91,7 +91,8 @@ func (e *Huobi) doSpotKline(operation *exchange.PublicOperation) error {
 	}
 
 	operation.Kline = []*exchange.KlineDetail{}
-	for _, k := range rawKline {
+	for i := len(rawKline) - 1; i >= 0; i-- {
+		k := rawKline[i]
 		detail := &exchange.KlineDetail{
 			Exchange: e.GetName(),
 			Pair:     operation.Pair.Name,

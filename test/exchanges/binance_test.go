@@ -28,7 +28,7 @@ func Test_Binance(t *testing.T) {
 	// Test_Constraint(e, pair)
 
 	// Test_NewOrderBook(e, pair)
-	Test_TickerPrice(e)
+	// Test_TickerPrice(e)
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.01, 0.01)
