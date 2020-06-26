@@ -56,6 +56,24 @@ type AccountBalances []struct {
 	Total float64 `json:"total"`
 }
 
+type PlaceOrder struct {
+	CreatedAt     time.Time   `json:"createdAt"`
+	FilledSize    int         `json:"filledSize"`
+	Future        string      `json:"future"`
+	ID            int         `json:"id"`
+	Market        string      `json:"market"`
+	Price         float64     `json:"price"`
+	RemainingSize int         `json:"remainingSize"`
+	Side          string      `json:"side"`
+	Size          int         `json:"size"`
+	Status        string      `json:"status"`
+	Type          string      `json:"type"`
+	ReduceOnly    bool        `json:"reduceOnly"`
+	Ioc           bool        `json:"ioc"`
+	PostOnly      bool        `json:"postOnly"`
+	ClientID      interface{} `json:"clientId"`
+}
+
 type OpenOrders []struct {
 	CreatedAt     time.Time   `json:"createdAt"`
 	FilledSize    float64     `json:"filledSize"`
@@ -131,32 +149,6 @@ type DepositAddress struct {
 
 type Uuid struct {
 	Id string `json:"uuid"`
-}
-
-type PlaceOrder struct {
-	AccountId                  string
-	OrderUuid                  string `json:"OrderUuid"`
-	Exchange                   string `json:"Exchange"`
-	Type                       string
-	Quantity                   float64 `json:"Quantity"`
-	QuantityRemaining          float64 `json:"QuantityRemaining"`
-	Limit                      float64 `json:"Limit"`
-	Reserved                   float64
-	ReserveRemaining           float64
-	CommissionReserved         float64
-	CommissionReserveRemaining float64
-	CommissionPaid             float64
-	Price                      float64 `json:"Price"`
-	PricePerUnit               float64 `json:"PricePerUnit"`
-	Opened                     string
-	Closed                     string
-	IsOpen                     bool
-	Sentinel                   string
-	CancelInitiated            bool
-	ImmediateOrCancel          bool
-	IsConditional              bool
-	Condition                  string
-	ConditionTarget            float64
 }
 
 type OrderBook struct {

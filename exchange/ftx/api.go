@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	API_URL string = "https://ftx.com/api"
+	API_URL string = "https://ftx.com"
 )
 
 /*API Base Knowledge
@@ -53,7 +53,7 @@ func (e *Ftx) GetCoinsData() error {
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestUrl := "/coins"
+	strRequestUrl := "/api/coins"
 	strUrl := API_URL + strRequestUrl
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -111,7 +111,7 @@ func (e *Ftx) GetPairsData() error { //TODO
 	jsonResponse := &JsonResponse{}
 	coinsData := CoinsData{}
 
-	strRequestUrl := "/coins"
+	strRequestUrl := "/api/coins"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
@@ -179,7 +179,7 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) { // TODO
 	mapParams["market"] = symbol
 	mapParams["type"] = "both"
 
-	strRequestUrl := "/v1.1/public/getorderbook"
+	strRequestUrl := "/api/v1.1/public/getorderbook"
 	strUrl := API_URL + strRequestUrl
 
 	maker := &exchange.Maker{
@@ -222,7 +222,7 @@ func (e *Ftx) UpdateAllBalances() {
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/wallet/balances" // "/account"
+	strRequest := "/api/wallet/balances" // "/account"
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
@@ -282,27 +282,29 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	}
 
 	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["market"] = e.GetSymbolByPair(pair) // future "BTC-PERP", spot "ALTHEDGE/USD"
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["side"] = "sell"
+	mapParams["type"] = "limit"
 
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/orders"
+	placeOrder := PlaceOrder{}
+	strRequest := "/api/orders"
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonResponse.Message)
+		return nil, fmt.Errorf("%s LimitSell Failed: %s", e.GetName(), jsonPlaceReturn)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
+	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Direction:    exchange.Sell,
@@ -371,18 +373,18 @@ func (e *Ftx) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
-	order.StatusMessage = jsonOrderStatus
-	if orderStatus.CancelInitiated {
-		order.Status = exchange.Canceling
-	} else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
-		order.Status = exchange.Cancelled
-	} else if orderStatus.QuantityRemaining == 0 {
-		order.Status = exchange.Filled
-	} else if orderStatus.QuantityRemaining != orderStatus.Quantity {
-		order.Status = exchange.Partial
-	} else {
-		order.Status = exchange.New
-	}
+	// order.StatusMessage = jsonOrderStatus
+	// if orderStatus.CancelInitiated {
+	// 	order.Status = exchange.Canceling
+	// } else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
+	// 	order.Status = exchange.Cancelled
+	// } else if orderStatus.QuantityRemaining == 0 {
+	// 	order.Status = exchange.Filled
+	// } else if orderStatus.QuantityRemaining != orderStatus.Quantity {
+	// 	order.Status = exchange.Partial
+	// } else {
+	// 	order.Status = exchange.New
+	// }
 
 	return nil
 }
@@ -483,15 +485,19 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 
 	// create signature
 	preSign = timestamp + strMethod + strSignUrl
+	if strMethod == "POST" {
+		preSign += postBody
+	}
 	signature := exchange.ComputeHmac256NoDecode(preSign, e.API_SECRET)
 
-	log.Printf("postBody: %v", postBody)
-	log.Printf("preSign: %v", preSign)
-	log.Printf("strRequestUrl: %v", strRequestUrl)
+	// log.Printf("postBody: %v", postBody)
+	// log.Printf("preSign: %v", preSign)
+	// log.Printf("strRequestUrl: %v", strRequestUrl)
 
 	// request
-	strRequestUrl = strRequestPath // ==========================
+	// strRequestUrl = strRequestPath // ==========================
 	request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(postBody))
+	// request, err = http.NewRequest(strMethod, strRequestUrl, nil)
 	if nil != err {
 		return err.Error()
 	}
@@ -501,13 +507,6 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 	request.Header.Add("FTX-SIGN", signature)
 	// request.Header.Add("Content-Type", "application/json")
 	// add FTX-SUBACCOUNT if using subaccount
-
-	log.Printf("key: %v", e.API_KEY)
-	log.Printf("secret: %v", e.API_SECRET)
-
-	log.Printf("FTX-KEY: %v", e.API_KEY)
-	log.Printf("FTX-TS: %v", timestamp)
-	log.Printf("FTX-SIGN: %v", signature)
 
 	response, err := httpClient.Do(request)
 	if nil != err {
@@ -520,5 +519,6 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 		return err.Error()
 	}
 
+	// log.Printf("JSON: %v", string(body))
 	return string(body)
 }

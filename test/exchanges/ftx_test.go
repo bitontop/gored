@@ -26,7 +26,7 @@ func Test_Ftx(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	Test_AOOpenOrder(e, pair)
+	// Test_AOOpenOrder(e, pair)
 	// Test_AOOrderHistory(e, pair)
 	// Test_AODepositAddress(e, pair.Base)
 	// Test_AODepositHistory(e, pair)
@@ -34,6 +34,7 @@ func Test_Ftx(t *testing.T) {
 
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Trading_Sell(e, pair, 999999, 0.1)
 	// Test_OrderStatus(e, pair, "1234567890")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 	// log.Println(e.GetTradingWebURL(pair))
