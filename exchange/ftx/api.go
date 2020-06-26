@@ -60,7 +60,7 @@ func (e *Ftx) GetCoinsData() error {
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonCurrencyReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
@@ -109,30 +109,30 @@ Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
 func (e *Ftx) GetPairsData() error { //TODO
 	jsonResponse := &JsonResponse{}
-	coinsData := CoinsData{}
+	pairsData := PairsData{}
 
-	strRequestUrl := "/api/coins"
+	strRequestUrl := "/api/markets"
 	strUrl := API_URL + strRequestUrl
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonSymbolsReturn)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &coinsData); err != nil {
+	if err := json.Unmarshal(jsonResponse.Result, &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
-	for _, data := range coinsData {
-		if data.Underlying == "" {
+	for _, data := range pairsData {
+		if data.Type != "spot" {
 			continue
 		}
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin("USD")
-			target := coin.GetCoin(data.ID)
+			base := coin.GetCoin(data.QuoteCurrency)
+			target := coin.GetCoin(data.BaseCurrency)
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
@@ -145,15 +145,15 @@ func (e *Ftx) GetPairsData() error { //TODO
 				pairConstraint = &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
-					ExSymbol:    fmt.Sprintf("%v/USD", data.ID),
+					ExSymbol:    data.Name,
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     DEFAULT_LOT_SIZE,
-					PriceFilter: DEFAULT_PRICE_FILTER,
+					LotSize:     data.SizeIncrement,
+					PriceFilter: data.PriceIncrement,
 					Listed:      true,
 				}
 			} else {
-				pairConstraint.ExSymbol = fmt.Sprintf("%v/USD", data.ID)
+				pairConstraint.ExSymbol = data.Name
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -175,11 +175,7 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) { // TODO
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	mapParams := make(map[string]string)
-	mapParams["market"] = symbol
-	mapParams["type"] = "both"
-
-	strRequestUrl := "/api/v1.1/public/getorderbook"
+	strRequestUrl := fmt.Sprintf("/api/markets/%v/orderbook?depth=%v", symbol, 100)
 	strUrl := API_URL + strRequestUrl
 
 	maker := &exchange.Maker{
@@ -188,22 +184,30 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) { // TODO
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
-	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
+	jsonOrderbook := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonResponse.Message)
+		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonOrderbook)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)
-	for _, bid := range orderBook.Buy {
-		maker.Bids = append(maker.Bids, bid)
+	for _, bid := range orderBook.Bids {
+		buydata := exchange.Order{}
+		buydata.Quantity = bid[1]
+		buydata.Rate = bid[0]
+
+		maker.Bids = append(maker.Bids, buydata)
 	}
-	for _, ask := range orderBook.Sell {
-		maker.Asks = append(maker.Asks, ask)
+
+	for _, ask := range orderBook.Asks {
+		selldata := exchange.Order{}
+		selldata.Quantity = ask[1]
+		selldata.Rate = ask[0]
+		maker.Asks = append(maker.Asks, selldata)
 	}
 	return maker, nil
 }

@@ -17,7 +17,7 @@ import (
 
 func Test_Ftx(t *testing.T) {
 	e := InitEx(exchange.FTX)
-	pair := pair.GetPairByKey("USD|ETHMOON")
+	pair := pair.GetPairByKey("USD|BTC")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -32,6 +32,7 @@ func Test_Ftx(t *testing.T) {
 	// Test_AODepositHistory(e, pair)
 	// Test_AOWithdrawalHistory(e, pair)
 
+	// private only balance done, POST auth not passed
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 999999, 0.1)

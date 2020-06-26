@@ -7,8 +7,6 @@ package ftx
 import (
 	"encoding/json"
 	"time"
-
-	"github.com/bitontop/gored/exchange"
 )
 
 type JsonResponse struct {
@@ -26,28 +24,30 @@ type CoinsData []struct {
 }
 
 type PairsData []struct {
-	Ask             float64     `json:"ask"`
-	Bid             float64     `json:"bid"`
-	Change1H        float64     `json:"change1h"`
-	Change24H       float64     `json:"change24h"`
-	Description     string      `json:"description"`
-	Enabled         bool        `json:"enabled"`
-	Expired         bool        `json:"expired"`
-	Expiry          interface{} `json:"expiry"`
-	Index           float64     `json:"index"`
-	IndexAdjustment float64     `json:"indexAdjustment"`
-	Last            float64     `json:"last"`
-	LowerBound      float64     `json:"lowerBound"`
-	Mark            float64     `json:"mark"`
-	Name            string      `json:"name"`
-	Perpetual       bool        `json:"perpetual"`
-	PostOnly        bool        `json:"postOnly"`
-	PriceIncrement  float64     `json:"priceIncrement"`
-	SizeIncrement   float64     `json:"sizeIncrement"`
-	Type            string      `json:"type"`
-	Underlying      string      `json:"underlying"`
-	UpperBound      float64     `json:"upperBound"`
-	VolumeUsd24H    float64     `json:"volumeUsd24h"`
+	Ask            float64 `json:"ask"`
+	BaseCurrency   string  `json:"baseCurrency"`
+	Bid            float64 `json:"bid"`
+	Change1H       float64 `json:"change1h,omitempty"`
+	Change24H      float64 `json:"change24h,omitempty"`
+	ChangeBod      float64 `json:"changeBod,omitempty"`
+	Enabled        bool    `json:"enabled"`
+	Last           float64 `json:"last"`
+	MinProvideSize float64 `json:"minProvideSize"`
+	Name           string  `json:"name"`
+	Price          float64 `json:"price"`
+	PriceIncrement float64 `json:"priceIncrement"`
+	QuoteCurrency  string  `json:"quoteCurrency"`
+	QuoteVolume24H float64 `json:"quoteVolume24h,omitempty"`
+	Restricted     bool    `json:"restricted"`
+	SizeIncrement  float64 `json:"sizeIncrement"`
+	Type           string  `json:"type"`
+	Underlying     string  `json:"underlying"`
+	VolumeUsd24H   float64 `json:"volumeUsd24h,omitempty"`
+}
+
+type OrderBook struct {
+	Asks [][]float64 `json:"asks"`
+	Bids [][]float64 `json:"bids"`
 }
 
 type AccountBalances []struct {
@@ -149,9 +149,4 @@ type DepositAddress struct {
 
 type Uuid struct {
 	Id string `json:"uuid"`
-}
-
-type OrderBook struct {
-	Buy  []exchange.Order `json:"buy"`
-	Sell []exchange.Order `json:"sell"`
 }
