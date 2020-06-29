@@ -50,6 +50,16 @@ type OrderBook struct {
 	Bids [][]float64 `json:"bids"`
 }
 
+type RawKline []struct {
+	Close     float64   `json:"close"`
+	High      float64   `json:"high"`
+	Low       float64   `json:"low"`
+	Open      float64   `json:"open"`
+	StartTime time.Time `json:"startTime"`
+	Time      float64   `json:"time"`
+	Volume    float64   `json:"volume"`
+}
+
 type AccountBalances []struct {
 	Coin  string  `json:"coin"`
 	Free  float64 `json:"free"`

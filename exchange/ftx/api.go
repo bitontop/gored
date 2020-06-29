@@ -212,10 +212,6 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) { // TODO
 	return maker, nil
 }
 
-func (e *Ftx) LoadPublicData(operation *exchange.PublicOperation) error {
-	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
-}
-
 /*************** Private API ***************/
 
 func (e *Ftx) UpdateAllBalances() {
