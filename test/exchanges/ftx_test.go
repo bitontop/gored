@@ -1,7 +1,6 @@
 package test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/bitontop/gored/exchange"
@@ -27,32 +26,35 @@ func Test_Ftx(t *testing.T) {
 	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
+	// Test_TickerPrice(e)
 
 	// Test_AOOpenOrder(e, pair)
 	// Test_AOOrderHistory(e, pair)
 	// Test_AODepositAddress(e, pair.Base)
 	// Test_AODepositHistory(e, pair)
 	// Test_AOWithdrawalHistory(e, pair)
+
+	// ==============================================
 	// spot Kline
 	// interval options: 15s, 1min, 5min, 15min, 1hour, 4hour, 1day
-	opKline := &exchange.PublicOperation{
-		Wallet:         exchange.SpotWallet,
-		Type:           exchange.KLine,
-		EX:             e.GetName(),
-		Pair:           pair,
-		KlineInterval:  "1min", // default to 5min if not provided
-		KlineStartTime: 1593400000123,
-		KlineEndTime:   1593500000123,
-		DebugMode:      true,
-	}
-	err := e.LoadPublicData(opKline)
-	if err != nil {
-		log.Printf("%v", err)
-	}
+	// opKline := &exchange.PublicOperation{
+	// 	Wallet:         exchange.SpotWallet,
+	// 	Type:           exchange.KLine,
+	// 	EX:             e.GetName(),
+	// 	Pair:           pair,
+	// 	KlineInterval:  "1min", // default to 5min if not provided
+	// 	KlineStartTime: 1593400000123,
+	// 	KlineEndTime:   1593500000123,
+	// 	DebugMode:      true,
+	// }
+	// err := e.LoadPublicData(opKline)
+	// if err != nil {
+	// 	log.Printf("%v", err)
+	// }
 
-	for _, k := range opKline.Kline {
-		log.Printf("%s SpotKline %+v", e.GetName(), k)
-	}
+	// for _, k := range opKline.Kline {
+	// 	log.Printf("%s SpotKline %+v", e.GetName(), k)
+	// }
 	// ==============================================
 
 	// private only balance done, POST auth not passed

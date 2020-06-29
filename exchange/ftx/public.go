@@ -17,9 +17,70 @@ func (e *Ftx) LoadPublicData(operation *exchange.PublicOperation) error {
 		case exchange.SpotWallet:
 			return e.doSpotKline(operation)
 		}
+	case exchange.GetTickerPrice:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doTickerPrice(operation)
+		}
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Ftx) doTickerPrice(operation *exchange.PublicOperation) error {
+	jsonResponse := &JsonResponse{}
+	tickerPrice := PairsData{}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/api/markets", API_URL),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonTickerPrice := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonTickerPrice), &jsonResponse); err != nil {
+		return fmt.Errorf("%s doTickerPrice Json Unmarshal Err: %v %v", e.GetName(), err, jsonTickerPrice)
+	} else if !jsonResponse.Success {
+		return fmt.Errorf("%s doTickerPrice Failed: %v", e.GetName(), jsonTickerPrice)
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &tickerPrice); err != nil {
+		return fmt.Errorf("%s doTickerPrice Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+	}
+
+	operation.TickerPrice = []*exchange.TickerPriceDetail{}
+	for _, tp := range tickerPrice {
+		if tp.Type != "spot" {
+			continue
+		}
+		p := e.GetPairBySymbol(tp.Name)
+
+		if p == nil {
+			if operation.DebugMode {
+				log.Printf("doTickerPrice got nil pair for symbol: %v", tp.Name)
+			}
+			continue
+		} else if p.Name == "" {
+			continue
+		}
+
+		tpd := &exchange.TickerPriceDetail{
+			Pair:  p,
+			Price: tp.Price,
+		}
+
+		operation.TickerPrice = append(operation.TickerPrice, tpd)
+	}
+
+	return nil
 }
 
 // interval options: 15s, 1min, 5min, 15min, 1hour, 4hour, 1day
