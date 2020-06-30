@@ -16,29 +16,29 @@ func (e *Ftx) DoAccountOperation(operation *exchange.AccountOperation) error {
 		}
 	case exchange.Balance:
 		if operation.Wallet == exchange.SpotWallet {
-			// return e.getBalance(operation)
+			return e.getBalance(operation)
 		}
 
 	// Private operation
 	case exchange.GetOpenOrder:
 		if operation.Wallet == exchange.SpotWallet {
-			// return e.doGetOpenOrder(operation)
+			return e.doGetOpenOrder(operation)
 		}
 	case exchange.GetOrderHistory:
 		if operation.Wallet == exchange.SpotWallet {
-			// return e.doGetOrderHistory(operation)
+			return e.doGetOrderHistory(operation)
 		}
 	case exchange.GetWithdrawalHistory:
 		if operation.Wallet == exchange.SpotWallet {
-			// return e.doGetWithdrawalHistory(operation)
+			return e.doGetWithdrawalHistory(operation)
 		}
 	case exchange.GetDepositHistory:
 		if operation.Wallet == exchange.SpotWallet {
-			// return e.doGetDepositHistory(operation)
+			return e.doGetDepositHistory(operation)
 		}
 	case exchange.GetDepositAddress:
 		if operation.Wallet == exchange.SpotWallet {
-			// return e.doGetDepositAddress(operation)
+			return e.doGetDepositAddress(operation)
 		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
@@ -52,7 +52,7 @@ func (e *Ftx) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	jsonResponse := &JsonResponse{}
 	openOrders := OpenOrders{}
 	symbol := e.GetSymbolByPair(operation.Pair)
-	strRequest := "/orders" // /orders?market={market}
+	strRequest := "/api/orders" // /orders?market={market}
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = symbol
@@ -125,7 +125,7 @@ func (e *Ftx) doGetOrderHistory(operation *exchange.AccountOperation) error {
 	jsonResponse := &JsonResponse{}
 	closeOrders := CloseOrders{}
 	symbol := e.GetSymbolByPair(operation.Pair)
-	strRequest := "/orders/history" // /orders/history?market={market}
+	strRequest := "/api/orders/history" // /orders/history?market={market}
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = symbol
@@ -198,7 +198,7 @@ func (e *Ftx) doGetWithdrawalHistory(operation *exchange.AccountOperation) error
 
 	jsonResponse := &JsonResponse{}
 	withdrawHistory := WithdrawHistory{}
-	strRequest := "/wallet/withdrawals"
+	strRequest := "/api/wallet/withdrawals"
 
 	mapParams := make(map[string]string)
 
@@ -320,7 +320,7 @@ func (e *Ftx) doGetDepositAddress(operation *exchange.AccountOperation) error {
 
 	jsonResponse := &JsonResponse{}
 	depositAddress := DepositAddress{}
-	strRequest := fmt.Sprintf("/wallet/deposit_address/%v", e.GetSymbolByCoin(operation.Coin))
+	strRequest := fmt.Sprintf("/api/wallet/deposit_address/%v", e.GetSymbolByCoin(operation.Coin))
 
 	mapParams := make(map[string]string)
 
@@ -339,6 +339,9 @@ func (e *Ftx) doGetDepositAddress(operation *exchange.AccountOperation) error {
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &depositAddress); err != nil {
 		operation.Error = fmt.Errorf("%s doGetDepositAddress Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		if string(jsonResponse.Result) == "false" {
+			operation.Error = fmt.Errorf("%s doGetDepositAddress cannot get deposit address for this coin: %v", e.GetName(), operation.Coin.Code)
+		}
 		return operation.Error
 	}
 
@@ -365,8 +368,8 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	accountBalance := AccountBalances{}
-	strRequest := "/api/wallet/balances"
+	accountBalance := AccountAllBalances{}
+	strRequest := "/api/wallet/all_balances"
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if operation.DebugMode {
@@ -374,6 +377,7 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 		operation.CallResponce = jsonBalanceReturn
 	}
 
+	// log.Printf("AllBalanceJSON: %v", jsonBalanceReturn) //
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		operation.Error = fmt.Errorf("%s GetAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return operation.Error
@@ -387,7 +391,7 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	operation.BalanceList = []exchange.AssetBalance{}
-	for _, account := range accountBalance {
+	for _, account := range accountBalance.Main {
 		if account.Total == 0 {
 			// log.Printf("--%v", account)
 			continue
@@ -412,14 +416,18 @@ func (e *Ftx) getBalance(operation *exchange.AccountOperation) error {
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/wallet/balances"
+	strRequest := "/api/wallet/balances"
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	mapParams := make(map[string]string)
+	mapParams["coin"] = e.GetSymbolByCoin(operation.Coin)
+
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonBalanceReturn
 	}
 
+	// log.Printf("1b: %v",jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		operation.Error = fmt.Errorf("%s GetBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return operation.Error

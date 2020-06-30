@@ -5,12 +5,12 @@ package ftx
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -276,6 +276,7 @@ func (e *Ftx) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool
 	return true
 }
 
+// TODO
 func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
@@ -283,10 +284,12 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = e.GetSymbolByPair(pair) // future "BTC-PERP", spot "ALTHEDGE/USD"
+	// mapParams["market"] = "BTC-PERP" // TODO
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "sell"
 	mapParams["type"] = "limit"
+	// mapParams["reduceOnly"] = false
 
 	jsonResponse := &JsonResponse{}
 	placeOrder := PlaceOrder{}
@@ -315,6 +318,7 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	return order, nil
 }
 
+// TODO
 func (e *Ftx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
@@ -356,35 +360,40 @@ func (e *Ftx) OrderStatus(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
-
 	jsonResponse := &JsonResponse{}
-	orderStatus := PlaceOrder{}
-	strRequest := "/v1.1/account/getorder"
+	orderStatus := OrderStatus{}
+	strRequest := fmt.Sprintf("/api/orders/%v", order.OrderID)
 
-	jsonOrderStatus := e.ApiKeyGET(strRequest, mapParams)
+	mapParams := make(map[string]string)
+
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
 	}
 	if err := json.Unmarshal(jsonResponse.Result, &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
-	// order.StatusMessage = jsonOrderStatus
-	// if orderStatus.CancelInitiated {
-	// 	order.Status = exchange.Canceling
-	// } else if !orderStatus.IsOpen && orderStatus.QuantityRemaining > 0 {
-	// 	order.Status = exchange.Cancelled
-	// } else if orderStatus.QuantityRemaining == 0 {
-	// 	order.Status = exchange.Filled
-	// } else if orderStatus.QuantityRemaining != orderStatus.Quantity {
-	// 	order.Status = exchange.Partial
-	// } else {
-	// 	order.Status = exchange.New
-	// }
+	order.Rate = orderStatus.Price
+	order.Quantity = orderStatus.Size
+	order.DealRate = orderStatus.AvgFillPrice
+	order.DealQuantity = orderStatus.FilledSize
+
+	order.StatusMessage = jsonOrderStatus
+	if (orderStatus.Status == "new" || orderStatus.Status == "open") && order.DealQuantity == 0 {
+		order.Status = exchange.New
+	} else if (orderStatus.Status == "new" || orderStatus.Status == "open") && order.DealQuantity < order.Quantity {
+		order.Status = exchange.Partial
+	} else if order.DealQuantity == order.Quantity {
+		order.Status = exchange.Filled
+	} else if orderStatus.Status == "closed" || orderStatus.Status == "cancelled" {
+		order.Status = exchange.Cancelled
+		order.Canceled = true
+	} else {
+		order.Status = exchange.Other
+	}
 
 	return nil
 }
@@ -398,22 +407,23 @@ func (e *Ftx) CancelOrder(order *exchange.Order) error {
 		return fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
-	mapParams := make(map[string]string)
-	mapParams["uuid"] = order.OrderID
-
 	jsonResponse := &JsonResponse{}
-	cancelOrder := PlaceOrder{}
-	strRequest := "/v1.1/market/cancel"
+	cancelOrderMsg := ""
+	strRequest := fmt.Sprintf("/api/orders/%v", order.OrderID)
 
-	jsonCancelOrder := e.ApiKeyGET(strRequest, mapParams)
+	mapParams := make(map[string]string)
+
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if !jsonResponse.Success {
-		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonResponse.Message)
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &cancelOrder); err != nil {
+	if err := json.Unmarshal(jsonResponse.Result, &cancelOrderMsg); err != nil {
 		return fmt.Errorf("%s CancelOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
+
+	log.Printf("%s CancelOrder: %v", e.GetName(), cancelOrderMsg)
 
 	order.Status = exchange.Canceling
 	order.CancelStatus = jsonCancelOrder
@@ -476,6 +486,7 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 		bytesParams, _ := json.Marshal(mapParams)
 		postBody = string(bytesParams)
 		strSignUrl = strRequestPath // ?
+		// postBody = `{"market": "BTC/USD", "side": "buy", "price": 8500, "size": 1, "type": "limit", "reduceOnly": false, "ioc": false, "postOnly": false, "clientId": null}` // TODO
 	} else if len(mapParams) != 0 {
 		strSignUrl = strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
 	} else {
@@ -496,8 +507,8 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 
 	// request
 	// strRequestUrl = strRequestPath // ==========================
-	request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(postBody))
-	// request, err = http.NewRequest(strMethod, strRequestUrl, nil)
+	// request, err = http.NewRequest(strMethod, strRequestUrl, strings.NewReader(postBody))
+	request, err = http.NewRequest(strMethod, strRequestUrl, bytes.NewBuffer([]byte(postBody)))
 	if nil != err {
 		return err.Error()
 	}

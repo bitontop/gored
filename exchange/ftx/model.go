@@ -66,16 +66,48 @@ type AccountBalances []struct {
 	Total float64 `json:"total"`
 }
 
+type AccountAllBalances struct {
+	Main []struct {
+		Coin  string  `json:"coin"`
+		Free  float64 `json:"free"`
+		Total float64 `json:"total"`
+	} `json:"main"`
+	BattleRoyale []struct {
+		Coin  string  `json:"coin"`
+		Free  float64 `json:"free"`
+		Total float64 `json:"total"`
+	} `json:"Battle Royale"`
+}
+
 type PlaceOrder struct {
 	CreatedAt     time.Time   `json:"createdAt"`
-	FilledSize    int         `json:"filledSize"`
+	FilledSize    float64     `json:"filledSize"`
 	Future        string      `json:"future"`
 	ID            int         `json:"id"`
 	Market        string      `json:"market"`
 	Price         float64     `json:"price"`
-	RemainingSize int         `json:"remainingSize"`
+	RemainingSize float64     `json:"remainingSize"`
 	Side          string      `json:"side"`
-	Size          int         `json:"size"`
+	Size          float64     `json:"size"`
+	Status        string      `json:"status"`
+	Type          string      `json:"type"`
+	ReduceOnly    bool        `json:"reduceOnly"`
+	Ioc           bool        `json:"ioc"`
+	PostOnly      bool        `json:"postOnly"`
+	ClientID      interface{} `json:"clientId"`
+}
+
+type OrderStatus struct {
+	CreatedAt     time.Time   `json:"createdAt"`
+	FilledSize    float64     `json:"filledSize"`
+	Future        string      `json:"future"`
+	ID            int         `json:"id"`
+	Market        string      `json:"market"`
+	Price         float64     `json:"price"`
+	AvgFillPrice  float64     `json:"avgFillPrice"`
+	RemainingSize float64     `json:"remainingSize"`
+	Side          string      `json:"side"`
+	Size          float64     `json:"size"`
 	Status        string      `json:"status"`
 	Type          string      `json:"type"`
 	ReduceOnly    bool        `json:"reduceOnly"`
