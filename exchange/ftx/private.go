@@ -12,7 +12,7 @@ func (e *Ftx) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.BalanceList:
 		if operation.Wallet == exchange.SpotWallet {
-			// return e.getAllBalance(operation)
+			return e.getAllBalance(operation)
 		}
 	case exchange.Balance:
 		if operation.Wallet == exchange.SpotWallet {
@@ -366,7 +366,7 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 
 	jsonResponse := &JsonResponse{}
 	accountBalance := AccountBalances{}
-	strRequest := "/wallet/balances"
+	strRequest := "/api/wallet/balances"
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if operation.DebugMode {
@@ -389,6 +389,7 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 	operation.BalanceList = []exchange.AssetBalance{}
 	for _, account := range accountBalance {
 		if account.Total == 0 {
+			// log.Printf("--%v", account)
 			continue
 		}
 
