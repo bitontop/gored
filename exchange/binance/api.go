@@ -681,3 +681,52 @@ func (e *Binance) WApiKeyRequest(strMethod string, mapParams map[string]string, 
 
 	return string(body)
 }
+
+func (e *Binance) TestApi() string {
+	key := "NWFjY2U2OWQzMjM0NDczMTgwODcwMDNjOWU2M2NhMDE="
+	secret := "NWFmNWQ0NGRiMTlhNGMz"
+	strUrl := "https://api.btse.com/spot/api/v3.1/user/wallet"
+	nonce := fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
+
+	mapParams := make(map[string]string)
+
+	log.Printf("====================\nkey: %v, secret: %v, strUrl: %v, nonce: %v, mapParams: %+v", key, secret, strUrl, nonce, mapParams) // ====================
+
+	// signature := exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
+
+	// payload := fmt.Sprintf("%s&signature=%s", exchange.Map2UrlQuery(mapParams), signature)
+	// if len(mapParams) == 0 {
+	// 	payload = fmt.Sprintf("signature=%s", signature)
+	// }
+
+	// strUrl := API_URL + strRequestPath
+	// request, err := http.NewRequest(strMethod, strUrl, bytes.NewBuffer([]byte(payload)))
+	// mapParams["signature"] = signature
+
+	// signature at end
+	// strUrl := API_URL + strRequestPath + "?" + fmt.Sprintf("%s&signature=%s", exchange.Map2UrlQuery(mapParams), signature)
+	request, err := http.NewRequest("GET", strUrl, nil)
+
+	if nil != err {
+		return err.Error()
+	}
+
+	// log.Printf("=wwww= strUrl: %v", strUrl) // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+
+	request.Header.Add("Content-Type", "application/json; charset=utf-8")
+	request.Header.Add("X-MBX-APIKEY", e.API_KEY)
+
+	httpClient := &http.Client{}
+	response, err := httpClient.Do(request)
+	if nil != err {
+		return err.Error()
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if nil != err {
+		return err.Error()
+	}
+
+	return string(body)
+}

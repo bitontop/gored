@@ -12,33 +12,33 @@ func (e *Ftx) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.BalanceList:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.getAllBalance(operation)
+			// return e.getAllBalance(operation)
 		}
 	case exchange.Balance:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.getBalance(operation)
+			// return e.getBalance(operation)
 		}
 
 	// Private operation
 	case exchange.GetOpenOrder:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.doGetOpenOrder(operation)
+			// return e.doGetOpenOrder(operation)
 		}
 	case exchange.GetOrderHistory:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.doGetOrderHistory(operation)
+			// return e.doGetOrderHistory(operation)
 		}
 	case exchange.GetWithdrawalHistory:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.doGetWithdrawalHistory(operation)
+			// return e.doGetWithdrawalHistory(operation)
 		}
 	case exchange.GetDepositHistory:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.doGetDepositHistory(operation)
+			// return e.doGetDepositHistory(operation)
 		}
 	case exchange.GetDepositAddress:
 		if operation.Wallet == exchange.SpotWallet {
-			return e.doGetDepositAddress(operation)
+			// return e.doGetDepositAddress(operation)
 		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
@@ -260,7 +260,7 @@ func (e *Ftx) doGetDepositHistory(operation *exchange.AccountOperation) error {
 
 	jsonResponse := &JsonResponse{}
 	depositHistory := DepositHistory{}
-	strRequest := "/wallet/deposits"
+	strRequest := "/api/wallet/deposits"
 
 	mapParams := make(map[string]string)
 

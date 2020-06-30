@@ -179,6 +179,9 @@ func (e *Stex) DeleteCoin(coin *coin.Coin) {
 
 /*************** Pairs on the Exchanges ***************/
 func (e *Stex) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+	if pair == nil{
+		return nil
+	}
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}

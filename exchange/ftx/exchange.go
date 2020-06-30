@@ -169,6 +169,9 @@ func (e *Ftx) DeleteCoin(coin *coin.Coin) {
 
 /*************** Pairs on the Exchanges ***************/
 func (e *Ftx) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+	if pair == nil {
+		return nil
+	}
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
@@ -228,13 +231,13 @@ func (e *Ftx) DeletePair(pair *pair.Pair) {
 func (e *Ftx) GetConstraintFetchMethod(pair *pair.Pair) *exchange.ConstrainFetchMethod {
 	constrainFetchMethod := &exchange.ConstrainFetchMethod{}
 	constrainFetchMethod.PublicAPI = true
-	constrainFetchMethod.PrivateAPI = false
-	constrainFetchMethod.HealthAPI = false
+	constrainFetchMethod.PrivateAPI = true // POST auth error
+	constrainFetchMethod.HealthAPI = true
 	constrainFetchMethod.HasWithdraw = false
 	constrainFetchMethod.HasTransfer = false
 	constrainFetchMethod.Fee = false
-	constrainFetchMethod.LotSize = false
-	constrainFetchMethod.PriceFilter = false
+	constrainFetchMethod.LotSize = true
+	constrainFetchMethod.PriceFilter = true
 	constrainFetchMethod.TxFee = false
 	constrainFetchMethod.Withdraw = false
 	constrainFetchMethod.Deposit = false

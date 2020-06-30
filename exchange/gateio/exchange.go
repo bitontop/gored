@@ -169,6 +169,9 @@ func (e *Gateio) DeleteCoin(coin *coin.Coin) {
 
 /*************** Pairs on the Exchanges ***************/
 func (e *Gateio) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+	if pair == nil{
+		return nil
+	}
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}

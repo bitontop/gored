@@ -171,6 +171,9 @@ func (e *Coindeal) DeleteCoin(coin *coin.Coin) {
 
 /*************** Pairs on the Exchanges ***************/
 func (e *Coindeal) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
+	if pair == nil{
+		return nil
+	}
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
 		return tmp.(*exchange.PairConstraint)
 	}
