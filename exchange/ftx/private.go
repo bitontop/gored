@@ -3,7 +3,6 @@ package ftx
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 
 	"github.com/bitontop/gored/exchange"
 )
@@ -51,11 +50,12 @@ func (e *Ftx) doGetOpenOrder(operation *exchange.AccountOperation) error {
 
 	jsonResponse := &JsonResponse{}
 	openOrders := OpenOrders{}
-	symbol := e.GetSymbolByPair(operation.Pair)
 	strRequest := "/api/orders" // /orders?market={market}
 
 	mapParams := make(map[string]string)
-	mapParams["market"] = symbol
+	if operation.Pair != nil {
+		mapParams["market"] = e.GetSymbolByPair(operation.Pair)
+	}
 
 	jsonGetOpenOrder := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if operation.DebugMode {
@@ -80,7 +80,7 @@ func (e *Ftx) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	for _, o := range openOrders {
 
 		order := &exchange.Order{
-			Pair:         operation.Pair,
+			Pair:         e.GetPairBySymbol(o.Market),
 			OrderID:      fmt.Sprintf("%v", o.ID),
 			Rate:         o.Price,
 			Quantity:     o.Size,
@@ -224,11 +224,6 @@ func (e *Ftx) doGetWithdrawalHistory(operation *exchange.AccountOperation) error
 	operation.WithdrawalHistory = []*exchange.WDHistory{}
 	for _, withdrawRecord := range withdrawHistory {
 		c := e.GetCoinBySymbol(withdrawRecord.Coin)
-		quantity, err := strconv.ParseFloat(withdrawRecord.Size, 64)
-		if err != nil {
-			operation.Error = fmt.Errorf("%s doGetWithdrawalHistory parse quantity Err: %v, %v", e.GetName(), err, withdrawRecord.Size)
-			return operation.Error
-		}
 
 		var chainType exchange.ChainType
 		chainType = exchange.MAINNET
@@ -237,8 +232,8 @@ func (e *Ftx) doGetWithdrawalHistory(operation *exchange.AccountOperation) error
 		record := &exchange.WDHistory{
 			ID:        fmt.Sprintf("%v", withdrawRecord.ID),
 			Coin:      c,
-			Quantity:  quantity,
-			Tag:       withdrawRecord.Tag,
+			Quantity:  withdrawRecord.Size,
+			Tag:       fmt.Sprintf("%v", withdrawRecord.Tag),
 			Address:   withdrawRecord.Address,
 			TxHash:    withdrawRecord.Txid,
 			ChainType: chainType,
@@ -270,6 +265,7 @@ func (e *Ftx) doGetDepositHistory(operation *exchange.AccountOperation) error {
 		operation.CallResponce = jsonGetDepositHistory
 	}
 
+	// log.Printf("***********************DEPOSIT HISTORY: %v", jsonGetDepositHistory) // TODO
 	if err := json.Unmarshal([]byte(jsonGetDepositHistory), &jsonResponse); err != nil {
 		operation.Error = fmt.Errorf("%s doGetDepositHistory Json Unmarshal Err: %v %v", e.GetName(), err, jsonGetDepositHistory)
 		return operation.Error
@@ -286,11 +282,6 @@ func (e *Ftx) doGetDepositHistory(operation *exchange.AccountOperation) error {
 	operation.DepositHistory = []*exchange.WDHistory{}
 	for _, depositRecord := range depositHistory {
 		c := e.GetCoinBySymbol(depositRecord.Coin)
-		quantity, err := strconv.ParseFloat(depositRecord.Size, 64)
-		if err != nil {
-			operation.Error = fmt.Errorf("%s doGetDepositHistory parse quantity Err: %v, %v", e.GetName(), err, depositRecord.Size)
-			return operation.Error
-		}
 
 		var chainType exchange.ChainType
 		chainType = exchange.MAINNET
@@ -299,7 +290,7 @@ func (e *Ftx) doGetDepositHistory(operation *exchange.AccountOperation) error {
 		record := &exchange.WDHistory{
 			ID:        fmt.Sprintf("%v", depositRecord.ID),
 			Coin:      c,
-			Quantity:  quantity,
+			Quantity:  depositRecord.Size,
 			TxHash:    depositRecord.Txid,
 			ChainType: chainType,
 			Status:    statusMsg,
@@ -368,8 +359,8 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	jsonResponse := &JsonResponse{}
-	accountBalance := AccountAllBalances{}
-	strRequest := "/api/wallet/all_balances"
+	accountBalance := AccountBalances{}
+	strRequest := "/api/wallet/balances"
 
 	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
 	if operation.DebugMode {
@@ -391,7 +382,7 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	operation.BalanceList = []exchange.AssetBalance{}
-	for _, account := range accountBalance.Main {
+	for _, account := range accountBalance {
 		if account.Total == 0 {
 			// log.Printf("--%v", account)
 			continue
