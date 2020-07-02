@@ -340,7 +340,6 @@ func Test_AOOpenOrder(e exchange.Exchange, pair *pair.Pair) {
 		Type:      exchange.GetOpenOrder,
 		Wallet:    exchange.SpotWallet,
 		Ex:        e.GetName(),
-		Coin:      pair.Base,
 		Pair:      pair,
 		DebugMode: true,
 	}
