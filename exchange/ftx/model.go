@@ -158,25 +158,25 @@ type CloseOrders []struct {
 
 // need test array or single
 type WithdrawHistory []struct {
-	Coin    string    `json:"coin"`
-	Address string    `json:"address"`
-	Tag     string    `json:"tag"`
-	Fee     int       `json:"fee"`
-	ID      int       `json:"id"`
-	Size    string    `json:"size"`
-	Status  string    `json:"status"`
-	Time    time.Time `json:"time"`
-	Txid    string    `json:"txid"`
+	Coin    string      `json:"coin"`
+	Address string      `json:"address"`
+	Tag     interface{} `json:"tag"`
+	Fee     float64     `json:"fee"`
+	ID      int         `json:"id"`
+	Size    float64     `json:"size"`
+	Status  string      `json:"status"`
+	Time    time.Time   `json:"time"`
+	Txid    string      `json:"txid"`
 }
 
 type DepositHistory []struct {
 	Coin          string    `json:"coin"`
 	Confirmations int       `json:"confirmations"`
 	ConfirmedTime time.Time `json:"confirmedTime"`
-	Fee           int       `json:"fee"`
+	Fee           float64   `json:"fee"`
 	ID            int       `json:"id"`
 	SentTime      time.Time `json:"sentTime"`
-	Size          string    `json:"size"`
+	Size          float64   `json:"size"`
 	Status        string    `json:"status"`
 	Time          time.Time `json:"time"`
 	Txid          string    `json:"txid"`

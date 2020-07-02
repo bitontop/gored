@@ -518,7 +518,9 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 	request.Header.Add("FTX-KEY", e.API_KEY)
 	request.Header.Add("FTX-TS", timestamp)
 	request.Header.Add("FTX-SIGN", signature)
-	// request.Header.Add("Content-Type", "application/json")
+	if e.Sub_Account_Name != "" {
+		request.Header.Add("FTX-SUBACCOUNT", e.Sub_Account_Name)
+	}
 	// add FTX-SUBACCOUNT if using subaccount
 
 	response, err := httpClient.Do(request)

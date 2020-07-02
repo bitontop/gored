@@ -24,8 +24,9 @@ type Ftx struct {
 	Name    string `bson:"name"`
 	Website string `bson:"website"`
 
-	API_KEY    string
-	API_SECRET string
+	API_KEY          string
+	API_SECRET       string
+	Sub_Account_Name string
 
 	Source    exchange.DataSource // / exchange API / microservicve api 1 / PSQL
 	SourceURI string
@@ -46,10 +47,11 @@ func CreateFtx(config *exchange.Config) *Ftx {
 			Name:    "Ftx",
 			Website: "https://ftx.com/",
 
-			API_KEY:    config.API_KEY,
-			API_SECRET: config.API_SECRET,
-			Source:     config.Source,
-			SourceURI:  config.SourceURI,
+			API_KEY:          config.API_KEY,
+			API_SECRET:       config.API_SECRET,
+			Sub_Account_Name: config.UserID,
+			Source:           config.Source,
+			SourceURI:        config.SourceURI,
 		}
 
 		balanceMap = cmap.New()
