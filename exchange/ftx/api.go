@@ -276,7 +276,6 @@ func (e *Ftx) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) bool
 	return true
 }
 
-// TODO
 func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
@@ -284,7 +283,6 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = e.GetSymbolByPair(pair) // future "BTC-PERP", spot "ALTHEDGE/USD"
-	// mapParams["market"] = "BTC-PERP" // TODO
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "sell"
@@ -318,40 +316,43 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	return order, nil
 }
 
-// TODO
 func (e *Ftx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order, error) {
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
 	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair)
-	mapParams["quantity"] = strconv.FormatFloat(quantity, 'f', -1, 64)
-	mapParams["rate"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["market"] = e.GetSymbolByPair(pair) // future "BTC-PERP", spot "ALTHEDGE/USD"
+	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
+	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
+	mapParams["side"] = "buy"
+	mapParams["type"] = "limit"
+	// mapParams["reduceOnly"] = false
 
 	jsonResponse := &JsonResponse{}
-	uuid := Uuid{}
-	strRequest := "/v1.1/market/buylimit"
+	placeOrder := PlaceOrder{}
+	strRequest := "/api/orders"
 
-	jsonPlaceReturn := e.ApiKeyGET(strRequest, mapParams)
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !jsonResponse.Success {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonResponse.Message)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %s", e.GetName(), jsonPlaceReturn)
 	}
-	if err := json.Unmarshal(jsonResponse.Result, &uuid); err != nil {
+	if err := json.Unmarshal(jsonResponse.Result, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 	}
 
 	order := &exchange.Order{
 		Pair:         pair,
-		OrderID:      uuid.Id,
+		OrderID:      fmt.Sprintf("%v", placeOrder.ID),
 		Rate:         rate,
 		Quantity:     quantity,
 		Direction:    exchange.Buy,
 		Status:       exchange.New,
 		JsonResponse: jsonPlaceReturn,
 	}
+
 	return order, nil
 }
 
@@ -513,6 +514,7 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 		return err.Error()
 	}
 
+	request.Header.Set("Content-Type", "application/json")
 	request.Header.Add("FTX-KEY", e.API_KEY)
 	request.Header.Add("FTX-TS", timestamp)
 	request.Header.Add("FTX-SIGN", signature)
