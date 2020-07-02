@@ -267,7 +267,9 @@ func (e *Coinex) doGetOpenOrder(operation *exchange.AccountOperation) error {
 
 	mapParams := make(map[string]string)
 	mapParams["access_id"] = e.API_KEY
-	mapParams["market"] = e.GetSymbolByPair(operation.Pair)
+	if operation.Pair != nil {
+		mapParams["market"] = e.GetSymbolByPair(operation.Pair)
+	}
 	mapParams["page"] = "1"
 	mapParams["limit"] = "100"
 
@@ -310,7 +312,7 @@ func (e *Coinex) doGetOpenOrder(operation *exchange.AccountOperation) error {
 		}
 
 		order := &exchange.Order{
-			Pair:         operation.Pair,
+			Pair:         e.GetPairBySymbol(o.Market),
 			OrderID:      fmt.Sprintf("%v", o.ID),
 			Rate:         rate,
 			Quantity:     quantity,

@@ -300,7 +300,9 @@ func (e *Binance) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	strRequest := "/api/v3/openOrders"
 
 	mapParams := make(map[string]string)
-	// mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+	if operation.Pair != nil {
+		mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+	}
 
 	jsonGetOpenOrder := e.ApiKeyGet(mapParams, strRequest)
 	if operation.DebugMode {

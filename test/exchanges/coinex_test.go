@@ -1,7 +1,6 @@
 package test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/bitontop/gored/exchange"
@@ -59,21 +58,21 @@ func Test_Coinex(t *testing.T) {
 
 	// spot Kline
 	// interval options: 1min, 3min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 12hour, 1day, 3day, 1week
-	opKline := &exchange.PublicOperation{
-		Wallet:        exchange.SpotWallet,
-		Type:          exchange.KLine,
-		EX:            e.GetName(),
-		Pair:          pair,
-		KlineInterval: "1min", // default to 5min if not provided
-		DebugMode:     true,
-	}
-	err := e.LoadPublicData(opKline)
-	if err != nil {
-		log.Printf("%v", err)
-	}
+	// opKline := &exchange.PublicOperation{
+	// 	Wallet:        exchange.SpotWallet,
+	// 	Type:          exchange.KLine,
+	// 	EX:            e.GetName(),
+	// 	Pair:          pair,
+	// 	KlineInterval: "1min", // default to 5min if not provided
+	// 	DebugMode:     true,
+	// }
+	// err := e.LoadPublicData(opKline)
+	// if err != nil {
+	// 	log.Printf("%v", err)
+	// }
 
-	for _, k := range opKline.Kline {
-		log.Printf("%s SpotKline %+v", e.GetName(), k)
-	}
+	// for _, k := range opKline.Kline {
+	// 	log.Printf("%s SpotKline %+v", e.GetName(), k)
+	// }
 	// ==============================================
 }

@@ -50,7 +50,9 @@ func (e *Okex) getOpenOrder(op *exchange.AccountOperation) error {
 	strRequest := "/api/spot/v3/orders_pending"
 
 	mapParams := make(map[string]interface{})
-	// mapParams["instrument_id"] = e.GetSymbolByPair(op.Pair)
+	if op.Pair != nil {
+		mapParams["instrument_id"] = e.GetSymbolByPair(op.Pair)
+	}
 
 	jsonOrders := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if op.DebugMode {
