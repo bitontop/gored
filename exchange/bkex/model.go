@@ -15,7 +15,7 @@ type JsonResponse struct {
 /********** Public API Structure**********/
 type Coin struct {
 	CoinType          string  `json:"coinType"`
-	MaxWithdrawOneDay int     `json:"maxWithdrawOneDay"`
+	MaxWithdrawOneDay float64 `json:"maxWithdrawOneDay"`
 	MaxWithdrawSingle float64 `json:"maxWithdrawSingle"`
 	MinWithdrawSingle float64 `json:"minWithdrawSingle"`
 	SupportDeposit    bool    `json:"supportDeposit"`
