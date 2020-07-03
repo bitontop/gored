@@ -25,7 +25,7 @@ func Test_Ftx(t *testing.T) {
 	Test_Pair(e, pair)
 	// Test_Orderbook(e, pair)
 	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_Constraint(e, pair)
 	// Test_TickerPrice(e)
 
 	// Test_AOOpenOrder(e, nil)

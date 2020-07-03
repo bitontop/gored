@@ -143,19 +143,21 @@ func (e *Ftx) GetPairsData() error { //TODO
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
 				pairConstraint = &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Name,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     data.SizeIncrement,
-					PriceFilter: data.PriceIncrement,
-					Listed:      true,
+					PairID:           p.ID,
+					Pair:             p,
+					ExSymbol:         data.Name,
+					MakerFee:         DEFAULT_MAKER_FEE,
+					TakerFee:         DEFAULT_TAKER_FEE,
+					LotSize:          data.SizeIncrement,
+					PriceFilter:      data.PriceIncrement,
+					MinTradeQuantity: data.MinProvideSize,
+					Listed:           true,
 				}
 			} else {
 				pairConstraint.ExSymbol = data.Name
 				pairConstraint.LotSize = data.SizeIncrement
 				pairConstraint.PriceFilter = data.PriceIncrement
+				pairConstraint.MinTradeQuantity = data.MinProvideSize
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
