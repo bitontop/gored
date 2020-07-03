@@ -154,6 +154,8 @@ func (e *Ftx) GetPairsData() error { //TODO
 				}
 			} else {
 				pairConstraint.ExSymbol = data.Name
+				pairConstraint.LotSize = data.SizeIncrement
+				pairConstraint.PriceFilter = data.PriceIncrement
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

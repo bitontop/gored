@@ -3,6 +3,7 @@ package ftx
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/bitontop/gored/exchange"
 )
@@ -39,8 +40,100 @@ func (e *Ftx) DoAccountOperation(operation *exchange.AccountOperation) error {
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositAddress(operation)
 		}
+	case exchange.GetTransferHistory:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetTransferHistory(operation)
+		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Ftx) doGetTransferHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+	depositHistory := DepositHistory{}
+	withdrawHistory := WithdrawHistory{}
+
+	// get deposit history
+	strRequest := "/api/wallet/deposits"
+
+	jsonGetDepositHistory := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonGetDepositHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonGetDepositHistory), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetDepositHistory Json Unmarshal Err: %v %v", e.GetName(), err, jsonGetDepositHistory)
+		return operation.Error
+	} else if !jsonResponse.Success {
+		operation.Error = fmt.Errorf("%s doGetDepositHistory Failed: %v", e.GetName(), jsonGetDepositHistory)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &depositHistory); err != nil {
+		operation.Error = fmt.Errorf("%s doGetDepositHistory Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return operation.Error
+	}
+
+	// get withdraw history
+	strRequest = "/api/wallet/withdrawals"
+
+	jsonGetWithdrawalHistory := e.ApiKeyRequest("GET", strRequest, make(map[string]string))
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonGetWithdrawalHistory
+	}
+
+	if err := json.Unmarshal([]byte(jsonGetWithdrawalHistory), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetWithdrawalHistory Json Unmarshal Err: %v %v", e.GetName(), err, jsonGetWithdrawalHistory)
+		return operation.Error
+	} else if !jsonResponse.Success {
+		operation.Error = fmt.Errorf("%s doGetWithdrawalHistory Failed: %v", e.GetName(), jsonGetWithdrawalHistory)
+		return operation.Error
+	}
+	if err := json.Unmarshal(jsonResponse.Result, &withdrawHistory); err != nil {
+		operation.Error = fmt.Errorf("%s doGetWithdrawalHistory Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.TransferOutHistory = []*exchange.TransferHistory{}
+	operation.TransferInHistory = []*exchange.TransferHistory{}
+	for _, dh := range depositHistory {
+		if !strings.Contains(dh.Notes, "Transfer from main account") {
+			continue
+		}
+		c := e.GetCoinBySymbol(dh.Coin)
+
+		record := &exchange.TransferHistory{
+			Coin:      c,
+			Quantity:  dh.Size,
+			TimeStamp: dh.Time.UnixNano(),
+		}
+
+		record.Type = exchange.TransferIn
+		operation.TransferInHistory = append(operation.TransferInHistory, record)
+	}
+	for _, wh := range withdrawHistory {
+		if !strings.Contains(wh.Notes, "to main account") {
+			continue
+		}
+		c := e.GetCoinBySymbol(wh.Coin)
+
+		record := &exchange.TransferHistory{
+			Coin:      c,
+			Quantity:  wh.Size,
+			TimeStamp: wh.Time.UnixNano(),
+		}
+
+		record.Type = exchange.TransferOut
+		operation.TransferOutHistory = append(operation.TransferOutHistory, record)
+	}
+
+	return nil
 }
 
 func (e *Ftx) doGetOpenOrder(operation *exchange.AccountOperation) error {
@@ -233,7 +326,7 @@ func (e *Ftx) doGetWithdrawalHistory(operation *exchange.AccountOperation) error
 			ID:        fmt.Sprintf("%v", withdrawRecord.ID),
 			Coin:      c,
 			Quantity:  withdrawRecord.Size,
-			Tag:       fmt.Sprintf("%v", withdrawRecord.Tag),
+			Tag:       fmt.Sprintf("%s", withdrawRecord.Tag),
 			Address:   withdrawRecord.Address,
 			TxHash:    withdrawRecord.Txid,
 			ChainType: chainType,
@@ -265,7 +358,6 @@ func (e *Ftx) doGetDepositHistory(operation *exchange.AccountOperation) error {
 		operation.CallResponce = jsonGetDepositHistory
 	}
 
-	// log.Printf("***********************DEPOSIT HISTORY: %v", jsonGetDepositHistory) // TODO
 	if err := json.Unmarshal([]byte(jsonGetDepositHistory), &jsonResponse); err != nil {
 		operation.Error = fmt.Errorf("%s doGetDepositHistory Json Unmarshal Err: %v %v", e.GetName(), err, jsonGetDepositHistory)
 		return operation.Error

@@ -25,7 +25,7 @@ func Test_Coinex(t *testing.T) {
 	// Test_Orderbook(e, pair)
 	// Test_NewOrderBook(e, pair)
 	// Test_ConstraintFetch(e, pair)
-	// Test_Constraint(e, pair)
+	Test_Constraint(e, pair)
 
 	// Test_TickerPrice(e)
 

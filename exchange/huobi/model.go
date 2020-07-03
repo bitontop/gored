@@ -77,13 +77,20 @@ type CoinsData []struct {
 // }
 
 type PairsData []struct {
-	BaseCurrency    string `json:"base-currency"`
-	QuoteCurrency   string `json:"quote-currency"`
-	PricePrecision  int    `json:"price-precision"`
-	AmountPrecision int    `json:"amount-precision"`
-	SymbolPartition string `json:"symbol-partition"`
-	Symbol          string `json:"symbol"`
-	State           string `json:"state"`
+	BaseCurrency             string  `json:"base-currency"`
+	QuoteCurrency            string  `json:"quote-currency"`
+	PricePrecision           int     `json:"price-precision"`
+	AmountPrecision          int     `json:"amount-precision"`
+	SymbolPartition          string  `json:"symbol-partition"`
+	Symbol                   string  `json:"symbol"`
+	State                    string  `json:"state"`
+	ValuePrecision           int     `json:"value-precision"`
+	MinOrderAmt              float64 `json:"min-order-amt"`
+	MaxOrderAmt              float64 `json:"max-order-amt"`
+	MinOrderValue            float64 `json:"min-order-value"`
+	LeverageRatio            float64 `json:"leverage-ratio,omitempty"`
+	SuperMarginLeverageRatio float64 `json:"super-margin-leverage-ratio,omitempty"`
+	FundingLeverageRatio     float64 `json:"funding-leverage-ratio,omitempty"`
 }
 
 type OrderBook struct {

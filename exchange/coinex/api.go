@@ -169,17 +169,19 @@ func (e *Coinex) GetPairsData() error {
 		if p != nil {
 			makerFee, _ := strconv.ParseFloat(data.MakerFeeRate, 64)
 			takerFee, _ := strconv.ParseFloat(data.TakerFeeRate, 64)
+			minTrade, _ := strconv.ParseFloat(data.MinAmount, 64)
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
 				pairConstraint = &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    makerFee,
-					TakerFee:    takerFee,
-					LotSize:     math.Pow10(-1 * data.TradingDecimal),
-					PriceFilter: math.Pow10(-1 * data.PricingDecimal),
-					Listed:      true,
+					PairID:           p.ID,
+					Pair:             p,
+					ExSymbol:         data.Symbol,
+					MakerFee:         makerFee,
+					TakerFee:         takerFee,
+					LotSize:          math.Pow10(-1 * data.TradingDecimal),
+					PriceFilter:      math.Pow10(-1 * data.PricingDecimal),
+					MinTradeQuantity: minTrade,
+					Listed:           true,
 				}
 			} else {
 				pairConstraint.ExSymbol = data.Symbol
@@ -187,6 +189,7 @@ func (e *Coinex) GetPairsData() error {
 				pairConstraint.TakerFee = takerFee
 				pairConstraint.LotSize = math.Pow10(-1 * data.TradingDecimal)
 				pairConstraint.PriceFilter = math.Pow10(-1 * data.PricingDecimal)
+				pairConstraint.MinTradeQuantity = minTrade
 			}
 			e.SetPairConstraint(pairConstraint)
 		}

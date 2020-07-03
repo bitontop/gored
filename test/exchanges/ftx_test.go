@@ -28,11 +28,12 @@ func Test_Ftx(t *testing.T) {
 	// Test_Constraint(e, pair)
 	// Test_TickerPrice(e)
 
-	// Test_AOOpenOrder(e, pair)
+	// Test_AOOpenOrder(e, nil)
 	// Test_AOOrderHistory(e, pair)
-	// Test_AODepositAddress(e, pair.Base)
+	// Test_AODepositAddress(e, pair.Target)
 	// Test_AODepositHistory(e, pair)
 	// Test_AOWithdrawalHistory(e, pair)
+	// Test_AOTransferHistory(e)
 
 	// ==============================================
 	// spot Kline
@@ -59,9 +60,9 @@ func Test_Ftx(t *testing.T) {
 
 	// private only balance done, POST auth not passed
 	Test_Balance(e, pair)
-	Test_CheckBalance(e, pair.Target, exchange.SpotWallet)
+	Test_CheckBalance(e, pair.Base, exchange.SpotWallet)
 	Test_CheckAllBalance(e, exchange.SpotWallet)
-	// Test_Trading(e, pair, 0.00000001, 100)
+	// Test_Trading(e, pair, 1234, 0.001)
 	// Test_Trading_Sell(e, pair, 999999, 0.1)
 	// Test_OrderStatus(e, pair, "9596912")
 	// Test_CancelOrder(e, pair, "9596912")

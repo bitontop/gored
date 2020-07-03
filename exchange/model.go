@@ -32,16 +32,17 @@ type Config struct {
 }
 
 type PairConstraint struct {
-	PairID      int
-	Pair        *pair.Pair //the code on excahnge with the same chain, eg: BCH, BCC on different exchange, but they are the same chain
-	ExID        string
-	ExSymbol    string
-	MakerFee    float64
-	TakerFee    float64
-	LotSize     float64 // the decimal place for this coin on exchange for the pairs, eg:  BTC: 0.00001    NEO:1   LTC: 0.001 ETH:0.01
-	PriceFilter float64
-	Listed      bool
-	Issue       string //the issue for the pair if have any problem
+	PairID           int
+	Pair             *pair.Pair //the code on excahnge with the same chain, eg: BCH, BCC on different exchange, but they are the same chain
+	ExID             string
+	ExSymbol         string
+	MakerFee         float64
+	TakerFee         float64
+	LotSize          float64 // the decimal place for this coin on exchange for the pairs, eg:  BTC: 0.00001    NEO:1   LTC: 0.001 ETH:0.01
+	PriceFilter      float64
+	MinTradeQuantity float64 // minimum trade target quantity
+	Listed           bool
+	Issue            string //the issue for the pair if have any problem
 }
 
 type CoinConstraint struct {

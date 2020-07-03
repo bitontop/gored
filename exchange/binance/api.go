@@ -251,21 +251,35 @@ func (e *Binance) GetPairsData() error {
 					}
 				}
 				pairConstraint := e.GetPairConstraint(p)
+				// get minTradeQuantity
+				minTrade := 0.0
+				for _, filter := range data.Filters {
+					if filter.FilterType == "LOT_SIZE" {
+						minTrade, err = strconv.ParseFloat(filter.MinQty, 64)
+						if err != nil {
+							log.Printf("%s minTrade Filter parse Err: %v, %v", e.GetName(), filter.MinQty, err)
+							minTrade = 0
+						}
+						break
+					}
+				}
 				if pairConstraint == nil {
 					pairConstraint = &exchange.PairConstraint{
-						PairID:      p.ID,
-						Pair:        p,
-						ExSymbol:    data.Symbol,
-						MakerFee:    DEFAULT_MAKER_FEE,
-						TakerFee:    DEFAULT_TAKER_FEE,
-						LotSize:     lotsize,
-						PriceFilter: priceFilter,
-						Listed:      true,
+						PairID:           p.ID,
+						Pair:             p,
+						ExSymbol:         data.Symbol,
+						MakerFee:         DEFAULT_MAKER_FEE,
+						TakerFee:         DEFAULT_TAKER_FEE,
+						LotSize:          lotsize,
+						PriceFilter:      priceFilter,
+						MinTradeQuantity: minTrade,
+						Listed:           true,
 					}
 				} else {
 					pairConstraint.ExSymbol = data.Symbol
 					pairConstraint.LotSize = lotsize
 					pairConstraint.PriceFilter = priceFilter
+					pairConstraint.MinTradeQuantity = minTrade
 				}
 				e.SetPairConstraint(pairConstraint)
 			}

@@ -159,6 +159,7 @@ type CloseOrders []struct {
 // need test array or single
 type WithdrawHistory []struct {
 	Coin    string      `json:"coin"`
+	Notes   string      `json:"notes"`
 	Address string      `json:"address"`
 	Tag     interface{} `json:"tag"`
 	Fee     float64     `json:"fee"`
@@ -171,6 +172,7 @@ type WithdrawHistory []struct {
 
 type DepositHistory []struct {
 	Coin          string    `json:"coin"`
+	Notes         string    `json:"notes"`
 	Confirmations int       `json:"confirmations"`
 	ConfirmedTime time.Time `json:"confirmedTime"`
 	Fee           float64   `json:"fee"`

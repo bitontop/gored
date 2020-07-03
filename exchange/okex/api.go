@@ -180,24 +180,30 @@ func (e *Okex) GetPairsData() error {
 		if err != nil {
 			return fmt.Errorf("%s Convert lotSize to Float64 Err: %v %v", e.GetName(), err, data.TickSize)
 		}
+		minTrade, err := strconv.ParseFloat(data.MinSize, 64)
+		if err != nil {
+			return fmt.Errorf("%s Convert minTrade to Float64 Err: %v %v", e.GetName(), err, data.MinSize)
+		}
 
 		if p != nil {
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
 				pairConstraint = &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.InstrumentID,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     lotSize,
-					PriceFilter: priceFilter,
-					Listed:      DEFAULT_LISTED,
+					PairID:           p.ID,
+					Pair:             p,
+					ExSymbol:         data.InstrumentID,
+					MakerFee:         DEFAULT_MAKER_FEE,
+					TakerFee:         DEFAULT_TAKER_FEE,
+					LotSize:          lotSize,
+					PriceFilter:      priceFilter,
+					MinTradeQuantity: minTrade,
+					Listed:           DEFAULT_LISTED,
 				}
 			} else {
 				pairConstraint.ExSymbol = data.InstrumentID
 				pairConstraint.LotSize = lotSize
 				pairConstraint.PriceFilter = priceFilter
+				pairConstraint.MinTradeQuantity = minTrade
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
