@@ -7,7 +7,6 @@ package coin
 import (
 	"errors"
 	"fmt"
-	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -98,14 +97,10 @@ func GetCoins() []*Coin {
 }
 
 func AddCoin(coin *Coin) error {
-	if strings.ToUpper(coin.Code) == "USD" {
-		log.Printf("***************AddCoin USD: %+v", coin) // TODO
-	}
 	if coin != nil && coin.Code != "" {
 		if coin.ID == 0 {
 			coin.ID = GenerateCoinID()
 		} else if ExistID(coin.ID) {
-			log.Printf("***************ExistID: %+v", coin) // TODO
 			coin.ID = GenerateCoinID()
 		}
 		coin.Code = strings.ToUpper(coin.Code)

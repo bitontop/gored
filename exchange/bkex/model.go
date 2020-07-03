@@ -16,7 +16,7 @@ type JsonResponse struct {
 type Coin struct {
 	CoinType          string  `json:"coinType"`
 	MaxWithdrawOneDay int     `json:"maxWithdrawOneDay"`
-	MaxWithdrawSingle int     `json:"maxWithdrawSingle"`
+	MaxWithdrawSingle float64 `json:"maxWithdrawSingle"`
 	MinWithdrawSingle float64 `json:"minWithdrawSingle"`
 	SupportDeposit    bool    `json:"supportDeposit"`
 	SupportTrade      bool    `json:"supportTrade"`
