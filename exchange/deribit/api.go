@@ -128,7 +128,7 @@ func (e *Deribit) GetPairsData() error {
 			p := &pair.Pair{}
 			switch e.Source {
 			case exchange.EXCHANGE_API:
-				base := &coin.Coin{000, "USD", "USD", "", "", "", 0, 0}
+				base := coin.GetCoin("USD") // &coin.Coin{0, "USD", "USD", "", "", "", 0, 0}
 				target := coin.GetCoin("CQBTC")
 				if base != nil && target != nil {
 					p = pair.GetPair(base, target)

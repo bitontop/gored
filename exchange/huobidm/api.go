@@ -118,12 +118,10 @@ func (e *Huobidm) GetCoinsData() error {
 		}
 	} else {
 		c = e.GetCoinBySymbol("usd")
-		if c == nil {
-			c = &coin.Coin{
-				ID:   308,
-				Code: "USD",
-			}
-		}
+	}
+
+	if c == nil {
+		return nil
 	}
 	coinConstraint := &exchange.CoinConstraint{
 		CoinID:       c.ID,
