@@ -107,7 +107,7 @@ func (e *Ftx) GetCoinsData() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Add Model of API Response
 Step 3: Modify API Path(strRequestUrl)*/
-func (e *Ftx) GetPairsData() error { //TODO
+func (e *Ftx) GetPairsData() error {
 	jsonResponse := &JsonResponse{}
 	pairsData := PairsData{}
 
@@ -142,7 +142,7 @@ func (e *Ftx) GetPairsData() error { //TODO
 		if p != nil {
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
-				pairConstraint = &exchange.PairConstraint{
+				pairConstraint = &exchange.PairConstraint{ // no minTradeBaseQuantity
 					PairID:           p.ID,
 					Pair:             p,
 					ExSymbol:         data.Name,
@@ -173,8 +173,8 @@ Step 4: Modify API Path(strRequestUrl)
 Step 5: Add Params - Depend on API request
 Step 6: Convert the response to Standard Maker struct*/
 
-// orderbook TODO
-func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) { // TODO
+// orderbook
+func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	jsonResponse := &JsonResponse{}
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
@@ -491,7 +491,6 @@ func (e *Ftx) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[stri
 		bytesParams, _ := json.Marshal(mapParams)
 		postBody = string(bytesParams)
 		strSignUrl = strRequestPath // ?
-		// postBody = `{"market": "BTC/USD", "side": "buy", "price": 8500, "size": 1, "type": "limit", "reduceOnly": false, "ioc": false, "postOnly": false, "clientId": null}` // TODO
 	} else if len(mapParams) != 0 {
 		strSignUrl = strRequestPath + "?" + exchange.Map2UrlQuery(mapParams)
 	} else {

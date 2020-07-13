@@ -234,6 +234,8 @@ func (e *Binance) GetPairsData() error {
 				var err error
 				lotsize := 0.0
 				priceFilter := 0.0
+				minTrade := 0.0
+				minBase := 0.0
 				for _, filter := range data.Filters {
 					switch filter.FilterType {
 					case "LOT_SIZE":
@@ -242,44 +244,46 @@ func (e *Binance) GetPairsData() error {
 							log.Printf("%s Lot Size Err: %v", e.GetName(), err)
 							lotsize = DEFAULT_LOT_SIZE
 						}
+						minTrade, err = strconv.ParseFloat(filter.MinQty, 64)
+						if err != nil {
+							log.Printf("%s minTrade Filter parse Err: %v, %v", e.GetName(), filter.MinQty, err)
+							minTrade = 0.0
+						}
 					case "PRICE_FILTER":
 						priceFilter, err = strconv.ParseFloat(filter.TickSize, 64)
 						if err != nil {
 							log.Printf("%s Price Filter Err: %v", e.GetName(), err)
 							priceFilter = DEFAULT_PRICE_FILTER
 						}
+					case "MIN_NOTIONAL":
+						minBase, err = strconv.ParseFloat(filter.MinNotional, 64)
+						if err != nil {
+							log.Printf("%s minBase Filter parse Err: %v, %v", e.GetName(), filter.MinNotional, err)
+							minBase = 0.0
+						}
 					}
 				}
 				pairConstraint := e.GetPairConstraint(p)
-				// get minTradeQuantity
-				minTrade := 0.0
-				for _, filter := range data.Filters {
-					if filter.FilterType == "LOT_SIZE" {
-						minTrade, err = strconv.ParseFloat(filter.MinQty, 64)
-						if err != nil {
-							log.Printf("%s minTrade Filter parse Err: %v, %v", e.GetName(), filter.MinQty, err)
-							minTrade = 0
-						}
-						break
-					}
-				}
+
 				if pairConstraint == nil {
 					pairConstraint = &exchange.PairConstraint{
-						PairID:           p.ID,
-						Pair:             p,
-						ExSymbol:         data.Symbol,
-						MakerFee:         DEFAULT_MAKER_FEE,
-						TakerFee:         DEFAULT_TAKER_FEE,
-						LotSize:          lotsize,
-						PriceFilter:      priceFilter,
-						MinTradeQuantity: minTrade,
-						Listed:           true,
+						PairID:               p.ID,
+						Pair:                 p,
+						ExSymbol:             data.Symbol,
+						MakerFee:             DEFAULT_MAKER_FEE,
+						TakerFee:             DEFAULT_TAKER_FEE,
+						LotSize:              lotsize,
+						PriceFilter:          priceFilter,
+						MinTradeQuantity:     minTrade,
+						MinTradeBaseQuantity: minBase,
+						Listed:               true,
 					}
 				} else {
 					pairConstraint.ExSymbol = data.Symbol
 					pairConstraint.LotSize = lotsize
 					pairConstraint.PriceFilter = priceFilter
 					pairConstraint.MinTradeQuantity = minTrade
+					pairConstraint.MinTradeBaseQuantity = minBase
 				}
 				e.SetPairConstraint(pairConstraint)
 			}

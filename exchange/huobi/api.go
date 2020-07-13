@@ -169,21 +169,23 @@ func (e *Huobi) GetPairsData() error {
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
 				pairConstraint = &exchange.PairConstraint{
-					PairID:           p.ID,
-					Pair:             p,
-					ExSymbol:         data.Symbol,
-					MakerFee:         DEFAULT_MAKER_FEE,
-					TakerFee:         DEFAULT_TAKER_FEE,
-					LotSize:          math.Pow10(data.AmountPrecision * -1),
-					PriceFilter:      math.Pow10(data.PricePrecision * -1),
-					MinTradeQuantity: data.MinOrderAmt,
-					Listed:           true,
+					PairID:               p.ID,
+					Pair:                 p,
+					ExSymbol:             data.Symbol,
+					MakerFee:             DEFAULT_MAKER_FEE,
+					TakerFee:             DEFAULT_TAKER_FEE,
+					LotSize:              math.Pow10(data.AmountPrecision * -1),
+					PriceFilter:          math.Pow10(data.PricePrecision * -1),
+					MinTradeQuantity:     data.MinOrderAmt,
+					MinTradeBaseQuantity: data.MinOrderValue,
+					Listed:               true,
 				}
 			} else {
 				pairConstraint.ExSymbol = data.Symbol
 				pairConstraint.LotSize = math.Pow10(data.AmountPrecision * -1)
 				pairConstraint.PriceFilter = math.Pow10(data.PricePrecision * -1)
 				pairConstraint.MinTradeQuantity = data.MinOrderAmt
+				pairConstraint.MinTradeBaseQuantity = data.MinOrderValue
 				if data.State == "online" {
 					pairConstraint.Listed = true
 				}

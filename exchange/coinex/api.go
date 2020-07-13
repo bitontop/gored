@@ -172,7 +172,7 @@ func (e *Coinex) GetPairsData() error {
 			minTrade, _ := strconv.ParseFloat(data.MinAmount, 64)
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
-				pairConstraint = &exchange.PairConstraint{
+				pairConstraint = &exchange.PairConstraint{ // no minTradeBaseQuantity
 					PairID:           p.ID,
 					Pair:             p,
 					ExSymbol:         data.Symbol,

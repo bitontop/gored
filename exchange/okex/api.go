@@ -188,7 +188,7 @@ func (e *Okex) GetPairsData() error {
 		if p != nil {
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
-				pairConstraint = &exchange.PairConstraint{
+				pairConstraint = &exchange.PairConstraint{ // no minBaseQuantity
 					PairID:           p.ID,
 					Pair:             p,
 					ExSymbol:         data.InstrumentID,
