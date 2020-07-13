@@ -61,7 +61,7 @@ func (e *Goko) GetCoinsData() error {
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if jsonResponse.Code != "0" {
-		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonResponse.Msg)
+		return fmt.Errorf("%s Get Coins Failed: %s", e.GetName(), jsonCurrencyReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -147,7 +147,7 @@ func (e *Goko) GetPairsData() error {
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Code != "0" {
-		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonResponse.Msg)
+		return fmt.Errorf("%s Get Pairs Failed: %s", e.GetName(), jsonSymbolsReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
