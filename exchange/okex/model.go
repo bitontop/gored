@@ -9,7 +9,7 @@ import (
 )
 
 type ErrorMsg struct {
-	Code int    `json:"code"`
+	Code string `json:"code"`
 	Msg  string `json:"message"`
 }
 
@@ -51,7 +51,7 @@ type WithdrawResponse struct {
 	Amount       string `json:"amount"`
 	WithdrawalID string `json:"withdrawal_id"`
 	Currency     string `json:"currency"`
-	Code         int    `json:"code"`
+	Code         string `json:"code"`
 	Message      string `json:"message"`
 }
 
@@ -65,7 +65,7 @@ type PlaceOrder struct {
 	OrderID   string `json:"order_id"`
 	ClientOid string `json:"client_oid"`
 	Result    bool   `json:"result"`
-	Code      int    `json:"code"`
+	Code      string `json:"code"`
 	Message   string `json:"message"`
 }
 
@@ -81,7 +81,7 @@ type OrderStatus struct {
 	FilledSize     string    `json:"filled_size"`
 	FilledNotional string    `json:"filled_notional"`
 	Status         string    `json:"status"`
-	Code           int       `json:"code"`
+	Code           string    `json:"code"`
 	Message        string    `json:"message"`
 }
 
@@ -104,7 +104,7 @@ type WSOrderBook struct {
 // 	Amount     float64 `json:"amount"`
 // 	To         int     `json:"to"`
 // 	Result     bool    `json:"result"`
-// 	Code       int     `json:"code"`
+// 	Code       string     `json:"code"`
 // 	Message    string  `json:"message"`
 // }
 
