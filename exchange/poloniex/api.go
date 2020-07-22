@@ -125,7 +125,7 @@ func (e *Poloniex) GetPairsData() error {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	}
 
-	for key, _ := range pairsData {
+	for key, data := range pairsData {
 		coinStrs := strings.Split(key, "_")
 		p := &pair.Pair{}
 		switch e.Source {
@@ -144,6 +144,7 @@ func (e *Poloniex) GetPairsData() error {
 				pairConstraint = &exchange.PairConstraint{
 					PairID:      p.ID,
 					Pair:        p,
+					ExID:        fmt.Sprintf("%v", data.ID),
 					ExSymbol:    key,
 					MakerFee:    DEFAULT_MAKER_FEE,
 					TakerFee:    DEFAULT_TAKER_FEE,

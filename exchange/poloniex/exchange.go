@@ -169,7 +169,7 @@ func (e *Poloniex) DeleteCoin(coin *coin.Coin) {
 
 /*************** Pairs on the Exchanges ***************/
 func (e *Poloniex) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
-	if pair == nil{
+	if pair == nil {
 		return nil
 	}
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
@@ -215,6 +215,26 @@ func (e *Poloniex) GetSymbolByPair(pair *pair.Pair) string {
 	pairConstraint := e.GetPairConstraint(pair)
 	if pairConstraint != nil {
 		return pairConstraint.ExSymbol
+	}
+	return ""
+}
+
+func (e *Poloniex) GetPairByID(exID string) *pair.Pair {
+	for _, id := range pairConstraintMap.Keys() {
+		if tmp, ok := pairConstraintMap.Get(id); ok {
+			pc := tmp.(*exchange.PairConstraint)
+			if pc.ExID == exID {
+				return pc.Pair
+			}
+		}
+	}
+	return nil
+}
+
+func (e *Poloniex) GetIDByPair(pair *pair.Pair) string {
+	pairConstraint := e.GetPairConstraint(pair)
+	if pairConstraint != nil {
+		return pairConstraint.ExID
 	}
 	return ""
 }
