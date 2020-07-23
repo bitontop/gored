@@ -444,6 +444,33 @@ func (e *Poloniex) OrderStatus(order *exchange.Order) error {
 		}
 	}
 
+	rate, err := strconv.ParseFloat(orderStatus.Result[order.OrderID].Rate, 64)
+	if err != nil {
+		log.Printf("%s OrderStatus parse error: %v", e.GetName(), err)
+		return err
+	}
+	quantity, err := strconv.ParseFloat(orderStatus.Result[order.OrderID].StartingAmount, 64)
+	if err != nil {
+		log.Printf("%s OrderStatus parse error: %v", e.GetName(), err)
+		return err
+	}
+	quantityLeft, err := strconv.ParseFloat(orderStatus.Result[order.OrderID].Amount, 64)
+	if err != nil {
+		log.Printf("%s OrderStatus parse error: %v", e.GetName(), err)
+		return err
+	}
+
+	order.Pair = e.GetPairBySymbol(orderStatus.Result[order.OrderID].CurrencyPair)
+	order.Rate = rate
+	order.Quantity = quantity
+	order.DealRate = rate
+	order.DealQuantity = order.Quantity - quantityLeft
+	if orderStatus.Result[order.OrderID].Type == "buy" {
+		order.Direction = exchange.Buy
+	} else if orderStatus.Result[order.OrderID].Type == "sell" {
+		order.Direction = exchange.Sell
+	}
+
 	return nil
 }
 
