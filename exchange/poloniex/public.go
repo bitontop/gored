@@ -20,6 +20,11 @@ func (e *Poloniex) LoadPublicData(operation *exchange.PublicOperation) error {
 	switch operation.Type {
 	case exchange.TradeHistory:
 		return e.doTradeHistory(operation)
+	case exchange.KLine:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doSpotKline(operation)
+		}
 	case exchange.Orderbook:
 		switch operation.Wallet {
 		case exchange.SpotWallet:
@@ -27,6 +32,82 @@ func (e *Poloniex) LoadPublicData(operation *exchange.PublicOperation) error {
 		}
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+// interval options: 5min, 15min, 30min, 2hour, 4hour, 1day
+func (e *Poloniex) doSpotKline(operation *exchange.PublicOperation) error {
+	interval := "300"
+	if operation.KlineInterval != "" {
+		switch operation.KlineInterval {
+		case "5min":
+			interval = "300"
+		case "15min":
+			interval = "900"
+		case "30min":
+			interval = "1800"
+		case "2hour":
+			interval = "7200"
+		case "4hour":
+			interval = "14400"
+		case "1day":
+			interval = "86400"
+		}
+	}
+
+	get := &utils.HttpGet{
+		URI: fmt.Sprintf("https://poloniex.com/public?command=returnChartData&currencyPair=%v&period=%v", // 1500478320000
+			e.GetSymbolByPair(operation.Pair), // BTCUSDT
+			interval,
+		),
+		Proxy: operation.Proxy,
+	}
+
+	if operation.KlineStartTime != 0 {
+		get.URI += fmt.Sprintf("&start=%v", operation.KlineStartTime/1000)
+	}
+	if operation.KlineEndTime != 0 {
+		get.URI += fmt.Sprintf("&end=%v", operation.KlineEndTime/1000)
+	}
+
+	err := utils.HttpGetRequest(get)
+
+	if err != nil {
+		log.Printf("%+v", err)
+		operation.Error = err
+		return err
+
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	kLine := Kline{}
+	if err := json.Unmarshal(get.ResponseBody, &kLine); err != nil {
+		operation.Error = fmt.Errorf("%s doSpotKline Json Unmarshal Err: %v %v", e.GetName(), err, string(get.ResponseBody))
+		return operation.Error
+	}
+
+	operation.Kline = []*exchange.KlineDetail{}
+	for _, k := range kLine {
+
+		detail := &exchange.KlineDetail{
+			Exchange: e.GetName(),
+			Pair:     operation.Pair.Name,
+			OpenTime: float64(k.Date),
+			Open:     k.Open,
+			High:     k.High,
+			Low:      k.Low,
+			Close:    k.Close,
+			Volume:   k.Volume,
+			// QuoteAssetVolume:    k.QuoteVolume,
+		}
+
+		operation.Kline = append(operation.Kline, detail)
+	}
+
+	return nil
 }
 
 // timestamp 10 digit precision
