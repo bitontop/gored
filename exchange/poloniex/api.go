@@ -152,6 +152,14 @@ func (e *Poloniex) GetPairsData() error {
 					PriceFilter: DEFAULT_PRICE_FILTER,
 					Listed:      DEFAULT_LISTED,
 				}
+				switch p.Base.Code {
+				case "USDT", "USD":
+					pairConstraint.MinTradeBaseQuantity = 10
+				case "BTC":
+					pairConstraint.MinTradeBaseQuantity = 0.001
+				case "ETH":
+					pairConstraint.MinTradeBaseQuantity = 0.05
+				}
 			} else {
 				pairConstraint.ExSymbol = key
 			}
