@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitontop/gored/exchange"
@@ -510,10 +511,9 @@ func (e *Huobi) getOpenOrder(op *exchange.AccountOperation) error {
 			Timestamp: data.CreatedAt,
 		}
 
-		switch data.Type {
-		case "buy":
+		if strings.Contains(data.Type, "buy") {
 			order.Direction = exchange.Buy
-		case "sell":
+		} else if strings.Contains(data.Type, "sell") {
 			order.Direction = exchange.Sell
 		}
 
