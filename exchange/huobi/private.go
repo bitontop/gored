@@ -484,6 +484,7 @@ func (e *Huobi) getOpenOrder(op *exchange.AccountOperation) error {
 	if op.Pair != nil {
 		mapParams["symbol"] = e.GetSymbolByPair(op.Pair)
 	}
+	mapParams["size"] = "500"
 
 	jsonOrders := e.ApiKeyRequest("GET", mapParams, strRequest)
 	if op.DebugMode {

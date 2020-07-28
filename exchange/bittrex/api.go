@@ -146,17 +146,19 @@ func (e *Bittrex) GetPairsData() error {
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
 				pairConstraint = &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.MarketName,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     DEFAULT_LOT_SIZE,
-					PriceFilter: DEFAULT_PRICE_FILTER,
-					Listed:      true,
+					PairID:           p.ID,
+					Pair:             p,
+					ExSymbol:         data.MarketName,
+					MakerFee:         DEFAULT_MAKER_FEE,
+					TakerFee:         DEFAULT_TAKER_FEE,
+					LotSize:          DEFAULT_LOT_SIZE,
+					PriceFilter:      DEFAULT_PRICE_FILTER,
+					MinTradeQuantity: data.MinTradeSize,
+					Listed:           true,
 				}
 			} else {
 				pairConstraint.ExSymbol = data.MarketName
+				pairConstraint.MinTradeQuantity = data.MinTradeSize
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
