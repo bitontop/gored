@@ -369,7 +369,7 @@ func (e *Okex) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Ord
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !placeOrder.Result {
-		return nil, fmt.Errorf("%s LimitSell Failed: %v %v", e.GetName(), placeOrder.Code, placeOrder.Message)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -401,10 +401,11 @@ func (e *Okex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	log.Printf("json: %v", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !placeOrder.Result {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %v %v", e.GetName(), placeOrder.Code, placeOrder.Message)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v", e.GetName(), jsonPlaceReturn)
 	}
 
 	order := &exchange.Order{
@@ -437,7 +438,7 @@ func (e *Okex) OrderStatus(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if orderStatus.Code != "0" {
-		return fmt.Errorf("%s OrderStatus Failed: %v %v", e.GetName(), orderStatus.Code, orderStatus.Message)
+		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
 	}
 
 	order.StatusMessage = jsonOrderStatus
@@ -479,7 +480,7 @@ func (e *Okex) CancelOrder(order *exchange.Order) error {
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &cancelOrder); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if !cancelOrder.Result {
-		return fmt.Errorf("%s CancelOrder Failed: %v %v", e.GetName(), cancelOrder.Code, cancelOrder.Message)
+		return fmt.Errorf("%s CancelOrder Failed: %v", e.GetName(), jsonCancelOrder)
 	}
 
 	order.Status = exchange.Canceling
