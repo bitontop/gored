@@ -93,7 +93,7 @@ func (e *Stex) doGetOpenOrder(operation *exchange.AccountOperation) error {
 		}
 
 		if o.Status == "PROCESSING" {
-			order.Status = exchange.Other
+			order.Status = exchange.New
 		} else if o.Status == "PENDING" {
 			order.Status = exchange.Cancelled
 		} else if o.Status == "FINISHED" {
@@ -102,6 +102,8 @@ func (e *Stex) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			order.Status = exchange.Partial
 		} else if o.Status == "CANCELLED" {
 			order.Status = exchange.Cancelled
+		} else {
+			order.Status = exchange.Other
 		}
 
 		operation.OpenOrders = append(operation.OpenOrders, order)
