@@ -103,6 +103,7 @@ func (e *Stex) doGetOpenOrder(operation *exchange.AccountOperation) error {
 		} else if o.Status == "CANCELLED" {
 			order.Status = exchange.Cancelled
 		} else {
+			log.Printf("%v OpenOrder %v unknown type: %v", e.GetName(), order.OrderID, o.Status)
 			order.Status = exchange.Other
 		}
 
