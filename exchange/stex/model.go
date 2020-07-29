@@ -180,3 +180,18 @@ type TradeHistory []struct {
 	Type      string `json:"type"`
 	Timestamp string `json:"timestamp"`
 }
+
+type OpenOrders []struct {
+	ID               int     `json:"id"`
+	CurrencyPairID   int     `json:"currency_pair_id"`
+	CurrencyPairName string  `json:"currency_pair_name"`
+	Price            string  `json:"price"`
+	TriggerPrice     float64 `json:"trigger_price"`
+	InitialAmount    string  `json:"initial_amount"`
+	ProcessedAmount  string  `json:"processed_amount"`
+	Type             string  `json:"type"`
+	OriginalType     string  `json:"original_type"`
+	Created          string  `json:"created"`
+	Timestamp        string  `json:"timestamp"`
+	Status           string  `json:"status"`
+}

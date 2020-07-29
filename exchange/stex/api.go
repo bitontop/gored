@@ -332,22 +332,6 @@ func (e *Stex) webpageOrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 }
 
 /*************** Private API ***************/
-func (e *Stex) DoAccountOperation(operation *exchange.AccountOperation) error {
-	switch operation.Type {
-
-	// case exchange.Transfer:
-	// 	return e.transfer(operation)
-	// case exchange.BalanceList:
-	// 	return e.getAllBalance(operation)
-	// case exchange.Balance:
-	// 	return e.getBalance(operation)
-
-	case exchange.Withdraw:
-		return e.doWithdraw(operation)
-
-	}
-	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
-}
 
 func (e *Stex) doWithdraw(operation *exchange.AccountOperation) error {
 	if e.API_KEY == "" || e.API_SECRET == "" {
