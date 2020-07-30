@@ -401,7 +401,6 @@ func (e *Okex) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
-	log.Printf("json: %v", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if !placeOrder.Result {
