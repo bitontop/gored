@@ -16,7 +16,8 @@ import (
 
 /********************Public API********************/
 func Test_Binance(t *testing.T) {
-	e := InitEx(exchange.BINANCE)
+	// e := InitEx(exchange.BINANCE)
+	e := InitExFromJson(exchange.BINANCE)
 	// e := InitExFromJson(exchange.BINANCE)
 	pair := pair.GetPairByKey("BTC|ETH")
 

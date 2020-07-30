@@ -13,8 +13,8 @@ import (
 
 /********************Public API********************/
 func Test_Bitmex(t *testing.T) {
-	e := InitEx(exchange.BITMEX)
-	pair := pair.GetPairByKey("XBT|ETH")
+	e := InitExFromJson(exchange.BITMEX)
+	pair := pair.GetPairByKey("USD|BTC")
 
 	Test_Coins(e)
 	Test_Pairs(e)

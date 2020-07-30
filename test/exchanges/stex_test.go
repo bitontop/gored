@@ -30,8 +30,9 @@ func Test_Stex(t *testing.T) {
 	// Test_Trading_Sell(e, pair, 0.06, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	Test_TradeHistory(e, pair)
-	Test_NewOrderBook(e, pair)
+	// Test_AOOpenOrder(e, pair)
+	// Test_TradeHistory(e, pair)
+	// Test_NewOrderBook(e, pair)
 
 	// // Test Withdraw
 	// opWithdraw := &exchange.AccountOperation{

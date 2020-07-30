@@ -26,11 +26,35 @@ func Test_Poloniex(t *testing.T) {
 	// Test_ConstraintFetch(e, pair)
 	// Test_Constraint(e, pair)
 
-	// Test_Balance(e, pair)
+	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)
-	// Test_Trading_Sell(e, pair, 0.05, 0.04)
+	// Test_Trading_Sell(e, pair, 0.05, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	Test_TradeHistory(e, pair)
-	Test_NewOrderBook(e, pair)
+	// Test_TradeHistory(e, pair)
+	// Test_NewOrderBook(e, pair)
+
+	// ==============================================
+
+	// spot Kline
+	// interval options: 5min, 15min, 30min, 2hour, 4hour, 1day
+	// opKline := &exchange.PublicOperation{
+	// 	Wallet:         exchange.SpotWallet,
+	// 	Type:           exchange.KLine,
+	// 	EX:             e.GetName(),
+	// 	Pair:           pair,
+	// 	KlineInterval:  "15min", // default to 5min if not provided
+	// 	KlineStartTime: 1530965420000,
+	// 	KlineEndTime:   1530969020000,
+	// 	DebugMode:      true,
+	// }
+	// err := e.LoadPublicData(opKline)
+	// if err != nil {
+	// 	log.Printf("%v", err)
+	// }
+
+	// for _, k := range opKline.Kline {
+	// 	log.Printf("%s SpotKline %+v", e.GetName(), k)
+	// }
+	// ==============================================
 }

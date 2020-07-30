@@ -16,8 +16,10 @@ import (
 /********************Public API********************/
 
 func Test_Okex(t *testing.T) {
-	e := InitEx(exchange.OKEX)
-	pair := pair.GetPairByKey("BTC|ETH")
+	// e := InitEx(exchange.OKEX)
+	// pair := pair.GetPairByKey("BTC|ETH")
+	e := InitExFromJson(exchange.OKEX)
+	pair := pair.GetPairByKey("BTC|EOS")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -34,6 +36,7 @@ func Test_Okex(t *testing.T) {
 	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	Test_CheckAllBalance(e, exchange.SpotWallet)
 
+	// Test_Trading_Sell(e, pair, 0.001, 0.1)
 	// okex.Socket(pair)
 	Test_Balance(e, pair)
 	// Test_Trading(e, pair, 0.00000001, 100)

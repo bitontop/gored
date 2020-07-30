@@ -16,8 +16,8 @@ import (
 /********************Public API********************/
 
 func Test_Ftx(t *testing.T) {
-	e := InitEx(exchange.FTX)
-	// e := InitExFromJson(exchange.FTX)
+	// e := InitEx(exchange.FTX)
+	e := InitExFromJson(exchange.FTX)
 	pair := pair.GetPairByKey("USD|BTC")
 
 	// Test_Coins(e)
