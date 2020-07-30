@@ -437,8 +437,6 @@ func (e *Okex) OrderStatus(order *exchange.Order) error {
 	jsonOrderStatus := e.ApiKeyRequest("GET", nil, strRequest)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &orderStatus); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
-	} else if orderStatus.Code != "0" {
-		return fmt.Errorf("%s OrderStatus Failed: %v", e.GetName(), jsonOrderStatus)
 	}
 
 	order.StatusMessage = jsonOrderStatus

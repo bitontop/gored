@@ -44,6 +44,11 @@ func (e *Stex) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	}
 
 	jsonOpenOrders := e.ApiKeyGet(nil, strRequestUrl)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.CallResponce = jsonOpenOrders
+	}
+
 	if err := json.Unmarshal([]byte(jsonOpenOrders), &jsonResponse); err != nil {
 		return fmt.Errorf("%s doGetOpenOrder Json Unmarshal Err: %v %s", e.GetName(), err, jsonOpenOrders)
 	} else if !jsonResponse.Success {
