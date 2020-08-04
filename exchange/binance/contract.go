@@ -320,6 +320,12 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
 	}
 
+	if operation.OrderDirection == "" {
+		return fmt.Errorf("%s ContractPlaceOrder empty OrderDirection: %+v", e.GetName(), operation)
+	} else if operation.TradeType == "" {
+		return fmt.Errorf("%s ContractPlaceOrder empty TradeType: %+v", e.GetName(), operation)
+	}
+
 	placeOrder := ContractPlaceOrder{}
 	// strRequestUrl := "/fapi/v1/order/test" // test api
 	strRequestUrl := "/fapi/v1/order"
@@ -328,16 +334,22 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 	if operation.OrderDirection == exchange.Buy {
 		mapParams["side"] = "BUY"
-	} else {
+	} else if operation.OrderDirection == exchange.Sell {
 		mapParams["side"] = "SELL"
 	}
 	if operation.TradeType == exchange.Trade_STOP_LIMIT || operation.TradeType == exchange.Trade_STOP_MARKET {
 		mapParams["stopPrice"] = fmt.Sprintf("%v", operation.StopRate)
 	}
 	mapParams["type"] = string(operation.TradeType) // "LIMIT"
-	mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
-	mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
-	mapParams["timeInForce"] = string(operation.OrderType) //"GTC"
+	if operation.Rate != 0 {
+		mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
+	}
+	if operation.Quantity != 0 {
+		mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
+	}
+	if operation.OrderType != "" {
+		mapParams["timeInForce"] = string(operation.OrderType) //"GTC"
+	}
 	//  timeInForce:
 	// 	GTC - Good Till Cancel 成交为止
 	//  IOC - Immediate or Cancel 无法立即成交(吃单)的部分就撤销
@@ -420,6 +432,13 @@ func (e *Binance) doContractOrderStatus(operation *exchange.AccountOperation) er
 		order.Status = exchange.New
 	} else {
 		order.Status = exchange.Other
+	}
+
+	switch orderStatus.Side {
+	case "BUY":
+		order.Direction = exchange.Buy
+	case "SELL":
+		order.Direction = exchange.Sell
 	}
 
 	order.DealRate, _ = strconv.ParseFloat(orderStatus.Price, 64)

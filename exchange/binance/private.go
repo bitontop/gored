@@ -24,10 +24,10 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractPlaceOrder(operation)
 		}
-	// case exchange.GetOrderStatus: // operation model changed
-	// 	if operation.Wallet == exchange.ContractWallet {
-	// 		return e.doContractOrderStatus(operation)
-	// 	}
+	case exchange.GetOrderStatus: // operation model changed
+		if operation.Wallet == exchange.ContractWallet {
+			return e.doContractOrderStatus(operation)
+		}
 	case exchange.CancelOrder:
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractCancelOrder(operation)

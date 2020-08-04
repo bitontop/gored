@@ -19,7 +19,7 @@ func Test_Binance(t *testing.T) {
 	// e := InitEx(exchange.BINANCE)
 	e := InitExFromJson(exchange.BINANCE)
 	// e := InitExFromJson(exchange.BINANCE)
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USDT|BTC")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -213,21 +213,41 @@ func Test_Binance(t *testing.T) {
 	// 	OrderDirection: exchange.Buy,
 	// 	TradeType:      exchange.TRADE_LIMIT,
 	// 	OrderType:      exchange.GTC,
-	// 	Rate:           4000,
+	// 	Rate:           3500,
 	// 	Quantity:       0.01,
 	// 	DebugMode:      true,
 	// }
-	// err = e.DoAccountOperation(opPlaceOrder)
-	// if err != nil {
+	// if err := e.DoAccountOperation(opPlaceOrder); err != nil {
 	// 	log.Printf("==%v", err)
 	// }
 	// log.Printf("Contract PlaceOrder CallResponse: %+v", opPlaceOrder.CallResponce)
-	// // ==============================================
 
-	// // contract OrderStatus
+	// ===============================================
+
+	// contract CancelOrder
+	// cancelOrder := &exchange.Order{
+	// 	Pair:    pair,
+	// 	OrderID: "6257716142",
+	// }
+	// opCancelOrder := &exchange.AccountOperation{
+	// 	Wallet:    exchange.ContractWallet,
+	// 	Type:      exchange.CancelOrder,
+	// 	Ex:        e.GetName(),
+	// 	Pair:      pair,
+	// 	Order:     cancelOrder,
+	// 	DebugMode: true,
+	// }
+	// if err := e.DoAccountOperation(opCancelOrder); err != nil {
+	// 	log.Printf("==%v", err)
+	// } else {
+	// 	log.Printf("Contract opCancelOrder callResponse: %+v", opCancelOrder.CallResponce)
+	// }
+	// ==============================================
+
+	// contract OrderStatus
 	// order := &exchange.Order{
 	// 	Pair:    pair,
-	// 	OrderID: "1573346959",
+	// 	OrderID: "6257716142",
 	// }
 	// opOrderStatus := &exchange.AccountOperation{
 	// 	Wallet:    exchange.ContractWallet,
@@ -237,30 +257,15 @@ func Test_Binance(t *testing.T) {
 	// 	Order:     order,
 	// 	DebugMode: true,
 	// }
-	// err = e.DoAccountOperation(opOrderStatus)
+	// err := e.DoAccountOperation(opOrderStatus)
 	// if err != nil {
 	// 	log.Printf("==%v", err)
+	// } else {
+	// 	log.Printf("Contract OrderStatus: %+v", opOrderStatus.Order)
+	// 	log.Printf("Contract OrderStatus callResponse: %+v", opOrderStatus.CallResponce)
 	// }
-	// // ==============================================
 
-	// // contract CancelOrder
-	// order = &exchange.Order{
-	// 	Pair:    pair,
-	// 	OrderID: "1573346959",
-	// }
-	// opCancelOrder := &exchange.AccountOperation{
-	// 	Wallet:    exchange.ContractWallet,
-	// 	Type:      exchange.CancelOrder,
-	// 	Ex:        e.GetName(),
-	// 	Pair:      pair,
-	// 	Order:     order,
-	// 	DebugMode: true,
-	// }
-	// err = e.DoAccountOperation(opCancelOrder)
-	// if err != nil {
-	// 	log.Printf("==%v", err)
-	// }
-	// // ==============================================
+	// // ===============================================
 
 	// Test_TradeHistory(e, pair)
 
