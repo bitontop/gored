@@ -273,6 +273,7 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	balance := AssetBalance{}
+	operation.BalanceList = []exchange.AssetBalance{}
 
 	strRequest := ""
 	switch operation.Wallet {
@@ -290,7 +291,13 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 
 	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn) //====================
 	if jsonAllBalanceReturn == "[]" {
-		log.Printf("getAllBalance empty return: %v", jsonAllBalanceReturn)
+		// log.Printf("getAllBalance empty return: %v", jsonAllBalanceReturn)
+		for _, c := range e.GetCoins() { // set all coin balance to 0
+			b := exchange.AssetBalance{
+				Coin: c,
+			}
+			operation.BalanceList = append(operation.BalanceList, b)
+		}
 		return nil
 	} else if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &balance); err != nil {
 		errorJson := ErrorMsg{}
