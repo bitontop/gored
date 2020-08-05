@@ -475,10 +475,10 @@ func (e *Ftx) getAllBalance(operation *exchange.AccountOperation) error {
 
 	operation.BalanceList = []exchange.AssetBalance{}
 	for _, account := range accountBalance {
-		if account.Total == 0 {
-			// log.Printf("--%v", account)
-			continue
-		}
+		// if account.Total == 0 {
+		// 	// log.Printf("--%v", account)
+		// 	continue
+		// }
 
 		balance := exchange.AssetBalance{
 			Coin:             e.GetCoinBySymbol(account.Coin),
