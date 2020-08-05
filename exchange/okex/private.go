@@ -304,9 +304,9 @@ func (e *Okex) getAllBalance(operation *exchange.AccountOperation) error {
 	}
 
 	for _, account := range balance {
-		if account.Balance == "0" {
-			continue
-		}
+		// if account.Balance == "0" {
+		// 	continue
+		// }
 		frozen, err := strconv.ParseFloat(account.Hold, 64)
 		available, err := strconv.ParseFloat(account.Available, 64)
 		if err != nil {
