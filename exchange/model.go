@@ -213,8 +213,9 @@ const (
 type AccountOperation struct {
 	ID int `json:"id"` //dummy at this moment for
 
-	Type OperationType `json:"type"`
-	Ex   ExchangeName  `json:"exchange_name"`
+	Type    OperationType `json:"type"`
+	Ex      ExchangeName  `json:"exchange_name"`
+	Sandbox bool          `json:"sandbox"`
 
 	//#Transfer,TransferHistory,Balance,Withdraw
 	Coin *coin.Coin `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
@@ -226,6 +227,10 @@ type AccountOperation struct {
 	TransferAmount      string     `json:"transfer_amount"`
 	TransferStartTime   int64      `json:"transfer_start_time"`
 	TransferEndTime     int64      `json:"transfer_end_time"`
+
+	// start/end timestamp
+	StartTime int64 `json:"start_time"`
+	EndTime   int64 `json:"end_time"`
 
 	// #Withdraw
 	WithdrawAddress string `json:"withdraw_address"`

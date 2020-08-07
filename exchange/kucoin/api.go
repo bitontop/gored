@@ -22,7 +22,8 @@ import (
 
 /*The Base Endpoint URL*/
 const (
-	API_URL = "https://openapi-v2.kucoin.com"
+	API_URL         = "https://openapi-v2.kucoin.com"
+	SANDBOX_API_URL = "https://openapi-sandbox.kucoin.com"
 )
 
 /*API Base Knowledge
@@ -257,7 +258,7 @@ func (e *Kucoin) UpdateAllBalances() {
 	mapParams := make(map[string]string)
 	mapParams["type"] = "trade"
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams, false)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -300,7 +301,7 @@ func (e *Kucoin) Withdraw(coin *coin.Coin, quantity float64, addr, tag string) b
 	mapParams["address"] = addr
 	mapParams["amount"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
-	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
+	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams, false)
 	if err := json.Unmarshal([]byte(jsonCreateWithdraw), &jsonResponse); err != nil {
 		log.Printf("%s Withdraw Json Unmarshal Err: %v %v", e.GetName(), err, jsonCreateWithdraw)
 		return false
@@ -338,7 +339,7 @@ func (e *Kucoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
-	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams, false)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "200000" {
@@ -381,7 +382,7 @@ func (e *Kucoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', priceFilter, 64)
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', lotSize, 64)
 
-	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	jsonPlaceReturn := e.ApiKeyRequest("POST", strRequest, mapParams, false)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "200000" {
@@ -413,7 +414,7 @@ func (e *Kucoin) OrderStatus(order *exchange.Order) error {
 	orderStatus := OrderStatus{}
 	strRequest := fmt.Sprintf("/api/v1/orders/%s", order.OrderID)
 
-	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, nil)
+	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, nil, false)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != "200000" {
@@ -460,7 +461,7 @@ func (e *Kucoin) CancelOrder(order *exchange.Order) error {
 	cancelOrder := CancelOrder{}
 	strRequest := fmt.Sprintf("/api/v1/orders/%s", order.OrderID)
 
-	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, nil)
+	jsonCancelOrder := e.ApiKeyRequest("DELETE", strRequest, nil, false)
 	if err := json.Unmarshal([]byte(jsonCancelOrder), &jsonResponse); err != nil {
 		return fmt.Errorf("%s CancelOrder Json Unmarshal Err: %v %v", e.GetName(), err, jsonCancelOrder)
 	} else if jsonResponse.Code != "200000" {
@@ -485,9 +486,12 @@ func (e *Kucoin) CancelAllOrder() error {
 Step 1: Change Instance Name    (e *<exchange Instance Name>)
 Step 2: Create mapParams Depend on API Signature request
 Step 3: Add HttpGetRequest below strUrl if API has different requests*/
-func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string) string {
+func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string, sandbox bool) string {
 	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
 	strRequestUrl := API_URL + strRequestPath
+	if sandbox {
+		strRequestUrl = SANDBOX_API_URL + strRequestPath
+	}
 
 	httpClient := &http.Client{}
 	var err error
@@ -499,6 +503,9 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 		if nil != mapParams && len(mapParams) > 0 {
 			payload := exchange.Map2UrlQuery(mapParams)
 			strRequestUrl = API_URL + strRequestPath + "?" + payload
+			if sandbox {
+				strRequestUrl = SANDBOX_API_URL + strRequestPath + "?" + payload
+			}
 			signature = signature + "?" + payload
 		}
 		request, err = http.NewRequest(strMethod, strRequestUrl, nil)

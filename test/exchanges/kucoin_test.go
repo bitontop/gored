@@ -39,9 +39,33 @@ func Test_Kucoin(t *testing.T) {
 	// Test_Trading_Sell(e, pair, 0.06, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
-	SubBalances(e, "5cbd31ab9c93e9280cd36a0a")
-	SubAccountList(e)
-	SubAllBalances(e)
+	// SubBalances(e, "5cbd31ab9c93e9280cd36a0a")
+	// SubAccountList(e)
+	// SubAllBalances(e)
+	// ===============================================
+	op := &exchange.AccountOperation{
+		Type:      exchange.GetOpenOrder,
+		Wallet:    exchange.SpotWallet,
+		Sandbox:   true,
+		Ex:        e.GetName(),
+		Pair:      pair,
+		StartTime: 1596838564000,
+		EndTime:   1596838564001,
+		DebugMode: true,
+	}
+
+	if err := e.DoAccountOperation(op); err != nil {
+		log.Printf("%+v", err)
+	} else {
+		for _, o := range op.OpenOrders {
+			log.Printf("%s OpenOrders: %v %+v", e.GetName(), o.Pair.Name, o)
+		}
+		if len(op.OpenOrders) == 0 {
+			log.Printf("%s OpenOrder Response: %v", e.GetName(), op.CallResponce)
+		}
+	}
+	// ===============================================
+	// Test_AOOpenOrder(e, pair)
 
 	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)

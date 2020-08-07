@@ -200,3 +200,42 @@ type SubAccountList []struct {
 	SubName string `json:"subName"`
 	Remarks string `json:"remarks"`
 }
+
+type OpenOrders struct {
+	CurrentPage int `json:"currentPage"`
+	PageSize    int `json:"pageSize"`
+	TotalNum    int `json:"totalNum"`
+	TotalPage   int `json:"totalPage"`
+	Items       []struct {
+		ID            string      `json:"id"`
+		Symbol        string      `json:"symbol"`
+		OpType        string      `json:"opType"`
+		Type          string      `json:"type"`
+		Side          string      `json:"side"`
+		Price         string      `json:"price"`
+		Size          string      `json:"size"`
+		Funds         string      `json:"funds"`
+		DealFunds     string      `json:"dealFunds"`
+		DealSize      string      `json:"dealSize"`
+		Fee           string      `json:"fee"`
+		FeeCurrency   string      `json:"feeCurrency"`
+		Stp           string      `json:"stp"`
+		Stop          string      `json:"stop"`
+		StopTriggered bool        `json:"stopTriggered"`
+		StopPrice     string      `json:"stopPrice"`
+		TimeInForce   string      `json:"timeInForce"`
+		PostOnly      bool        `json:"postOnly"`
+		Hidden        bool        `json:"hidden"`
+		Iceberg       bool        `json:"iceberg"`
+		VisibleSize   string      `json:"visibleSize"`
+		CancelAfter   int         `json:"cancelAfter"`
+		Channel       string      `json:"channel"`
+		ClientOid     string      `json:"clientOid"`
+		Remark        interface{} `json:"remark"`
+		Tags          interface{} `json:"tags"`
+		IsActive      bool        `json:"isActive"`
+		CancelExist   bool        `json:"cancelExist"`
+		CreatedAt     int64       `json:"createdAt"`
+		TradeType     string      `json:"tradeType"`
+	} `json:"items"`
+}

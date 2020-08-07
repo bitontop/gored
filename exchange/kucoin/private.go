@@ -20,6 +20,11 @@ func (e *Kucoin) DoAccountOperation(operation *exchange.AccountOperation) error 
 	case exchange.Withdraw:
 		return e.doWithdraw(operation)
 
+	case exchange.GetOpenOrder:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetOpenOrder(operation)
+		}
+
 	case exchange.SubBalanceList:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSubBalance(operation) // spot trading sub account
@@ -36,6 +41,102 @@ func (e *Kucoin) DoAccountOperation(operation *exchange.AccountOperation) error 
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
 }
 
+func (e *Kucoin) doGetOpenOrder(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	jsonResponse := JsonResponse{}
+	openOrders := OpenOrders{}
+	strRequest := "/api/v1/orders"
+
+	mapParams := make(map[string]string)
+	mapParams["status"] = "active"
+	mapParams["tradeType"] = "TRADE"
+	if operation.Pair != nil {
+		mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+	}
+	if operation.StartTime != 0 { // milisecond, [start,end)
+		mapParams["startAt"] = fmt.Sprintf("%v", operation.StartTime)
+	}
+	if operation.EndTime != 0 {
+		mapParams["endAt"] = fmt.Sprintf("%v", operation.EndTime)
+	}
+
+	jsonGetOpenOrder := e.ApiKeyRequest("GET", strRequest, mapParams, operation.Sandbox)
+	// log.Printf("-=--=-===-==--=json: %v", jsonGetOpenOrder)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
+		operation.CallResponce = jsonGetOpenOrder
+	}
+
+	if err := json.Unmarshal([]byte(jsonGetOpenOrder), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetOpenOrder Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOpenOrder)
+		return operation.Error
+	} else if jsonResponse.Code != "200000" {
+		operation.Error = fmt.Errorf("%s doGetOpenOrder Failed: %v", e.GetName(), jsonGetOpenOrder)
+		return operation.Error
+	}
+
+	if err := json.Unmarshal(jsonResponse.Data, &openOrders); err != nil {
+		operation.Error = fmt.Errorf("%s doGetOpenOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+		return operation.Error
+	}
+
+	// store info into orders
+	operation.OpenOrders = []*exchange.Order{}
+	for _, o := range openOrders.Items {
+		rate, err := strconv.ParseFloat(o.Price, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doGetOpenOrder parse rate Err: %v, %v", e.GetName(), err, o.Price)
+			return operation.Error
+		}
+		quantity, err := strconv.ParseFloat(o.Size, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doGetOpenOrder parse quantity Err: %v, %v", e.GetName(), err, o.Size)
+			return operation.Error
+		}
+		dealQuantity, err := strconv.ParseFloat(o.DealSize, 64)
+		if err != nil {
+			operation.Error = fmt.Errorf("%s doGetOpenOrder parse dealQuantity Err: %v, %v", e.GetName(), err, o.DealSize)
+			return operation.Error
+		}
+
+		order := &exchange.Order{
+			Pair:         e.GetPairBySymbol(o.Symbol),
+			OrderID:      fmt.Sprintf("%v", o.ID),
+			Rate:         rate,
+			Quantity:     quantity,
+			DealRate:     rate,
+			DealQuantity: dealQuantity,
+			Timestamp:    o.CreatedAt,
+			// JsonResponse: jsonGetOpenOrder,
+		}
+
+		switch o.Side {
+		case "buy":
+			order.Direction = exchange.Buy
+		case "sell":
+			order.Direction = exchange.Sell
+		}
+
+		if dealQuantity == quantity {
+			order.Status = exchange.Filled
+		} else if dealQuantity > 0 && dealQuantity < quantity {
+			order.Status = exchange.Partial
+		} else if dealQuantity == 0 {
+			order.Status = exchange.New
+		} else {
+			order.Status = exchange.Other
+		}
+
+		operation.OpenOrders = append(operation.OpenOrders, order)
+	}
+
+	return nil
+}
+
 func (e *Kucoin) doSubAllBalance(operation *exchange.AccountOperation) error { //TODO, test with sub account
 	if e.API_KEY == "" || e.API_SECRET == "" {
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
@@ -47,7 +148,7 @@ func (e *Kucoin) doSubAllBalance(operation *exchange.AccountOperation) error { /
 
 	mapParams := make(map[string]string)
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams, operation.Sandbox)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonBalanceReturn
@@ -155,7 +256,7 @@ func (e *Kucoin) doSubAccountList(operation *exchange.AccountOperation) error { 
 
 	mapParams := make(map[string]string)
 
-	jsonSubAccountReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	jsonSubAccountReturn := e.ApiKeyRequest("GET", strRequest, mapParams, operation.Sandbox)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonSubAccountReturn
@@ -203,7 +304,7 @@ func (e *Kucoin) doSubBalance(operation *exchange.AccountOperation) error { //TO
 	mapParams := make(map[string]string)
 	mapParams["subUserId"] = operation.SubAccountID
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams)
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, mapParams, operation.Sandbox)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonBalanceReturn
@@ -271,7 +372,7 @@ func (e *Kucoin) doWithdraw(operation *exchange.AccountOperation) error {
 	mapParams["address"] = operation.WithdrawAddress
 	mapParams["amount"] = operation.WithdrawAmount
 
-	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
+	jsonCreateWithdraw := e.ApiKeyRequest("POST", strRequestUrl, mapParams, operation.Sandbox)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
 		operation.CallResponce = jsonCreateWithdraw
@@ -320,7 +421,7 @@ func (e *Kucoin) transfer(operation *exchange.AccountOperation) error {
 		mapParams["to"] = "trade"
 	}
 
-	jsonTransferReturn := e.ApiKeyRequest("POST", strRequestUrl, mapParams)
+	jsonTransferReturn := e.ApiKeyRequest("POST", strRequestUrl, mapParams, operation.Sandbox)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
 		operation.CallResponce = jsonTransferReturn
@@ -363,7 +464,7 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 		accountType = "trade"
 	}
 
-	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil, operation.Sandbox)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonAllBalanceReturn
@@ -426,7 +527,7 @@ func (e *Kucoin) getBalance(operation *exchange.AccountOperation) error {
 		accountType = "trade"
 	}
 
-	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil)
+	jsonBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil, operation.Sandbox)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonBalanceReturn
