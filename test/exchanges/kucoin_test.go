@@ -44,13 +44,13 @@ func Test_Kucoin(t *testing.T) {
 	// SubAllBalances(e)
 	// ===============================================
 	op := &exchange.AccountOperation{
-		Type:      exchange.GetOpenOrder,
-		Wallet:    exchange.SpotWallet,
-		Sandbox:   true,
-		Ex:        e.GetName(),
-		Pair:      pair,
-		StartTime: 1596838564000,
-		EndTime:   1596838564001,
+		Type:    exchange.GetOpenOrder,
+		Wallet:  exchange.SpotWallet,
+		Sandbox: true,
+		Ex:      e.GetName(),
+		Pair:    pair,
+		// StartTime: 1596838564000,
+		// EndTime:   1596838564001,
 		DebugMode: true,
 	}
 
@@ -66,6 +66,7 @@ func Test_Kucoin(t *testing.T) {
 	}
 	// ===============================================
 	// Test_AOOpenOrder(e, pair)
+	Test_TickerPrice(e)
 
 	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)

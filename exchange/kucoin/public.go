@@ -3,6 +3,7 @@ package kucoin
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -19,8 +20,72 @@ func (e *Kucoin) LoadPublicData(operation *exchange.PublicOperation) error {
 		case exchange.SpotWallet:
 			return e.doSpotOrderBook(operation)
 		}
+	case exchange.GetTickerPrice:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doTickerPrice(operation)
+		}
+
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+func (e *Kucoin) doTickerPrice(operation *exchange.PublicOperation) error {
+	jsonResponse := JsonResponse{}
+	tickerPrice := TickerPrice{}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/api/v1/market/allTickers", API_URL), // TODO sandbox
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if err := utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	jsonTickerPrice := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonTickerPrice), &jsonResponse); err != nil {
+		return fmt.Errorf("%s Get tickerPrice Json Unmarshal Err: %v %v", e.GetName(), err, jsonTickerPrice)
+	} else if jsonResponse.Code != "200000" {
+		return fmt.Errorf("%s Get Pairs Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+	}
+	if err := json.Unmarshal(jsonResponse.Data, &tickerPrice); err != nil {
+		return fmt.Errorf("%s Get tickerPrice Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+	}
+
+	operation.TickerPrice = []*exchange.TickerPriceDetail{}
+	for _, tp := range tickerPrice.Ticker {
+		p := e.GetPairBySymbol(tp.Symbol)
+		price, err := strconv.ParseFloat(tp.AveragePrice, 64)
+		if err != nil {
+			log.Printf("%s doTickerPrice parse Err: %v %v", e.GetName(), err, tp.AveragePrice)
+			operation.Error = err
+			return err
+		}
+
+		if p == nil {
+			if operation.DebugMode {
+				log.Printf("doTickerPrice got nil pair for symbol: %v", tp.Symbol)
+			}
+			continue
+		} else if p.Name == "" {
+			continue
+		}
+
+		tpd := &exchange.TickerPriceDetail{
+			Pair:  p,
+			Price: price,
+		}
+
+		operation.TickerPrice = append(operation.TickerPrice, tpd)
+	}
+
+	return nil
 }
 
 func (e *Kucoin) doTradeHistory(operation *exchange.PublicOperation) error {

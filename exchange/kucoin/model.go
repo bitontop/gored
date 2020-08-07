@@ -47,6 +47,24 @@ type OrderBook struct {
 	Bids     [][]string `json:"bids"`
 }
 
+type TickerPrice struct {
+	Time   int64 `json:"time"`
+	Ticker []struct {
+		Symbol       string `json:"symbol"`
+		SymbolName   string `json:"symbolName"`
+		Buy          string `json:"buy"`
+		Sell         string `json:"sell"`
+		ChangeRate   string `json:"changeRate"`
+		ChangePrice  string `json:"changePrice"`
+		High         string `json:"high"`
+		Low          string `json:"low"`
+		Vol          string `json:"vol"`
+		VolValue     string `json:"volValue"`
+		Last         string `json:"last"`
+		AveragePrice string `json:"averagePrice"`
+	} `json:"ticker"`
+}
+
 type AccountBalance []struct {
 	Balance   string `json:"balance"`
 	Available string `json:"available"`
