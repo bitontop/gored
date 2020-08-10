@@ -25,17 +25,161 @@ func (e *Kucoin) LoadPublicData(operation *exchange.PublicOperation) error {
 		case exchange.SpotWallet:
 			return e.doTickerPrice(operation)
 		}
+	case exchange.KLine:
+		switch operation.Wallet {
+		case exchange.SpotWallet:
+			return e.doSpotKline(operation)
+		}
 
 	}
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
+}
+
+// interval options: 1min, 3min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 8hour, 12hour, 1day, 1week
+func (e *Kucoin) doSpotKline(operation *exchange.PublicOperation) error {
+	interval := "5min"
+	if operation.KlineInterval != "" {
+		switch operation.KlineInterval {
+		case "1min":
+			interval = "1min"
+		case "3min":
+			interval = "3min"
+		case "5min":
+			interval = "5min"
+		case "15min":
+			interval = "15min"
+		case "30min":
+			interval = "30min"
+		case "1hour":
+			interval = "1hour"
+		case "2hour":
+			interval = "2hour"
+		case "4hour":
+			interval = "4hour"
+		case "6hour":
+			interval = "6hour"
+		case "8hour":
+			interval = "8hour"
+		case "12hour":
+			interval = "12hour"
+		case "1day":
+			interval = "1day"
+		case "1week":
+			interval = "1week"
+		}
+	}
+
+	baseURL := API_URL
+	if e.isSandBox() {
+		baseURL = SANDBOX_API_URL
+	}
+	get := &utils.HttpGet{
+		URI: fmt.Sprintf("%s/api/v1/market/candles?symbol=%v&type=%v", baseURL,
+			e.GetSymbolByPair(operation.Pair), // ETH-BTC
+			interval,
+		),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if operation.KlineStartTime != 0 {
+		startTime := operation.KlineStartTime
+		for startTime > 9999999999 {
+			startTime = startTime / 10
+		}
+		get.URI += fmt.Sprintf("&startAt=%v", startTime)
+	}
+	if operation.KlineEndTime != 0 {
+		endTime := operation.KlineEndTime
+		for endTime > 9999999999 {
+			endTime = endTime / 10
+		}
+		get.URI += fmt.Sprintf("&endAt=%v", endTime)
+	}
+
+	if err := utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	rawKline := KLine{}
+
+	jsonKline := get.ResponseBody
+	if err := json.Unmarshal([]byte(jsonKline), &rawKline); err != nil {
+		return fmt.Errorf("%s Get doSpotKline Json Unmarshal Err: %v %v", e.GetName(), err, jsonKline)
+	} else if rawKline.Code != "200000" {
+		return fmt.Errorf("%s Get doSpotKline Failed: %v", e.GetName(), jsonKline)
+	}
+
+	operation.Kline = []*exchange.KlineDetail{}
+	for _, k := range rawKline.Data {
+		openTime, err := strconv.ParseFloat(k[0], 64)
+		if err != nil {
+			log.Printf("%s openTime parse Err: %v %v", e.GetName(), err, k[0])
+			operation.Error = err
+			return err
+		}
+		open, err := strconv.ParseFloat(k[1], 64)
+		if err != nil {
+			log.Printf("%s open parse Err: %v %v", e.GetName(), err, k[1])
+			operation.Error = err
+			return err
+		}
+		close, err := strconv.ParseFloat(k[2], 64)
+		if err != nil {
+			log.Printf("%s close parse Err: %v %v", e.GetName(), err, k[2])
+			operation.Error = err
+			return err
+		}
+		high, err := strconv.ParseFloat(k[3], 64)
+		if err != nil {
+			log.Printf("%s high parse Err: %v %v", e.GetName(), err, k[3])
+			operation.Error = err
+			return err
+		}
+		low, err := strconv.ParseFloat(k[4], 64)
+		if err != nil {
+			log.Printf("%s low parse Err: %v %v", e.GetName(), err, k[4])
+			operation.Error = err
+			return err
+		}
+		volume, err := strconv.ParseFloat(k[6], 64) // k[5] Transaction amount, k[6] Transaction volume.
+		if err != nil {
+			log.Printf("%s volume parse Err: %v %v", e.GetName(), err, k[6])
+			operation.Error = err
+			return err
+		}
+
+		detail := &exchange.KlineDetail{
+			Exchange: e.GetName(),
+			Pair:     operation.Pair.Name,
+			OpenTime: openTime,
+			Open:     open,
+			High:     high,
+			Low:      low,
+			Close:    close,
+			Volume:   volume,
+		}
+
+		operation.Kline = append(operation.Kline, detail)
+	}
+
+	return nil
 }
 
 func (e *Kucoin) doTickerPrice(operation *exchange.PublicOperation) error {
 	jsonResponse := JsonResponse{}
 	tickerPrice := TickerPrice{}
 
+	baseURL := API_URL
+	if e.isSandBox() {
+		baseURL = SANDBOX_API_URL
+	}
 	get := &utils.HttpGet{
-		URI:       fmt.Sprintf("%s/api/v1/market/allTickers", API_URL), // TODO sandbox
+		URI:       fmt.Sprintf("%s/api/v1/market/allTickers", baseURL),
 		Proxy:     operation.Proxy,
 		DebugMode: operation.DebugMode,
 	}
@@ -91,8 +235,12 @@ func (e *Kucoin) doTickerPrice(operation *exchange.PublicOperation) error {
 func (e *Kucoin) doTradeHistory(operation *exchange.PublicOperation) error {
 	symbol := e.GetSymbolByPair(operation.Pair)
 
+	baseURL := API_URL
+	if e.isSandBox() {
+		baseURL = SANDBOX_API_URL
+	}
 	get := &utils.HttpGet{
-		URI: fmt.Sprintf("%s/api/v1/market/histories?symbol=%s", API_URL, symbol),
+		URI: fmt.Sprintf("%s/api/v1/market/histories?symbol=%s", baseURL, symbol),
 	}
 
 	err := utils.HttpGetRequest(get)
@@ -144,8 +292,12 @@ func (e *Kucoin) doSpotOrderBook(op *exchange.PublicOperation) error {
 		BeforeTimestamp: float64(time.Now().UnixNano() / 1e6),
 	}
 
+	baseURL := API_URL
+	if e.isSandBox() {
+		baseURL = SANDBOX_API_URL
+	}
 	get := &utils.HttpGet{
-		URI:       fmt.Sprintf("%s/api/v1/market/orderbook/level2?symbol=%s", API_URL, symbol),
+		URI:       fmt.Sprintf("%s/api/v1/market/orderbook/level2?symbol=%s", baseURL, symbol),
 		Proxy:     op.Proxy,
 		DebugMode: op.DebugMode,
 	}

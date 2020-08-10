@@ -66,6 +66,29 @@ func Test_Kucoin(t *testing.T) {
 		}
 	}
 	// ===============================================
+	// spot Kline
+	// interval options: 1min, 3min, 5min, 15min, 30min, 1hour, 2hour, 4hour, 6hour, 8hour, 12hour, 1day, 1week
+	// opKline := &exchange.PublicOperation{
+	// 	Wallet:         exchange.SpotWallet,
+	// 	Type:           exchange.KLine,
+	// 	EX:             e.GetName(),
+	// 	Pair:           pair,
+	// 	KlineInterval:  "1min", // default to 5min if not provided
+	// 	KlineStartTime: 1597005120000,
+	// 	KlineEndTime:   1597065120000,
+	// 	DebugMode:      true,
+	// }
+	// err := e.LoadPublicData(opKline)
+	// if err != nil {
+	// 	log.Printf("Kline err: %v", err)
+	// }
+
+	// for _, k := range opKline.Kline {
+	// 	log.Printf("%s SpotKline %+v", e.GetName(), k)
+	// }
+	// log.Printf("opKline.RequestURI: %v", opKline.RequestURI)
+	// ==============================================
+
 	// Test_AOOpenOrder(e, pair)
 	// Test_TickerPrice(e)
 

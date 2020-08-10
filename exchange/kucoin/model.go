@@ -65,6 +65,11 @@ type TickerPrice struct {
 	} `json:"ticker"`
 }
 
+type KLine struct {
+	Code string     `json:"code"`
+	Data [][]string `json:"data"`
+}
+
 type AccountBalance []struct {
 	Balance   string `json:"balance"`
 	Available string `json:"available"`

@@ -57,12 +57,15 @@ func (e *Kucoin) GetCoinsData() error {
 
 	strRequestUrl := "/api/v1/currencies"
 	strUrl := API_URL + strRequestUrl
+	if e.isSandBox() {
+		strUrl = SANDBOX_API_URL + strRequestUrl
+	}
 
 	jsonCurrencyReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Json Unmarshal Err: %v %v", e.GetName(), err, jsonCurrencyReturn)
 	} else if jsonResponse.Code != "200000" {
-		return fmt.Errorf("%s Get Coins Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return fmt.Errorf("%s Get Coins Failed: %v", e.GetName(), jsonCurrencyReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -120,12 +123,15 @@ func (e *Kucoin) GetPairsData() error {
 
 	strRequestUrl := "/api/v1/symbols"
 	strUrl := API_URL + strRequestUrl
+	if e.isSandBox() {
+		strUrl = SANDBOX_API_URL + strRequestUrl
+	}
 
 	jsonSymbolsReturn := exchange.HttpGetRequest(strUrl, nil)
 	if err := json.Unmarshal([]byte(jsonSymbolsReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Pairs Json Unmarshal Err: %v %v", e.GetName(), err, jsonSymbolsReturn)
 	} else if jsonResponse.Code != "200000" {
-		return fmt.Errorf("%s Get Pairs Failed: %d %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonSymbolsReturn)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &pairsData); err != nil {
 		return fmt.Errorf("%s Get Pairs Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -147,22 +153,29 @@ func (e *Kucoin) GetPairsData() error {
 		if p != nil {
 			lotSize, _ := strconv.ParseFloat(data.BaseIncrement, 64)
 			priceFilter, _ := strconv.ParseFloat(data.PriceIncrement, 64)
+			targetMinSize, _ := strconv.ParseFloat(data.BaseMinSize, 64)
+			baseMinSize, _ := strconv.ParseFloat(data.QuoteMinSize, 64)
+
 			pairConstraint := e.GetPairConstraint(p)
 			if pairConstraint == nil {
 				pairConstraint = &exchange.PairConstraint{
-					PairID:      p.ID,
-					Pair:        p,
-					ExSymbol:    data.Symbol,
-					MakerFee:    DEFAULT_MAKER_FEE,
-					TakerFee:    DEFAULT_TAKER_FEE,
-					LotSize:     lotSize,
-					PriceFilter: priceFilter,
-					Listed:      DEFAULT_LISTED,
+					PairID:               p.ID,
+					Pair:                 p,
+					ExSymbol:             data.Symbol,
+					MakerFee:             DEFAULT_MAKER_FEE,
+					TakerFee:             DEFAULT_TAKER_FEE,
+					LotSize:              lotSize,
+					PriceFilter:          priceFilter,
+					Listed:               DEFAULT_LISTED,
+					MinTradeQuantity:     targetMinSize,
+					MinTradeBaseQuantity: baseMinSize,
 				}
 			} else {
 				pairConstraint.ExSymbol = data.Symbol
 				pairConstraint.LotSize = lotSize
 				pairConstraint.PriceFilter = priceFilter
+				pairConstraint.MinTradeQuantity = targetMinSize
+				pairConstraint.MinTradeBaseQuantity = baseMinSize
 			}
 			e.SetPairConstraint(pairConstraint)
 		}
@@ -184,6 +197,9 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 
 	strRequestUrl := "/api/v1/market/orderbook/level2"
 	strUrl := API_URL + strRequestUrl
+	if e.isSandBox() {
+		strUrl = SANDBOX_API_URL + strRequestUrl
+	}
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = symbol
@@ -198,7 +214,7 @@ func (e *Kucoin) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Code != "200000" {
-		return nil, fmt.Errorf("%s Get Pairs Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s Get Pairs Failed: %v", e.GetName(), jsonOrderbook)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -489,7 +505,7 @@ Step 3: Add HttpGetRequest below strUrl if API has different requests*/
 func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[string]string, sandbox bool) string {
 	nonce := time.Now().UnixNano() / int64(time.Millisecond) //Millisecond无误
 	strRequestUrl := API_URL + strRequestPath
-	if sandbox {
+	if sandbox || e.isSandBox() {
 		strRequestUrl = SANDBOX_API_URL + strRequestPath
 	}
 
@@ -503,7 +519,7 @@ func (e *Kucoin) ApiKeyRequest(strMethod, strRequestPath string, mapParams map[s
 		if nil != mapParams && len(mapParams) > 0 {
 			payload := exchange.Map2UrlQuery(mapParams)
 			strRequestUrl = API_URL + strRequestPath + "?" + payload
-			if sandbox {
+			if sandbox || e.isSandBox() {
 				strRequestUrl = SANDBOX_API_URL + strRequestPath + "?" + payload
 			}
 			signature = signature + "?" + payload

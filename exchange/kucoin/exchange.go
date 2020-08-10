@@ -95,6 +95,15 @@ func (e *Kucoin) InitData() error {
 	return nil
 }
 
+// set sandbox apiKey pw to "sandbox" to use sandbox api
+func (e *Kucoin) isSandBox() bool {
+	if e.Passphrase == "sandbox" {
+		return true
+	}
+
+	return false
+}
+
 /**************** Exchange Information ****************/
 func (e *Kucoin) GetID() int {
 	return e.ID
@@ -174,7 +183,7 @@ func (e *Kucoin) DeleteCoin(coin *coin.Coin) {
 
 /*************** Pairs on the Exchanges ***************/
 func (e *Kucoin) GetPairConstraint(pair *pair.Pair) *exchange.PairConstraint {
-	if pair == nil{
+	if pair == nil {
 		return nil
 	}
 	if tmp, ok := pairConstraintMap.Get(fmt.Sprintf("%d", pair.ID)); ok {
