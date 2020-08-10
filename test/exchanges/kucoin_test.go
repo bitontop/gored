@@ -43,10 +43,11 @@ func Test_Kucoin(t *testing.T) {
 	// SubAccountList(e)
 	// SubAllBalances(e)
 	// ===============================================
+	// OpenOrder
 	op := &exchange.AccountOperation{
 		Type:    exchange.GetOpenOrder,
 		Wallet:  exchange.SpotWallet,
-		Sandbox: true,
+		Sandbox: false,
 		Ex:      e.GetName(),
 		Pair:    pair,
 		// StartTime: 1596838564000,
@@ -57,8 +58,8 @@ func Test_Kucoin(t *testing.T) {
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
-		for _, o := range op.OpenOrders {
-			log.Printf("%s OpenOrders: %v %+v", e.GetName(), o.Pair.Name, o)
+		for i, o := range op.OpenOrders {
+			log.Printf("%s %v OpenOrders: %v %+v", e.GetName(), i+1, o.Pair.Name, o)
 		}
 		if len(op.OpenOrders) == 0 {
 			log.Printf("%s OpenOrder Response: %v", e.GetName(), op.CallResponce)
@@ -66,7 +67,7 @@ func Test_Kucoin(t *testing.T) {
 	}
 	// ===============================================
 	// Test_AOOpenOrder(e, pair)
-	Test_TickerPrice(e)
+	// Test_TickerPrice(e)
 
 	// Test_CheckBalance(e, pair.Target, exchange.AssetWallet)
 	// Test_CheckAllBalance(e, exchange.SpotWallet)

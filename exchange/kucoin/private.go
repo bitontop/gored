@@ -49,6 +49,7 @@ func (e *Kucoin) doGetOpenOrder(operation *exchange.AccountOperation) error {
 	jsonResponse := JsonResponse{}
 	openOrders := OpenOrders{}
 	strRequest := "/api/v1/orders"
+	operation.OpenOrders = []*exchange.Order{}
 
 	mapParams := make(map[string]string)
 	mapParams["status"] = "active"
@@ -63,75 +64,99 @@ func (e *Kucoin) doGetOpenOrder(operation *exchange.AccountOperation) error {
 		mapParams["endAt"] = fmt.Sprintf("%v", operation.EndTime)
 	}
 
-	jsonGetOpenOrder := e.ApiKeyRequest("GET", strRequest, mapParams, operation.Sandbox)
-	// log.Printf("-=--=-===-==--=json: %v", jsonGetOpenOrder)
-	if operation.DebugMode {
-		operation.RequestURI = strRequest
-		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
-		operation.CallResponce = jsonGetOpenOrder
+	totalPage := 2
+	var endTS int64
+	endTS = 0
+	getAllRecord := true
+	if operation.StartTime != 0 || operation.EndTime != 0 {
+		getAllRecord = false
 	}
 
-	if err := json.Unmarshal([]byte(jsonGetOpenOrder), &jsonResponse); err != nil {
-		operation.Error = fmt.Errorf("%s doGetOpenOrder Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOpenOrder)
-		return operation.Error
-	} else if jsonResponse.Code != "200000" {
-		operation.Error = fmt.Errorf("%s doGetOpenOrder Failed: %v", e.GetName(), jsonGetOpenOrder)
-		return operation.Error
-	}
+	for totalPage > 1 {
 
-	if err := json.Unmarshal(jsonResponse.Data, &openOrders); err != nil {
-		operation.Error = fmt.Errorf("%s doGetOpenOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
-		return operation.Error
-	}
-
-	// store info into orders
-	operation.OpenOrders = []*exchange.Order{}
-	for _, o := range openOrders.Items {
-		rate, err := strconv.ParseFloat(o.Price, 64)
-		if err != nil {
-			operation.Error = fmt.Errorf("%s doGetOpenOrder parse rate Err: %v, %v", e.GetName(), err, o.Price)
-			return operation.Error
+		if endTS != 0 { // milisecond, [start,end)
+			mapParams["endAt"] = fmt.Sprintf("%v", endTS)
 		}
-		quantity, err := strconv.ParseFloat(o.Size, 64)
-		if err != nil {
-			operation.Error = fmt.Errorf("%s doGetOpenOrder parse quantity Err: %v, %v", e.GetName(), err, o.Size)
-			return operation.Error
+
+		jsonGetOpenOrder := e.ApiKeyRequest("GET", strRequest, mapParams, operation.Sandbox)
+		// log.Printf("-=--=-===-==--========================================json: %v", jsonGetOpenOrder) //TODO
+		if operation.DebugMode {
+			operation.RequestURI = strRequest
+			// operation.MapParams = fmt.Sprintf("%+v", mapParams)
+			operation.CallResponce = jsonGetOpenOrder
 		}
-		dealQuantity, err := strconv.ParseFloat(o.DealSize, 64)
-		if err != nil {
-			operation.Error = fmt.Errorf("%s doGetOpenOrder parse dealQuantity Err: %v, %v", e.GetName(), err, o.DealSize)
+
+		if err := json.Unmarshal([]byte(jsonGetOpenOrder), &jsonResponse); err != nil {
+			operation.Error = fmt.Errorf("%s doGetOpenOrder Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOpenOrder)
+			return operation.Error
+		} else if jsonResponse.Code != "200000" {
+			operation.Error = fmt.Errorf("%s doGetOpenOrder Failed: %v", e.GetName(), jsonGetOpenOrder)
 			return operation.Error
 		}
 
-		order := &exchange.Order{
-			Pair:         e.GetPairBySymbol(o.Symbol),
-			OrderID:      fmt.Sprintf("%v", o.ID),
-			Rate:         rate,
-			Quantity:     quantity,
-			DealRate:     rate,
-			DealQuantity: dealQuantity,
-			Timestamp:    o.CreatedAt,
-			// JsonResponse: jsonGetOpenOrder,
+		if err := json.Unmarshal(jsonResponse.Data, &openOrders); err != nil {
+			operation.Error = fmt.Errorf("%s doGetOpenOrder Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+			return operation.Error
 		}
 
-		switch o.Side {
-		case "buy":
-			order.Direction = exchange.Buy
-		case "sell":
-			order.Direction = exchange.Sell
+		totalPage = openOrders.TotalPage
+
+		// store info into orders
+		for _, o := range openOrders.Items {
+			rate, err := strconv.ParseFloat(o.Price, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doGetOpenOrder parse rate Err: %v, %v", e.GetName(), err, o.Price)
+				return operation.Error
+			}
+			quantity, err := strconv.ParseFloat(o.Size, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doGetOpenOrder parse quantity Err: %v, %v", e.GetName(), err, o.Size)
+				return operation.Error
+			}
+			dealQuantity, err := strconv.ParseFloat(o.DealSize, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doGetOpenOrder parse dealQuantity Err: %v, %v", e.GetName(), err, o.DealSize)
+				return operation.Error
+			}
+
+			order := &exchange.Order{
+				Pair:         e.GetPairBySymbol(o.Symbol),
+				OrderID:      fmt.Sprintf("%v", o.ID),
+				Rate:         rate,
+				Quantity:     quantity,
+				DealRate:     rate,
+				DealQuantity: dealQuantity,
+				Timestamp:    o.CreatedAt,
+				// JsonResponse: jsonGetOpenOrder,
+			}
+
+			switch o.Side {
+			case "buy":
+				order.Direction = exchange.Buy
+			case "sell":
+				order.Direction = exchange.Sell
+			}
+
+			if dealQuantity == quantity {
+				order.Status = exchange.Filled
+			} else if dealQuantity > 0 && dealQuantity < quantity {
+				order.Status = exchange.Partial
+			} else if dealQuantity == 0 {
+				order.Status = exchange.New
+			} else {
+				order.Status = exchange.Other
+			}
+
+			operation.OpenOrders = append(operation.OpenOrders, order)
+			endTS = o.CreatedAt
 		}
 
-		if dealQuantity == quantity {
-			order.Status = exchange.Filled
-		} else if dealQuantity > 0 && dealQuantity < quantity {
-			order.Status = exchange.Partial
-		} else if dealQuantity == 0 {
-			order.Status = exchange.New
-		} else {
-			order.Status = exchange.Other
+		if !getAllRecord {
+			break
 		}
-
-		operation.OpenOrders = append(operation.OpenOrders, order)
+		if len(operation.OpenOrders) >= 500 {
+			break
+		}
 	}
 
 	return nil
