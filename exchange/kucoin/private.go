@@ -14,7 +14,9 @@ func (e *Kucoin) DoAccountOperation(operation *exchange.AccountOperation) error 
 	case exchange.Transfer:
 		return e.transfer(operation)
 	case exchange.BalanceList:
-		return e.getAllBalance(operation)
+		if operation.Wallet == exchange.SpotWallet || operation.Wallet == exchange.AssetWallet || operation.Wallet == exchange.MarginWallet {
+			return e.getAllBalance(operation)
+		}
 	case exchange.Balance:
 		return e.getBalance(operation)
 	case exchange.Withdraw:
@@ -478,6 +480,7 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 	accountID := AccountID{}
 	strRequest := "/api/v1/accounts"
 	accountType := ""
+	operation.BalanceList = []exchange.AssetBalance{}
 	// balanceList := []exchange.AssetBalance{}
 
 	mapParams := make(map[string]string)
@@ -487,6 +490,9 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 	} else if operation.Wallet == exchange.SpotWallet {
 		mapParams["type"] = "trade"
 		accountType = "trade"
+	} else if operation.Wallet == exchange.MarginWallet {
+		mapParams["type"] = "margin"
+		accountType = "margin"
 	}
 
 	jsonAllBalanceReturn := e.ApiKeyRequest("GET", strRequest, nil, operation.Sandbox)
