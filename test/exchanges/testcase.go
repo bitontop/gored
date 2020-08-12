@@ -261,8 +261,8 @@ func Test_CheckAllBalance(e exchange.Exchange, balanceType exchange.WalletType) 
 		log.Printf("%v", err)
 		return
 	}
-	for _, balance := range opAllBalance.BalanceList {
-		log.Printf("AllAccount balance: Coin: %v, avaliable: %v, frozen: %v", balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
+	for i, balance := range opAllBalance.BalanceList {
+		log.Printf("AllAccount balance: %v Coin: %v, avaliable: %v, frozen: %v", i+1, balance.Coin.Code, balance.BalanceAvailable, balance.BalanceFrozen)
 	}
 	if len(opAllBalance.BalanceList) == 0 {
 		log.Println("AllAccount 0 balance")
