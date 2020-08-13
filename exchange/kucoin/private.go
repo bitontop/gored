@@ -6,6 +6,8 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/bitontop/gored/coin"
+
 	"github.com/bitontop/gored/exchange"
 )
 
@@ -514,6 +516,12 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 		return operation.Error
 	}
 
+	// need to update all coin balance in coinMap
+	coinMap := make(map[string]bool)
+	for _, c := range e.GetCoins() { // set all coin balance to 0
+		coinMap[c.Code] = false
+	}
+
 	for _, account := range accountID {
 		if account.Balance == "0" {
 			// continue
@@ -530,7 +538,18 @@ func (e *Kucoin) getAllBalance(operation *exchange.AccountOperation) error {
 				BalanceAvailable: avaliable,
 				BalanceFrozen:    frozen,
 			}
+			coinMap[balance.Coin.Code] = true
 			operation.BalanceList = append(operation.BalanceList, balance)
+		}
+	}
+
+	// set every coin else into balanceList
+	for code, set := range coinMap {
+		if !set {
+			b := exchange.AssetBalance{
+				Coin: coin.GetCoin(code),
+			}
+			operation.BalanceList = append(operation.BalanceList, b)
 		}
 	}
 
