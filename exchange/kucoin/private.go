@@ -148,6 +148,7 @@ func (e *Kucoin) doGetOpenOrder(operation *exchange.AccountOperation) error {
 			} else if dealQuantity == 0 {
 				order.Status = exchange.New
 			} else {
+				log.Printf("%v openOrder get unknown status: %+v", e.GetName(), o)
 				order.Status = exchange.Other
 			}
 
