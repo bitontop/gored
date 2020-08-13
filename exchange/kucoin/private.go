@@ -28,6 +28,10 @@ func (e *Kucoin) DoAccountOperation(operation *exchange.AccountOperation) error 
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetOpenOrder(operation)
 		}
+	case exchange.GetOrderHistory:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doGetOrderHistory(operation)
+		}
 
 	case exchange.SubBalanceList:
 		if operation.Wallet == exchange.SpotWallet {
@@ -43,6 +47,128 @@ func (e *Kucoin) DoAccountOperation(operation *exchange.AccountOperation) error 
 		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Kucoin) doGetOrderHistory(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	jsonResponse := JsonResponse{}
+	doneOrders := OpenOrders{}
+	strRequest := "/api/v1/orders"
+	operation.OrderHistory = []*exchange.Order{}
+
+	mapParams := make(map[string]string)
+	mapParams["status"] = "done"
+	mapParams["tradeType"] = "TRADE"
+	if operation.Pair != nil {
+		mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+	}
+	if operation.StartTime != 0 { // milisecond, [start,end)
+		mapParams["startAt"] = fmt.Sprintf("%v", operation.StartTime)
+	}
+	if operation.EndTime != 0 {
+		mapParams["endAt"] = fmt.Sprintf("%v", operation.EndTime)
+	}
+
+	totalPage := 2
+	var endTS int64
+	endTS = 0
+	getAllRecord := true
+	if operation.StartTime != 0 || operation.EndTime != 0 {
+		getAllRecord = false
+	}
+
+	for totalPage > 1 {
+
+		if endTS != 0 { // milisecond, [start,end)
+			mapParams["endAt"] = fmt.Sprintf("%v", endTS)
+		}
+
+		jsonGetOpenOrder := e.ApiKeyRequest("GET", strRequest, mapParams, operation.Sandbox)
+		// log.Printf("-=--=-===-==--========================================json: %v", jsonGetOpenOrder) //TODO
+		if operation.DebugMode {
+			operation.RequestURI = strRequest
+			// operation.MapParams = fmt.Sprintf("%+v", mapParams)
+			operation.CallResponce = jsonGetOpenOrder
+		}
+
+		if err := json.Unmarshal([]byte(jsonGetOpenOrder), &jsonResponse); err != nil {
+			operation.Error = fmt.Errorf("%s doGetOrderHistory Json Unmarshal Err: %v, %s", e.GetName(), err, jsonGetOpenOrder)
+			return operation.Error
+		} else if jsonResponse.Code != "200000" {
+			operation.Error = fmt.Errorf("%s doGetOrderHistory Failed: %v", e.GetName(), jsonGetOpenOrder)
+			return operation.Error
+		}
+
+		if err := json.Unmarshal(jsonResponse.Data, &doneOrders); err != nil {
+			operation.Error = fmt.Errorf("%s doGetOrderHistory Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
+			return operation.Error
+		}
+
+		totalPage = doneOrders.TotalPage
+
+		// store info into orders
+		for _, o := range doneOrders.Items {
+			rate, err := strconv.ParseFloat(o.Price, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doGetOrderHistory parse rate Err: %v, %v", e.GetName(), err, o.Price)
+				return operation.Error
+			}
+			quantity, err := strconv.ParseFloat(o.Size, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doGetOrderHistory parse quantity Err: %v, %v", e.GetName(), err, o.Size)
+				return operation.Error
+			}
+			dealQuantity, err := strconv.ParseFloat(o.DealSize, 64)
+			if err != nil {
+				operation.Error = fmt.Errorf("%s doGetOrderHistory parse dealQuantity Err: %v, %v", e.GetName(), err, o.DealSize)
+				return operation.Error
+			}
+
+			order := &exchange.Order{
+				Pair:         e.GetPairBySymbol(o.Symbol),
+				OrderID:      fmt.Sprintf("%v", o.ID),
+				Rate:         rate,
+				Quantity:     quantity,
+				DealRate:     rate,
+				DealQuantity: dealQuantity,
+				Timestamp:    o.CreatedAt,
+				// JsonResponse: jsonGetOpenOrder,
+			}
+
+			switch o.Side {
+			case "buy":
+				order.Direction = exchange.Buy
+			case "sell":
+				order.Direction = exchange.Sell
+			}
+
+			if dealQuantity == quantity {
+				order.Status = exchange.Filled
+				// } else if dealQuantity > 0 && dealQuantity < quantity {
+				// 	order.Status = exchange.Partial
+				// } else if dealQuantity == 0 {
+				// 	order.Status = exchange.New
+			} else {
+				log.Printf("%v doneOrder get unknown status: %+v", e.GetName(), o)
+				order.Status = exchange.Cancelled
+			}
+
+			operation.OrderHistory = append(operation.OrderHistory, order)
+			endTS = o.CreatedAt
+		}
+
+		if !getAllRecord {
+			break
+		}
+		if len(operation.OrderHistory) >= 500 {
+			break
+		}
+	}
+
+	return nil
 }
 
 func (e *Kucoin) doGetOpenOrder(operation *exchange.AccountOperation) error {

@@ -35,6 +35,9 @@ func Test_Kucoin(t *testing.T) {
 	// Test_Constraint(e, pair)
 
 	Test_Balance(e, pair)
+	Test_CheckAllBalance(e, exchange.AssetWallet)
+	Test_CheckAllBalance(e, exchange.SpotWallet)
+	Test_CheckAllBalance(e, exchange.MarginWallet)
 	// Test_Trading(e, pair, 0.00000001, 100)
 	// Test_Trading_Sell(e, pair, 0.06, 0.01)
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
@@ -44,8 +47,31 @@ func Test_Kucoin(t *testing.T) {
 	// SubAllBalances(e)
 	// ===============================================
 	// OpenOrder
+	// op := &exchange.AccountOperation{
+	// 	Type:    exchange.GetOpenOrder,
+	// 	Wallet:  exchange.SpotWallet,
+	// 	Sandbox: false,
+	// 	Ex:      e.GetName(),
+	// 	Pair:    pair,
+	// 	// StartTime: 1596838564000,
+	// 	// EndTime:   1596838564001,
+	// 	DebugMode: true,
+	// }
+
+	// if err := e.DoAccountOperation(op); err != nil {
+	// 	log.Printf("%+v", err)
+	// } else {
+	// 	for i, o := range op.OpenOrders {
+	// 		log.Printf("%s %v OpenOrders: %v %+v", e.GetName(), i+1, o.Pair.Name, o)
+	// 	}
+	// 	if len(op.OpenOrders) == 0 {
+	// 		log.Printf("%s OpenOrder Response: %v", e.GetName(), op.CallResponce)
+	// 	}
+	// }
+	// ===============================================
+	// OrderHistory
 	op := &exchange.AccountOperation{
-		Type:    exchange.GetOpenOrder,
+		Type:    exchange.GetOrderHistory,
 		Wallet:  exchange.SpotWallet,
 		Sandbox: false,
 		Ex:      e.GetName(),
@@ -58,11 +84,11 @@ func Test_Kucoin(t *testing.T) {
 	if err := e.DoAccountOperation(op); err != nil {
 		log.Printf("%+v", err)
 	} else {
-		for i, o := range op.OpenOrders {
-			log.Printf("%s %v OpenOrders: %v %+v", e.GetName(), i+1, o.Pair.Name, o)
+		for i, o := range op.OrderHistory {
+			log.Printf("%s %v OrderHistory: %v %+v", e.GetName(), i+1, o.Pair.Name, o)
 		}
-		if len(op.OpenOrders) == 0 {
-			log.Printf("%s OpenOrder Response: %v", e.GetName(), op.CallResponce)
+		if len(op.OrderHistory) == 0 {
+			log.Printf("%s OrderHistory Response: %v", e.GetName(), op.CallResponce)
 		}
 	}
 	// ===============================================
