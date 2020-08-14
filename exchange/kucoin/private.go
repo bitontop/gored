@@ -152,7 +152,7 @@ func (e *Kucoin) doGetOrderHistory(operation *exchange.AccountOperation) error {
 				// } else if dealQuantity == 0 {
 				// 	order.Status = exchange.New
 			} else {
-				log.Printf("%v doneOrder get unknown status: %+v", e.GetName(), o)
+				// log.Printf("%v doneOrder get unknown status: %+v", e.GetName(), o)
 				order.Status = exchange.Cancelled
 			}
 

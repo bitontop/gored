@@ -431,6 +431,7 @@ func (e *Kucoin) OrderStatus(order *exchange.Order) error {
 	strRequest := fmt.Sprintf("/api/v1/orders/%s", order.OrderID)
 
 	jsonOrderStatus := e.ApiKeyRequest("GET", strRequest, nil, false)
+	// log.Printf("--------------------------------------%v", jsonOrderStatus)
 	if err := json.Unmarshal([]byte(jsonOrderStatus), &jsonResponse); err != nil {
 		return fmt.Errorf("%s OrderStatus Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderStatus)
 	} else if jsonResponse.Code != "200000" {
@@ -445,6 +446,8 @@ func (e *Kucoin) OrderStatus(order *exchange.Order) error {
 		dealSize, _ := strconv.ParseFloat(orderStatus.DealSize, 64)
 		if dealSize == order.Quantity {
 			order.Status = exchange.Filled
+		} else if !orderStatus.IsActive {
+			order.Status = exchange.Cancelled
 		} else if dealSize > 0 && dealSize < order.Quantity {
 			order.Status = exchange.Partial
 		} else if math.Abs(dealSize-0.0) < 0.00000000001 {
@@ -458,7 +461,10 @@ func (e *Kucoin) OrderStatus(order *exchange.Order) error {
 		order.Status = exchange.Other
 	}
 
-	order.DealRate, _ = strconv.ParseFloat(orderStatus.DealFunds, 64)
+	dealSize, _ := strconv.ParseFloat(orderStatus.DealSize, 64)
+	dealFunds, _ := strconv.ParseFloat(orderStatus.DealFunds, 64)
+
+	order.DealRate = dealFunds / dealSize
 	order.DealQuantity, _ = strconv.ParseFloat(orderStatus.DealSize, 64)
 
 	return nil
