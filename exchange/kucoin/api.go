@@ -359,7 +359,7 @@ func (e *Kucoin) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.O
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "200000" {
-		return nil, fmt.Errorf("%s LimitSell Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitSell Failed: %v, %+v", e.GetName(), jsonPlaceReturn, mapParams)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
@@ -402,7 +402,7 @@ func (e *Kucoin) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "200000" {
-		return nil, fmt.Errorf("%s LimitBuy Failed: %s %v", e.GetName(), jsonResponse.Code, jsonResponse.Msg)
+		return nil, fmt.Errorf("%s LimitBuy Failed: %v, %+v", e.GetName(), jsonPlaceReturn, mapParams)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &placeOrder); err != nil {
 		return nil, fmt.Errorf("%s LimitBuy Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
