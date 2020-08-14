@@ -209,7 +209,8 @@ func (e *Kucoin) doTickerPrice(operation *exchange.PublicOperation) error {
 		if err != nil {
 			log.Printf("%s doTickerPrice parse Err: %v %v", e.GetName(), err, tp.AveragePrice)
 			operation.Error = err
-			return err
+			continue
+			// return err
 		}
 
 		if p == nil {
