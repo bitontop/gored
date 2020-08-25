@@ -319,6 +319,8 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	jsonOrderbook := exchange.HttpGetRequest(strUrl, mapParams)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &orderBook); err != nil {
 		return nil, fmt.Errorf("%s OrderBook json Unmarshal error: %v %v", e.GetName(), err, jsonOrderbook)
+	} else if orderBook.Code != 0 {
+		return nil, fmt.Errorf("%s Get OrderBook failed: %v", e.GetName(), jsonOrderbook)
 	}
 
 	maker.AfterTimestamp = float64(time.Now().UnixNano() / 1e6)

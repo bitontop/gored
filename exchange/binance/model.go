@@ -47,6 +47,7 @@ type PlaceOrder struct {
 }
 
 type OrderBook struct {
+	Code         int             `json:"code"`
 	LastUpdateID int             `json:"lastUpdateId"`
 	Bids         [][]interface{} `json:"bids"`
 	Asks         [][]interface{} `json:"asks"`
