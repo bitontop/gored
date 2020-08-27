@@ -22,7 +22,7 @@ import (
 
 func Test_Kucoin(t *testing.T) {
 	e := InitEx(exchange.KUCOIN)
-	pair := pair.GetPairByKey("BTC|ETH")
+	pair := pair.GetPairByKey("USDT|ETH")
 
 	// Test_TradeHistory(e, pair)
 	// Test_NewOrderBook(e, pair)
@@ -39,7 +39,8 @@ func Test_Kucoin(t *testing.T) {
 	Test_CheckAllBalance(e, exchange.SpotWallet)
 	Test_CheckAllBalance(e, exchange.MarginWallet)
 	// Test_Trading(e, pair, 0.00000001, 100)
-	// Test_Trading_Sell(e, pair, 0.06, 0.01)
+	// Test_Trading_Sell(e, pair, 15000, 0.00001)
+	// Test_OrderStatus(e, pair, "5f35deb10882f60006469a37")
 	// Test_Withdraw(e, pair.Base, 1, "ADDRESS")
 
 	// SubBalances(e, "5cbd31ab9c93e9280cd36a0a")
