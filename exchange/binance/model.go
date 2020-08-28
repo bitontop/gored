@@ -456,3 +456,8 @@ type TickerPrice []struct {
 	Symbol string `json:"symbol"`
 	Price  string `json:"price"`
 }
+
+type SubTransfer struct {
+	Success bool   `json:"success"`
+	TxnID   string `json:"txnId"`
+}

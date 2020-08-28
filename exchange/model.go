@@ -166,14 +166,15 @@ type MarginBalance struct {
 type OperationType string
 
 const (
-	Withdraw          OperationType = "Withdraw"
-	Transfer          OperationType = "Transfer"          // transfer  between inneral wallet
-	Balance           OperationType = "Balance"           // balance(s) of different accounts
-	BalanceList       OperationType = "BalanceAll"        // balance(s) of different accounts
-	SubBalanceList    OperationType = "SubBalanceList"    // balance(s) of subaccount
-	SubAllBalanceList OperationType = "SubAllBalanceList" // balance(s) of all subaccounts
-	GetSubAccountList OperationType = "GetSubAccountList" // get sub accounts list
-	GetPositionInfo   OperationType = "GetPositionInfo"   // position information for Contract
+	Withdraw           OperationType = "Withdraw"
+	Transfer           OperationType = "Transfer"           // transfer  between inneral wallet
+	SubAccountTransfer OperationType = "SubAccountTransfer" // transfer  between main/sub account
+	Balance            OperationType = "Balance"            // balance(s) of different accounts
+	BalanceList        OperationType = "BalanceAll"         // balance(s) of different accounts
+	SubBalanceList     OperationType = "SubBalanceList"     // balance(s) of subaccount
+	SubAllBalanceList  OperationType = "SubAllBalanceList"  // balance(s) of all subaccounts
+	GetSubAccountList  OperationType = "GetSubAccountList"  // get sub accounts list
+	GetPositionInfo    OperationType = "GetPositionInfo"    // position information for Contract
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"
@@ -221,12 +222,17 @@ type AccountOperation struct {
 	Coin *coin.Coin `json:"transfer_coin"` //BOT standard symbol, not the symbol on exchange
 
 	//specific operations
-	// #Transfer
+	// #Inner Transfer
 	TransferFrom        WalletType `json:"transfer_from"`
 	TransferDestination WalletType `json:"transfer_dest"`
 	TransferAmount      string     `json:"transfer_amount"`
 	TransferStartTime   int64      `json:"transfer_start_time"`
 	TransferEndTime     int64      `json:"transfer_end_time"`
+
+	// #SubAccount Transfer
+	SubTransferFrom   string `json:"sub_transfer_from"`
+	SubTransferTo     string `json:"sub_transfer_to"`
+	SubTransferAmount string `json:"sub_transfer_amount"`
 
 	// start/end timestamp
 	StartTime int64 `json:"start_time"`

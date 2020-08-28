@@ -19,7 +19,7 @@ func Test_Binance(t *testing.T) {
 	// e := InitEx(exchange.BINANCE)
 	e := InitExFromJson(exchange.BINANCE)
 	// e := InitExFromJson(exchange.BINANCE)
-	pair := pair.GetPairByKey("USDT|BTC")
+	pair := pair.GetPairByKey("BTC|ETH")
 
 	// Test_Coins(e)
 	// Test_Pairs(e)
@@ -264,6 +264,25 @@ func Test_Binance(t *testing.T) {
 	// 	log.Printf("Contract OrderStatus: %+v", opOrderStatus.Order)
 	// 	log.Printf("Contract OrderStatus callResponse: %+v", opOrderStatus.CallResponce)
 	// }
+
+	// // ===============================================
+
+	// SubAccount Transfer
+	// opSubTransfer := &exchange.AccountOperation{
+	// 	Wallet:            exchange.SpotWallet,
+	// 	Type:              exchange.SubAccountTransfer,
+	// 	Ex:                e.GetName(),
+	// 	Coin:              pair.Target,
+	// 	SubTransferFrom:   "exapi@bitontop.com",
+	// 	SubTransferTo:     "tonywei@bitontop.com",
+	// 	SubTransferAmount: "0.01",
+	// 	DebugMode:         true,
+	// }
+	// err := e.DoAccountOperation(opSubTransfer)
+	// if err != nil {
+	// 	log.Printf("==%v", err)
+	// }
+	// log.Printf("SubAccount Transfer callResponse: %+v", opSubTransfer.CallResponce)
 
 	// // ===============================================
 

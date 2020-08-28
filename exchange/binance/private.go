@@ -13,7 +13,13 @@ import (
 func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
 	case exchange.Withdraw:
-		return e.doWithdraw(operation)
+		if operation.Wallet == exchange.SpotWallet {
+			return e.doWithdraw(operation)
+		}
+	case exchange.SubAccountTransfer:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.subTransfer(operation)
+		}
 	// case exchange.Transfer:
 	// 	return e.transfer(operation)
 	// case exchange.Balance:
@@ -93,6 +99,40 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 	}
 
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+// TODO, test
+func (e *Binance) subTransfer(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	subTrans := SubTransfer{}
+	strRequestUrl := "/wapi/v3/sub-account/transfer.html"
+
+	mapParams := make(map[string]string)
+	mapParams["fromEmail"] = operation.SubTransferFrom
+	mapParams["toEmail"] = operation.SubTransferTo
+	mapParams["asset"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.SubTransferAmount
+
+	jsonTransferReturn := e.WApiKeyRequest("POST", mapParams, strRequestUrl) // e.ApiKeyGet(mapParams, strRequest) // e.WApiKeyRequest("GET", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.CallResponce = jsonTransferReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferReturn), &subTrans); err != nil {
+		operation.Error = fmt.Errorf("%s doSubTransfer Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferReturn)
+		return operation.Error
+	} else if !subTrans.Success {
+		operation.Error = fmt.Errorf("%s doSubTransfer failed: %v", e.GetName(), jsonTransferReturn)
+		return operation.Error
+	}
+
+	// log.Printf("SubTransfer response %v", jsonTransferReturn)
+
+	return nil
 }
 
 func (e *Binance) doSubAccountList(operation *exchange.AccountOperation) error { //TODO, test with sub account
