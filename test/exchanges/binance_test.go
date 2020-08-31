@@ -280,7 +280,7 @@ func Test_Binance(t *testing.T) {
 	// }
 	// err := e.DoAccountOperation(opSubTransfer)
 	// if err != nil {
-	// 	log.Printf("==%v", err)
+	// 	log.Printf("SubAccount Transfer error: %v", err)
 	// }
 	// log.Printf("SubAccount Transfer callResponse: %+v", opSubTransfer.CallResponce)
 

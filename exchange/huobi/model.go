@@ -242,3 +242,10 @@ type TransferHistory []struct {
 	Transferer   int     `json:"transferer"`
 	Transferee   int     `json:"transferee"`
 }
+
+type SubTransfer struct {
+	Status  string `json:"status"`
+	Data    int    `json:"data"`
+	ErrCode string `json:"err-code"`
+	ErrMsg  string `json:"err-msg"`
+}

@@ -87,6 +87,25 @@ func Test_Huobi(t *testing.T) {
 	// }
 	// =====================================================================
 
+	// SubAccount Transfer
+	// opSubTransfer := &exchange.AccountOperation{
+	// 	Wallet:          exchange.SpotWallet,
+	// 	Type:            exchange.SubAccountTransfer,
+	// 	Ex:              e.GetName(),
+	// 	Coin:            pair.Target,
+	// 	SubTransferFrom: "157709010", // ** Put subAccountId into 'SubTransferFrom' or 'SubTransferTo' **
+	// 	// SubTransferTo:     "157709010",
+	// 	SubTransferAmount: "0.00599",
+	// 	DebugMode:         true,
+	// }
+	// err := e.DoAccountOperation(opSubTransfer)
+	// if err != nil {
+	// 	log.Printf("SubAccount Transfer error: %v", err)
+	// }
+	// log.Printf("SubAccount Transfer callResponse: %+v", opSubTransfer.CallResponce)
+
+	// ===============================================
+
 	// SubBalances(e, "8459451")
 	// SubAccountList(e)
 	// SubAllBalances(e)

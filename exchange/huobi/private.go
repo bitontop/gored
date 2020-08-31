@@ -13,6 +13,10 @@ import (
 
 func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
+	case exchange.SubAccountTransfer:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.subTransfer(operation)
+		}
 
 	// case exchange.Transfer:
 	// 	return e.transfer(operation)
@@ -68,6 +72,46 @@ func (e *Huobi) DoAccountOperation(operation *exchange.AccountOperation) error {
 		}
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Huobi) subTransfer(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	subTrans := SubTransfer{}
+	strRequestUrl := "/v1/subuser/transfer"
+
+	mapParams := make(map[string]string)
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.SubTransferAmount
+
+	// Type options: master-transfer-in, master-transfer-out, master-point-transfer-in, master-point-transfer-out
+	if operation.SubTransferTo != "" { // transfer to sub
+		mapParams["sub-uid"] = operation.SubTransferTo
+		mapParams["type"] = "master-transfer-out"
+	} else if operation.SubTransferFrom != "" { // transfer from sub
+		mapParams["sub-uid"] = operation.SubTransferFrom
+		mapParams["type"] = "master-transfer-in"
+	}
+
+	jsonTransferReturn := e.ApiKeyRequest("POST", mapParams, strRequestUrl)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.CallResponce = jsonTransferReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferReturn), &subTrans); err != nil {
+		operation.Error = fmt.Errorf("%s doSubTransfer Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferReturn)
+		return operation.Error
+	} else if subTrans.Status != "ok" {
+		operation.Error = fmt.Errorf("%s doSubTransfer Failed: %v", e.GetName(), jsonTransferReturn)
+		return operation.Error
+	}
+
+	// log.Printf("SubTransfer response %v", jsonTransferReturn)
+
+	return nil
 }
 
 // get past 30 days data
