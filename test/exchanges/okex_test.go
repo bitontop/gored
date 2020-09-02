@@ -93,5 +93,24 @@ func Test_Okex(t *testing.T) {
 	// }
 	// ==============================================
 
+	// SubAccount Transfer
+	// opSubTransfer := &exchange.AccountOperation{
+	// 	Wallet: exchange.SpotWallet,
+	// 	Type:   exchange.SubAccountTransfer,
+	// 	Ex:     e.GetName(),
+	// 	Coin:   pair.Target,
+	// 	// SubTransferFrom: "bitontop", // ** Put subAccountId into 'SubTransferFrom' or 'SubTransferTo' **
+	// 	SubTransferTo:     "bitontop",
+	// 	SubTransferAmount: "0.001",
+	// 	DebugMode:         true,
+	// }
+	// err := e.DoAccountOperation(opSubTransfer)
+	// if err != nil {
+	// 	log.Printf("SubAccount Transfer error: %v", err)
+	// }
+	// log.Printf("SubAccount Transfer callResponse: %+v", opSubTransfer.CallResponce)
+
+	// ===============================================
+
 	// Test_TradeHistory(e, pair)
 }

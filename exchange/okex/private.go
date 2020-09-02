@@ -11,6 +11,10 @@ import (
 
 func (e *Okex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
+	case exchange.SubAccountTransfer:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.subTransfer(operation)
+		}
 	case exchange.Transfer:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.transfer(operation)
@@ -39,6 +43,56 @@ func (e *Okex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	}
 
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+// all types of transfer in same api, all types of wallets. Only support spot now.
+// put subAccount login name into 'SubTransferFrom' or 'SubTransferTo'
+func (e *Okex) subTransfer(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" || e.Passphrase == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	trans := Transfer{}
+	strRequest := "/api/account/v3/transfer"
+
+	mapParams := make(map[string]interface{})
+	mapParams["currency"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.SubTransferAmount
+	mapParams["from"] = "1" // 1 spot, 6 asset
+	mapParams["to"] = "1"
+	if operation.SubTransferFrom != "" {
+		mapParams["type"] = "2"
+		mapParams["sub_account"] = operation.SubTransferFrom
+	} else if operation.SubTransferTo != "" {
+		mapParams["type"] = "1"
+		mapParams["sub_account"] = operation.SubTransferTo
+	} else {
+		return fmt.Errorf("%s doSubTransfer failed, missing subAccount param", e.GetName())
+	}
+
+	jsonTransferReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferReturn), &trans); err != nil {
+		errorJson := ErrorMsg{}
+		if err := json.Unmarshal([]byte(jsonTransferReturn), &errorJson); err != nil {
+			operation.Error = fmt.Errorf("%s doSubTransfer Err: %v", e.GetName(), jsonTransferReturn)
+			return operation.Error
+		} else {
+			operation.Error = fmt.Errorf("%s doSubTransfer Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferReturn)
+			return operation.Error
+		}
+	} else if !trans.Result {
+		operation.Error = fmt.Errorf("%s doSubTransfer failed: %v", e.GetName(), jsonTransferReturn)
+		return operation.Error
+	}
+
+	// log.Printf("SubTransfer response %v", jsonTransferReturn)
+
+	return nil
 }
 
 func (e *Okex) getOpenOrder(op *exchange.AccountOperation) error {
