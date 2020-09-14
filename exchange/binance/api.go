@@ -23,7 +23,7 @@ import (
 /*The Base Endpoint URL*/
 const (
 	API_URL      = "https://api.binance.com"
-	CONTRACT_URL = "https://fapi.binance.com"
+	CONTRACT_URL = "https://fapi.binance.com" ///
 )
 
 /*API Base Knowledge
