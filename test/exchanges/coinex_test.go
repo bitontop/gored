@@ -75,4 +75,23 @@ func Test_Coinex(t *testing.T) {
 	// 	log.Printf("%s SpotKline %+v", e.GetName(), k)
 	// }
 	// ==============================================
+
+	// SubAccount Transfer
+	// opSubTransfer := &exchange.AccountOperation{
+	// 	Wallet: exchange.SpotWallet,
+	// 	Type:   exchange.SubAccountTransfer,
+	// 	Ex:     e.GetName(),
+	// 	Coin:   pair.Target,
+	// 	// SubTransferFrom: "sub1", // ** Put subAccountId into 'SubTransferFrom' or 'SubTransferTo' **
+	// 	SubTransferTo:     "sub1",
+	// 	SubTransferAmount: "0.0001",
+	// 	DebugMode:         true,
+	// }
+	// err := e.DoAccountOperation(opSubTransfer)
+	// if err != nil {
+	// 	log.Printf("SubAccount Transfer error: %v", err)
+	// }
+	// log.Printf("SubAccount Transfer callResponse: %+v", opSubTransfer.CallResponce)
+
+	// ===============================================
 }

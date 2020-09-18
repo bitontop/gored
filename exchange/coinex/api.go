@@ -525,18 +525,27 @@ func (e *Coinex) ApiKeyRequest(strMethod string, strRequestPath string, mapParam
 	mapParams["tonce"] = strconv.FormatInt(timestamp, 10)
 
 	var strRequestUrl string
+	jsonParams := ""
 	if nil == mapParams {
 		strRequestUrl = API_URL + strRequestPath
 	} else {
-		strParams := exchange.Map2UrlQuery(mapParams)
-		strRequestUrl = API_URL + strRequestPath + "?" + strParams
+		if strMethod == "GET" {
+			strParams := exchange.Map2UrlQuery(mapParams)
+			strRequestUrl = API_URL + strRequestPath + "?" + strParams
+		} else {
+			strRequestUrl = API_URL + strRequestPath
+			if len(mapParams) != 0 {
+				bytesParams, _ := json.Marshal(mapParams)
+				jsonParams = string(bytesParams)
+			}
+		}
 	}
 
 	signature := fmt.Sprintf("%s&secret_key=%s", exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	// 构建Request, 并且按官方要求添加Http Header
 	httpClient := &http.Client{}
-	request, err := http.NewRequest(strMethod, strRequestUrl, nil)
+	request, err := http.NewRequest(strMethod, strRequestUrl, strings.NewReader(jsonParams))
 	if nil != err {
 		return err.Error()
 	}

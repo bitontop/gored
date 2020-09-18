@@ -11,7 +11,10 @@ import (
 
 func (e *Coinex) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
-
+	case exchange.SubAccountTransfer:
+		if operation.Wallet == exchange.SpotWallet {
+			return e.subTransfer(operation)
+		}
 	// case exchange.Transfer:
 	// 	return e.transfer(operation)
 	// case exchange.Balance:
@@ -53,6 +56,48 @@ func (e *Coinex) DoAccountOperation(operation *exchange.AccountOperation) error 
 
 	}
 	return fmt.Errorf("%s Operation type invalid: %s %v", operation.Ex, operation.Wallet, operation.Type)
+}
+
+func (e *Coinex) subTransfer(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key, Secret Key or Passphrase are nil", e.GetName())
+	}
+
+	jsonResponse := JsonResponse{}
+	strRequest := "/v1/sub_account/transfer"
+
+	mapParams := make(map[string]string)
+	mapParams["access_id"] = e.API_KEY
+	mapParams["coin_type"] = e.GetSymbolByCoin(operation.Coin)
+	mapParams["amount"] = operation.SubTransferAmount
+
+	if operation.SubTransferFrom != "" {
+		mapParams["transfer_side"] = "in" // to post "in" or "out", in for deposit, out for withdrawal
+		mapParams["transfer_account"] = operation.SubTransferFrom
+	} else if operation.SubTransferTo != "" {
+		mapParams["transfer_side"] = "out" // to post "in" or "out", in for deposit, out for withdrawal
+		mapParams["transfer_account"] = operation.SubTransferTo
+	} else {
+		return fmt.Errorf("%s doSubTransfer failed, missing subAccount name", e.GetName())
+	}
+
+	jsonTransferReturn := e.ApiKeyRequest("POST", strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonTransferReturn
+	}
+
+	if err := json.Unmarshal([]byte(jsonTransferReturn), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doSubTransfer Json Unmarshal Err: %v, %s", e.GetName(), err, jsonTransferReturn)
+		return operation.Error
+	} else if jsonResponse.Code != 0 {
+		operation.Error = fmt.Errorf("%s doSubTransfer failed: %v", e.GetName(), jsonTransferReturn)
+		return operation.Error
+	}
+
+	// log.Printf("SubTransfer response %v", jsonTransferReturn)
+
+	return nil
 }
 
 func (e *Coinex) doGetTransferHistory(operation *exchange.AccountOperation) error {
