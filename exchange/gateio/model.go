@@ -23,7 +23,7 @@ type CoinsData struct {
 		CurrSuffix  string      `json:"curr_suffix"`
 		RatePercent string      `json:"rate_percent"`
 		Trend       string      `json:"trend"`
-		Supply      int         `json:"supply"`
+		Supply      interface{} `json:"supply"`
 		Marketcap   interface{} `json:"marketcap"`
 		Lq          string      `json:"lq"`
 	} `json:"data"`
