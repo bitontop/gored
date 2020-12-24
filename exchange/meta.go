@@ -159,6 +159,7 @@ const (
 	NICEHASH     ExchangeName = "NICEHASH"
 	OKEX         ExchangeName = "OKEX"
 	OKEXDM       ExchangeName = "OKEXDM"
+	OKSIM        ExchangeName = "OKSIM"
 	OTCBTC       ExchangeName = "OTCBTC"
 	P2PB2B       ExchangeName = "P2PB2B"
 	POLONIEX     ExchangeName = "POLONIEX"
