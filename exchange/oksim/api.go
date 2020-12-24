@@ -55,57 +55,52 @@ func (e *Oksim) GetCoinsData() error {
 
 	jsonResponse := &JsonResponse{}
 
-	mapParams := make(map[string]interface{})
-	mapParams["instType"] = "SPOT"
-
-	strRequestUrl := "/api/v5/public/instruments"
-	jsonCurrencyReturn := e.ApiKeyRequest("GET", mapParams, strRequestUrl)
+	strRequestUrl := "/api/v5/asset/currencies"
+	jsonCurrencyReturn := e.ApiKeyRequest("GET", nil, strRequestUrl)
 	if err := json.Unmarshal([]byte(jsonCurrencyReturn), &jsonResponse); err != nil {
 		return fmt.Errorf("%s Get Coins Result Unmarshal Err: %v %s", e.GetName(), err, []byte(jsonCurrencyReturn))
 	} else if jsonResponse.Code != "0" {
 		return fmt.Errorf("%s Coins Failed: %v", e.GetName(), jsonResponse.Msg)
 	}
 
-	coinsData := []*PairData{}
+	coinsData := []*CoinData{}
 	if err := json.Unmarshal(jsonResponse.Data, &coinsData); err != nil {
 		return fmt.Errorf("%s Coins Data Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
 	}
 
 	for _, data := range coinsData {
-		base := &coin.Coin{}
-		target := &coin.Coin{}
+		c := &coin.Coin{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base = coin.GetCoin(data.CtValCcy)
-			if base == nil {
-				base = &coin.Coin{}
-				base.Code = data.CtValCcy
-				coin.AddCoin(base)
-			}
-			target = coin.GetCoin(data.SettleCcy)
-			if target == nil {
-				target = &coin.Coin{}
-				target.Code = data.SettleCcy
-				coin.AddCoin(target)
+			c = coin.GetCoin(data.Ccy)
+			if c == nil {
+				c = &coin.Coin{
+					Code: data.Ccy,
+					Name: data.Name,
+				}
+				coin.AddCoin(c)
 			}
 
 		case exchange.JSON_FILE:
-			base = e.GetCoinBySymbol(data.CtValCcy) //data.Currency)
-			target = e.GetCoinBySymbol(data.SettleCcy)
+			c = e.GetCoinBySymbol(data.Ccy) //data.Currency)
 		}
 
-		if base != nil {
-			coinConstraint := e.GetCoinConstraint(base)
+		if c != nil {
+			coinConstraint := e.GetCoinConstraint(c)
 			if coinConstraint == nil {
 				coinConstraint = &exchange.CoinConstraint{
-					CoinID:       base.ID,
-					Coin:         base,
-					ExSymbol:     data.CtValCcy,
+					CoinID:       c.ID,
+					Coin:         c,
+					ExSymbol:     data.Ccy,
 					ChainType:    exchange.MAINNET,
+					Deposit:      data.CanDep,
+					Withdraw:     data.CanWd,
 					Confirmation: DEFAULT_CONFIRMATION,
 				}
 			} else {
-				coinConstraint.ExSymbol = data.CtValCcy
+				coinConstraint.ExSymbol = data.Ccy
+				coinConstraint.Deposit = data.CanDep
+				coinConstraint.Withdraw = data.CanWd
 			}
 
 			e.SetCoinConstraint(coinConstraint)
@@ -145,8 +140,8 @@ func (e *Oksim) GetPairsData() error {
 		p := &pair.Pair{}
 		switch e.Source {
 		case exchange.EXCHANGE_API:
-			base := coin.GetCoin(data.CtValCcy)
-			target := coin.GetCoin(data.SettleCcy)
+			base := coin.GetCoin(data.QuoteCcy)
+			target := coin.GetCoin(data.BaseCcy)
 			if base != nil && target != nil {
 				p = pair.GetPair(base, target)
 			}
@@ -220,6 +215,7 @@ func (e *Oksim) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 
 	strRequestUrl := "/api/v5/market/books"
 	jsonOrderbook := e.ApiKeyRequest("GET", mapParams, strRequestUrl)
+	log.Printf("%s", jsonOrderbook)
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get OrderBook Result Unmarshal Err: %v %s", e.GetName(), err, []byte(jsonOrderbook))
 	} else if jsonResponse.Code != "0" {
@@ -263,6 +259,7 @@ func (e *Oksim) UpdateAllBalances() {
 
 	strRequest := "/api/v5/asset/balances"
 	jsonBalanceReturn := e.ApiKeyRequest("GET", nil, strRequest)
+	log.Printf("%s", jsonBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonBalanceReturn), &jsonResponse); err != nil {
 		log.Printf("%s UpdateAllBalances Json Unmarshal Err: %v %v", e.GetName(), err, jsonBalanceReturn)
 		return
@@ -328,6 +325,7 @@ func (e *Oksim) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Or
 	mapParams["sz"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 
 	jsonPlaceReturn := e.ApiKeyRequest("POST", mapParams, strRequest)
+	log.Printf("%s", jsonPlaceReturn)
 	if err := json.Unmarshal([]byte(jsonPlaceReturn), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s LimitSell Json Unmarshal Err: %v %v", e.GetName(), err, jsonPlaceReturn)
 	} else if jsonResponse.Code != "0" {

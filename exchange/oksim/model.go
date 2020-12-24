@@ -9,33 +9,45 @@ import (
 )
 
 type JsonResponse struct {
-	Code string          `json:"code"`
-	Msg  string          `json:"message"`
-	Data json.RawMessage `json:"data"`
+	Code         string          `json:"code"`
+	DetailMsg    string          `json:"detailMsg"`
+	ErrorCode    string          `json:"error_code"`
+	ErrorMessage string          `json:"error_message"`
+	Msg          string          `json:"msg"`
+	Data         json.RawMessage `json:"data"`
+}
+
+type CoinData struct {
+	CanDep bool   `json:"canDep"`
+	CanWd  bool   `json:"canWd"`
+	Ccy    string `json:"ccy"`
+	Chain  string `json:"chain"`
+	MinWd  int    `json:"minWd"`
+	Name   string `json:"name"`
 }
 
 type PairData struct {
-	InstType  string `json:"instType"`
-	InstID    string `json:"instId"`
-	Uly       string `json:"uly"`
-	Category  string `json:"category"`
+	Alias     string `json:"alias"`
 	BaseCcy   string `json:"baseCcy"`
-	QuoteCcy  string `json:"quoteCcy"`
-	SettleCcy string `json:"settleCcy"`
-	CtVal     string `json:"ctVal"`
+	Category  string `json:"category"`
 	CtMult    string `json:"ctMult"`
+	CtType    string `json:"ctType"`
+	CtVal     string `json:"ctVal"`
 	CtValCcy  string `json:"ctValCcy"`
-	OptType   string `json:"optType"`
-	Stk       string `json:"stk"`
-	ListTime  string `json:"listTime"`
 	ExpTime   string `json:"expTime"`
+	InstID    string `json:"instId"`
+	InstType  string `json:"instType"`
 	Lever     string `json:"lever"`
-	TickSz    string `json:"tickSz"`
+	ListTime  string `json:"listTime"`
 	LotSz     string `json:"lotSz"`
 	MinSz     string `json:"minSz"`
-	CtType    string `json:"ctType"`
-	Alias     string `json:"alias"`
+	OptType   string `json:"optType"`
+	QuoteCcy  string `json:"quoteCcy"`
+	SettleCcy string `json:"settleCcy"`
 	State     string `json:"state"`
+	Stk       string `json:"stk"`
+	TickSz    string `json:"tickSz"`
+	Uly       string `json:"uly"`
 }
 
 type OrderBook struct {
@@ -92,4 +104,12 @@ type OrderStatus struct {
 	Category    string `json:"category"`
 	UTime       string `json:"uTime"`
 	CTime       string `json:"cTime"`
+}
+
+type Transfer struct {
+	TransID string `json:"transId"`
+	Ccy     string `json:"ccy"`
+	From    string `json:"from"`
+	Amt     string `json:"amt"`
+	To      string `json:"to"`
 }

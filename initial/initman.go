@@ -61,6 +61,7 @@ import (
 	"github.com/bitontop/gored/exchange/newcapital"
 	"github.com/bitontop/gored/exchange/okex"
 	"github.com/bitontop/gored/exchange/okexdm"
+	"github.com/bitontop/gored/exchange/oksim"
 	"github.com/bitontop/gored/exchange/otcbtc"
 	"github.com/bitontop/gored/exchange/poloniex"
 	"github.com/bitontop/gored/exchange/probit"
@@ -570,6 +571,13 @@ func (e *InitManager) Init(config *exchange.Config) exchange.Exchange {
 
 	case exchange.BITBNS:
 		ex := bitbns.CreateBitbns(config)
+		if ex != nil {
+			e.exMan.Add(ex)
+		}
+		return ex
+
+	case exchange.OKSIM:
+		ex := oksim.CreateOksim(config)
 		if ex != nil {
 			e.exMan.Add(ex)
 		}
