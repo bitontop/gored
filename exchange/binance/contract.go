@@ -261,6 +261,56 @@ func (e *Binance) doGetPositionInfo(operation *exchange.AccountOperation) error 
 	return nil
 }
 
+func (e *Binance) doGetFutureBalances(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
+	}
+
+	futureBalances := []*FutureBalance{}
+	strRequest := "/fapi/v2/balance"
+
+	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = jsonAllBalanceReturn
+	}
+
+	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
+	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &futureBalances); err != nil {
+		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		return operation.Error
+	} /* else if len(accountBalances) == 0 {
+		operation.Error = fmt.Errorf("%s ContractAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
+		return operation.Error
+	} */
+
+	operation.BalanceList = []exchange.AssetBalance{}
+	for _, account := range futureBalances {
+		// if account.Balance == "0" {
+		// 	continue
+		// }
+
+		total, err := strconv.ParseFloat(account.Balance, 64)
+		available, err := strconv.ParseFloat(account.AvailableBalance, 64)
+		frozen := total - available
+		if err != nil {
+			return fmt.Errorf("%s balance parse fail: %v %+v", e.GetName(), err, account)
+		}
+
+		balance := exchange.AssetBalance{
+			Coin:             e.GetCoinBySymbol(account.Asset),
+			Balance:          total,
+			BalanceAvailable: available,
+			BalanceFrozen:    frozen,
+		}
+		operation.BalanceList = append(operation.BalanceList, balance)
+
+	}
+
+	return nil
+	// return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
+}
+
 // // contract balance has too many detail
 // // contract balance doc
 // // https://binance-docs.github.io/apidocs/futures/cn/#user_data-5
@@ -311,6 +361,45 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 
 	return nil
 	// return fmt.Errorf("%s getBalance fail: %v", e.GetName(), jsonBalanceReturn)
+}
+
+func (e *Binance) doSetFutureLeverage(operation *exchange.AccountOperation) error {
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	if operation.Pair == nil {
+		return fmt.Errorf("%s SetFutureLeverage Pair is empty", e.GetName())
+	}
+
+	if operation.Leverage < 1 || operation.Leverage > 125 {
+		return fmt.Errorf("%s SetFutureLeverage is between 1 to 125: %d", e.GetName(), operation.Leverage)
+	}
+
+	futureLeverage := FutureLeverage{}
+	strRequestUrl := "/fapi/v1/leverage"
+
+	mapParams := make(map[string]string)
+	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+	mapParams["leverage"] = fmt.Sprintf("%d", operation.Leverage)
+
+	jsonSetLeverage := e.ContractApiKeyRequest("POST", mapParams, strRequestUrl)
+	if operation.DebugMode {
+		operation.RequestURI = strRequestUrl
+		operation.CallResponce = jsonSetLeverage
+	}
+
+	if err := json.Unmarshal([]byte(jsonSetLeverage), &futureLeverage); err != nil {
+		operation.Error = fmt.Errorf("%s SetFutureLeverage Json Unmarshal Err: %v, %s", e.GetName(), err, jsonSetLeverage)
+		return operation.Error
+	}
+
+	if futureLeverage.Leverage != operation.Leverage {
+		operation.Error = fmt.Errorf("%s SetFutureLeverage Failed: %v", e.GetName(), futureLeverage)
+		return operation.Error
+	}
+
+	return nil
 }
 
 // type: TRADE_LIMIT, TRADE_MARKET, Trade_STOP_LIMIT, Trade_STOP_MARKET

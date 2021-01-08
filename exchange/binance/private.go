@@ -20,12 +20,20 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.SpotWallet {
 			return e.subTransfer(operation)
 		}
-	// case exchange.Transfer:
-	// 	return e.transfer(operation)
-	// case exchange.Balance:
-	// 	return e.getBalance(operation)
+		// case exchange.Transfer:
+		// 	return e.transfer(operation)
+		// case exchange.Balance:
+		// 	return e.getBalance(operation)
 
-	// Contract operation
+		// Contract operation
+	case exchange.GetFutureBalance:
+		if operation.Wallet == exchange.ContractWallet {
+			return e.doGetFutureBalances(operation)
+		}
+	case exchange.SetFutureLeverage: // operation model changed
+		if operation.Wallet == exchange.ContractWallet {
+			return e.doSetFutureLeverage(operation)
+		}
 	case exchange.PlaceOrder:
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doContractPlaceOrder(operation)

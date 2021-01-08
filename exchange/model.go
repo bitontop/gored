@@ -198,6 +198,10 @@ const (
 	GetWithdrawalHistory OperationType = "GetWithdrawalHistory"
 	GetTransferHistory   OperationType = "GetTransferHistory"
 	GetDepositAddress    OperationType = "GetDepositAddress" // Get address for one coin
+
+	// Contract
+	GetFutureBalance  OperationType = "GetFutureBalance"
+	SetFutureLeverage OperationType = "SetFutureLeverage"
 )
 
 type WalletType string
@@ -294,6 +298,7 @@ type AccountOperation struct {
 	OrderType      OrderPriceType // eg. FOK
 	TradeType      OrderTradeType // eg. TRADE_LIMIT
 	OrderDirection TradeDirection //TradeDirection
+	Leverage       int
 }
 
 type PublicOperation struct {
@@ -365,6 +370,7 @@ type DepositAddr struct {
 
 type AssetBalance struct {
 	Coin             *coin.Coin `json:"balance_coin"`
+	Balance          float64    `json:"balance"`
 	BalanceAvailable float64    `json:"balance_available"` //the fund able to do trading
 	BalanceFrozen    float64    `json:"balance_frozen"`    // the fund in order or frozen can't do trading         the total amount of fund should be   BalanceAvailable + BalanceFrozen
 

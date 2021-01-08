@@ -301,6 +301,22 @@ type ContractBalance struct {
 	UpdateTime                  int    `json:"updateTime"`
 }
 
+type FutureBalance struct {
+	AccountAlias       string `json:"accountAlias"`
+	Asset              string `json:"asset"`
+	Balance            string `json:"balance"`
+	CrossWalletBalance string `json:"crossWalletBalance"`
+	CrossUnPnl         string `json:"crossUnPnl"`
+	AvailableBalance   string `json:"availableBalance"`
+	MaxWithdrawAmount  string `json:"maxWithdrawAmount"`
+}
+
+type FutureLeverage struct {
+	Leverage         int    `json:"leverage"`
+	MaxNotionalValue string `json:"maxNotionalValue"`
+	Symbol           string `json:"symbol"`
+}
+
 // private operation
 type OpenOrders []struct {
 	Symbol              string `json:"symbol"`
