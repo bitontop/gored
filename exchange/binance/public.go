@@ -255,11 +255,20 @@ func (e *Binance) doContractKline(operation *exchange.PublicOperation) error {
 	}
 
 	get := &utils.HttpGet{
-		URI: fmt.Sprintf("https://fapi.binance.com/fapi/v1/klines?symbol=%v&interval=%v&limit=1500",
+		URI: fmt.Sprintf("%s/fapi/v1/klines?symbol=%s&interval=%s&limit=1500",
+			CONTRACT_URL,
 			e.GetSymbolByPair(operation.Pair), // BTCUSDT
 			interval,
 		),
 		Proxy: operation.Proxy,
+	}
+
+	if operation.TestMode {
+		get.URI = fmt.Sprintf("%s/fapi/v1/klines?symbol=%s&interval=%s&limit=1500",
+			CONTRACT_TESTNET_URL,
+			e.GetSymbolByPair(operation.Pair), // BTCUSDT
+			interval,
+		)
 	}
 
 	if operation.KlineStartTime != 0 {
@@ -267,7 +276,6 @@ func (e *Binance) doContractKline(operation *exchange.PublicOperation) error {
 	}
 
 	err := utils.HttpGetRequest(get)
-
 	if err != nil {
 		log.Printf("%+v", err)
 		operation.Error = err
@@ -434,6 +442,9 @@ func (e *Binance) doContractOrderBook(operation *exchange.PublicOperation) error
 
 	strRequestUrl := "/fapi/v1/depth"
 	strUrl := CONTRACT_URL + strRequestUrl
+	if operation.TestMode {
+		strUrl = CONTRACT_TESTNET_URL + strRequestUrl
+	}
 
 	operation.Maker = &exchange.Maker{
 		WorkerIP:        exchange.GetExternalIP(),

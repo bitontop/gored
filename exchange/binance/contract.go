@@ -24,7 +24,7 @@ func (e *Binance) doContractGetOpenOrder(operation *exchange.AccountOperation) e
 		mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 	}
 
-	jsonGetOpenOrder := e.ContractApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetOpenOrder := e.ContractApiKeyRequest("GET", mapParams, strRequest, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
@@ -106,7 +106,7 @@ func (e *Binance) doContractGetOrderHistory(operation *exchange.AccountOperation
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 
-	jsonGetOpenOrder := e.ContractApiKeyRequest("GET", mapParams, strRequest)
+	jsonGetOpenOrder := e.ContractApiKeyRequest("GET", mapParams, strRequest, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		// operation.MapParams = fmt.Sprintf("%+v", mapParams)
@@ -246,7 +246,7 @@ func (e *Binance) doGetPositionInfo(operation *exchange.AccountOperation) error 
 	positionInfo := PositionInfo{}
 	strRequest := "/fapi/v1/positionRisk"
 
-	jsonPositionInfoReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
+	jsonPositionInfoReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonPositionInfoReturn
@@ -269,7 +269,7 @@ func (e *Binance) doGetFutureBalances(operation *exchange.AccountOperation) erro
 	futureBalances := []*FutureBalance{}
 	strRequest := "/fapi/v2/balance"
 
-	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
+	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonAllBalanceReturn
@@ -322,7 +322,7 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	accountBalances := ContractBalance{}
 	strRequest := "/fapi/v1/account"
 
-	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest)
+	jsonAllBalanceReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
 		operation.CallResponce = jsonAllBalanceReturn
@@ -383,7 +383,7 @@ func (e *Binance) doSetFutureLeverage(operation *exchange.AccountOperation) erro
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 	mapParams["leverage"] = fmt.Sprintf("%d", operation.Leverage)
 
-	jsonSetLeverage := e.ContractApiKeyRequest("POST", mapParams, strRequestUrl)
+	jsonSetLeverage := e.ContractApiKeyRequest("POST", mapParams, strRequestUrl, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
 		operation.CallResponce = jsonSetLeverage
@@ -445,7 +445,7 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	//  FOK - Fill or Kill 无法全部立即成交就撤销
 	//  GTX - Good Till Crossing 无法成为挂单方就撤销
 
-	jsonCreatePlaceOrder := e.ContractApiKeyRequest("POST", mapParams, strRequestUrl)
+	jsonCreatePlaceOrder := e.ContractApiKeyRequest("POST", mapParams, strRequestUrl, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
 		operation.CallResponce = jsonCreatePlaceOrder
@@ -491,7 +491,7 @@ func (e *Binance) doContractOrderStatus(operation *exchange.AccountOperation) er
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 	mapParams["orderId"] = operation.Order.OrderID
 
-	jsonCreateOrderStatus := e.ContractApiKeyRequest("GET", mapParams, strRequestUrl)
+	jsonCreateOrderStatus := e.ContractApiKeyRequest("GET", mapParams, strRequestUrl, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
 		operation.CallResponce = jsonCreateOrderStatus
@@ -549,7 +549,7 @@ func (e *Binance) doContractCancelOrder(operation *exchange.AccountOperation) er
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 	mapParams["orderId"] = operation.Order.OrderID
 
-	jsonCreateCancelOrder := e.ContractApiKeyRequest("DELETE", mapParams, strRequestUrl)
+	jsonCreateCancelOrder := e.ContractApiKeyRequest("DELETE", mapParams, strRequestUrl, operation.TestMode)
 	if operation.DebugMode {
 		operation.RequestURI = strRequestUrl
 		operation.CallResponce = jsonCreateCancelOrder
@@ -572,17 +572,16 @@ func (e *Binance) doContractCancelOrder(operation *exchange.AccountOperation) er
 	return nil
 }
 
-func (e *Binance) ContractApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string) string {
+func (e *Binance) ContractApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string, testMode bool) string {
 	mapParams["recvWindow"] = "500000" //"50000000"
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
 	payload := exchange.Map2UrlQuery(mapParams)
 	strUrl := CONTRACT_URL + strRequestPath + "?" + payload
-
-	// log.Printf("===============server ts: %v, request ts: %v", exchange.HttpGetRequest(CONTRACT_URL+"/fapi/v1/time", nil), mapParams["timestamp"])
-	// log.Printf("%v===============strUrl: %v", strMethod, strUrl)
-	// log.Printf("================payload: %v", payload)
+	if testMode {
+		strUrl = CONTRACT_TESTNET_URL + strRequestPath + "?" + payload
+	}
 
 	request, err := http.NewRequest(strMethod, strUrl, nil)
 	if nil != err {
