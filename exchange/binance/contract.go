@@ -275,21 +275,13 @@ func (e *Binance) doGetFutureBalances(operation *exchange.AccountOperation) erro
 		operation.CallResponce = jsonAllBalanceReturn
 	}
 
-	// log.Printf("jsonAllBalanceReturn: %v", jsonAllBalanceReturn)
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &futureBalances); err != nil {
-		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
+		operation.Error = fmt.Errorf("%s GetFutureBalances Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
-	} /* else if len(accountBalances) == 0 {
-		operation.Error = fmt.Errorf("%s ContractAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
-		return operation.Error
-	} */
+	}
 
 	operation.BalanceList = []exchange.AssetBalance{}
 	for _, account := range futureBalances {
-		// if account.Balance == "0" {
-		// 	continue
-		// }
-
 		total, err := strconv.ParseFloat(account.Balance, 64)
 		available, err := strconv.ParseFloat(account.AvailableBalance, 64)
 		frozen := total - available
@@ -304,7 +296,6 @@ func (e *Binance) doGetFutureBalances(operation *exchange.AccountOperation) erro
 			BalanceFrozen:    frozen,
 		}
 		operation.BalanceList = append(operation.BalanceList, balance)
-
 	}
 
 	return nil
@@ -332,17 +323,10 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 	if err := json.Unmarshal([]byte(jsonAllBalanceReturn), &accountBalances); err != nil {
 		operation.Error = fmt.Errorf("%s ContractAllBalance Json Unmarshal Err: %v, %s", e.GetName(), err, jsonAllBalanceReturn)
 		return operation.Error
-	} /* else if len(accountBalances) == 0 {
-		operation.Error = fmt.Errorf("%s ContractAllBalance Failed: %v", e.GetName(), jsonAllBalanceReturn)
-		return operation.Error
-	} */
+	}
 
 	operation.BalanceList = []exchange.AssetBalance{}
 	for _, account := range accountBalances.Assets {
-		// if account.Balance == "0" {
-		// 	continue
-		// }
-
 		total, err := strconv.ParseFloat(account.WalletBalance, 64)
 		available, err := strconv.ParseFloat(account.MaxWithdrawAmount, 64)
 		frozen := total - available
@@ -352,6 +336,7 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 
 		balance := exchange.AssetBalance{
 			Coin:             e.GetCoinBySymbol(account.Asset),
+			Balance:          total,
 			BalanceAvailable: available,
 			BalanceFrozen:    frozen,
 		}
