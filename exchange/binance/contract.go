@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -341,7 +342,6 @@ func (e *Binance) doContractAllBalance(operation *exchange.AccountOperation) err
 			BalanceFrozen:    frozen,
 		}
 		operation.BalanceList = append(operation.BalanceList, balance)
-
 	}
 
 	return nil
@@ -404,6 +404,9 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	// strRequestUrl := "/fapi/v1/order/test" // test api
 	strRequestUrl := "/fapi/v1/order"
 
+	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(operation.Pair)) * -1))
+	lotSize := int(math.Round(math.Log10(e.GetLotSize(operation.Pair)) * -1))
+
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 	if operation.OrderDirection == exchange.Buy {
@@ -412,14 +415,14 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 		mapParams["side"] = "SELL"
 	}
 	if operation.TradeType == exchange.Trade_STOP_LIMIT || operation.TradeType == exchange.Trade_STOP_MARKET {
-		mapParams["stopPrice"] = fmt.Sprintf("%v", operation.StopRate)
+		mapParams["stopPrice"] = strconv.FormatFloat(operation.StopRate, 'f', priceFilter, 64)
 	}
 	mapParams["type"] = string(operation.TradeType) // "LIMIT"
 	if operation.Rate != 0 {
-		mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
+		mapParams["price"] = strconv.FormatFloat(operation.Rate, 'f', priceFilter, 64)
 	}
 	if operation.Quantity != 0 {
-		mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
+		mapParams["quantity"] = strconv.FormatFloat(operation.Quantity, 'f', lotSize, 64)
 	}
 	if operation.OrderType != "" {
 		mapParams["timeInForce"] = string(operation.OrderType) //"GTC"
@@ -558,7 +561,7 @@ func (e *Binance) doContractCancelOrder(operation *exchange.AccountOperation) er
 }
 
 func (e *Binance) ContractApiKeyRequest(strMethod string, mapParams map[string]string, strRequestPath string, testMode bool) string {
-	mapParams["recvWindow"] = "500000" //"50000000"
+	mapParams["recvWindow"] = "5000" // It is recommended to use a small recvWindow of 5000 or less!
 	mapParams["timestamp"] = fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))
 	mapParams["signature"] = exchange.ComputeHmac256NoDecode(exchange.Map2UrlQuery(mapParams), e.API_SECRET)
 
