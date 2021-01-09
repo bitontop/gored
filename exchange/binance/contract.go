@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -404,9 +403,6 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 	// strRequestUrl := "/fapi/v1/order/test" // test api
 	strRequestUrl := "/fapi/v1/order"
 
-	priceFilter := int(math.Round(math.Log10(e.GetPriceFilter(operation.Pair)) * -1))
-	lotSize := int(math.Round(math.Log10(e.GetLotSize(operation.Pair)) * -1))
-
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
 	if operation.OrderDirection == exchange.Buy {
@@ -415,14 +411,14 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 		mapParams["side"] = "SELL"
 	}
 	if operation.TradeType == exchange.Trade_STOP_LIMIT || operation.TradeType == exchange.Trade_STOP_MARKET {
-		mapParams["stopPrice"] = strconv.FormatFloat(operation.StopRate, 'f', priceFilter, 64)
+		mapParams["stopPrice"] = fmt.Sprintf("%v", operation.StopRate)
 	}
 	mapParams["type"] = string(operation.TradeType) // "LIMIT"
 	if operation.Rate != 0 {
-		mapParams["price"] = strconv.FormatFloat(operation.Rate, 'f', priceFilter, 64)
+		mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
 	}
 	if operation.Quantity != 0 {
-		mapParams["quantity"] = strconv.FormatFloat(operation.Quantity, 'f', lotSize, 64)
+		mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
 	}
 	if operation.OrderType != "" {
 		mapParams["timeInForce"] = string(operation.OrderType) //"GTC"
