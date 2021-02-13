@@ -248,6 +248,7 @@ type AccountOperation struct {
 	WithdrawTag     string `json:"withdraw_tag"`
 	WithdrawAmount  string `json:"withdraw_amount"` //here using string instead of float64
 	WithdrawID      string `json:"withdraw_id"`
+	WithdrawChain   string `json:"withdraw_chain"`
 
 	// #Balance
 	Wallet       WalletType `json:"wallet"`         // Contract/Spot operation. Default spot if empty

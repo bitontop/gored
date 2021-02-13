@@ -484,6 +484,8 @@ func (e *Huobi) doWithdraw(operation *exchange.AccountOperation) error {
 		mapParams["tag"] = operation.WithdrawTag
 	}
 
+	mapParams["chain"] = operation.WithdrawChain
+
 	jsonWithdraw := e.ApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {
 		operation.RequestURI = strRequest
