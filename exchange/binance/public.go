@@ -492,6 +492,8 @@ func (e *Binance) doSpotOrderBook(op *exchange.PublicOperation) error {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(op.Pair)
 
+	log.Printf("doSpotOrderBook symbo:%+v", op)
+
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = symbol
 	mapParams["limit"] = "100"
