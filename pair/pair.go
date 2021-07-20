@@ -20,6 +20,8 @@ type Pair struct {
 	Name   string
 	Base   *coin.Coin
 	Target *coin.Coin
+
+	Symbol string //hard fix for symbol if not exist in constrain
 }
 
 var pairMap cmap.ConcurrentMap
