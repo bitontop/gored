@@ -50,7 +50,7 @@ func GeneratePairID() int {
 func SetPair(id int, base, target *coin.Coin) *Pair {
 	if base != nil && target != nil {
 		key := GetKey(base, target)
-		p := &Pair{id, key, base, target}
+		p := &Pair{id, key, base, target, ""}
 		pairMap.Set(fmt.Sprintf("%d", id), p)
 		return p
 	} else {
