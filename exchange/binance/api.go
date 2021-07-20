@@ -308,7 +308,7 @@ func (e *Binance) OrderBook(p *pair.Pair) (*exchange.Maker, error) {
 	mapParams["symbol"] = symbol
 	mapParams["limit"] = "100"
 
-	log.Printf("doSpotOrderBook symbo:%+v", op)
+	log.Printf("doSpotOrderBook symbo:%+v", symbol)
 
 	strRequestUrl := "/api/v1/depth"
 	strUrl := API_URL + strRequestUrl
