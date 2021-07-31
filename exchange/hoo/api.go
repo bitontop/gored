@@ -208,6 +208,10 @@ func (e *Hoo) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
+	if symbol == "" {
+		symbol = pair.Symbol
+	}
+
 	strRequestUrl := "/open/v1/depth/market"
 	strUrl := API_URL + strRequestUrl
 
