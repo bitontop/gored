@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	API_URL string = "https://api.hoo.com"
+	API_URL string = "https://api.hoo.co"
 )
 
 /*API Base Knowledge
@@ -224,7 +224,7 @@ func (e *Hoo) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	if err := json.Unmarshal([]byte(jsonOrderbook), &jsonResponse); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Json Unmarshal Err: %v %v", e.GetName(), err, jsonOrderbook)
 	} else if jsonResponse.Code != 0 {
-		return nil, fmt.Errorf("%s Get Orderbook Failed: %v", e.GetName(), jsonOrderbook)
+		return nil, fmt.Errorf("%s Get Orderbook mapParams:%+v Failed: %v", e.GetName(), mapParams, jsonOrderbook)
 	}
 	if err := json.Unmarshal(jsonResponse.Data, &orderBook); err != nil {
 		return nil, fmt.Errorf("%s Get Orderbook Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Data)
