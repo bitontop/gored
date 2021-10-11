@@ -553,7 +553,7 @@ func (e *Ftx) doGetPositions(operation *exchange.AccountOperation) error {
 	strRequest := "/api/positions" // https://docs.ftx.com/#get-positions
 
 	mapParams := make(map[string]string)
-	// mapParams["showAvgPrice"] = true // showAvgPrice 	boolean 	false 	optional
+	mapParams["showAvgPrice"] = "true" // showAvgPrice 	boolean 	false 	optional
 
 	resp := e.ApiKeyRequest("GET", strRequest, mapParams)
 	if operation.DebugMode {

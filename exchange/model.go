@@ -311,7 +311,7 @@ type OpenPositions []struct {
 	Future                       string  `json:"future"`
 	Size                         float64 `json:"size"`
 	Side                         string  `json:"side"`
-	NetSize                      float64 `json:"netSize"`
+	NetSize                      int     `json:"netSize"`
 	LongOrderSize                float64 `json:"longOrderSize"`
 	ShortOrderSize               float64 `json:"shortOrderSize"`
 	Cost                         float64 `json:"cost"`
@@ -323,6 +323,11 @@ type OpenPositions []struct {
 	OpenSize                     float64 `json:"openSize"`
 	CollateralUsed               float64 `json:"collateralUsed"`
 	EstimatedLiquidationPrice    float64 `json:"estimatedLiquidationPrice"`
+	RecentAverageOpenPrice       float64 `json:"recentAverageOpenPrice"`
+	RecentPnl                    float64 `json:"recentPnl"`
+	RecentBreakEvenPrice         float64 `json:"recentBreakEvenPrice"`
+	CumulativeBuySize            float64 `json:"cumulativeBuySize"`
+	CumulativeSellSize           float64 `json:"cumulativeSellSize"`
 }
 
 type PublicOperation struct {
