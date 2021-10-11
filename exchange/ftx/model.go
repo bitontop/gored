@@ -194,3 +194,21 @@ type DepositAddress struct {
 type Uuid struct {
 	Id string `json:"uuid"`
 }
+
+// type OpenPositions []struct {
+// 	Future                       string  `json:"future"`
+// 	Size                         float64 `json:"size"`
+// 	Side                         string  `json:"side"`
+// 	NetSize                      float64 `json:"netSize"`
+// 	LongOrderSize                float64 `json:"longOrderSize"`
+// 	ShortOrderSize               float64 `json:"shortOrderSize"`
+// 	Cost                         float64 `json:"cost"`
+// 	EntryPrice                   float64 `json:"entryPrice"`
+// 	UnrealizedPnl                float64 `json:"unrealizedPnl"`
+// 	RealizedPnl                  float64 `json:"realizedPnl"`
+// 	InitialMarginRequirement     float64 `json:"initialMarginRequirement"`
+// 	MaintenanceMarginRequirement float64 `json:"maintenanceMarginRequirement"`
+// 	OpenSize                     float64 `json:"openSize"`
+// 	CollateralUsed               float64 `json:"collateralUsed"`
+// 	EstimatedLiquidationPrice    float64 `json:"estimatedLiquidationPrice"`
+// }

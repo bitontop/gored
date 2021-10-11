@@ -10,6 +10,10 @@ import (
 
 func (e *Ftx) DoAccountOperation(operation *exchange.AccountOperation) error {
 	switch operation.Type {
+
+	case exchange.GetPositions:
+		return e.doGetPositions(operation)
+
 	case exchange.BalanceList:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.getAllBalance(operation)
@@ -534,4 +538,49 @@ func (e *Ftx) getBalance(operation *exchange.AccountOperation) error {
 	}
 
 	return nil
+}
+
+func (e *Ftx) doGetPositions(operation *exchange.AccountOperation) error {
+	// var str string
+	var err error
+
+	if e.API_KEY == "" || e.API_SECRET == "" {
+		return fmt.Errorf("%s API Key or Secret Key or passphrase are nil.", e.GetName())
+	}
+
+	jsonResponse := &JsonResponse{}
+
+	strRequest := "/api/positions" // https://docs.ftx.com/#get-positions
+
+	mapParams := make(map[string]string)
+	// mapParams["showAvgPrice"] = true // showAvgPrice 	boolean 	false 	optional
+
+	resp := e.ApiKeyRequest("GET", strRequest, mapParams)
+	if operation.DebugMode {
+		operation.RequestURI = strRequest
+		operation.CallResponce = resp
+	}
+
+	// str = fmt.Sprintf("doGetPositions:: %s", resp)
+	// log.Print(str)
+
+	if err = json.Unmarshal([]byte(resp), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetPositions Json Unmarshal Err: %v %v", e.GetName(), err, resp)
+		return operation.Error
+	} else if !jsonResponse.Success {
+		operation.Error = fmt.Errorf("%s doGetPositions Failed: %v", e.GetName(), resp)
+		return operation.Error
+	}
+
+	operation.OpenPositionList = exchange.OpenPositions{}
+
+	if err := json.Unmarshal(jsonResponse.Result, &operation.OpenPositionList); err != nil {
+		operation.Error = fmt.Errorf("%s doGetPositions Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return operation.Error
+	}
+
+	// str = fmt.Sprintf("doGetPositions:: %#v", openPositions)
+	// log.Print(str)
+
+	return err
 }

@@ -175,6 +175,7 @@ const (
 	SubAllBalanceList  OperationType = "SubAllBalanceList"  // balance(s) of all subaccounts
 	GetSubAccountList  OperationType = "GetSubAccountList"  // get sub accounts list
 	GetPositionInfo    OperationType = "GetPositionInfo"    // position information for Contract
+	GetPositions       OperationType = "GetPositions"       // open positions' list for the contract 3
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"
@@ -301,6 +302,27 @@ type AccountOperation struct {
 	TradeType      OrderTradeType // eg. TRADE_LIMIT
 	OrderDirection TradeDirection //TradeDirection
 	Leverage       int
+
+	//### new start from FTX
+	OpenPositionList OpenPositions
+}
+
+type OpenPositions []struct {
+	Future                       string  `json:"future"`
+	Size                         float64 `json:"size"`
+	Side                         string  `json:"side"`
+	NetSize                      float64 `json:"netSize"`
+	LongOrderSize                float64 `json:"longOrderSize"`
+	ShortOrderSize               float64 `json:"shortOrderSize"`
+	Cost                         float64 `json:"cost"`
+	EntryPrice                   float64 `json:"entryPrice"`
+	UnrealizedPnl                float64 `json:"unrealizedPnl"`
+	RealizedPnl                  float64 `json:"realizedPnl"`
+	InitialMarginRequirement     float64 `json:"initialMarginRequirement"`
+	MaintenanceMarginRequirement float64 `json:"maintenanceMarginRequirement"`
+	OpenSize                     float64 `json:"openSize"`
+	CollateralUsed               float64 `json:"collateralUsed"`
+	EstimatedLiquidationPrice    float64 `json:"estimatedLiquidationPrice"`
 }
 
 type PublicOperation struct {
