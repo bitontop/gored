@@ -176,6 +176,7 @@ const (
 	GetSubAccountList  OperationType = "GetSubAccountList"  // get sub accounts list
 	GetPositionInfo    OperationType = "GetPositionInfo"    // position information for Contract
 	GetPositions       OperationType = "GetPositions"       // open positions' list for the contract 3
+	GetFutureStats     OperationType = "GetFutureStats"
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"
