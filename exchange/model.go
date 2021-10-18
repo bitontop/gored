@@ -308,6 +308,13 @@ type AccountOperation struct {
 	OpenPositionList OpenPositions
 }
 
+type FutureStats struct {
+	Volume          float64   `json:"volume"`
+	NextFundingRate float64   `json:"nextFundingRate"`
+	NextFundingTime time.Time `json:"nextFundingTime"`
+	OpenInterest    float64   `json:"openInterest"`
+}
+
 type OpenPositions []struct {
 	Future                       string  `json:"future"`
 	Size                         float64 `json:"size"`
@@ -348,6 +355,8 @@ type PublicOperation struct {
 	KlineEndTime   int64                `json:"kline_end_time"`
 	Kline          []*KlineDetail       `json:"kline"`
 	TickerPrice    []*TickerPriceDetail `json:"ticker_price"`
+
+	FutureStats FutureStats
 
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`

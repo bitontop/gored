@@ -176,10 +176,10 @@ func (e *Ftx) doGetFutureStats(operation *exchange.PublicOperation) error {
 	var str string
 	var err error
 
-	// jsonResponse := &JsonResponse{}
+	jsonResponse := &JsonResponse{}
 
 	get := &utils.HttpGet{
-		URI:       fmt.Sprintf("%s/api/futures/%s-PERP/stats", API_URL, operation.Coin.Code),
+		URI:       fmt.Sprintf("%s/api/futures/%s/stats", API_URL, operation.Pair.Symbol),
 		Proxy:     operation.Proxy,
 		DebugMode: operation.DebugMode,
 	}
@@ -193,7 +193,25 @@ func (e *Ftx) doGetFutureStats(operation *exchange.PublicOperation) error {
 		operation.CallResponce = string(get.ResponseBody)
 	}
 
-	str = fmt.Sprintf("%s", operation.CallResponce)
+	// str = fmt.Sprintf("%s", operation.CallResponce)
+	// log.Print(str)
+
+	if err = json.Unmarshal([]byte(operation.CallResponce), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetFutureStats Json Unmarshal Err: %v %v", e.GetName(), err, operation.CallResponce)
+		return operation.Error
+	} else if !jsonResponse.Success {
+		operation.Error = fmt.Errorf("%s doGetFutureStats Failed: %v", e.GetName(), operation.CallResponce)
+		return operation.Error
+	}
+
+	operation.FutureStats = exchange.FutureStats{}
+
+	if err := json.Unmarshal(jsonResponse.Result, &operation.FutureStats); err != nil {
+		operation.Error = fmt.Errorf("%s doGetFutureStats Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return operation.Error
+	}
+
+	str = fmt.Sprintf("operation: %#v", operation)
 	log.Print(str)
 
 	return err
