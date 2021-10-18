@@ -173,7 +173,7 @@ func (e *Ftx) doSpotKline(operation *exchange.PublicOperation) error {
 }
 
 func (e *Ftx) doGetFutureStats(operation *exchange.PublicOperation) error {
-	var str string
+	// var str string
 	var err error
 
 	jsonResponse := &JsonResponse{}
@@ -204,15 +204,15 @@ func (e *Ftx) doGetFutureStats(operation *exchange.PublicOperation) error {
 		return operation.Error
 	}
 
-	operation.FutureStats = exchange.FutureStats{}
+	operation.FutureStats = &exchange.FutureStats{}
 
-	if err := json.Unmarshal(jsonResponse.Result, &operation.FutureStats); err != nil {
+	if err := json.Unmarshal(jsonResponse.Result, operation.FutureStats); err != nil {
 		operation.Error = fmt.Errorf("%s doGetFutureStats Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
 		return operation.Error
 	}
 
-	str = fmt.Sprintf("operation: %#v", operation)
-	log.Print(str)
+	// str = fmt.Sprintf("operation: %#v", operation)
+	// log.Print(str)
 
 	return err
 }

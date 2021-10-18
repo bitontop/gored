@@ -319,7 +319,7 @@ type OpenPositions []struct {
 	Future                       string  `json:"future"`
 	Size                         float64 `json:"size"`
 	Side                         string  `json:"side"`
-	NetSize                      int     `json:"netSize"`
+	NetSize                      float64 `json:"netSize"`
 	LongOrderSize                float64 `json:"longOrderSize"`
 	ShortOrderSize               float64 `json:"shortOrderSize"`
 	Cost                         float64 `json:"cost"`
@@ -356,7 +356,7 @@ type PublicOperation struct {
 	Kline          []*KlineDetail       `json:"kline"`
 	TickerPrice    []*TickerPriceDetail `json:"ticker_price"`
 
-	FutureStats FutureStats
+	FutureStats *FutureStats
 
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`
