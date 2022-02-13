@@ -179,11 +179,11 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
-	// log.Printf("FTX symbol:%s", symbol)
-
 	if symbol == "" {
 		symbol = pair.Symbol
 	}
+
+	// log.Printf("FTX symbol:%s", symbol)
 
 	strRequestUrl := fmt.Sprintf("/api/markets/%v/orderbook?depth=%v", symbol, 100)
 	strUrl := API_URL + strRequestUrl
@@ -251,6 +251,8 @@ func (e *Ftx) UpdateAllBalances() {
 		c := e.GetCoinBySymbol(v.Coin)
 		if c != nil {
 			balanceMap.Set(c.Code, v.Free)
+			// str := fmt.Sprintf("%s=%.8f", c.Code, v.Free)
+			// log.Printf(str)
 		}
 	}
 }
@@ -341,7 +343,7 @@ func (e *Ftx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 		symbol = pair.Symbol
 	}
 
-	log.Printf("FTX LimitBuy symbol:%s", symbol)
+	// log.Printf("FTX LimitBuy symbol:%s", symbol)
 
 	mapParams := make(map[string]string)
 	mapParams["market"] = symbol // future "BTC-PERP", spot "ALTHEDGE/USD"

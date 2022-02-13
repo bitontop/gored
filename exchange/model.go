@@ -5,6 +5,7 @@ package exchange
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -177,6 +178,7 @@ const (
 	GetPositionInfo    OperationType = "GetPositionInfo"    // position information for Contract
 	GetPositions       OperationType = "GetPositions"       // open positions' list for the contract 3
 	GetFutureStats     OperationType = "GetFutureStats"
+	GetAccount         OperationType = "GetAccount"
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"
@@ -306,6 +308,8 @@ type AccountOperation struct {
 
 	//### new start from FTX
 	OpenPositionList OpenPositions
+
+	Data json.RawMessage //semi-processed data
 }
 
 type FutureStats struct {

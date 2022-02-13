@@ -212,3 +212,44 @@ type Uuid struct {
 // 	CollateralUsed               float64 `json:"collateralUsed"`
 // 	EstimatedLiquidationPrice    float64 `json:"estimatedLiquidationPrice"`
 // }
+
+type Account struct {
+	AccountIdentifier            int     `json:"accountIdentifier"`
+	Username                     string  `json:"username"`
+	Collateral                   float64 `json:"collateral"`
+	FreeCollateral               float64 `json:"freeCollateral"`
+	TotalAccountValue            float64 `json:"totalAccountValue"`
+	TotalPositionSize            float64 `json:"totalPositionSize"`
+	InitialMarginRequirement     float64 `json:"initialMarginRequirement"`
+	MaintenanceMarginRequirement float64 `json:"maintenanceMarginRequirement"`
+	MarginFraction               float64 `json:"marginFraction"`
+	OpenMarginFraction           float64 `json:"openMarginFraction"`
+	Liquidating                  bool    `json:"liquidating"`
+	BackstopProvider             bool    `json:"backstopProvider"`
+	Positions                    []struct {
+		Future                       string      `json:"future"`
+		Size                         float64     `json:"size"`
+		Side                         string      `json:"side"`
+		NetSize                      float64     `json:"netSize"`
+		LongOrderSize                float64     `json:"longOrderSize"`
+		ShortOrderSize               float64     `json:"shortOrderSize"`
+		Cost                         float64     `json:"cost"`
+		EntryPrice                   interface{} `json:"entryPrice"`
+		UnrealizedPnl                float64     `json:"unrealizedPnl"`
+		RealizedPnl                  float64     `json:"realizedPnl"`
+		InitialMarginRequirement     float64     `json:"initialMarginRequirement"`
+		MaintenanceMarginRequirement float64     `json:"maintenanceMarginRequirement"`
+		OpenSize                     float64     `json:"openSize"`
+		CollateralUsed               float64     `json:"collateralUsed"`
+		EstimatedLiquidationPrice    interface{} `json:"estimatedLiquidationPrice"`
+	} `json:"positions"`
+	TakerFee                    float64     `json:"takerFee"`
+	MakerFee                    float64     `json:"makerFee"`
+	Leverage                    float64     `json:"leverage"`
+	PositionLimit               interface{} `json:"positionLimit"`
+	PositionLimitUsed           interface{} `json:"positionLimitUsed"`
+	UseFttCollateral            bool        `json:"useFttCollateral"`
+	ChargeInterestOnNegativeUsd bool        `json:"chargeInterestOnNegativeUsd"`
+	SpotMarginEnabled           bool        `json:"spotMarginEnabled"`
+	SpotLendingEnabled          bool        `json:"spotLendingEnabled"`
+}
