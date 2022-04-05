@@ -23,7 +23,14 @@ func (e *Ftx) LoadPublicData(operation *exchange.PublicOperation) error {
 			return e.doTickerPrice(operation)
 		}
 
+	case exchange.GetFutureStats:
+		switch operation.Wallet {
+		case exchange.SpotWallet: //actually future works the same for FTX
+			return e.doGetFutureStats(operation)
+		}
+
 	}
+
 	return fmt.Errorf("LoadPublicData :: Operation type invalid: %+v", operation.Type)
 }
 
@@ -163,4 +170,49 @@ func (e *Ftx) doSpotKline(operation *exchange.PublicOperation) error {
 	}
 
 	return nil
+}
+
+func (e *Ftx) doGetFutureStats(operation *exchange.PublicOperation) error {
+	// var str string
+	var err error
+
+	jsonResponse := &JsonResponse{}
+
+	get := &utils.HttpGet{
+		URI:       fmt.Sprintf("%s/api/futures/%s/stats", API_URL, operation.Pair.Symbol),
+		Proxy:     operation.Proxy,
+		DebugMode: operation.DebugMode,
+	}
+	if err = utils.HttpGetRequest(get); err != nil {
+		operation.Error = err
+		return operation.Error
+	}
+
+	if operation.DebugMode {
+		operation.RequestURI = get.URI
+		operation.CallResponce = string(get.ResponseBody)
+	}
+
+	// str = fmt.Sprintf("%s", operation.CallResponce)
+	// log.Print(str)
+
+	if err = json.Unmarshal([]byte(operation.CallResponce), &jsonResponse); err != nil {
+		operation.Error = fmt.Errorf("%s doGetFutureStats Json Unmarshal Err: %v %v", e.GetName(), err, operation.CallResponce)
+		return operation.Error
+	} else if !jsonResponse.Success {
+		operation.Error = fmt.Errorf("%s doGetFutureStats Failed: %v", e.GetName(), operation.CallResponce)
+		return operation.Error
+	}
+
+	operation.FutureStats = &exchange.FutureStats{}
+
+	if err := json.Unmarshal(jsonResponse.Result, operation.FutureStats); err != nil {
+		operation.Error = fmt.Errorf("%s doGetFutureStats Result Unmarshal Err: %v %s", e.GetName(), err, jsonResponse.Result)
+		return operation.Error
+	}
+
+	// str = fmt.Sprintf("operation: %#v", operation)
+	// log.Print(str)
+
+	return err
 }

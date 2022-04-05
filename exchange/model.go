@@ -5,6 +5,7 @@ package exchange
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/bitontop/gored/coin"
@@ -175,6 +176,9 @@ const (
 	SubAllBalanceList  OperationType = "SubAllBalanceList"  // balance(s) of all subaccounts
 	GetSubAccountList  OperationType = "GetSubAccountList"  // get sub accounts list
 	GetPositionInfo    OperationType = "GetPositionInfo"    // position information for Contract
+	GetPositions       OperationType = "GetPositions"       // open positions' list for the contract 3
+	GetFutureStats     OperationType = "GetFutureStats"
+	GetAccount         OperationType = "GetAccount"
 
 	//Public Query
 	GetCoin OperationType = "GetCoin"
@@ -301,6 +305,41 @@ type AccountOperation struct {
 	TradeType      OrderTradeType // eg. TRADE_LIMIT
 	OrderDirection TradeDirection //TradeDirection
 	Leverage       int
+
+	//### new start from FTX
+	OpenPositionList OpenPositions
+
+	Data json.RawMessage //semi-processed data
+}
+
+type FutureStats struct {
+	Volume          float64   `json:"volume"`
+	NextFundingRate float64   `json:"nextFundingRate"`
+	NextFundingTime time.Time `json:"nextFundingTime"`
+	OpenInterest    float64   `json:"openInterest"`
+}
+
+type OpenPositions []struct {
+	Future                       string  `json:"future"`
+	Size                         float64 `json:"size"`
+	Side                         string  `json:"side"`
+	NetSize                      float64 `json:"netSize"`
+	LongOrderSize                float64 `json:"longOrderSize"`
+	ShortOrderSize               float64 `json:"shortOrderSize"`
+	Cost                         float64 `json:"cost"`
+	EntryPrice                   float64 `json:"entryPrice"`
+	UnrealizedPnl                float64 `json:"unrealizedPnl"`
+	RealizedPnl                  float64 `json:"realizedPnl"`
+	InitialMarginRequirement     float64 `json:"initialMarginRequirement"`
+	MaintenanceMarginRequirement float64 `json:"maintenanceMarginRequirement"`
+	OpenSize                     float64 `json:"openSize"`
+	CollateralUsed               float64 `json:"collateralUsed"`
+	EstimatedLiquidationPrice    float64 `json:"estimatedLiquidationPrice"`
+	RecentAverageOpenPrice       float64 `json:"recentAverageOpenPrice"`
+	RecentPnl                    float64 `json:"recentPnl"`
+	RecentBreakEvenPrice         float64 `json:"recentBreakEvenPrice"`
+	CumulativeBuySize            float64 `json:"cumulativeBuySize"`
+	CumulativeSellSize           float64 `json:"cumulativeSellSize"`
 }
 
 type PublicOperation struct {
@@ -320,6 +359,8 @@ type PublicOperation struct {
 	KlineEndTime   int64                `json:"kline_end_time"`
 	Kline          []*KlineDetail       `json:"kline"`
 	TickerPrice    []*TickerPriceDetail `json:"ticker_price"`
+
+	FutureStats *FutureStats
 
 	//#Debug
 	DebugMode    bool   `json:"debug mode"`

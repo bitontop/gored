@@ -179,6 +179,12 @@ func (e *Ftx) OrderBook(pair *pair.Pair) (*exchange.Maker, error) {
 	orderBook := OrderBook{}
 	symbol := e.GetSymbolByPair(pair)
 
+	if symbol == "" {
+		symbol = pair.Symbol
+	}
+
+	// log.Printf("FTX symbol:%s", symbol)
+
 	strRequestUrl := fmt.Sprintf("/api/markets/%v/orderbook?depth=%v", symbol, 100)
 	strUrl := API_URL + strRequestUrl
 
@@ -245,6 +251,8 @@ func (e *Ftx) UpdateAllBalances() {
 		c := e.GetCoinBySymbol(v.Coin)
 		if c != nil {
 			balanceMap.Set(c.Code, v.Free)
+			// str := fmt.Sprintf("%s=%.8f", c.Code, v.Free)
+			// log.Printf(str)
 		}
 	}
 }
@@ -285,8 +293,13 @@ func (e *Ftx) LimitSell(pair *pair.Pair, quantity, rate float64) (*exchange.Orde
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	symbol := e.GetSymbolByPair(pair)
+	if symbol == "" {
+		symbol = pair.Symbol
+	}
+
 	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair) // future "BTC-PERP", spot "ALTHEDGE/USD"
+	mapParams["market"] = symbol // future "BTC-PERP", spot "ALTHEDGE/USD"
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "sell"
@@ -325,8 +338,15 @@ func (e *Ftx) LimitBuy(pair *pair.Pair, quantity, rate float64) (*exchange.Order
 		return nil, fmt.Errorf("%s API Key or Secret Key are nil", e.GetName())
 	}
 
+	symbol := e.GetSymbolByPair(pair)
+	if symbol == "" {
+		symbol = pair.Symbol
+	}
+
+	// log.Printf("FTX LimitBuy symbol:%s", symbol)
+
 	mapParams := make(map[string]string)
-	mapParams["market"] = e.GetSymbolByPair(pair) // future "BTC-PERP", spot "ALTHEDGE/USD"
+	mapParams["market"] = symbol // future "BTC-PERP", spot "ALTHEDGE/USD"
 	mapParams["size"] = strconv.FormatFloat(quantity, 'f', -1, 64)
 	mapParams["price"] = strconv.FormatFloat(rate, 'f', -1, 64)
 	mapParams["side"] = "buy"
