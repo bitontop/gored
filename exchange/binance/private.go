@@ -758,6 +758,7 @@ func (e *Binance) doWithdraw(operation *exchange.AccountOperation) error {
 		mapParams["addressTag"] = operation.WithdrawTag
 	}
 	mapParams["amount"] = operation.WithdrawAmount
+	mapParams["network"] = operation.WithdrawChain
 
 	jsonSubmitWithdraw := e.WApiKeyRequest("POST", mapParams, strRequest)
 	if operation.DebugMode {

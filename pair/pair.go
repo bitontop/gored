@@ -21,7 +21,7 @@ type Pair struct {
 	Base   *coin.Coin
 	Target *coin.Coin
 
-	Symbol string //hard fix for missing constrian
+	Symbol string //hard fix for missing constrian //hard fix for symbol if not exist in constrain
 }
 
 var pairMap cmap.ConcurrentMap
@@ -50,7 +50,7 @@ func GeneratePairID() int {
 func SetPair(id int, base, target *coin.Coin) *Pair {
 	if base != nil && target != nil {
 		key := GetKey(base, target)
-		p := &Pair{id, key, base, target}
+		p := &Pair{id, key, base, target, ""}
 		pairMap.Set(fmt.Sprintf("%d", id), p)
 		return p
 	} else {
