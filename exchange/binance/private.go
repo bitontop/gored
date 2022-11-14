@@ -88,10 +88,15 @@ func (e *Binance) DoAccountOperation(operation *exchange.AccountOperation) error
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doGetDepositAddress(operation)
 		}
+	// case exchange.GetPositions:
+	// 	if operation.Wallet == exchange.ContractWallet {
+	// 		return e.doGetPositionInfo(operation)
+	// 	}
 	case exchange.GetPositionInfo:
 		if operation.Wallet == exchange.ContractWallet {
 			return e.doGetPositionInfo(operation)
 		}
+
 	case exchange.SubBalanceList:
 		if operation.Wallet == exchange.SpotWallet {
 			return e.doSubBalance(operation)

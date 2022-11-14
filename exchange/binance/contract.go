@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -243,8 +244,10 @@ func (e *Binance) doGetPositionInfo(operation *exchange.AccountOperation) error 
 		return fmt.Errorf("%s API Key or Secret Key are nil.", e.GetName())
 	}
 
-	positionInfo := PositionInfo{}
-	strRequest := "/fapi/v1/positionRisk"
+	// positionInfo := PositionInfo{}
+	strRequest := "/fapi/v2/positionRisk"
+
+	// log.Printf("strRequest: [%s]", strRequest)
 
 	jsonPositionInfoReturn := e.ContractApiKeyRequest("GET", make(map[string]string), strRequest, operation.TestMode)
 	if operation.DebugMode {
@@ -253,8 +256,9 @@ func (e *Binance) doGetPositionInfo(operation *exchange.AccountOperation) error 
 	}
 
 	// log.Printf("jsonPositionInfoReturn: %v", jsonPositionInfoReturn)
-	if err := json.Unmarshal([]byte(jsonPositionInfoReturn), &positionInfo); err != nil {
+	if err := json.Unmarshal([]byte(jsonPositionInfoReturn), &operation.BinanceOpenPositionList); err != nil {
 		operation.Error = fmt.Errorf("%s doGetPositionInfo Json Unmarshal Err: %v, %s", e.GetName(), err, jsonPositionInfoReturn)
+		log.Print(operation.Error)
 		return operation.Error
 	}
 
@@ -405,20 +409,22 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
+	log.Print("mapParams[symbol] = ", mapParams["symbol"])
+
 	if operation.OrderDirection == exchange.Buy {
 		mapParams["side"] = "BUY"
 	} else if operation.OrderDirection == exchange.Sell {
 		mapParams["side"] = "SELL"
 	}
 	if operation.TradeType == exchange.Trade_STOP_LIMIT || operation.TradeType == exchange.Trade_STOP_MARKET {
-		mapParams["stopPrice"] = fmt.Sprintf("%v", operation.StopRate)
+		mapParams["stopPrice"] = fmt.Sprintf("%f", operation.StopRate)
 	}
 	mapParams["type"] = string(operation.TradeType) // "LIMIT"
 	if operation.Rate != 0 {
-		mapParams["price"] = fmt.Sprintf("%v", operation.Rate)
+		mapParams["price"] = fmt.Sprintf("%f", operation.Rate)
 	}
 	if operation.Quantity != 0 {
-		mapParams["quantity"] = fmt.Sprintf("%v", operation.Quantity)
+		mapParams["quantity"] = fmt.Sprintf("%f", operation.Quantity)
 	}
 	if operation.OrderType != "" {
 		mapParams["timeInForce"] = string(operation.OrderType) //"GTC"
