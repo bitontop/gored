@@ -409,7 +409,7 @@ func (e *Binance) doContractPlaceOrder(operation *exchange.AccountOperation) err
 
 	mapParams := make(map[string]string)
 	mapParams["symbol"] = e.GetSymbolByPair(operation.Pair)
-	log.Print("mapParams[symbol] = ", mapParams["symbol"])
+	// log.Print("mapParams[symbol] = ", mapParams["symbol"])
 
 	if operation.OrderDirection == exchange.Buy {
 		mapParams["side"] = "BUY"
